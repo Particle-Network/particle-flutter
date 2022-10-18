@@ -11,8 +11,8 @@ import '../generated/json/base/json_field.dart';
 
 part 'rest_client.g.dart';
 
-String projectId = "772f7499-1d2e-40f4-8e2c-7b6dd47db9de";
-String clientKey = "ctWeIc2UBA6sYTKJknT9cu9LBikF00fbk1vmQjsV";
+String projectId = ""; //your project id
+String clientKey = ""; //your project client key
 const baseUrl = "https://api.particle.network/";
 
 @RestApi()
@@ -34,6 +34,9 @@ abstract class SolanaRpcApi {
 
   static SolanaRpcApi getClient() {
     if (_instace != null) return _instace!;
+    if (projectId.isEmpty || clientKey.isEmpty) {
+      throw Exception("projectId or clientKey must be not empty!!! Click here to get : https://dashboard.particle.network/");
+    }
     final dio = Dio();
     dio.options.headers["Content-Type"] = "application/json";
     dio.options.headers["Authorization"] = authenticate(projectId, clientKey);
@@ -52,6 +55,9 @@ abstract class EvmRpcApi {
 
   static EvmRpcApi getClient() {
     if (_instace != null) return _instace!;
+    if (projectId.isEmpty || clientKey.isEmpty) {
+      throw Exception("projectId or clientKey must be not empty!!! Click here to get : https://dashboard.particle.network/");
+    }
     final dio = Dio();
     dio.options.headers["Content-Type"] = "application/json";
     dio.options.headers["Authorization"] = authenticate(projectId, clientKey);

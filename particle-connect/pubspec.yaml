@@ -1,7 +1,7 @@
 name: particle_connect
 description: A flutter plugin project for particle connect
 version: 0.7.1
-homepage:
+homepage: https://particle.network/
 
 environment:
   sdk: '>=2.18.1 <3.0.0'

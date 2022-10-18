@@ -26,15 +26,14 @@ class AuthLogic {
   static void login() async {
     List<SupportAuthType> supportAuthType = <SupportAuthType>[];
     supportAuthType.add(SupportAuthType.all);
-    String result =
-        await ParticleAuth.login(LoginType.phone, "", supportAuthType);
+    String result =await ParticleAuth.login(LoginType.phone, "", supportAuthType);
+
     debugPrint("login: $result");
     showToast("login: $result");
 
     if (jsonDecode(result)["status"] == true ||
         jsonDecode(result)["status"] == 1) {
       final userInfo = jsonDecode(result)["data"];
-
       List<Map<String, dynamic>> wallets = (userInfo["wallets"] as List)
           .map((dynamic e) => e as Map<String, dynamic>)
           .toList();
@@ -145,7 +144,6 @@ class AuthLogic {
   }
 
   static void setChainInfoAsync() async {
-    currChainInfo = SolanaChain.devnet();
     bool isSuccess = await ParticleAuth.setChainInfoAsync(SolanaChain.devnet());
     print("setChainInfoAsync: $isSuccess");
   }
