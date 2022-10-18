@@ -10,8 +10,8 @@ import '../generated/json/base/json_field.dart';
 
 part 'rest_client.g.dart';
 
-String projectId = "b0991b94-8219-4499-bf8e-d92ce6087f72"; //your project id
-String clientKey = "cEpW3oDxg8JoFK2WR4OT04d0mMffdBRPiQIbu0xF"; //your project client key
+String projectId = ""; //your project id
+String clientKey = ""; //your project client key
 const baseUrl = "https://api.particle.network/";
 
 @RestApi()
