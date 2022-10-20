@@ -88,7 +88,7 @@ class WalletLogic {
   static void switchWallet() async {
     WalletType walletType = WalletType.particle;
     String publicAddress = "";
-    bool result = await ParticleWallet.switchWallet(walletType, publicAddress);
+    String result = await ParticleWallet.switchWallet(walletType, publicAddress);
     print("result:$result");
     showToast("result: $result");
   }

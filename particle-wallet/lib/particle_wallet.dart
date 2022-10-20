@@ -117,7 +117,7 @@ class ParticleWallet {
     _channel.invokeMethod('supportChain', jsonEncode(allInfos));
   }
 
-  static Future<bool> switchWallet(WalletType walletType,
+  static Future<String> switchWallet(WalletType walletType,
       String publicAddress) async {
     return await _channel.invokeMethod(
         'switchWallet',

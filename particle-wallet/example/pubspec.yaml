@@ -1,4 +1,5 @@
 name: particle_wallet_example
+version: 0.1.0
 description: Demonstrates how to use the particle_wallet plugin.
 
 # The following line prevents the package from being accidentally published to

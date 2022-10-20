@@ -11,10 +11,10 @@ import ParticleWalletGUI
 import RxSwift
 import SwiftyJSON
 
-class ParticleWalletPlugin: NSObject, FlutterPlugin {
+public class ParticleWalletPlugin: NSObject, FlutterPlugin {
     let bag = DisposeBag()
     
-    enum Method: String {
+    public enum Method: String {
         case navigatorWallet
         case navigatorTokenReceive
         case navigatorTokenSend
