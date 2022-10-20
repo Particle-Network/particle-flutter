@@ -1,17 +1,24 @@
-name: particle_auth
-description: A flutter plugin project for particle auth
-version: 0.7.2
-homepage: https://particle.network
+name: particle_wallet
+description: A flutter plugin project for particle wallet
+version: 0.0.1
+homepage:
 
 environment:
-  sdk: '>=2.18.0 <3.0.0'
+  sdk: '>=2.18.1 <3.0.0'
   flutter: ">=2.5.0"
 
 dependencies:
   flutter:
     sdk: flutter
+  particle_connect: ^0.7.3
   plugin_platform_interface: ^2.0.2
-
+  pretty_dio_logger: ^1.1.1
+  provider: ^6.0.3
+  auto_route: ^4.0.1
+  retrofit: ^3.0.1+1
+  json_serializable: ^6.3.1
+  uuid: ^3.0.6
+  oktoast: ^3.1.5
 dev_dependencies:
   flutter_test:
     sdk: flutter
@@ -35,10 +42,10 @@ flutter:
   plugin:
     platforms:
       android:
-        package: network.particle.auth_plugin.particle_auth
-        pluginClass: ParticleAuthPlugin
+        package: network.particle.wallet_plugin.particle_wallet
+        pluginClass: ParticleWalletPlugin
       ios:
-        pluginClass: ParticleAuthPlugin
+        pluginClass: ParticleWalletPlugin
 
   # To add assets to your plugin package, add an assets section, like this:
   # assets:
