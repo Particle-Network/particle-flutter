@@ -10,6 +10,7 @@ import com.connect.common.model.ConnectError
 import com.connect.common.model.DAppMetadata
 import com.evm.adapter.EVMConnectAdapter
 import com.particle.base.ChainInfo
+import com.particle.base.ChainName
 import com.particle.base.Env
 import com.particle.base.ParticleNetwork
 import com.particle.connect.ParticleConnect
@@ -23,7 +24,6 @@ import io.flutter.plugin.common.MethodChannel
 import kotlinx.coroutines.launch
 import network.particle.flutter.bridge.model.*
 import network.particle.flutter.bridge.utils.BridgeScope
-import network.particle.flutter.bridge.utils.ChainUtils
 import network.particle.flutter.bridge.utils.EncodeUtils
 import org.json.JSONException
 import org.json.JSONObject
@@ -39,7 +39,7 @@ object ConnectBridge {
     fun init(activity: Activity, initParams: String?) {
         LogUtils.d("init", initParams)
         val initData: InitData = GsonUtils.fromJson(initParams, InitData::class.java)
-        val chainInfo: ChainInfo = ChainUtils.getChainInfo(initData.chainName, initData.chainIdName)
+        val chainInfo: ChainInfo = getChainInfo(initData.chainName, initData.chainIdName)
         val (name, icon, url) = initData.metadata
         val rpcUrl: RpcUrl? = initData.rpcUrl
         val dAppMetadata = DAppMetadata(
@@ -57,7 +57,7 @@ object ConnectBridge {
             chainParams, ChainData::class.java
         )
         try {
-            val chainInfo = ChainUtils.getChainInfo(
+            val chainInfo = getChainInfo(
                 chainData.chainName, chainData.chainIdName
             )
             setChain(chainInfo)
@@ -553,6 +553,23 @@ object ConnectBridge {
                 adapter.add(SolanaConnectAdapter())
             }
         } catch (ignored: Exception) {
+        }
+    }
+
+    fun getChainInfo(chainName: String, chainIdName: String?): ChainInfo {
+        var chainNameTmp = chainName
+        if (ChainName.BSC.toString() == chainName) {
+            chainNameTmp = "Bsc"
+        }
+        return try {
+            val clazz1 =
+                Class.forName("com.particle.base." + chainNameTmp + "Chain")
+            val cons =
+                clazz1.getConstructor(String::class.java)
+            cons.newInstance(chainIdName) as ChainInfo
+        } catch (e: java.lang.Exception) {
+            e.printStackTrace()
+            throw RuntimeException(e.message)
         }
     }
 }
