@@ -1,0 +1,10 @@
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="network.particle.wallet_plugin.particle_wallet">
+
+    <application>
+        <activity
+            android:name="network.particle.flutter.bridge.ui.FlutterLoginOptActivity"
+            android:exported="false"
+            android:theme="@style/FlutterBridgeThemeLoginOpt" />
+    </application>
+</manifest>
