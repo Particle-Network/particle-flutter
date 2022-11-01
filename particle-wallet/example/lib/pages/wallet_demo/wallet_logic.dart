@@ -3,6 +3,7 @@ import 'package:oktoast/oktoast.dart';
 import 'package:particle_connect/model/connect_info.dart';
 import 'package:particle_wallet/model/language.dart';
 import 'package:particle_wallet/model/user_interface_style.dart';
+import 'package:particle_wallet/model/wallet_display.dart';
 import 'package:particle_wallet/particle_wallet.dart';
 import 'package:particle_connect/model/chain_info.dart';
 
@@ -12,29 +13,31 @@ class WalletLogic {
   }
 
   static void navigatorWallet() {
-    ParticleWallet.navigatorWallet(0);
+    ParticleWallet.navigatorWallet();
   }
 
   static void navigatorTokenReceive() {
-    ParticleWallet.navigatorTokenReceive(
-        "8ci2fZwQSmArbeHkuA7M8h5rsRwwh4FMTXrZxb3KsDpb");
+    String tokenAddress = "8ci2fZwQSmArbeHkuA7M8h5rsRwwh4FMTXrZxb3KsDpb";
+    ParticleWallet.navigatorTokenReceive(tokenAddress: tokenAddress);
   }
 
   static void navigatorTokenSend() {
-    ParticleWallet.navigatorTokenSend(
-        "8ci2fZwQSmArbeHkuA7M8h5rsRwwh4FMTXrZxb3KsDpb",
-        "1232fZwQSmArbeHkuA7M8h5rsRwwh4FMTXrZxb3KsDpb",
-        1000000);
+    String tokenAddress = "8ci2fZwQSmArbeHkuA7M8h5rsRwwh4FMTXrZxb3KsDpb";
+    String toAddress = "1232fZwQSmArbeHkuA7M8h5rsRwwh4FMTXrZxb3KsDpb";
+    int amount = 1000000;
+    ParticleWallet.navigatorTokenSend(tokenAddress: tokenAddress, toAddress: toAddress, amount: amount);
   }
 
   static void navigatorTokenTransactionRecords() {
+    String tokenAddress = "8ci2fZwQSmArbeHkuA7M8h5rsRwwh4FMTXrZxb3KsDpb";
     ParticleWallet.navigatorTokenTransactionRecords(
-        "8ci2fZwQSmArbeHkuA7M8h5rsRwwh4FMTXrZxb3KsDpb");
+        tokenAddress: tokenAddress);
   }
 
   static void navigatorNFTSend() {
-    ParticleWallet.navigatorNFTSend(
-        "0xD000F000Aa1F8accbd5815056Ea32A54777b2Fc4", "1412", "");
+    String mintAddress = "0xD000F000Aa1F8accbd5815056Ea32A54777b2Fc4";
+    String tokenId = "1412";
+    ParticleWallet.navigatorNFTSend(mintAddress, tokenId, receiveAddress: "");
   }
 
   static void navigatorNFTDetails() {

@@ -9,8 +9,6 @@ import 'package:particle_wallet/particle_wallet.dart';
 import 'package:particle_wallet_example/mock/test_account.dart';
 import 'package:particle_wallet_example/mock/transaction_mock.dart';
 
-
-
 class ConnectLogic {
   static late ChainInfo currChainInfo;
   static WalletType walletType = WalletType.metaMask;

@@ -29,14 +29,103 @@ dependencies:
 #  particle_auth: ^0.0.1
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
+  
+  # 支持国际化
+  flutter_localizations:
+    sdk: flutter
+  intl: ^0.17.0
+  # 数据库操作
+  floor: ^1.3.0
+  validators: ^3.0.0 # for email format check
+  provider: ^5.0.0 # for state management
+  built_value: ^8.1.1 # for model & serialization
+  oktoast: ^3.0.0 # for toast
+  flutter_easyrefresh: ^2.2.2 # for loading more
+  pull_to_refresh: ^2.0.0
+  dotted_line: ^3.1.0
+  pull_to_refresh_flutter3: ^2.0.1
+  gif: ^2.2.0
+  top_modal_sheet: ^2.0.1
+  rxdart: ^0.26.0 # for bloc
+  stream_transform: ^2.0.0
+  flutter_bloc: ^7.1.0 # for bloc
+  equatable: ^2.0.3 # for bloc & equable
+  localstorage: ^4.0.0+1 # for interests & topics cache
+  moor_flutter: ^4.0.0 # for articles cache
+  connectivity: ^3.0.6 # for internet connectivity check
+  dio: ^4.0.6 # for download html & others files
+  pretty_dio_logger: ^1.2.0-beta-1 # for dio request log
+  web_socket_channel: ^2.1.0 # for socket
+  flutter_secure_storage: ^4.2.0 # for storing user login information
+  shared_preferences: ^2.0.6 # for UserDefaults(suiteName: kSuiteName)
+  uni_links: ^0.5.1 # for DeepLink
+  lottie: 1.1.0
+  package_info: ^2.0.2 # for app version
+  url_launcher: ^6.0.9 # for open url
+  cached_network_image: ^3.1.0 # cache image
+  lpinyin: ^2.0.3 # for get pinyin of Chinese character, and sort it
+  xml: ^5.1.2 # for extract location xml data
+  extended_text: ^9.0.0 # for rich text
+  extended_text_field: ^10.0.0 # for rich text
+  get_it: ^7.2.0 # get global ctx
+  device_info: ^2.0.2 # get device id
+  quiver: ^3.0.1 # dart helper
+  encrypt: ^5.0.0 # aes
+  card_swiper: ^1.0.2 # for app tutorial swiper
+  dotted_dashed_line: ^0.0.3
+  event_bus: ^2.0.0 # eventbus
+  photo_view: ^0.14.0
+  # fdottedline: ^1.0.1
+  r_dotted_line_border: ^0.1.1
+  # hexcolor: ^2.0.7
+  flutter_svg: ^0.22.0 # svg icon
+  badges: ^2.0.1
+  flutter_cupertino_datetime_picker: ^2.0.1
+  card_loading: ^0.1.5
+  loading_animation_widget: ^1.2.0+2
+  webview_flutter:
+    git:
+      source: git
+      url: 'https://github.com/fesp/plugins'
+      path: 'packages/webview_flutter/webview_flutter'
+      ref: 'add-file-chooser-on-android'
+  flutter_markdown: ^0.6.10
+  syntax_highlighter: ^0.1.1
+  expandable_text: ^2.2.0
+  percent_indicator: ^3.0.1
+  common_utils: ^2.1.0
+  flutter_easyloading: ^3.0.5
+  flutter_lints: ^2.0.0
+  built_value_generator: ^8.1.1 # for model & serialization
+  firebase_crashlytics: ^2.8.9
+  firebase_core: ^1.21.1
+  firebase_performance: ^0.8.2+4
+  flutter_spinkit: ^5.1.0
+  html: ^0.15.0
+  floor_generator: ^1.3.0
+  build_runner: ^2.2.1
+  # The following adds the Cupertino Icons font to your application.
+  # Use with the CupertinoIcons class for iOS style icons.
   cupertino_icons: ^1.0.2
-  oktoast: ^3.1.5
-  pretty_dio_logger: ^1.1.1
-  provider: ^6.0.3
-  auto_route: ^4.0.1
+
+  #wallet相关
+  web3dart: ^2.3.0
+  local_auth: ^2.1.2
+  bip39: ^1.0.6
+  flutter_bitcoin: ^1.0.1
+  steel_crypt: ^3.0.0+1
+  sqflite: ^2.0.1
+  path_provider: ^2.0.11
+  # dart_sql: ^0.0.7
+  ed25519_hd_key: ^2.2.0
+  qr_flutter: ^4.0.0
+  sacco: ^0.2.0
+  flutter_aes_ecb_pkcs5_fork: ^0.1.4
+  flutter_slidable: ^1.3.0 
+  decimal: ^2.2.0
+  hex: ^0.2.0
+  firebase_analytics: ^9.3.8
   retrofit: ^3.0.1+1
-  json_serializable: ^6.3.1
-  uuid: ^3.0.6
 
 dev_dependencies:
   flutter_test:

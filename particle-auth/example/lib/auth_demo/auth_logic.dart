@@ -10,6 +10,7 @@ import 'package:particle_auth_example/model/pn_account_info_entity.dart';
 
 
 class AuthLogic {
+
   static late ChainInfo currChainInfo;
 
   static void setChain() {
@@ -23,10 +24,17 @@ class AuthLogic {
   static String? evmPubAddress;
   static String? solPubAddress;
 
+  void loginA() async {
+    List<SupportAuthType> supportAuthType = <SupportAuthType>[];
+    supportAuthType.add(SupportAuthType.google);
+    String result = await ParticleAuth.login(LoginType.phone, "", supportAuthType);
+debugPrint("login: $result");
+    showToast("login: $result");
+  }
   static void login() async {
     List<SupportAuthType> supportAuthType = <SupportAuthType>[];
-    supportAuthType.add(SupportAuthType.all);
-    String result =await ParticleAuth.login(LoginType.phone, "", supportAuthType);
+    supportAuthType.add(SupportAuthType.google);
+    String result = await ParticleAuth.login(LoginType.phone, "", supportAuthType);
 
     debugPrint("login: $result");
     showToast("login: $result");

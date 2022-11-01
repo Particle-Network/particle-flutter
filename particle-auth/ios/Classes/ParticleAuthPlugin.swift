@@ -140,12 +140,14 @@ public extension ParticleAuthPlugin {
     }
     
     func login(_ json: String?, flutterResult: @escaping FlutterResult) {
+        
         guard let json = json else {
             flutterResult(FlutterError(code: "", message: "json is nil", details: nil))
             return
         }
-        
+
         let data = JSON(parseJSON: json)
+        
         let type = data["login_type"].stringValue.lowercased()
         let account = data["account"].string
         let supportAuthType = data["support_auth_type_values"].arrayValue

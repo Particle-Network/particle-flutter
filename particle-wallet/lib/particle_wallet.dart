@@ -6,6 +6,7 @@ import 'package:particle_connect/model/chain_info.dart';
 import 'package:particle_connect/model/connect_info.dart';
 import 'package:particle_wallet/model/language.dart';
 import 'package:particle_wallet/model/user_interface_style.dart';
+import 'package:particle_wallet/model/wallet_display.dart';
 
 class ParticleWallet {
   ParticleWallet._();
@@ -18,14 +19,20 @@ class ParticleWallet {
   ///   "env": "PRODUCTION"
   /// }
   static Future<void> init() async {
-    await _channel.invokeMethod('init');
+    if (Platform.isAndroid) {
+      await _channel.invokeMethod('init');
+    }
   }
 
-  static Future<String> navigatorWallet(int display) async {
+  /// navigator to wallet page.
+  /// set [walletDisplay] show token or nft in wallet page, default is token.
+  static Future<String> navigatorWallet(
+      {WalletDisplay walletDisplay = WalletDisplay.token}) async {
+    int display = walletDisplay == WalletDisplay.token ? 0 : 1;
     return await _channel.invokeMethod('navigatorWallet', display);
   }
 
-  static Future<String> navigatorTokenReceive(String tokenAddress) async {
+  static Future<String> navigatorTokenReceive({String tokenAddress = ""}) async {
     return await _channel.invokeMethod('navigatorTokenReceive', tokenAddress);
   }
 
@@ -34,8 +41,8 @@ class ParticleWallet {
   /// "account": "",
   /// "supportAuthTypeValues": ["GOOGLE"]
   /// }
-  static Future<String> navigatorTokenSend(String tokenAddress,
-      String toAddress, int amount) async {
+  static Future<String> navigatorTokenSend(
+      {String tokenAddress = "", String toAddress = "", int amount = 0}) async {
     return await _channel.invokeMethod(
         'navigatorTokenSend',
         jsonEncode({
@@ -46,13 +53,13 @@ class ParticleWallet {
   }
 
   static Future<String> navigatorTokenTransactionRecords(
-      String tokenAddress) async {
+      {String tokenAddress = ""}) async {
     return await _channel.invokeMethod(
         'navigatorTokenTransactionRecords', tokenAddress);
   }
 
-  static Future<bool> navigatorNFTSend(String mint, String tokenId,
-      String receiveAddress) async {
+  static Future<bool> navigatorNFTSend(
+      String mint, String tokenId, {String receiveAddress = ""}) async {
     return await _channel.invokeMethod(
         'navigatorNFTSend',
         jsonEncode({
@@ -113,12 +120,11 @@ class ParticleWallet {
         "chain_id": chainInfo.chainId,
       });
     }
-
     _channel.invokeMethod('supportChain', jsonEncode(allInfos));
   }
 
-  static Future<String> switchWallet(WalletType walletType,
-      String publicAddress) async {
+  static Future<String> switchWallet(
+      WalletType walletType, String publicAddress) async {
     return await _channel.invokeMethod(
         'switchWallet',
         jsonEncode({
@@ -127,8 +133,8 @@ class ParticleWallet {
         }));
   }
 
-  static Future<bool> setWallet(WalletType walletType,
-      String publicAddress) async {
+  static Future<bool> setWallet(
+      WalletType walletType, String publicAddress) async {
     if (Platform.isIOS) {
       return true;
     }

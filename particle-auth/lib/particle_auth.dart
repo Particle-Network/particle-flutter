@@ -3,7 +3,9 @@ import 'dart:io' show Platform;
 
 import 'package:flutter/services.dart';
 import 'package:particle_auth/model/chain_info.dart';
+import 'package:particle_auth/model/ios_modal_present_style.dart';
 import 'package:particle_auth/model/typeddata_version.dart';
+import 'package:particle_auth/model/user_interface_style.dart';
 
 import '../model/login_info.dart';
 
@@ -109,5 +111,25 @@ class ParticleAuth {
 
   static Future<String> getChainInfo() async {
     return await _channel.invokeMethod('getChainInfo');
+  }
+
+  static Future<void> openWebWallet() async {
+    return await _channel.invokeMethod('openWebWallet');
+  }
+
+  static Future<void> setDisplayWallet(bool displayWallet) async {
+    return await _channel.invokeMethod('setDisplayWallet', displayWallet);
+  }
+
+  static setInterfaceStyle(UserInterfaceStyle interfaceStyle) {
+    if (Platform.isIOS) {
+      _channel.invokeMethod("setInterfaceStyle", interfaceStyle.name);
+    }
+  }
+
+  static setModalPresentStyle(IOSModalPresentStyle modalPresentStyle) {
+    if (Platform.isIOS) {
+      _channel.invokeMethod("setModalPresentStyle", modalPresentStyle.name);
+    }
   }
 }

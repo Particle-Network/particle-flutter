@@ -13,6 +13,10 @@ import UIKit
     }
 
     override func application(_ app: UIApplication, open url: URL, options: [UIApplication.OpenURLOptionsKey: Any] = [:]) -> Bool {
-        return ParticleConnect.handleUrl(url)
+        if ParticleConnect.handleUrl(url) {
+            return true
+        } else {
+            return super.application(app, open: url, options: options)
+        }
     }
 }

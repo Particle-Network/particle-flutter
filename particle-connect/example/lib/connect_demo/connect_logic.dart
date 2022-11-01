@@ -198,7 +198,14 @@ class ConnectLogic {
   static void exportPrivateKey() async {
     String result =
         await ParticleConnect.exportPrivateKey(walletType, getPublicAddress());
-    print("exportPrivateKey: $result");
-    showToast("exportPrivateKey: $result");
+    Map<String, dynamic> jsonResult = jsonDecode(result);
+    if (jsonResult["status"]  == 1 || jsonResult["status"]  == true) {
+      pubAddress = jsonResult["data"]["publicAddress"];
+      print("pubAddress:$pubAddress");
+      showToast("connect: $result  pubAddress:$pubAddress");
+    } else {
+      print("${jsonResult["data"]}");
+      showToast("connect failed!");
+    }
   }
 }
