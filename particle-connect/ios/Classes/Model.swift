@@ -55,8 +55,8 @@ extension NSObject {
         } else if name == "arbitrum" {
             if chainId == 42161 {
                 chainInfo = .arbitrum(.mainnet)
-            } else if chainId == 421611 {
-                chainInfo = .arbitrum(.testnet)
+            } else if chainId == 421613 {
+                chainInfo = .arbitrum(.goerli)
             }
         } else if name == "moonbeam" {
             if chainId == 1284 {

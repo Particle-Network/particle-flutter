@@ -51,14 +51,6 @@ class EthereumChain implements ChainInfo {
     return EthereumChain(1, "Mainnet");
   }
 
-  static EthereumChain ropsten() {
-    return EthereumChain(3, "Ropsten");
-  }
-
-  static EthereumChain rinkeby() {
-    return EthereumChain(4, "Rinkeby");
-  }
-
   static EthereumChain goerli() {
     return EthereumChain(5, "Goerli");
   }
@@ -243,8 +235,8 @@ class ArbitrumChain implements ChainInfo {
     return ArbitrumChain(42161, "Mainnet");
   }
 
-  static ArbitrumChain testnet() {
-    return ArbitrumChain(421611, "Testnet");
+  static ArbitrumChain goerli() {
+    return ArbitrumChain(421613, "Goerli");
   }
 }
 
@@ -335,8 +327,8 @@ class OptimismChain implements ChainInfo {
     return OptimismChain(10, "Mainnet");
   }
 
-  static OptimismChain testnet() {
-    return OptimismChain(69, "Testnet");
+  static OptimismChain goerli() {
+    return OptimismChain(420, "Goerli");
   }
 }
 

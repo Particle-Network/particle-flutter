@@ -168,10 +168,6 @@ debugPrint("login: $result");
       chainInfo = EthereumChain.mainnet();
     } else if (chainId == EthereumChain.goerli().chainId) {
       chainInfo = EthereumChain.goerli();
-    } else if (chainId == EthereumChain.ropsten().chainId) {
-      chainInfo = EthereumChain.ropsten();
-    } else if (chainId == EthereumChain.rinkeby().chainId) {
-      chainInfo = EthereumChain.rinkeby();
     } else if (chainId == SolanaChain.mainnet().chainId) {
       chainInfo = SolanaChain.mainnet();
     } else if (chainId == SolanaChain.testnet().chainId) {
@@ -208,12 +204,12 @@ debugPrint("login: $result");
       chainInfo = HecoChain.testnet();
     } else if (chainId == ArbitrumChain.mainnet().chainId) {
       chainInfo = ArbitrumChain.mainnet();
-    } else if (chainId == ArbitrumChain.testnet().chainId) {
-      chainInfo = ArbitrumChain.testnet();
+    } else if (chainId == ArbitrumChain.goerli().chainId) {
+      chainInfo = ArbitrumChain.goerli();
     } else if (chainId == OptimismChain.mainnet().chainId) {
       chainInfo = OptimismChain.mainnet();
-    } else if (chainId == OptimismChain.testnet().chainId) {
-      chainInfo = OptimismChain.testnet();
+    } else if (chainId == OptimismChain.goerli().chainId) {
+      chainInfo = OptimismChain.goerli();
     } else if (chainId == HarmonyChain.mainnet().chainId) {
       chainInfo = HarmonyChain.mainnet();
     } else if (chainId == HarmonyChain.testnet().chainId) {
