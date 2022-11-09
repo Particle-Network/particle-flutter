@@ -146,17 +146,8 @@ extension NSObject {
     }
 
     func ResponseFromError(_ error: Error) -> FlutterResponseError {
-        if let error = error as? ParticleNetwork.Error {
-            switch error {
-            case .invalidResponse(let response):
-                return FlutterResponseError(code: response.code, message: response.message ?? "", data: response.data)
-            case .invalidData(reason: let reason):
-                return FlutterResponseError(code: nil, message: reason ?? "", data: nil)
-            case .interrupt:
-                return FlutterResponseError(code: nil, message: "interrupt", data: nil)
-            case .resultEmpty:
-                return FlutterResponseError(code: nil, message: error.description, data: nil)
-            }
+        if let responseError = error as? ParticleNetwork.ResponseError {
+            return FlutterResponseError(code: responseError.code, message: responseError.message ?? "", data: responseError.data)
         } else if let error = error as? ConnectError {
             return FlutterResponseError(code: error.code, message: error.message!, data: nil)
         } else {
