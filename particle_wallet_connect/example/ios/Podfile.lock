@@ -1,0 +1,70 @@
+PODS:
+  - Alamofire (5.6.2)
+  - CryptoSwift (1.6.0)
+  - Flutter (1.0.0)
+  - particle_wallet_connect (0.0.1):
+    - Flutter
+    - ParticleWalletConnect
+    - SwiftyJSON
+  - ParticleWalletConnect (0.8.8):
+    - RxAlamofire (~> 6.1.1)
+    - RxCocoa (= 6.5.0)
+    - RxSwift (= 6.5.0)
+    - SwiftyUserDefaults (~> 5.3.0)
+    - WalletConnectSwift
+  - RxAlamofire (6.1.1):
+    - RxAlamofire/Core (= 6.1.1)
+  - RxAlamofire/Core (6.1.1):
+    - Alamofire (~> 5.4)
+    - RxSwift (~> 6.0)
+  - RxCocoa (6.5.0):
+    - RxRelay (= 6.5.0)
+    - RxSwift (= 6.5.0)
+  - RxRelay (6.5.0):
+    - RxSwift (= 6.5.0)
+  - RxSwift (6.5.0)
+  - SwiftyJSON (5.0.1)
+  - SwiftyUserDefaults (5.3.0)
+  - WalletConnectSwift (1.7.0):
+    - CryptoSwift (~> 1.5)
+
+DEPENDENCIES:
+  - Flutter (from `Flutter`)
+  - particle_wallet_connect (from `.symlinks/plugins/particle_wallet_connect/ios`)
+
+SPEC REPOS:
+  trunk:
+    - Alamofire
+    - CryptoSwift
+    - ParticleWalletConnect
+    - RxAlamofire
+    - RxCocoa
+    - RxRelay
+    - RxSwift
+    - SwiftyJSON
+    - SwiftyUserDefaults
+    - WalletConnectSwift
+
+EXTERNAL SOURCES:
+  Flutter:
+    :path: Flutter
+  particle_wallet_connect:
+    :path: ".symlinks/plugins/particle_wallet_connect/ios"
+
+SPEC CHECKSUMS:
+  Alamofire: d368e1ff8a298e6dde360e35a3e68e6c610e7204
+  CryptoSwift: 562f8eceb40e80796fffc668b0cad9313284cfa6
+  Flutter: f04841e97a9d0b0a8025694d0796dd46242b2854
+  particle_wallet_connect: 05cfd2b264d78695797693e0b0509ce413d25597
+  ParticleWalletConnect: 55694aa3e893f41c076df93821cadc71670e3b42
+  RxAlamofire: beb75a1c452d0de225651db4903f5d29d034a620
+  RxCocoa: 94f817b71c07517321eb4f9ad299112ca8af743b
+  RxRelay: 1de1523e604c72b6c68feadedd1af3b1b4d0ecbd
+  RxSwift: 5710a9e6b17f3c3d6e40d6e559b9fa1e813b2ef8
+  SwiftyJSON: 2f33a42c6fbc52764d96f13368585094bfd8aa5e
+  SwiftyUserDefaults: 63f80248cf5bfb3458825d9a78f2eb7e1293a040
+  WalletConnectSwift: 6309bf3011b0b30e3e9d1e7449535302a9240f71
+
+PODFILE CHECKSUM: 36be1ebae198144c276cad8e4fb25fd982ae85c3
+
+COCOAPODS: 1.11.3
