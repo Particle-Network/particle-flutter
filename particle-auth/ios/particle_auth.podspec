@@ -9,7 +9,7 @@ Pod::Spec.new do |s|
   s.description      = <<-DESC
 A flutter plugin project for particle auth
                        DESC
-  s.homepage         = 'http://particle.network'
+  s.homepage         = 'https://particle.network'
   s.license          = { :file => '../LICENSE' }
   s.author           = { 'SunZhiC' => 'sunzhichao@minijoy.work' }
   s.source           = { :path => '.' }
@@ -17,7 +17,6 @@ A flutter plugin project for particle auth
   s.dependency 'Flutter'
   s.platform = :ios, '13.0'
 
-  s.pod_target_xcconfig = { 'DEFINES_MODULE' => 'YES', 'EXCLUDED_ARCHS[sdk=iphonesimulator*]' => 'arm64' }
   s.swift_version = '5.0'
 
 

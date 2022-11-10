@@ -50,7 +50,7 @@ abstract class EvmRpcApi {
 
   @POST("evm-chain/rpc")
   Future<String> rpc(@Body() RequestBodyEntity requestBody);
-
+  
   static EvmRpcApi? _instace;
 
   static EvmRpcApi getClient() {
