@@ -56,6 +56,7 @@ class ParticleAuth {
     return await _channel.invokeMethod('login', params);
   }
 
+  
   static Future<String> logout() async {
     return await _channel.invokeMethod('logout');
   }
@@ -68,6 +69,7 @@ class ParticleAuth {
     return await _channel.invokeMethod('signMessage', message);
   }
 
+  
   static Future<String> signTransaction(String transaction) async {
     return await _channel.invokeMethod('signTransaction', transaction);
   }
