@@ -55,7 +55,7 @@ public class ParticleAuthPlugin: NSObject, FlutterPlugin {
         case .initialize:
             self.initialize(json as? String)
         case .setChainInfo:
-            self.setChainInfo(json as? String)
+            self.setChainInfo(json as? String, flutterResult: result)
         case .getChainInfo:
             self.getChainInfo(flutterResult: result)
         case .setChainInfoAsync:
@@ -119,7 +119,7 @@ public extension ParticleAuthPlugin {
         ParticleNetwork.initialize(config: config)
     }
     
-    func setChainInfo(_ json: String?) {
+    func setChainInfo(_ json: String?, flutterResult: @escaping FlutterResult) {
         guard let json = json else {
             return
         }
@@ -127,8 +127,43 @@ public extension ParticleAuthPlugin {
         let data = JSON(parseJSON: json)
         let name = data["chain_name"].stringValue.lowercased()
         let chainId = data["chain_id"].intValue
-        guard let chainInfo = matchChain(name: name, chainId: chainId) else { return }
+        guard let chainInfo = matchChain(name: name, chainId: chainId) else { 
+            flutterResult(false)
+            return  
+        }
         ParticleNetwork.setChainInfo(chainInfo)
+        flutterResult(true)
+    }
+
+    func setChainInfoAsync(_ json: String?, flutterResult: @escaping FlutterResult) {
+        guard let json = json else {
+            flutterResult(FlutterError(code: "", message: "json is nil", details: nil))
+            return
+        }
+        let data = JSON(parseJSON: json)
+        let name = data["chain_name"].stringValue.lowercased()
+        let chainId = data["chain_id"].intValue
+        guard let chainInfo = matchChain(name: name, chainId: chainId) else { 
+            flutterResult(FlutterError(code: "", message: "did not find chain info for \(chainId)", details: nil))
+            return 
+        }
+        ParticleAuthService.setChainInfo(chainInfo).subscribe { [weak self] result in
+            guard let self = self else { return }
+
+            switch result {
+            case .failure(let error):
+                let response = self.ResponseFromError(error)
+                let statusModel = FlutterStatusModel(status: false, data: response)
+                let data = try! JSONEncoder().encode(statusModel)
+                guard let json = String(data: data, encoding: .utf8) else { return }
+                flutterResult(false)
+            case .success:
+                let statusModel = FlutterStatusModel(status: true, data: true)
+                let data = try! JSONEncoder().encode(statusModel)
+                guard let json = String(data: data, encoding: .utf8) else { return }
+                flutterResult(true)
+            }
+        }.disposed(by: self.bag)
     }
     
     func getChainInfo(flutterResult: FlutterResult) {
@@ -380,34 +415,6 @@ public extension ParticleAuthPlugin {
         flutterResult(json ?? "")
     }
     
-    func setChainInfoAsync(_ json: String?, flutterResult: @escaping FlutterResult) {
-        guard let json = json else {
-            flutterResult(FlutterError(code: "", message: "json is nil", details: nil))
-            return
-        }
-        let data = JSON(parseJSON: json)
-        let name = data["chain_name"].stringValue.lowercased()
-        let chainId = data["chain_id"].intValue
-        guard let chainInfo = matchChain(name: name, chainId: chainId) else { return }
-        ParticleAuthService.setChainInfo(chainInfo).subscribe { [weak self] result in
-            guard let self = self else { return }
-
-            switch result {
-            case .failure(let error):
-                let response = self.ResponseFromError(error)
-                let statusModel = FlutterStatusModel(status: false, data: response)
-                let data = try! JSONEncoder().encode(statusModel)
-                guard let json = String(data: data, encoding: .utf8) else { return }
-                
-                flutterResult(json)
-            case .success:
-                let statusModel = FlutterStatusModel(status: true, data: true)
-                let data = try! JSONEncoder().encode(statusModel)
-                guard let json = String(data: data, encoding: .utf8) else { return }
-                flutterResult(json)
-            }
-        }.disposed(by: self.bag)
-    }
     
     func setModalPresentStyle(_ json: String?) {
         guard let style = json else {
