@@ -1,4 +1,3 @@
-
 import 'package:particle_auth_example/mock/test_account.dart';
 import 'package:particle_auth_example/model/serialize_sol_transreqentity.dart';
 import 'package:particle_auth_example/model/serialize_trans_result_entity.dart';
@@ -18,6 +17,15 @@ class EvmService {
     return await EvmRpcApi.getClient().rpc(req);
   }
 
+  /// Request data when send erc20 token.
+  /// 
+  /// [contractAddress] is token address.
+  /// 
+  /// [sender] is sender public address.
+  /// 
+  /// [amount] is token amount that you want to send, for example send 0.01 token,
+  /// and token decimals is 18, pass 10000000000000000.
+  ///  
   static Future<String> erc20Transfer(
       String contractAddress, String sender, BigInt amount) async {
     var list2 = [sender, amount.toString()];
@@ -32,6 +40,125 @@ class EvmService {
     return await EvmRpcApi.getClient().rpc(req);
   }
 
+  /// Request data when send erc721 nft.
+  /// 
+  /// [contractAddress] is nft contract address.
+  /// 
+  /// [sender] is sender public address.
+  /// 
+  /// [to] is receiver public address.
+  /// 
+  /// [tokenId] is nft token id.
+  static Future<String> erc721SafeTransferFrom(
+      String contractAddress, String sender, String to, String tokenId) async {
+    var list2 = [sender, to, tokenId];
+    var list1 = [contractAddress, "erc721_safeTransferFrom", list2];
+
+    final req = RequestBodyEntity();
+    req.chainId = TestAccount.evm.chainId;
+    req.jsonrpc = "2.0";
+    req.id = const Uuid().v4();
+    req.method = "particle_abi_encodeFunctionCall";
+    req.params = list1;
+    return await EvmRpcApi.getClient().rpc(req);
+  }
+
+  /// Request data when send erc1155 nft.
+  /// 
+  /// [contractAddress] is nft contract address.
+  /// 
+  /// [sender] is sender public address.
+  /// 
+  /// [to] is receiver public address.
+  /// 
+  /// [tokenId] is nft token id.
+  /// 
+  /// [amount] is nft amount that you want to send, for example send 10 nft, pass "10"
+  /// 
+  /// [data] can pass "0x"
+  static Future<String> erc1155SafeTransferFrom(
+      String contractAddress,
+      String sender,
+      String to,
+      String tokenId,
+      String amount,
+      String data) async {
+    var list2 = [sender, to, tokenId, amount, data];
+    var list1 = [contractAddress, "erc1155_safeTransferFrom", list2];
+
+    final req = RequestBodyEntity();
+    req.chainId = TestAccount.evm.chainId;
+    req.jsonrpc = "2.0";
+    req.id = const Uuid().v4();
+    req.method = "particle_abi_encodeFunctionCall";
+    req.params = list1;
+    return await EvmRpcApi.getClient().rpc(req);
+  }
+
+  /// Request data when send erc20 approve.
+  /// [contractAddress] is token contract address.
+  /// 
+  /// [spender] is spender public address.
+  /// 
+  /// [amount] is token amount.
+  static Future<String> erc20Approve(
+      String contractAddress, String spender, BigInt amount) async {
+    var list2 = [spender, amount.toString()];
+    var list1 = [contractAddress, "erc20_approve", list2];
+
+    final req = RequestBodyEntity();
+    req.chainId = TestAccount.evm.chainId;
+    req.jsonrpc = "2.0";
+    req.id = const Uuid().v4();
+    req.method = "particle_abi_encodeFunctionCall";
+    req.params = list1;
+    return await EvmRpcApi.getClient().rpc(req);
+  }
+
+  /// Request data when execute erc20 transferFrom.
+  /// [contractAddress] is token contract address.
+  /// 
+  /// [from] is from public address.
+  /// 
+  /// [to] is to public address.
+  /// 
+  /// [amount] is token amount.
+  static Future<String> erc20TransferFrom(
+      String contractAddress, String from, String to, BigInt amount) async {
+    var list2 = [from, to, amount.toString()];
+    var list1 = [contractAddress, "erc20_transferFrom", list2];
+
+    final req = RequestBodyEntity();
+    req.chainId = TestAccount.evm.chainId;
+    req.jsonrpc = "2.0";
+    req.id = const Uuid().v4();
+    req.method = "particle_abi_encodeFunctionCall";
+    req.params = list1;
+    return await EvmRpcApi.getClient().rpc(req);
+  }
+
+  /// Request contact method.
+  /// 
+  /// [contractAddress] your contract address.
+  /// 
+  /// [method] your contract method name.
+  /// 
+  /// [params] your method's parameters.
+  static Future<String> customMethod(
+      String contractAddress, String method, List<Object> params) async {
+    var list2 = params;
+    var list1 = [contractAddress, "custom_$method", list2];
+
+    final req = RequestBodyEntity();
+    req.chainId = TestAccount.evm.chainId;
+    req.jsonrpc = "2.0";
+    req.id = const Uuid().v4();
+    req.method = "particle_abi_encodeFunctionCall";
+    req.params = list1;
+    return await EvmRpcApi.getClient().rpc(req);
+  }
+
+  /// Get suggesst fee 
   static Future<String> suggestedGasFees() async {
     final req = RequestBodyEntity();
     req.chainId = TestAccount.evm.chainId;
@@ -42,9 +169,17 @@ class EvmService {
     return await EvmRpcApi.getClient().rpc(req);
   }
 
-
+  /// call eth_estimateGas, get gasLimit
+  /// 
+  /// [from] is sender public address.
+  /// 
+  /// [to] if send native token, is recevier address, if send erc20 token or nft, is contract address.
+  /// 
+  /// [value] is native token amount in hex string.
+  /// 
+  /// [data] transacion data
   static Future<String> ethEstimateGas(
-      String from, String to, String value, String data) async {
+      String from, String? to, String value, String data) async {
     final req = RequestBodyEntity();
     req.chainId = TestAccount.evm.chainId;
     req.jsonrpc = "2.0";

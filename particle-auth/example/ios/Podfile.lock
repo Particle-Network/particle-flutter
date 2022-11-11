@@ -62,7 +62,7 @@ SPEC CHECKSUMS:
   BigInt: f668a80089607f521586bbe29513d708491ef2f7
   CryptoSwift: c4f2debceb38bf44c80659afe009f71e23e4a082
   Flutter: f04841e97a9d0b0a8025694d0796dd46242b2854
-  particle_auth: ceb60ac34af74dca2cae26fb75b0ce88810561fc
+  particle_auth: ab2f562eed02a8ad39aa15843c3f5d9faa079aaa
   ParticleAuthService: 1bb79b2b68948ebb4565b479afc097cc2ee2f409
   ParticleNetworkBase: be51e4608cf40d22ca7250c1d516f808c0a2f72f
   RxAlamofire: beb75a1c452d0de225651db4903f5d29d034a620

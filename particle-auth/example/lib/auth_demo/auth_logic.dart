@@ -116,7 +116,7 @@ debugPrint("login: $result");
       debugPrint("signAndSendTransaction: $result");
       showToast("signAndSendTransaction: $result");
     } else {
-      final trans = await TransactionMock.mockEvmTransaction(pubAddress);
+      final trans = await TransactionMock.mockEvmSendToken(pubAddress);
       String result = await ParticleAuth.signAndSendTransaction(trans);
       debugPrint("signAndSendTransaction: $result");
       showToast("signAndSendTransaction: $result");
