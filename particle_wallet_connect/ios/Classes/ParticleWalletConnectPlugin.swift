@@ -5,6 +5,7 @@
 //  Created by link on 2022/10/8.
 //
 
+import Alamofire
 import Flutter
 import Foundation
 import ParticleWalletConnect
@@ -12,14 +13,16 @@ import SwiftyJSON
 import WalletConnectSwift
 
 public class ParticleWalletConnectPlugin: NSObject, FlutterPlugin {
-    var requestFlutterResult: FlutterResult?
-    var didConnectFlutterResult: FlutterResult?
-    var didDisconnectFlutterResult: FlutterResult?
+    var eventChannel: FlutterEventChannel?
+    var events: FlutterEventSink?
     
-    var shouldStartCallBacks: [String: (String, Int) -> Void] = [:]
-    var requestCallBacks: [String: (WCResult<Data?>) -> Void] = [:]
-    var connectFlutterResult: FlutterResult?
+    var requestCallbacks: [String: (WCResult<Data?>) -> Void] = [:]
+    var shouldStartCallbacks: [String: (String, Int) -> Void] = [:]
     
+    override public init() {
+        super.init()
+    }
+
     public enum Method: String {
         case initialize
         case setCustomRpcUrl
@@ -30,11 +33,7 @@ public class ParticleWalletConnectPlugin: NSObject, FlutterPlugin {
         case getSession
         case getAllSessions
         case startSession
-        case subscriptRequest
         case handleRequest
-        case subscriptDidDisconnectSession
-        case subscriptDidConnectSession
-        case subscriptShouldStartSession
     }
     
     public static func register(with registrar: FlutterPluginRegistrar) {
@@ -42,9 +41,13 @@ public class ParticleWalletConnectPlugin: NSObject, FlutterPlugin {
         
         let instance = ParticleWalletConnectPlugin()
         
+        instance.eventChannel = FlutterEventChannel(name: "wallet_connect_bridge.event", binaryMessenger: registrar.messenger())
+        instance.eventChannel?.setStreamHandler(instance)
+
+        channel.setMethodCallHandler(instance.handle(_:result:))
         registrar.addMethodCallDelegate(instance, channel: channel)
     }
-    
+   
     public func handle(_ call: FlutterMethodCall, result: @escaping FlutterResult) {
         guard let method = ParticleWalletConnectPlugin.Method(rawValue: call.method) else {
             result(FlutterMethodNotImplemented)
@@ -72,16 +75,8 @@ public class ParticleWalletConnectPlugin: NSObject, FlutterPlugin {
             self.getAllSessions(flutterResult: result)
         case .startSession:
             self.startSession(json as? String)
-        case .subscriptRequest:
-            self.subscriptRequest(flutterResult: result)
         case .handleRequest:
             self.handleRequest(json as? String)
-        case .subscriptDidDisconnectSession:
-            self.subscriptDidDisconnectSession(flutterResult: result)
-        case .subscriptDidConnectSession:
-            self.subscriptDidConnectSession(flutterResult: result)
-        case .subscriptShouldStartSession:
-            self.subscriptShouldStartSession(flutterResult: result)
         }
     }
 }
@@ -123,10 +118,7 @@ public extension ParticleWalletConnectPlugin {
         guard let code = json else {
             return
         }
-        self.requestFlutterResult = flutterResult
-//        let code1 = "wc:AC571703-958B-4816-BBE1-2F5FBBD36086@1?bridge=https%3A%2F%2Fbridge.walletconnect.org%2F&key=5146dafb25399dbec29a03df1c39f9405a646fe98ce0380e2fa13401a102928d"
         ParticleWalletConnect.shared.connect(code: code)
-        
     }
     
     func disconnect(_ json: String?) {
@@ -170,7 +162,8 @@ public extension ParticleWalletConnectPlugin {
         
         let dappMetaData = self.getDapp(from: session)
         let data = try! JSONEncoder().encode(dappMetaData)
-        flutterResult(data)
+        guard let json = String(data: data, encoding: .utf8) else { return }
+        flutterResult(json)
     }
     
     func getAllSessions(flutterResult: FlutterResult) {
@@ -180,7 +173,8 @@ public extension ParticleWalletConnectPlugin {
         }
         
         let data = try! JSONEncoder().encode(dappMetaDatas)
-        flutterResult(data)
+        guard let json = String(data: data, encoding: .utf8) else { return }
+        flutterResult(json)
     }
     
     func startSession(_ json: String?) {
@@ -191,15 +185,11 @@ public extension ParticleWalletConnectPlugin {
         let topic = data["topic"].stringValue
         let publicAddress = data["public_address"].stringValue
         let chainId = data["chain_id"].intValue
-        if self.shouldStartCallBacks.keys.contains(topic) {
-            let shouldStartCallBack = self.shouldStartCallBacks[topic]
-            shouldStartCallBack?(publicAddress, chainId)
-            self.shouldStartCallBacks.removeValue(forKey: topic)
+        if self.shouldStartCallbacks.keys.contains(topic) {
+            let shouldStartCallback = self.shouldStartCallbacks[topic]
+            shouldStartCallback?(publicAddress, chainId)
+            self.shouldStartCallbacks.removeValue(forKey: topic)
         }
-    }
-    
-    func subscriptRequest(flutterResult: @escaping FlutterResult) {
-        self.requestFlutterResult = flutterResult
     }
     
     func handleRequest(_ json: String?) {
@@ -208,84 +198,138 @@ public extension ParticleWalletConnectPlugin {
         }
         let data = JSON(parseJSON: json)
         let requestId = data["request_id"].stringValue
-        let isSuccess = data["isSuccess"].boolValue
+        let isSuccess = data["is_success"].boolValue
         if isSuccess {
             //
-            let result = data["data"].arrayValue
-            if self.requestCallBacks.keys.contains(requestId) {
-                let requestCallBack = self.requestCallBacks[requestId]
+            let result = data["data"]
+            if self.requestCallbacks.keys.contains(requestId) {
+                let requestCallback = self.requestCallbacks[requestId]
                 let encoded = try? JSONEncoder().encode(result)
-                requestCallBack?(.success(encoded))
-                self.requestCallBacks.removeValue(forKey: requestId)
+                requestCallback?(.success(encoded))
+                self.requestCallbacks.removeValue(forKey: requestId)
             }
-            
         } else {
             // error
             let code = data["data"]["code"].int
             let message = data["data"]["message"].string
             let errorData = data["data"]["data"].string
             let error = WCResponseError(code: code, message: message, data: errorData)
-            if self.requestCallBacks.keys.contains(requestId) {
-                let requestCallBack = self.requestCallBacks[requestId]
-                requestCallBack?(.failure(error))
-                self.requestCallBacks.removeValue(forKey: requestId)
+            if self.requestCallbacks.keys.contains(requestId) {
+                let requestCallback = self.requestCallbacks[requestId]
+                requestCallback?(.failure(error))
+                self.requestCallbacks.removeValue(forKey: requestId)
             }
         }
     }
     
-    func subscriptDidDisconnectSession(flutterResult: @escaping FlutterResult) {
-        self.didDisconnectFlutterResult = flutterResult
-    }
-    
-    func subscriptDidConnectSession(flutterResult: @escaping FlutterResult) {
-        self.didConnectFlutterResult = flutterResult
-    }
-    
-    func subscriptShouldStartSession(flutterResult: @escaping FlutterResult) {
-    }
-    
-    private func getDapp(from session: Session) -> DappMetaData {
+    private func getDapp(from session: WalletConnectSwift.Session) -> DappMetaData {
         return DappMetaData(topic: session.url.topic, name: session.dAppInfo.peerMeta.name, icon: session.dAppInfo.peerMeta.icons.first?.absoluteString ?? "", url: session.dAppInfo.peerMeta.url.absoluteString)
     }
 }
 
 extension ParticleWalletConnectPlugin: ParticleWalletConnectDelegate {
     public func request(topic: String, method: String, params: [Encodable], completion: @escaping (WCResult<Data?>) -> Void) {
-        if let flutterResult = self.requestFlutterResult {
-            let requestId = UUID().uuidString
-            let dict: [String: Any] = ["request_id": requestId,
-                                       "method": method,
-                                       "params": params]
-            let json = dict.jsonString()
-            self.requestCallBacks[requestId] = completion
-            flutterResult(json)
+        let requestId = UUID().uuidString
+        
+        let values = params.map { para -> ValueType in
+            let p = convertData(para: para)
+
+            let data = try! JSONEncoder().encode(p)
+            return try! JSONDecoder().decode(ValueType.self, from: data)
+        }
+        let requestData = RequestData(request_id: requestId, method: method, params: values)
+        self.requestCallbacks[requestId] = completion
+        
+        let eventData = EventData(eventMethod: "request", data: requestData)
+        let data = try! JSONEncoder().encode(eventData)
+        guard let json = String(data: data, encoding: .utf8) else { return }
+        if self.events != nil {
+            self.events!(json)
         }
     }
     
     public func didConnectSession(_ session: WalletConnectSwift.Session) {
-        if let flutterResult = self.didConnectFlutterResult {
-            let dappMetaData = self.getDapp(from: session)
-            let data = try! JSONEncoder().encode(dappMetaData)
-            flutterResult(data)
+        let dappMetaData = self.getDapp(from: session)
+        let eventData = EventData(eventMethod: "didConnect", data: dappMetaData)
+        let data = try! JSONEncoder().encode(eventData)
+        guard let json = String(data: data, encoding: .utf8) else { return }
+        if self.events != nil {
+            self.events!(json)
         }
     }
     
     public func didDisconnect(_ session: WalletConnectSwift.Session) {
-        if let flutterResult = self.didDisconnectFlutterResult {
-            let dappMetaData = self.getDapp(from: session)
-            let data = try! JSONEncoder().encode(dappMetaData)
-            flutterResult(data)
+        let dappMetaData = self.getDapp(from: session)
+        let eventData = EventData(eventMethod: "didDisconnect", data: dappMetaData)
+        let data = try! JSONEncoder().encode(eventData)
+        guard let json = String(data: data, encoding: .utf8) else { return }
+        if self.events != nil {
+            self.events!(json)
         }
     }
     
     public func shouldStartSession(_ session: WalletConnectSwift.Session, completion: @escaping (String, Int) -> Void) {
-        self.shouldStartCallBacks[session.url.topic] = completion
-        if let fultterResult = self.connectFlutterResult {
-            let dappMetaData = self.getDapp(from: session)
-            let data = try! JSONEncoder().encode(dappMetaData)
-            fultterResult(data)
+        let dappMetaData = self.getDapp(from: session)
+        self.shouldStartCallbacks[session.url.topic] = completion
+        
+        let eventData = EventData(eventMethod: "shouldStart", data: dappMetaData)
+        let data = try! JSONEncoder().encode(eventData)
+        guard let json = String(data: data, encoding: .utf8) else { return }
+        print(json)
+        if self.events != nil {
+            self.events!(json)
         }
     }
+    
+    private func convertData(para: Encodable) -> ValueType? {
+        var data: Data?
+        if let int = para as? Int {
+            data = try! JSONEncoder().encode(int)
+        } else if let double = para as? Double {
+            data = try! JSONEncoder().encode(double)
+        } else if let string = para as? String {
+            data = try! JSONEncoder().encode(string)
+        } else if let bool = para as? Bool {
+            data = try! JSONEncoder().encode(bool)
+        } else if let array = para as? [Encodable] {
+            data = try! JSONEncoder().encode(array.map { self.convertData(para: $0) })
+        } else if let dict = para as? [String: Encodable] {
+            var newDict: [String: ValueType] = [:]
+            for (key, value) in dict {
+                newDict[key] = self.convertData(para: value)
+            }
+            data = try! JSONEncoder().encode(newDict)
+        }
+        
+        if data != nil {
+            return try! JSONDecoder().decode(ValueType.self, from: data!)
+        } else {
+            return nil
+        }
+    }
+}
+
+extension ParticleWalletConnectPlugin: FlutterStreamHandler {
+    public func onListen(withArguments arguments: Any?, eventSink events: @escaping FlutterEventSink) -> FlutterError? {
+        self.events = events
+        return nil
+    }
+    
+    public func onCancel(withArguments arguments: Any?) -> FlutterError? {
+        self.events = nil
+        return nil
+    }
+}
+
+struct RequestData: Encodable {
+    let request_id: String
+    let method: String
+    let params: [ValueType]
+}
+
+struct EventData<T: Encodable>: Encodable {
+    let eventMethod: String
+    let data: T
 }
 
 struct DappMetaData: Encodable {
