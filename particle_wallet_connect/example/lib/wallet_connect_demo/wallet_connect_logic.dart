@@ -74,8 +74,7 @@ class WalletConnectLogic {
     return result;
   }
 
-  static void connect() async {
-    const code = "";
+  static void connect(String code) async {
     await ParticleWalletConnect.connect(code);
   }
 

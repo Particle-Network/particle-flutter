@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:particle_wallet_connect_example/wallet_connect_demo/barcode_scanner_without_controller.dart';
 import 'package:particle_wallet_connect_example/wallet_connect_demo/wallet_connect_logic.dart';
 
 class WalletConnectDemoPage extends StatefulWidget {
@@ -10,6 +11,9 @@ class WalletConnectDemoPage extends StatefulWidget {
 }
 
 class WalletConnectDemoPageState extends State<WalletConnectDemoPage> {
+  String _string = "Not set yet";
+  set string(String value) => setState(() => _string = value);
+  
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -19,6 +23,43 @@ class WalletConnectDemoPageState extends State<WalletConnectDemoPage> {
       body: SingleChildScrollView(
         child: Column(
           children: <Widget>[
+            Padding(
+              padding: const EdgeInsets.only(
+                  left: 8.0, top: 16.0, right: 8.0, bottom: 8.0),
+              child: SizedBox(
+                width: double.infinity,
+                height: 50,
+                child: ElevatedButton(
+                    onPressed: () => {
+                          Navigator.of(context).push(
+                            MaterialPageRoute(
+                              builder: (context) =>
+                                  BarcodeScannerWithoutController(callback: (val) => setState(() => _string = val)),
+                            ),
+                          )
+                        },
+                    child: const Text(
+                      "Open camera to scan",
+                      style: TextStyle(fontSize: 18),
+                    )),
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.only(
+                  left: 8.0, top: 16.0, right: 8.0, bottom: 8.0),
+              child: SizedBox(
+                width: double.infinity,
+                height: 50,
+                child: ElevatedButton(
+                    onPressed: () => {
+                          WalletConnectLogic.init(),
+                        },
+                    child: Text(
+                      "qrcode = $_string",
+                      style: TextStyle(fontSize: 18),
+                    )),
+              ),
+            ),
             Padding(
               padding: const EdgeInsets.only(
                   left: 8.0, top: 16.0, right: 8.0, bottom: 8.0),
@@ -41,7 +82,7 @@ class WalletConnectDemoPageState extends State<WalletConnectDemoPage> {
                 width: double.infinity,
                 height: 50,
                 child: ElevatedButton(
-                    onPressed: () => {WalletConnectLogic.connect()},
+                    onPressed: () => {WalletConnectLogic.connect(_string)},
                     child: const Text(
                       "Connect",
                       style: TextStyle(fontSize: 18),
@@ -126,8 +167,6 @@ class WalletConnectDemoPageState extends State<WalletConnectDemoPage> {
                     )),
               ),
             ),
-            
-            
           ],
         ),
       ),
