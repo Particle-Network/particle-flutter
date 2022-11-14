@@ -1,7 +1,7 @@
 name: particle_wallet
 description: A flutter plugin project for particle wallet
 version: 0.8.0
-homepage:
+homepage: https://particle.network
 
 environment:
   sdk: '>=2.18.0 <3.0.0'

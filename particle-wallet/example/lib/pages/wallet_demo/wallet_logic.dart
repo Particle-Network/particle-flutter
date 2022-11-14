@@ -3,6 +3,7 @@ import 'package:oktoast/oktoast.dart';
 import 'package:particle_connect/model/connect_info.dart';
 import 'package:particle_wallet/model/buy_crypto_config.dart';
 import 'package:particle_wallet/model/language.dart';
+import 'package:particle_wallet/model/open_buy_network.dart';
 import 'package:particle_wallet/model/user_interface_style.dart';
 import 'package:particle_wallet/model/wallet_display.dart';
 import 'package:particle_wallet/particle_wallet.dart';
@@ -69,7 +70,7 @@ class WalletLogic {
   }
 
   static void navigatorBuyCrypto() {
-    final config = BuyCryptoConfig(walletAddress:null, cryptoCoin:null, fiatCoin:null, fiatAmt:null, network:null);
+    final config = BuyCryptoConfig(walletAddress:"your wallet address", cryptoCoin:"USDT", fiatCoin:"USD", fiatAmt:1000, network:OpenBuyNetwork.ethereum);
     ParticleWallet.navigatorBuyCrypto(config: config);
   }
 
