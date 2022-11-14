@@ -1,6 +1,6 @@
 name: particle_wallet
 description: A flutter plugin project for particle wallet
-version: 0.0.1
+version: 0.8.0
 homepage:
 
 environment:
@@ -10,15 +10,9 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-  particle_connect: ^0.7.3
+  particle_connect: ^0.8.1
   plugin_platform_interface: ^2.0.2
-  pretty_dio_logger: ^1.1.1
-  provider: ^6.0.3
-  auto_route: ^4.0.1
-  retrofit: ^3.0.1+1
-  json_serializable: ^6.3.1
-  uuid: ^3.0.6
-  oktoast: ^3.1.5
+
 dev_dependencies:
   flutter_test:
     sdk: flutter

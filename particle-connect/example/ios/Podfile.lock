@@ -135,7 +135,7 @@ SPEC CHECKSUMS:
   CryptoSwift: c4f2debceb38bf44c80659afe009f71e23e4a082
   Flutter: f04841e97a9d0b0a8025694d0796dd46242b2854
   GenericJSON: 79a840eeb77030962e8cf02a62d36bd413b67626
-  particle_connect: 89e70135867abeecae934ea241de2109dd2020f3
+  particle_connect: b26527054dcf5312694b8ddbb018300116fdd089
   ParticleAuthService: b01c5888ef7ec32ad18cd10d90fb3f4f45ae80f8
   ParticleConnect: 0361e75c94d0ecea78ee087fbd894e08bc777df8
   ParticleNetworkBase: fdbdf5f3af15799581e1d668c408028cd48bd2d0

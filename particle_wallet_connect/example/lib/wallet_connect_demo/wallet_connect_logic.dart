@@ -1,7 +1,7 @@
 import 'dart:convert';
 
 import 'package:oktoast/oktoast.dart';
-import 'package:particle_wallet_connect/model/Dapp_meta_data.dart';
+import 'package:particle_wallet_connect/model/Dapp_info.dart';
 import 'package:particle_wallet_connect/model/request_result.dart';
 import 'package:particle_wallet_connect/model/wallet_meta_data.dart';
 import 'package:particle_wallet_connect/particle_wallet_connect.dart';
@@ -23,7 +23,7 @@ class WalletConnectLogic {
         final eventMethod = eventObject["eventMethod"] as String;
         if (eventMethod == "shouldStart") {
           final Map<String, dynamic> parsed = eventObject["data"];
-          final dappMetaData = DappMetaData.fromJson(parsed);
+          final dappMetaData = DappInfo.fromJson(parsed);
           print(dappMetaData.toString());
           final topic = dappMetaData.topic;
           const publicAddress = "0xa0869E99886e1b6737A4364F2cf9Bb454FD637E4";
@@ -31,11 +31,11 @@ class WalletConnectLogic {
           ParticleWalletConnect.startSession(topic, publicAddress, chainId);
         } else if (eventMethod == "didConnect") {
           final Map<String, dynamic> parsed = eventObject["data"];
-          final dappMetaData = DappMetaData.fromJson(parsed);
+          final dappMetaData = DappInfo.fromJson(parsed);
           print(dappMetaData.toString());
         } else if (eventMethod == "didDisconnect") {
           final Map<String, dynamic> parsed = eventObject["data"];
-          final dappMetaData = DappMetaData.fromJson(parsed);
+          final dappMetaData = DappInfo.fromJson(parsed);
           print(dappMetaData.toString());
         } else if (eventMethod == "request") {
           final requestId = eventObject["data"]["request_id"] as String;
@@ -103,7 +103,7 @@ class WalletConnectLogic {
   }
 
   static void getAllSessions() async {
-    List<DappMetaData> dappMetaDatas =
+    List<DappInfo> dappMetaDatas =
         await ParticleWalletConnect.getAllSessions();
     print(dappMetaDatas);
     topic = dappMetaDatas.first.topic;

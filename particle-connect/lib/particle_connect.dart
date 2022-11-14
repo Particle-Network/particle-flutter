@@ -14,16 +14,6 @@ class ParticleConnect {
 
   static const MethodChannel _channel = MethodChannel('connect_bridge');
 
-  /// {
-  ///   "chain": "BscChain",
-  ///   "chain_id": "Testnet",
-  ///   "env": "PRODUCTION"
-  /// }
-  /// Map<String, String> rpcUrlEntity = <String, String>{
-  //    "evm_url": "custom evm_url",
-  //    "sol_url": "custom sol_url",
-  //  };
-
   /// Init particle connect SDK.
   /// 
   /// [chainInfo] Chain info, for example EthereumChain, BscChain.

@@ -2,7 +2,7 @@ import 'dart:convert';
 import 'dart:io' show Platform;
 
 import 'package:flutter/services.dart';
-import 'package:particle_wallet_connect/model/Dapp_meta_data.dart';
+import 'package:particle_wallet_connect/model/Dapp_info.dart';
 import 'package:particle_wallet_connect/model/request_result.dart';
 import 'package:particle_wallet_connect/model/wallet_meta_data.dart';
 
@@ -60,11 +60,11 @@ class ParticleWalletConnect {
   /// Connect to wallet connect code.
   /// 
   /// For example: wc:BE5F67A9-9F7E-41A7-9564-28BD8D736807@1?bridge=https%3A%2F%2Fbridge.walletconnect.org%2F&key=3d6d04df5e978ff0074d174deedc735b92bff85ffc34973f3a1d42077a57710b.
-  static Future<DappMetaData> connect(String code) async {
+  static Future<DappInfo> connect(String code) async {
     final result = await _channel.invokeMethod("connect", code);
     final Map<String, dynamic> parsed = jsonDecode(result);
 
-    final dappMetaData = DappMetaData.fromJson(parsed);
+    final dappMetaData = DappInfo.fromJson(parsed);
 
     return dappMetaData;
   }
@@ -96,11 +96,11 @@ class ParticleWalletConnect {
   }
 
   /// Get all wallet connect dapp meta datas.
-  static Future<List<DappMetaData>> getAllSessions() async {
+  static Future<List<DappInfo>> getAllSessions() async {
     final result = await _channel.invokeMethod("getAllSessions");
 
-    final List<DappMetaData> list = (jsonDecode(result) as List)
-        .map((e) => DappMetaData.fromJson(e))
+    final List<DappInfo> list = (jsonDecode(result) as List)
+        .map((e) => DappInfo.fromJson(e))
         .toList();
 
     return list;
@@ -109,11 +109,11 @@ class ParticleWalletConnect {
   /// Get wallet connect dapp meta data by topic.
   /// 
   /// [topic] is dapp's topic, comes from getSession or event: shouldStart method.
-  static Future<DappMetaData> getSessionBy(String topic) async {
+  static Future<DappInfo> getSessionBy(String topic) async {
     final result = await _channel.invokeMethod("getSession", topic);
     final Map<String, dynamic> parsed = jsonDecode(result);
 
-    final dappMetaData = DappMetaData.fromJson(parsed);
+    final dappMetaData = DappInfo.fromJson(parsed);
 
     return dappMetaData;
   }

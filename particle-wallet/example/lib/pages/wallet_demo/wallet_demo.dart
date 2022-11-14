@@ -116,7 +116,7 @@ class _WalletDemoPageState extends State<WalletDemoPage> {
                 width: double.infinity,
                 height: 50,
                 child: ElevatedButton(
-                    onPressed: () => {WalletLogic.navigatorPay()},
+                    onPressed: () => {WalletLogic.navigatorBuyCrypto()},
                     child: const Text(
                       "Navigator Pay",
                       style: TextStyle(fontSize: 18),

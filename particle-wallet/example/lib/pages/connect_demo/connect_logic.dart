@@ -5,6 +5,7 @@ import 'package:oktoast/oktoast.dart';
 import 'package:particle_connect/model/chain_info.dart';
 import 'package:particle_connect/model/connect_info.dart';
 import 'package:particle_connect/particle_connect.dart';
+import 'package:particle_connect/model/dapp_meta_data.dart';
 import 'package:particle_wallet/particle_wallet.dart';
 import 'package:particle_wallet_example/mock/test_account.dart';
 import 'package:particle_wallet_example/mock/transaction_mock.dart';
@@ -25,16 +26,9 @@ class ConnectLogic {
   }
 
   static void init() {
-    Map<String, String> dappInfo = <String, String>{
-      "name": "Particle Connect",
-      "icon": "https://connect.particle.network/icons/512.png",
-      "url": "https://connect.particle.network",
-    };
-    Map<String, String> rpcUrlEntity = <String, String>{
-      "evm_url": "custom evm_url",
-      "sol_url": "custom sol_url",
-    };
-    ParticleConnect.init(currChainInfo, dappInfo, Env.dev, null);
+
+    final dappInfo = DappMetaData("Particle Connect", "https://connect.particle.network/icons/512.png", "https://connect.particle.network");
+    ParticleConnect.init(currChainInfo, dappInfo, Env.dev);
   }
 
   static void setChainInfo() {

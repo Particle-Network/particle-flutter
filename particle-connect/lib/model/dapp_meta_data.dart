@@ -2,7 +2,7 @@ class DappMetaData {
   String name;
   String icon;
   String url;
-  
+
   DappMetaData(this.name, this.icon, this.url);
 
   DappMetaData.fromJson(Map<String, dynamic> json)
@@ -10,9 +10,6 @@ class DappMetaData {
         icon = json['icon'],
         url = json['url'];
 
-  static Map<String, dynamic> toJson(DappMetaData value) => {
-        'name': value.name,
-        'icon': value.icon,
-        'url': value.url
-      };
+  Map<String, dynamic> toJson() =>
+      {'name': name, 'icon': icon, 'url': url};
 }

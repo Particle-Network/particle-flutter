@@ -1,11 +1,9 @@
 import 'dart:convert';
 
-import 'package:flutter/foundation.dart';
 import 'package:oktoast/oktoast.dart';
 import 'package:particle_connect/model/chain_info.dart';
 import 'package:particle_connect/model/connect_info.dart';
 import 'package:particle_connect/model/dapp_meta_data.dart';
-import 'package:particle_connect/model/rpc_url_config.dart';
 import 'package:particle_connect/particle_connect.dart';
 import 'package:particle_connect_example/mock/test_account.dart';
 import 'package:particle_connect_example/mock/transaction_mock.dart';

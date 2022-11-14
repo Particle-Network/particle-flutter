@@ -22,6 +22,7 @@ public class ParticleWalletPlugin: NSObject, FlutterPlugin {
         case navigatorNFTSend
         case navigatorNFTDetails
         case navigatorPay
+        case navigatorBuyCrypto
         case navigatorLoginList
         case navigatorSwap
         case showTestNetwork
@@ -34,6 +35,7 @@ public class ParticleWalletPlugin: NSObject, FlutterPlugin {
         case switchWallet
         case setLanguage
         case setInterfaceStyle
+        case supportWalletConnect
     }
     
     public static func register(with registrar: FlutterPluginRegistrar) {
@@ -67,6 +69,8 @@ public class ParticleWalletPlugin: NSObject, FlutterPlugin {
             self.navigatorNFTDetails(json as? String)
         case .navigatorPay:
             self.navigatorPay()
+        case .navigatorBuyCrypto:
+            self.navigatorBuyCrypto(json as? String)
         case .navigatorLoginList:
             self.navigatorLoginList(flutterResult: result)
         case .navigatorSwap:
@@ -91,6 +95,8 @@ public class ParticleWalletPlugin: NSObject, FlutterPlugin {
             self.setLanguage(json as? String)
         case .setInterfaceStyle:
             self.setInterfaceStyle(json as? String)
+        case .supportWalletConnect:
+            self.supportWalletConnect((json as? Bool) ?? false)
         }
     }
 }
@@ -157,7 +163,40 @@ extension ParticleWalletPlugin {
     func navigatorPay() {
         PNRouter.navigatorPay()
     }
-    
+
+    func navigatorBuyCrypto(_ json: String?) {
+        guard let json = json else { return }
+        let data = JSON(parseJSON: json)
+        let walletAddress = data["wallet_address"].string
+        let networkString = data["network"].stringValue.lowercased()
+        var network: OpenBuyNetwork?
+        /*
+         Solana,
+         Ethereum,
+         BinanceSmartChain,
+         Avalanche,
+         Polygon,
+         */
+        if networkString == "solana" {
+            network = .solana
+        } else if networkString == "ethereum" {
+            network = .ethereum
+        } else if networkString == "binancesmartchain" {
+            network = .binanceSmartChain
+        } else if networkString == "avalanche" {
+            network = .avalanche
+        } else if networkString == "polygon" {
+            network = .polygon
+        } else {
+            network = nil
+        }
+        let fiatCoin = data["fiat_coin"].string
+        let fiatAmt = data["fiat_amt"].int
+        let cryptoCoin = data["crypto_coin"].string
+            
+        PNRouter.navigatorBuy(walletAddress: walletAddress, network: network, cryptoCoin: cryptoCoin, fiatCoin: fiatCoin, fiatAmt: fiatAmt)
+    }
+
     func navigatorLoginList(flutterResult: @escaping FlutterResult) {
         PNRouter.navigatorLoginList().subscribe { [weak self] result in
             guard let self = self else { return }
@@ -177,7 +216,7 @@ extension ParticleWalletPlugin {
                 guard let json = String(data: data, encoding: .utf8) else { return }
                 flutterResult(json)
             }
-        }.disposed(by: bag)
+        }.disposed(by: self.bag)
     }
     
     func navigatorSwap(_ json: String?) {
@@ -267,11 +306,11 @@ extension ParticleWalletPlugin {
          ZH_HANS,
          */
         if json.lowercased() == "system" {
-            ParticleWalletGUI.setLanguage(ParticleWalletGUI.Language.unspecified)
+            ParticleWalletGUI.setLanguage(Language.unspecified)
         } else if json.lowercased() == "en" {
-            ParticleWalletGUI.setLanguage(ParticleWalletGUI.Language.en)
+            ParticleWalletGUI.setLanguage(Language.en)
         } else if json.lowercased() == "zh_hans" {
-            ParticleWalletGUI.setLanguage(ParticleWalletGUI.Language.zh_Hans)
+            ParticleWalletGUI.setLanguage(Language.zh_Hans)
         }
     }
 
@@ -289,5 +328,9 @@ extension ParticleWalletPlugin {
         } else if json.lowercased() == "dark" {
             ParticleWalletGUI.setInterfaceStyle(UIUserInterfaceStyle.dark)
         }
+    }
+
+    func supportWalletConnect(_ enable: Bool) {
+        ParticleWalletGUI.supportWalletConnect(enable)
     }
 }
