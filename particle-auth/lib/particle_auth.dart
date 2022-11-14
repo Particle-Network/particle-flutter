@@ -17,9 +17,9 @@ class ParticleAuth {
   
   /// Init particle-auth SDK
   /// 
-  /// [chianInfo] Chain info, for example EthereumChain, BscChain.
+  /// [chainInfo] Chain info, for example EthereumChain, BscChain.
   /// 
-  /// [env] Development environment
+  /// [env] Development environment.
   static Future<void> init(ChainInfo chainInfo, Env env) async {
     if (Platform.isIOS) {
       await _channel.invokeMethod(
