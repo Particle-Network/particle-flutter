@@ -16,7 +16,7 @@ class ConnectLogic {
 
   static void selectChain() {
     // currChainInfo = SolanaChain.devnet();
-    currChainInfo = EthereumChain.goerli();
+    currChainInfo = EthereumChain.mainnet();
   }
 
   static String? pubAddress;

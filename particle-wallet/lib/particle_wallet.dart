@@ -136,6 +136,7 @@ class ParticleWallet {
   /// [toTokenAddress] optinial is to token address in swap pair.
   /// 
   /// [amount] optinial is from token amount.
+  /// for example swap 0.01 ETH, pass "10000000000000000".
   static Future<void> navigatorSwap({String? fromTokenAddress, String? toTokenAddress, String? amount}) async {
     await _channel.invokeMethod('navigatorSwap', jsonEncode({
           "from_token_address": fromTokenAddress,

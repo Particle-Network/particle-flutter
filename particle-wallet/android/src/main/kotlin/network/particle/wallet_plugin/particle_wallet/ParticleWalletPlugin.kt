@@ -62,8 +62,11 @@ class ParticleWalletPlugin : FlutterPlugin, MethodCallHandler, ActivityAware {
             "navigatorPay" -> {
                 WalletBridge.openPay()
             }
+            "navigatorBuyCrypto" -> {
+                WalletBridge.navigatorBuyCrypto(call.arguments as String)
+            }
             "navigatorSwap" -> {
-                WalletBridge.navigatorSwap(activity!!)
+                WalletBridge.navigatorSwap(activity!!, call.arguments as String)
             }
             "navigatorLoginList" -> {
                 WalletBridge.navigatorLoginList(activity!!, result)
@@ -97,6 +100,10 @@ class ParticleWalletPlugin : FlutterPlugin, MethodCallHandler, ActivityAware {
             }
             "setWallet"->{
                 WalletBridge.setWallet(call.arguments as String)
+            }
+
+            "supportWalletConnect" ->{
+                WalletBridge.supportWalletConnect(call.arguments as Boolean)
             }
 
             else -> result.notImplemented()

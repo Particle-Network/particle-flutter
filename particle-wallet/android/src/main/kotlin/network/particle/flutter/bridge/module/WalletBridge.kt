@@ -17,7 +17,9 @@ import com.particle.gui.ParticleWallet.enablePay
 import com.particle.gui.ParticleWallet.enableSwap
 import com.particle.gui.ParticleWallet.getEnablePay
 import com.particle.gui.ParticleWallet.getEnableSwap
+import com.particle.gui.ParticleWallet.navigatorBuy
 import com.particle.gui.ParticleWallet.openPay
+import com.particle.gui.ParticleWallet.supportWalletConnect
 import com.particle.gui.router.PNRouter
 import com.particle.gui.router.RouterPath
 import com.particle.gui.ui.nft_detail.NftDetailParams
@@ -189,8 +191,54 @@ object WalletBridge {
         ParticleNetwork.openPay()
     }
 
-    fun navigatorSwap(activity: Activity) {
-        PNRouter.navigatorSwap("native");
+    fun navigatorBuyCrypto(json: String) {
+        if (!isUIModuleInit()) return;
+
+        try {
+            val jsonObject = JSONObject(json);
+
+            val walletAddress = jsonObject.opt("wallet_address") as? String;
+            val fiatCoin = jsonObject.opt("fiat_coin") as? String;
+            val cryptoCoin = jsonObject.opt("crypto_coin") as? String;
+            val fiatAmt = jsonObject.opt("fiat_amt") as? Int;
+            val networkString = (jsonObject.opt("network") as? String)?.lowercase();
+            var network: ChainName? = null;
+
+            if (networkString == "solana") {
+                network = ChainName.Solana;
+            } else if (networkString == "ethereum") {
+                network = ChainName.Ethereum;
+            } else if (networkString == "binancesmartchain") {
+                network = ChainName.BSC;
+            } else if (networkString == "avalanche")  {
+                network = ChainName.Avalanche;
+            } else if (networkString == "polygon")  {
+                network = ChainName.Polygon;
+            }
+
+            ParticleNetwork.navigatorBuy(walletAddress, network, cryptoCoin, fiatCoin, fiatAmt);
+        } catch (e: Exception) {
+            ParticleNetwork.navigatorBuy();
+        }
+    }
+
+    fun navigatorSwap(activity: Activity, json: String) {
+        try {
+            var jsonObject = JSONObject(json);
+            val fromTokenAddress = jsonObject.opt("from_token_address") as? String;
+            val toTokenAddress = jsonObject.opt("to_token_address") as? String;
+            val amount = jsonObject.opt("amount") as? String;
+            if (fromTokenAddress != null) {
+                PNRouter.navigatorSwap(fromTokenAddress)
+            } else {
+                PNRouter.navigatorSwap("native");
+            };
+        } catch (e: Exception) {
+            PNRouter.navigatorSwap("native");
+        }
+
+
+
     }
 
     fun showTestNetwork(show: Boolean) {
@@ -241,7 +289,6 @@ object WalletBridge {
         } catch (e: Exception) {
             result.success(false)
         }
-
     }
 
     fun enableSwap(enable: Boolean) {
@@ -267,6 +314,11 @@ object WalletBridge {
             e.printStackTrace()
             throw RuntimeException(e.message)
         }
+    }
+
+    fun supportWalletConnect(enable: Boolean) {
+        LogUtils.d("supportWalletConnect", enable.toString());
+        ParticleNetwork.supportWalletConnect(enable);
     }
 
 

@@ -74,13 +74,13 @@ flutter {
 
 dependencies {
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
-//    def sdkVersion = "0.7.19"
-//    implementation("network.particle:auth-service:$sdkVersion")
-//    implementation("network.particle:api-service:$sdkVersion")
-//    implementation("network.particle:wallet-service:$sdkVersion")
-//    implementation("com.blankj:utilcodex:1.31.0")
-//    implementation("commons-codec:commons-codec:1.15")
-//    implementation("com.google.code.gson:gson:2.8.5")
+    def sdkVersion = "0.8.5"
+    implementation("network.particle:auth-service:$sdkVersion")
+    implementation("network.particle:api-service:$sdkVersion")
+    implementation("network.particle:wallet-service:$sdkVersion")
+    implementation("com.blankj:utilcodex:1.31.0")
+    implementation("commons-codec:commons-codec:1.15")
+    implementation("com.google.code.gson:gson:2.8.5")
 
-//    implementation 'androidx.appcompat:appcompat:1.1.0'
+    implementation 'androidx.appcompat:appcompat:1.1.0'
 }
