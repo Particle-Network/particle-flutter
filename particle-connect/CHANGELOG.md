@@ -1,3 +1,5 @@
+## 0.8.2
+fix bugs.
 ## 0.8.1
 fix bugs.
 
