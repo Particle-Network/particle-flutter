@@ -9,7 +9,7 @@
             android:configChanges="orientation|keyboardHidden|screenSize"
             android:exported="true"
             android:launchMode="singleTask"
-            android:theme="@android:style/Theme.Translucent.NoTitleBar.Fullscreen">
+            android:theme="@style/ThemeAuthWeb">
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
 
@@ -35,6 +35,7 @@
         <!-- Particle Connect Redirect Callback -->
         <activity
             android:name="com.connect.common.controller.RedirectActivity"
+            android:configChanges="orientation|keyboardHidden|screenSize"
             android:exported="true"
             android:launchMode="singleTask"
             android:theme="@android:style/Theme.Translucent.NoTitleBar.Fullscreen">

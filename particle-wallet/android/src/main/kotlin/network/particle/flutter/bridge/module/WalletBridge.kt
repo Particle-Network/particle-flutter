@@ -188,7 +188,7 @@ object WalletBridge {
     }
 
     fun openPay() {
-        ParticleNetwork.openPay()
+        ParticleNetwork.openBuy()
     }
 
     fun navigatorBuyCrypto(json: String) {
