@@ -269,14 +269,14 @@ packages:
       name: particle_connect
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "0.8.1"
+    version: "0.8.3"
   particle_wallet:
     dependency: "direct main"
     description:
       path: ".."
       relative: true
     source: path
-    version: "0.8.2"
+    version: "0.8.4"
   path:
     dependency: transitive
     description:

@@ -51,8 +51,8 @@ dependencies {
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
 
     def connectVersion = "0.9.31"
-    implementation("network.particle:base-service:0.8.6")
-    implementation("network.particle:auth-service:0.8.6")
+    implementation("network.particle:base-service:0.8.7")
+    implementation("network.particle:auth-service:0.8.7")
 
     implementation("network.particle:connect-common:$connectVersion")
     implementation("network.particle:connect:$connectVersion")

@@ -59,9 +59,6 @@ class ParticleWalletPlugin : FlutterPlugin, MethodCallHandler, ActivityAware {
             "navigatorNFTDetails" -> {
                 WalletBridge.navigatorNFTDetails(call.arguments as String)
             }
-            "navigatorPay" -> {
-                WalletBridge.openPay()
-            }
             "navigatorBuyCrypto" -> {
                 WalletBridge.navigatorBuyCrypto(call.arguments as String)
             }

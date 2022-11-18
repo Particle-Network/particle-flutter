@@ -18,7 +18,6 @@ import com.particle.gui.ParticleWallet.enableSwap
 import com.particle.gui.ParticleWallet.getEnablePay
 import com.particle.gui.ParticleWallet.getEnableSwap
 import com.particle.gui.ParticleWallet.navigatorBuy
-import com.particle.gui.ParticleWallet.openPay
 import com.particle.gui.ParticleWallet.supportWalletConnect
 import com.particle.gui.router.PNRouter
 import com.particle.gui.router.RouterPath
@@ -185,10 +184,6 @@ object WalletBridge {
 
     fun enablePay(enable: Boolean) {
         ParticleNetwork.enablePay(enable)
-    }
-
-    fun openPay() {
-        ParticleNetwork.openBuy()
     }
 
     fun navigatorBuyCrypto(json: String) {
