@@ -48,8 +48,8 @@ class ParticleConnect {
             "chain_id_name": chainInfo.chainIdName,
             "chain_id": chainInfo.chainId,
             "env": env.name,
-            "metadata": metadataEntity,
-            "rpc_url": rpcUrlEntity
+            "metadata": dappMetaData,
+            "rpc_url": rpcUrlConfig
           }));
     }
   }
