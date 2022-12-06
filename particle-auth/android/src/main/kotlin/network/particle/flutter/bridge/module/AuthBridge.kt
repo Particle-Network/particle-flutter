@@ -72,7 +72,7 @@ object AuthBridge {
             for (i in 0 until loginData.supportAuthTypeValues.size) {
                 try {
                     val supportType = loginData.supportAuthTypeValues[i]
-                    val authType = SupportAuthType.valueOf(supportType)
+                    val authType = SupportAuthType.valueOf(supportType.uppercase())
                     supportAuthType = supportAuthType or authType.value
                 } catch (e: Exception) {
                     e.printStackTrace()
