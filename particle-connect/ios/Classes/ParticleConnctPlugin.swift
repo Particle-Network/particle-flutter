@@ -8,6 +8,7 @@
 import ConnectCommon
 import Flutter
 import Foundation
+import ParticleAuthService
 import ParticleConnect
 import ParticleNetworkBase
 import RxSwift
@@ -224,7 +225,54 @@ extension ParticleConnectPlugin {
             return
         }
         
-        let walletTypeString = json
+        let data = JSON(parseJSON: json)
+        
+        let walletTypeString = data["wallet_type"].stringValue
+        let configJson = data["particle_connect_config"]
+        
+        var connectConfig: ParticleConnectConfig?
+        
+        if !configJson.isEmpty {
+            let loginType = LoginType(rawValue: configJson["login_type"].stringValue.lowercased()) ?? .email
+            var supportAuthTypeArray: [SupportAuthType] = []
+            
+            let array = configJson["support_auth_type_values"].arrayValue.map {
+                $0.stringValue.lowercased()
+            }
+            if array.contains("all") {
+                supportAuthTypeArray = [.all]
+            } else {
+                array.forEach {
+                    if $0 == "apple" {
+                        supportAuthTypeArray.append(.apple)
+                    } else if $0 == "google" {
+                        supportAuthTypeArray.append(.google)
+                    } else if $0 == "facebook" {
+                        supportAuthTypeArray.append(.facebook)
+                    } else if $0 == "github" {
+                        supportAuthTypeArray.append(.github)
+                    } else if $0 == "twitch" {
+                        supportAuthTypeArray.append(.twitch)
+                    } else if $0 == "microsoft" {
+                        supportAuthTypeArray.append(.microsoft)
+                    } else if $0 == "linkedin" {
+                        supportAuthTypeArray.append(.linkedin)
+                    } else if $0 == "discord" {
+                        supportAuthTypeArray.append(.discord)
+                    }
+                }
+            }
+            
+            var account = configJson["account"].string
+            
+            if account != nil, account!.isEmpty {
+                account = nil
+            }
+            
+            let loginFormMode = configJson["login_form_mode"].boolValue
+            connectConfig = ParticleConnectConfig(loginType: loginType, supportAuthType: supportAuthTypeArray, loginFormMode: loginFormMode, phoneOrEmailAccount: account)
+        }
+        
         guard let walletType = map2WalletType(from: walletTypeString) else {
             print("walletType \(walletTypeString) is not existed")
             let response = FlutterResponseError(code: nil, message: "walletType \(walletTypeString) is not existed", data: nil)
@@ -251,8 +299,10 @@ extension ParticleConnectPlugin {
         var observable: Single<Account?>
         if walletType == .walletConnect {
             observable = (adapter as! WalletConnectAdapter).connectWithQrCode(from: vc)
+        } else if walletType == .particle {
+            observable = adapter.connect(connectConfig)
         } else {
-            observable = adapter.connect(.none)
+            observable = adapter.connect(ConnectConfig.none)
         }
         
         observable.subscribe { [weak self] result in

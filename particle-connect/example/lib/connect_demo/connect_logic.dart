@@ -4,15 +4,16 @@ import 'package:oktoast/oktoast.dart';
 import 'package:particle_connect/model/chain_info.dart';
 import 'package:particle_connect/model/connect_info.dart';
 import 'package:particle_connect/model/dapp_meta_data.dart';
+import 'package:particle_connect/model/login_info.dart';
+import 'package:particle_connect/model/particle_connect_config.dart';
 import 'package:particle_connect/particle_connect.dart';
 import 'package:particle_connect_example/mock/test_account.dart';
 import 'package:particle_connect_example/mock/transaction_mock.dart';
 
 
-
 class ConnectLogic {
   static late ChainInfo currChainInfo;
-  static WalletType walletType = WalletType.metaMask;
+  static WalletType walletType = WalletType.particle;
 
   static void selectChain() {
     // currChainInfo = SolanaChain.devnet();
@@ -36,7 +37,8 @@ class ConnectLogic {
   }
 
   static void connect() async {
-    final result = await ParticleConnect.connect(walletType);
+    final config = ParticleConnectConfig(LoginType.google, "", [SupportAuthType.all], false);
+    final result = await ParticleConnect.connect(walletType, config: config);
     showToast('connect: $result');
     print("connect: $result");
     Map<String, dynamic> jsonResult = jsonDecode(result);

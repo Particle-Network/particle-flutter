@@ -7,6 +7,7 @@ import 'package:particle_connect/model/connect_info.dart';
 import 'dart:io' show Platform;
 
 import 'package:particle_connect/model/dapp_meta_data.dart';
+import 'package:particle_connect/model/particle_connect_config.dart';
 import 'package:particle_connect/model/rpc_url_config.dart';
 
 class ParticleConnect {
@@ -71,10 +72,15 @@ class ParticleConnect {
   /// Connect a wallet.
   ///
   /// [walletType] is which wallet you want to connect.
+  /// [ParticleConnectConfig] is optional, when [walletType] is particle,
+  /// you can pass a config.
   ///
   /// Result account or error.
-  static Future<String> connect(WalletType walletType) async {
-    return await _channel.invokeMethod('connect', walletType.name);
+  static Future<String> connect(WalletType walletType, {ParticleConnectConfig? config}) async {
+      return await _channel.invokeMethod('connect', jsonEncode({
+          "wallet_type": walletType.name,
+          "particle_connect_config": config,
+        }));
   }
 
   /// Disconnect a wallet

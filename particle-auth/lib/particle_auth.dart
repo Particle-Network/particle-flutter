@@ -42,12 +42,6 @@ class ParticleAuth {
     }
   }
 
-  /// {
-  /// "loginType": "phone",
-  /// "account": "",
-  /// "supportAuthTypeValues": ["GOOGLE"]
-  /// }
-  
   /// Login
   /// 
   /// [loginType], for example email, google and so on.
