@@ -7,20 +7,22 @@ enum LoginType {
   discord,
   github,
   twitch,
-  mocrosoft,
+  microsoft,
   linkedin,
   jwt,
 }
 
 enum SupportAuthType {
   none,
+  email,
+  phone,
   apple,
   google,
   facebook,
   discord,
   github,
   twitch,
-  mocrosoft,
+  microsoft,
   linkedin,
   all,
 }
