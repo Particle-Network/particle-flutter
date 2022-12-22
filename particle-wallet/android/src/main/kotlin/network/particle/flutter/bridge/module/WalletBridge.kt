@@ -12,6 +12,7 @@ import com.particle.api.service.DBService
 import com.particle.base.ChainInfo
 import com.particle.base.ChainName
 import com.particle.base.ParticleNetwork
+import com.particle.base.utils.PrefUtils
 import com.particle.gui.ParticleWallet
 import com.particle.gui.ParticleWallet.enablePay
 import com.particle.gui.ParticleWallet.enableSwap
@@ -42,6 +43,7 @@ object WalletBridge {
     //init
     fun init(activity: Activity?) {
         isUIInit = try {
+            PrefUtils.init(activity!!, "particle")
             ParticleWallet.init(activity!!, null)
             true
         } catch (e: Exception) {

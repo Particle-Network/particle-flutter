@@ -6,6 +6,28 @@ buildscript {
     repositories {
         google()
         mavenCentral()
+        maven { setUrl("https://s01.oss.sonatype.org/content/groups/staging/") }
+        maven { setUrl("https://s01.oss.sonatype.org/content/repositories/releases/") }
+
+        maven { setUrl("https://jitpack.io") }
+        maven { setUrl("https://maven.google.com/") }
+        maven { setUrl("https://maven.aliyun.com/repository/public") }
+
+
+        maven {
+            credentials {
+                username = "618e1901e6290b981e22d0b3"
+                password = "AS)ceNRJ6IJ6"
+            }
+            setUrl("https://packages.aliyun.com/maven/repository/2316149-release-7iKvTZ/")
+        }
+        maven {
+            credentials {
+                username = "618e1901e6290b981e22d0b3"
+                password = "AS)ceNRJ6IJ6"
+            }
+            setUrl("https://packages.aliyun.com/maven/repository/2316149-snapshot-mc7GiM/")
+        }
     }
 
     dependencies {
@@ -18,6 +40,28 @@ allprojects {
     repositories {
         google()
         mavenCentral()
+        maven { setUrl("https://s01.oss.sonatype.org/content/groups/staging/") }
+        maven { setUrl("https://s01.oss.sonatype.org/content/repositories/releases/") }
+
+        maven { setUrl("https://jitpack.io") }
+        maven { setUrl("https://maven.google.com/") }
+        maven { setUrl("https://maven.aliyun.com/repository/public") }
+
+
+        maven {
+            credentials {
+                username = "618e1901e6290b981e22d0b3"
+                password = "AS)ceNRJ6IJ6"
+            }
+            setUrl("https://packages.aliyun.com/maven/repository/2316149-release-7iKvTZ/")
+        }
+        maven {
+            credentials {
+                username = "618e1901e6290b981e22d0b3"
+                password = "AS)ceNRJ6IJ6"
+            }
+            setUrl("https://packages.aliyun.com/maven/repository/2316149-snapshot-mc7GiM/")
+        }
 
     }
 }
@@ -51,7 +95,7 @@ android {
 
 dependencies {
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
-    def sdkVersion = "0.8.7"
+    def sdkVersion = "0.9.7"
     implementation("network.particle:auth-service:$sdkVersion")
     implementation("network.particle:api-service:$sdkVersion")
     implementation("network.particle:wallet-service:$sdkVersion")
