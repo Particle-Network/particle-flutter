@@ -1,6 +1,7 @@
 package network.particle.flutter.bridge.module
 
 import android.app.Activity
+import android.text.TextUtils
 import com.blankj.utilcode.util.GsonUtils
 import com.blankj.utilcode.util.LogUtils
 import com.connect.common.*
@@ -16,7 +17,10 @@ import com.particle.base.ParticleNetwork
 import com.particle.connect.ParticleConnect
 import com.particle.connect.ParticleConnect.setChain
 import com.particle.connect.ParticleConnectAdapter
+import com.particle.connect.ParticleConnectConfig
 import com.particle.connect.model.AdapterAccount
+import com.particle.network.service.LoginType
+import com.particle.network.service.SupportAuthType
 import com.phantom.adapter.PhantomConnectAdapter
 import com.solana.adapter.SolanaConnectAdapter
 import com.wallet.connect.adapter.*
@@ -68,17 +72,52 @@ object ConnectBridge {
         }
     }
 
-    fun connect(walletType: String, result: MethodChannel.Result) {
-        LogUtils.d("connect", walletType)
+    fun connect(connectJson: String, result: MethodChannel.Result) {
+        LogUtils.d("connectJson", connectJson)
+        val connectData: ConnectData = GsonUtils.fromJson(
+            connectJson, ConnectData::class.java
+        )
+        val pnConfig = connectData.particleConnectConfig
+        var particleConnectConfig: ParticleConnectConfig? = null
+        if (pnConfig != null) {
+            val account: String = if (TextUtils.isEmpty(pnConfig.account)) {
+                ""
+            } else {
+                pnConfig.account
+            }
+            var supportAuthType = SupportAuthType.NONE.value
+            for (i in 0 until pnConfig.supportAuthTypeValues.size) {
+                try {
+                    val supportType: String = pnConfig.supportAuthTypeValues.get(i).uppercase()
+                    val authType = SupportAuthType.valueOf(supportType)
+                    supportAuthType = supportAuthType or authType.value
+                } catch (e:Exception) {
+                    e.printStackTrace()
+                }
+            }
+            var loginFormMode = false
+            try {
+                loginFormMode = pnConfig.loginFormMode
+            } catch (e: Exception) {
+                e.printStackTrace()
+            }
+            particleConnectConfig = ParticleConnectConfig(
+                LoginType.valueOf(pnConfig.loginType.uppercase()),
+                supportAuthType,
+                loginFormMode,
+                account
+            )
+        }
+
         var connectAdapter: IConnectAdapter? = null
         val adapters = ParticleConnect.getAdapters()
         for (adapter in adapters) {
-            if (adapter.name.equals(walletType, ignoreCase = true)) {
+            if (adapter.name.equals(connectData.walletType, ignoreCase = true)) {
                 connectAdapter = adapter
                 break
             }
         }
-        connectAdapter!!.connect<ConnectConfig>(null, object : ConnectCallback {
+        connectAdapter!!.connect<ConnectConfig>(particleConnectConfig, object : ConnectCallback {
             override fun onConnected(account: Account) {
                 LogUtils.d("onConnected", account.toString())
                 result.success(FlutterCallBack.success(account).toGson())
