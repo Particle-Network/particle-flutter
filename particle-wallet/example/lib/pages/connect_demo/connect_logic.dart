@@ -11,6 +11,7 @@ import 'package:particle_wallet_example/mock/test_account.dart';
 import 'package:particle_wallet_example/mock/transaction_mock.dart';
 import 'package:particle_connect/model/particle_connect_config.dart';
 import 'package:particle_connect/model/login_info.dart';
+
 class ConnectLogic {
   static late ChainInfo currChainInfo;
   static WalletType walletType = WalletType.particle;
@@ -27,22 +28,26 @@ class ConnectLogic {
   }
 
   static void init() {
-
-    final dappInfo = DappMetaData("Particle Connect", "https://connect.particle.network/icons/512.png", "https://connect.particle.network");
+    final dappInfo = DappMetaData(
+        "Particle Connect",
+        "https://connect.particle.network/icons/512.png",
+        "https://connect.particle.network");
     ParticleConnect.init(currChainInfo, dappInfo, Env.dev);
   }
 
-  static void setChainInfo() {
-    ParticleConnect.setChainInfo(currChainInfo);
+  static void setChainInfo() async {
+    bool isSuccess = await ParticleConnect.setChainInfo(currChainInfo);
+    print("setChainInfo: $isSuccess");
   }
 
   static void connect() async {
-    final config = ParticleConnectConfig(LoginType.google, "", [SupportAuthType.all], false);
+    final config = ParticleConnectConfig(
+        LoginType.google, "", [SupportAuthType.all], false);
     final result = await ParticleConnect.connect(walletType, config: config);
     showToast('connect: $result');
     print("connect: $result");
     Map<String, dynamic> jsonResult = jsonDecode(result);
-    if (jsonResult["status"]  == 1 || jsonResult["status"]  == true) {
+    if (jsonResult["status"] == 1 || jsonResult["status"] == true) {
       pubAddress = jsonResult["data"]["publicAddress"];
 
       ParticleWallet.setWallet(walletType, pubAddress!!);
@@ -72,11 +77,11 @@ class ConnectLogic {
   static late String message;
 
   static void login() async {
-    String loginResult = await ParticleConnect.login(
-        walletType, getPublicAddress(), "login.xyz", "https://login.xyz/demo#login");
+    String loginResult = await ParticleConnect.login(walletType,
+        getPublicAddress(), "login.xyz", "https://login.xyz/demo#login");
     showToast("loginResult:$loginResult");
     Map<String, dynamic> jsonResult = jsonDecode(loginResult);
-    if (jsonResult["status"]  == 1 || jsonResult["status"]  == true) {
+    if (jsonResult["status"] == 1 || jsonResult["status"] == true) {
       signature = jsonResult["data"]["signature"];
       message = jsonResult["data"]["message"];
     }
@@ -149,7 +154,8 @@ class ConnectLogic {
   }
 
   static void signTypedData() async {
-    String typedData = "{        \"types\": {            \"EIP712Domain\": [                {                    \"name\": \"name\",                    \"type\": \"string\"                },                {                    \"name\": \"version\",                    \"type\": \"string\"                },                {                    \"name\": \"chainId\",                    \"type\": \"uint256\"                },                {                    \"name\": \"verifyingContract\",                    \"type\": \"address\"                }            ],            \"Person\": [                {                    \"name\": \"name\",                    \"type\": \"string\"                },                {                    \"name\": \"wallet\",                    \"type\": \"address\"                }            ],            \"Mail\": [                {                    \"name\": \"from\",                    \"type\": \"Person\"                },                {                    \"name\": \"to\",                    \"type\": \"Person\"                },                {                    \"name\": \"contents\",                    \"type\": \"string\"                }            ]        },        \"primaryType\": \"Mail\",        \"domain\": {            \"name\": \"Ether Mail\",            \"version\": \"1\",            \"chainId\": 5,            \"verifyingContract\": \"0xCcCCccccCCCCcCCCCCCcCcCccCcCCCcCcccccccC\"        },        \"message\": {            \"from\": {                \"name\": \"Cow\",                \"wallet\": \"0xCD2a3d9F938E13CD947Ec05AbC7FE734Df8DD826\"            },            \"to\": {                \"name\": \"Bob\",                \"wallet\": \"0xbBbBBBBbbBBBbbbBbbBbbbbBBbBbbbbBbBbbBBbB\"            },            \"contents\": \"Hello, Bob!\"        }}        ";
+    String typedData =
+        "{        \"types\": {            \"EIP712Domain\": [                {                    \"name\": \"name\",                    \"type\": \"string\"                },                {                    \"name\": \"version\",                    \"type\": \"string\"                },                {                    \"name\": \"chainId\",                    \"type\": \"uint256\"                },                {                    \"name\": \"verifyingContract\",                    \"type\": \"address\"                }            ],            \"Person\": [                {                    \"name\": \"name\",                    \"type\": \"string\"                },                {                    \"name\": \"wallet\",                    \"type\": \"address\"                }            ],            \"Mail\": [                {                    \"name\": \"from\",                    \"type\": \"Person\"                },                {                    \"name\": \"to\",                    \"type\": \"Person\"                },                {                    \"name\": \"contents\",                    \"type\": \"string\"                }            ]        },        \"primaryType\": \"Mail\",        \"domain\": {            \"name\": \"Ether Mail\",            \"version\": \"1\",            \"chainId\": 5,            \"verifyingContract\": \"0xCcCCccccCCCCcCCCCCCcCcCccCcCCCcCcccccccC\"        },        \"message\": {            \"from\": {                \"name\": \"Cow\",                \"wallet\": \"0xCD2a3d9F938E13CD947Ec05AbC7FE734Df8DD826\"            },            \"to\": {                \"name\": \"Bob\",                \"wallet\": \"0xbBbBBBBbbBBBbbbBbbBbbbbBBbBbbbbBbBbbBBbB\"            },            \"contents\": \"Hello, Bob!\"        }}        ";
     String result = await ParticleConnect.signTypedData(
         walletType, getPublicAddress(), typedData);
     print("signTypedData: $result");
@@ -166,7 +172,7 @@ class ConnectLogic {
     String result =
         await ParticleConnect.importPrivateKey(walletType, privateKey);
     Map<String, dynamic> jsonResult = jsonDecode(result);
-    if (jsonResult["status"]  == 1 || jsonResult["status"]  == true) {
+    if (jsonResult["status"] == 1 || jsonResult["status"] == true) {
       pubAddress = jsonResult["data"]["publicAddress"];
       print("pubAddress:$pubAddress");
       showToast("connect: $result  pubAddress:$pubAddress");
@@ -183,8 +189,8 @@ class ConnectLogic {
       mnemonic = TestAccount.evm.mnemonic;
     }
     String result = await ParticleConnect.importMnemonic(walletType, mnemonic);
-   Map<String, dynamic> jsonResult = jsonDecode(result);
-    if (jsonResult["status"]  == 1 || jsonResult["status"]  == true) {
+    Map<String, dynamic> jsonResult = jsonDecode(result);
+    if (jsonResult["status"] == 1 || jsonResult["status"] == true) {
       pubAddress = jsonResult["data"]["publicAddress"];
       print("pubAddress:$pubAddress");
       showToast("connect: $result  pubAddress:$pubAddress");

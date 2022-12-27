@@ -51,6 +51,19 @@ class _ConnectDemoPageState extends State<ConnectDemoPage> {
                 width: double.infinity,
                 height: 50,
                 child: ElevatedButton(
+                    onPressed: () => {ConnectLogic.setChainInfo()},
+                    child: const Text(
+                      "SetChainInfo",
+                      style: TextStyle(fontSize: 18),
+                    )),
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: SizedBox(
+                width: double.infinity,
+                height: 50,
+                child: ElevatedButton(
                     onPressed: () => {ConnectLogic.connect()},
                     child: const Text(
                       "Connect",
