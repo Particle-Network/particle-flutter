@@ -32,8 +32,9 @@ class ConnectLogic {
     ParticleConnect.init(currChainInfo, dappInfo, Env.dev);
   }
 
-  static void setChainInfo() {
-    ParticleConnect.setChainInfo(currChainInfo);
+  static void setChainInfo() async{
+    bool isSuccess =await ParticleConnect.setChainInfo(currChainInfo);
+    print("setChainInfo: $isSuccess");
   }
 
   static void connect() async {

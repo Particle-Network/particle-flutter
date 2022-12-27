@@ -13,7 +13,7 @@ import 'package:particle_connect/model/particle_connect_config.dart';
 import 'package:particle_connect/model/login_info.dart';
 class ConnectLogic {
   static late ChainInfo currChainInfo;
-  static WalletType walletType = WalletType.metaMask;
+  static WalletType walletType = WalletType.particle;
 
   static void selectChain() {
     // currChainInfo = SolanaChain.devnet();

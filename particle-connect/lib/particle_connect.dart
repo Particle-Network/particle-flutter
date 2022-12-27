@@ -59,7 +59,7 @@ class ParticleConnect {
   /// Call this method before login.
   ///
   /// [chainInfo] Chain info, for example EthereumChain, BscChain.
-  static Future<String> setChainInfo(ChainInfo chainInfo) async {
+  static Future<bool> setChainInfo(ChainInfo chainInfo) async {
     return await _channel.invokeMethod(
         'setChainInfo',
         jsonEncode({
