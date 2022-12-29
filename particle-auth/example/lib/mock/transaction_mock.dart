@@ -251,4 +251,56 @@ class TransactionMock {
 
     return "0x$reqHex";
   }
+
+
+  /// Mock a transaction, writc contract 
+  static Future<String> mockWriteContract(String sendPubKey) async {
+    String sender = sendPubKey;
+    String contractAddress = "your contract address";
+    String methodName = "mint"; // this is your contract method name, like balanceOf, mint.
+    String to = contractAddress;
+    List<Object> params = <Object>["1"]; // this is the method params.
+
+    // use evm service to get data.
+    // if you can get data from your server or other, just pass to here.
+    // and data must begin with "0x", it is required.
+    final customMethodCall =
+        await EvmService.customMethod(contractAddress, methodName, params);
+    final data = jsonDecode(customMethodCall)["result"];
+
+    final gasLimitResult = await EvmService.ethEstimateGas(
+        sender, to, "0x0", data);
+    final jsonObj = jsonDecode(gasLimitResult);
+    final gasLimit = jsonObj["result"];
+
+    final gasFeesResult = await EvmService.suggestedGasFees();
+    final maxFeePerGas = double.parse(
+        jsonDecode(gasFeesResult)["result"]["high"]["maxFeePerGas"]);
+    final maxFeePerGasHex =
+        "0x${BigInt.from(maxFeePerGas * pow(10, 9)).toRadixString(16)}";
+
+    final maxPriorityFeePerGas = double.parse(
+        jsonDecode(gasFeesResult)["result"]["high"]["maxPriorityFeePerGas"]);
+    final maxPriorityFeePerGasHex =
+        "0x${BigInt.from(maxPriorityFeePerGas * pow(10, 9)).toRadixString(16)}";
+
+    // evm transaction
+    final req = {
+      "from": sender,
+      "to": to,
+      "gasLimit": gasLimit,
+      "value": "0x0",
+      "maxFeePerGas": maxFeePerGasHex,
+      "maxPriorityFeePerGas": maxPriorityFeePerGasHex,
+      "data": data,
+      "type": "0x2",
+      "nonce": "0x0",
+      "chainId": "0x${TestAccount.evm.chainId.toRadixString(16)}",
+    };
+    //to hexString
+    final reqStr = jsonEncode(req);
+    final reqHex = utf8.encode(reqStr).map((e) => e.toRadixString(16)).join();
+
+    return "0x$reqHex";
+  }
 }
