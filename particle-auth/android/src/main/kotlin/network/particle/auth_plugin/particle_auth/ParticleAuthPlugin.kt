@@ -13,99 +13,102 @@ import io.flutter.plugin.common.MethodChannel.Result
 import network.particle.flutter.bridge.module.AuthBridge
 
 /** ParticleAuthPlugin */
-class ParticleAuthPlugin: FlutterPlugin, MethodCallHandler, ActivityAware {
-  private var activity: Activity? = null
-  private var channel: MethodChannel? = null
+class ParticleAuthPlugin : FlutterPlugin, MethodCallHandler, ActivityAware {
+    private var activity: Activity? = null
+    private var channel: MethodChannel? = null
 
-  init {
-    instance = this
-  }
-
-  companion object {
-    @JvmStatic
-    lateinit var instance: ParticleAuthPlugin
-  }
-
-  override fun onAttachedToEngine(binding: FlutterPlugin.FlutterPluginBinding) {
-    channel = MethodChannel(binding.binaryMessenger, "auth_bridge")
-    channel?.setMethodCallHandler(this)
-  }
-
-  override fun onDetachedFromEngine(binding: FlutterPlugin.FlutterPluginBinding) {
-    channel?.setMethodCallHandler(null)
-    channel = null
-  }
-
-  override fun onMethodCall(call: MethodCall, result: MethodChannel.Result) {
-    when (call.method) {
-      "init" -> {
-        AuthBridge.init(activity!!, call.arguments as String)
-      }
-      "login" -> {
-        AuthBridge.login(call.arguments as String, result)
-      }
-      "logout" -> {
-        AuthBridge.logout(result)
-      }
-      "getAddress" -> {
-        AuthBridge.getAddress(result)
-      }
-      "signMessage" -> {
-        AuthBridge.signMessage(call.arguments as String, result)
-      }
-      "signTransaction" -> {
-        AuthBridge.signTransaction(call.arguments as String, result)
-      }
-      "signAllTransactions" -> {
-        AuthBridge.signAllTransactions(call.arguments as String, result)
-      }
-      "signAndSendTransaction" -> {
-        AuthBridge.signAndSendTransaction(call.arguments as String, result)
-      }
-      "signTypedData" -> {
-        AuthBridge.signTypedData(call.arguments as String, result)
-      }
-      "setChainInfo" -> {
-        AuthBridge.setChainInfo(call.arguments as String, result)
-      }
-      "setChainInfoAsync" -> {
-        AuthBridge.setChainInfoAsync(call.arguments as String, result)
-      }
-      "getChainInfo" -> {
-        AuthBridge.getChainInfo(result)
-      }
-
-      else -> result.notImplemented()
+    init {
+        instance = this
     }
-  }
 
-  override fun onAttachedToActivity(binding: ActivityPluginBinding) {
-    activity = binding.activity
-  }
-
-  override fun onDetachedFromActivityForConfigChanges() {
-    //nothing to do
-  }
-
-  override fun onReattachedToActivityForConfigChanges(binding: ActivityPluginBinding) {
-    activity = binding.activity
-  }
-
-  override fun onDetachedFromActivity() {
-    activity = null
-  }
-
-  /**
-   * 客户端回调Flutter
-   */
-  private fun nativeCallFlutter(method: String, arguments: Any) {
-    if (channel != null && activity != null) {
-      activity?.runOnUiThread(Runnable {
-        channel?.invokeMethod(
-          method,
-          arguments
-        )
-      })
+    companion object {
+        @JvmStatic
+        lateinit var instance: ParticleAuthPlugin
     }
-  }
+
+    override fun onAttachedToEngine(binding: FlutterPlugin.FlutterPluginBinding) {
+        channel = MethodChannel(binding.binaryMessenger, "auth_bridge")
+        channel?.setMethodCallHandler(this)
+    }
+
+    override fun onDetachedFromEngine(binding: FlutterPlugin.FlutterPluginBinding) {
+        channel?.setMethodCallHandler(null)
+        channel = null
+    }
+
+    override fun onMethodCall(call: MethodCall, result: MethodChannel.Result) {
+        when (call.method) {
+            "init" -> {
+                AuthBridge.init(activity!!, call.arguments as String)
+            }
+            "login" -> {
+                AuthBridge.login(call.arguments as String, result)
+            }
+            "logout" -> {
+                AuthBridge.logout(result)
+            }
+            "getAddress" -> {
+                AuthBridge.getAddress(result)
+            }
+            "signMessage" -> {
+                AuthBridge.signMessage(call.arguments as String, result)
+            }
+            "signTransaction" -> {
+                AuthBridge.signTransaction(call.arguments as String, result)
+            }
+            "signAllTransactions" -> {
+                AuthBridge.signAllTransactions(call.arguments as String, result)
+            }
+            "signAndSendTransaction" -> {
+                AuthBridge.signAndSendTransaction(call.arguments as String, result)
+            }
+            "signTypedData" -> {
+                AuthBridge.signTypedData(call.arguments as String, result)
+            }
+            "setChainInfo" -> {
+                AuthBridge.setChainInfo(call.arguments as String, result)
+            }
+            "setChainInfoAsync" -> {
+                AuthBridge.setChainInfoAsync(call.arguments as String, result)
+            }
+            "getChainInfo" -> {
+                AuthBridge.getChainInfo(result)
+            }
+            "getUserInfo" -> {
+                AuthBridge.getUserInfo(result)
+            }
+
+            else -> result.notImplemented()
+        }
+    }
+
+    override fun onAttachedToActivity(binding: ActivityPluginBinding) {
+        activity = binding.activity
+    }
+
+    override fun onDetachedFromActivityForConfigChanges() {
+        //nothing to do
+    }
+
+    override fun onReattachedToActivityForConfigChanges(binding: ActivityPluginBinding) {
+        activity = binding.activity
+    }
+
+    override fun onDetachedFromActivity() {
+        activity = null
+    }
+
+    /**
+     * 客户端回调Flutter
+     */
+    private fun nativeCallFlutter(method: String, arguments: Any) {
+        if (channel != null && activity != null) {
+            activity?.runOnUiThread(Runnable {
+                channel?.invokeMethod(
+                    method,
+                    arguments
+                )
+            })
+        }
+    }
 }

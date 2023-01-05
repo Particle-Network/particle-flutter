@@ -65,6 +65,11 @@ class AuthLogic {
     print("getAddress: $address");
   }
 
+  static void getUserInfo() async {
+    final userInfo = await ParticleAuth.getUserInfo();
+    print("getUserInfo: $userInfo");
+  }
+
   static void logout() async {
     String result = await ParticleAuth.logout();
     debugPrint("logout: $result");

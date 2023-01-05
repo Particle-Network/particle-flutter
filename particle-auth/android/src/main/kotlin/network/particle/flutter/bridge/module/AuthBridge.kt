@@ -245,7 +245,11 @@ object AuthBridge {
         val address = ParticleNetwork.getAddress()
         result.success(address)
     }
- 
+
+    fun getUserInfo(result: MethodChannel.Result) {
+        val address = ParticleNetwork.getUserInfo()
+        result.success(Gson().toJson(address))
+    }
 
     fun getChainInfo(result: MethodChannel.Result) {
         val chainInfo: ChainInfo = ParticleNetwork.chainInfo
