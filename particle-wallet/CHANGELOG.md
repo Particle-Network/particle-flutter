@@ -1,3 +1,6 @@
+## 0.9.4
+native auth:0.9.10
+flutter connect 0.9.4
 ## 0.9.3
 add setChainInfo Test button
 ## 0.9.1

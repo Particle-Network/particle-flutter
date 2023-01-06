@@ -1,3 +1,6 @@
+## 0.9.4
+native auth:0.9.10
+native connect:0.9.60
 ## 0.9.3
 fix bugs
 ## 0.9.2
