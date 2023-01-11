@@ -5,6 +5,8 @@ import 'package:particle_auth_example/mock/test_account.dart';
 import 'package:particle_auth_example/model/serialize_sol_transreqentity.dart';
 import 'package:particle_auth_example/model/serialize_trans_result_entity.dart';
 import 'package:particle_auth_example/net/particle_rpc.dart';
+import 'package:particle_auth_example/net/request_body_entity.dart';
+import 'package:uuid/uuid.dart';
 
 class TransactionMock {
   static Future<String> mockSolanaTransaction(String sendPubKey) async {
@@ -253,7 +255,7 @@ class TransactionMock {
   }
 
 
-  /// Mock a transaction, writc contract 
+  /// Mock a transaction, write contract 
   static Future<String> mockWriteContract(String sendPubKey) async {
     String sender = sendPubKey;
     String contractAddress = "your contract address";
@@ -302,5 +304,31 @@ class TransactionMock {
     final reqHex = utf8.encode(reqStr).map((e) => e.toRadixString(16)).join();
 
     return "0x$reqHex";
+  }
+
+  /// Mock read contract 
+  static Future<String> mockReadContract(String sendPubKey) async {
+    String contractAddress = "your contract address";
+    String methodName = "mint"; // this is your contract method name, like balanceOf, mint.
+    List<Object> params = <Object>["1"]; // this is the method params.
+
+    // first, get the data
+    final customMethodCall =
+        await EvmService.customMethod(contractAddress, methodName, params);
+    final data = jsonDecode(customMethodCall)["result"];
+
+    // second, rpc request eth_call
+    final req = RequestBodyEntity();
+    // be sure the chain id is what you want
+    req.chainId = TestAccount.evm.chainId;
+    req.jsonrpc = "2.0";
+    req.id = const Uuid().v4();
+    req.method = "eth_call";
+    req.params = [
+      {"to": contractAddress, "data": data}, "latest"
+    ];
+
+    final result = await EvmService.rpc(req);
+    return result;
   }
 }
