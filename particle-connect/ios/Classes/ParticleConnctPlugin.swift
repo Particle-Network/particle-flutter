@@ -50,6 +50,8 @@ public class ParticleConnectPlugin: NSObject, FlutterPlugin {
         case importPrivateKey
         case importMnemonic
         case exportPrivateKey
+        case switchEthereumChain
+        case addEthereumChain
     }
     
     public static func register(with registrar: FlutterPluginRegistrar) {
@@ -101,6 +103,10 @@ public class ParticleConnectPlugin: NSObject, FlutterPlugin {
             self.importMnemonic(json as? String, flutterResult: result)
         case .exportPrivateKey:
             self.exportPrivateKey(json as? String, flutterResult: result)
+        case .switchEthereumChain:
+            self.switchEthereumChain(json as? String, flutterResult: result)
+        case .addEthereumChain:
+            self.addEthereumChain(json as? String, flutterResult: result)
         }
     }
 }
@@ -926,6 +932,104 @@ extension ParticleConnectPlugin {
         let siwe = try! SiweMessage(message)
         
         adapter.verify(message: siwe, against: signature).subscribe { [weak self] result in
+            guard let self = self else { return }
+            switch result {
+            case .failure(let error):
+                let response = self.ResponseFromError(error)
+                let statusModel = FlutterStatusModel(status: false, data: response)
+                let data = try! JSONEncoder().encode(statusModel)
+                guard let json = String(data: data, encoding: .utf8) else { return }
+                flutterResult(json)
+            case .success(let flag):
+                let statusModel = FlutterStatusModel(status: true, data: flag)
+                let data = try! JSONEncoder().encode(statusModel)
+                guard let json = String(data: data, encoding: .utf8) else { return }
+                flutterResult(json)
+            }
+        }.disposed(by: self.bag)
+    }
+    
+    func switchEthereumChain(_ json: String?, flutterResult: @escaping FlutterResult) {
+        guard let json = json else {
+            flutterResult(FlutterError(code: "", message: "json is nil", details: nil))
+            return
+        }
+        
+        let data = JSON(parseJSON: json)
+        let walletTypeString = data["wallet_type"].stringValue
+        let publicAddress = data["public_address"].stringValue
+        let chainId = data["chain_id"].intValue
+
+        guard let walletType = map2WalletType(from: walletTypeString) else {
+            print("walletType \(walletTypeString) is not existed ")
+            let response = FlutterResponseError(code: nil, message: "walletType \(walletTypeString) is not existed", data: nil)
+            let statusModel = FlutterStatusModel(status: false, data: response)
+            let data = try! JSONEncoder().encode(statusModel)
+            guard let json = String(data: data, encoding: .utf8) else { return }
+            flutterResult(json)
+            return
+        }
+        
+        guard let adapter = map2ConnectAdapter(from: walletType) else {
+            print("adapter for \(walletTypeString) is not init")
+            let response = FlutterResponseError(code: nil, message: "adapter for \(walletTypeString) is not init", data: nil)
+            let statusModel = FlutterStatusModel(status: false, data: response)
+            let data = try! JSONEncoder().encode(statusModel)
+            guard let json = String(data: data, encoding: .utf8) else { return }
+            flutterResult(json)
+            return
+        }
+        
+        adapter.switchEthereumChain(publicAddress: publicAddress, chainId: chainId).subscribe { [weak self] result in
+            guard let self = self else { return }
+            switch result {
+            case .failure(let error):
+                let response = self.ResponseFromError(error)
+                let statusModel = FlutterStatusModel(status: false, data: response)
+                let data = try! JSONEncoder().encode(statusModel)
+                guard let json = String(data: data, encoding: .utf8) else { return }
+                flutterResult(json)
+            case .success(let flag):
+                let statusModel = FlutterStatusModel(status: true, data: flag)
+                let data = try! JSONEncoder().encode(statusModel)
+                guard let json = String(data: data, encoding: .utf8) else { return }
+                flutterResult(json)
+            }
+        }.disposed(by: self.bag)
+    }
+    
+    func addEthereumChain(_ json: String?, flutterResult: @escaping FlutterResult) {
+        guard let json = json else {
+            flutterResult(FlutterError(code: "", message: "json is nil", details: nil))
+            return
+        }
+        
+        let data = JSON(parseJSON: json)
+        let walletTypeString = data["wallet_type"].stringValue
+        let publicAddress = data["public_address"].stringValue
+        let chainId = data["chain_id"].intValue
+
+        guard let walletType = map2WalletType(from: walletTypeString) else {
+            print("walletType \(walletTypeString) is not existed ")
+            let response = FlutterResponseError(code: nil, message: "walletType \(walletTypeString) is not existed", data: nil)
+            let statusModel = FlutterStatusModel(status: false, data: response)
+            let data = try! JSONEncoder().encode(statusModel)
+            guard let json = String(data: data, encoding: .utf8) else { return }
+            flutterResult(json)
+            return
+        }
+        
+        guard let adapter = map2ConnectAdapter(from: walletType) else {
+            print("adapter for \(walletTypeString) is not init")
+            let response = FlutterResponseError(code: nil, message: "adapter for \(walletTypeString) is not init", data: nil)
+            let statusModel = FlutterStatusModel(status: false, data: response)
+            let data = try! JSONEncoder().encode(statusModel)
+            guard let json = String(data: data, encoding: .utf8) else { return }
+            flutterResult(json)
+            return
+        }
+        
+        adapter.addEthereumChain(publicAddress: publicAddress, chainId: chainId, chainName: nil, nativeCurrency: nil, rpcUrl: nil, blockExplorerUrl: nil).subscribe { [weak self] result in
             guard let self = self else { return }
             switch result {
             case .failure(let error):

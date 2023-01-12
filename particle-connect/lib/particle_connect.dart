@@ -26,9 +26,7 @@ class ParticleConnect {
   ///
   /// [RpcUrlConfig] set custom solana and evm rpc url, default is null.
   static Future<void> init(
-      ChainInfo chainInfo,
-      DappMetaData dappMetaData,
-      Env env,
+      ChainInfo chainInfo, DappMetaData dappMetaData, Env env,
       {RpcUrlConfig? rpcUrlConfig}) async {
     if (Platform.isIOS) {
       await _channel.invokeMethod(
@@ -76,8 +74,11 @@ class ParticleConnect {
   /// you can pass a config.
   ///
   /// Result account or error.
-  static Future<String> connect(WalletType walletType, {ParticleConnectConfig? config}) async {
-      return await _channel.invokeMethod('connect', jsonEncode({
+  static Future<String> connect(WalletType walletType,
+      {ParticleConnectConfig? config}) async {
+    return await _channel.invokeMethod(
+        'connect',
+        jsonEncode({
           "wallet_type": walletType.name,
           "particle_connect_config": config,
         }));
@@ -300,5 +301,21 @@ class ParticleConnect {
           "message": message,
           "signature": signature,
         }));
+  }
+
+  /// Add ethereum chain, only support metamask
+  /// Pass [walletType] and [publicAddress] to decide a wallet.
+  /// [chainId] tell metamask which chain to add.
+  static Future<String> addEthereumChain(WalletType walletType, String publicAddress, int chainId) async {
+    return await _channel.invokeMethod('addEthereumChain',
+        jsonEncode({"public_address": publicAddress, "chain_id": chainId}));
+  }
+
+  /// Add ethereum chain, only support metamask
+  /// Pass [walletType] and [publicAddress] to decide a wallet.
+  /// [chainId] tell metamask which chain to switch.
+  static Future<String> switchEthereumChain(WalletType walletType, String publicAddress, int chainId) async {
+    return await _channel.invokeMethod('switchEthereumChain',
+        jsonEncode({"public_address": publicAddress, "chain_id": chainId}));
   }
 }

@@ -204,4 +204,17 @@ class ConnectLogic {
       showToast("connect failed!");
     }
   }
+
+  static void addEthereumChain() async {
+    int chainId = 80001;
+    String result = await ParticleConnect.addEthereumChain(walletType, getPublicAddress(), chainId);
+    print(result);
+  }
+
+  static void switchEthereumChain() async {
+    int chainId = 5;
+    String result = await ParticleConnect.switchEthereumChain(walletType, getPublicAddress(), chainId);
+    print(result);
+  }
+
 }
