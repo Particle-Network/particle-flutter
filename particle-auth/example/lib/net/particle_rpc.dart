@@ -144,10 +144,12 @@ class EvmService {
   /// [method] your contract method name.
   /// 
   /// [params] your method's parameters.
+  /// 
+  /// [abiJsonString] your contract abi json string
   static Future<String> customMethod(
-      String contractAddress, String method, List<Object> params) async {
+      String contractAddress, String method, List<Object> params, String? abiJsonString) async {
     var list2 = params;
-    var list1 = [contractAddress, "custom_$method", list2];
+    var list1 = [contractAddress, "custom_$method", list2, abiJsonString];
 
     final req = RequestBodyEntity();
     req.chainId = TestAccount.evm.chainId;

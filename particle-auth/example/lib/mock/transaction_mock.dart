@@ -256,6 +256,7 @@ class TransactionMock {
 
 
   /// Mock a transaction, write contract 
+  /// write contract is same with send transaction.
   static Future<String> mockWriteContract(String sendPubKey) async {
     String sender = sendPubKey;
     String contractAddress = "your contract address";
@@ -266,8 +267,9 @@ class TransactionMock {
     // use evm service to get data.
     // if you can get data from your server or other, just pass to here.
     // and data must begin with "0x", it is required.
+    const abiJson = null;
     final customMethodCall =
-        await EvmService.customMethod(contractAddress, methodName, params);
+        await EvmService.customMethod(contractAddress, methodName, params, abiJson);
     final data = jsonDecode(customMethodCall)["result"];
 
     final gasLimitResult = await EvmService.ethEstimateGas(
@@ -307,14 +309,15 @@ class TransactionMock {
   }
 
   /// Mock read contract 
+  /// read data from chain
   static Future<String> mockReadContract(String sendPubKey) async {
     String contractAddress = "your contract address";
     String methodName = "mint"; // this is your contract method name, like balanceOf, mint.
     List<Object> params = <Object>["1"]; // this is the method params.
-
+    const abiJson = null;
     // first, get the data
     final customMethodCall =
-        await EvmService.customMethod(contractAddress, methodName, params);
+        await EvmService.customMethod(contractAddress, methodName, params, abiJson);
     final data = jsonDecode(customMethodCall)["result"];
 
     // second, rpc request eth_call
@@ -325,7 +328,7 @@ class TransactionMock {
     req.id = const Uuid().v4();
     req.method = "eth_call";
     req.params = [
-      {"to": contractAddress, "data": data}, "latest"
+      {"to": contractAddress, "data": data, "from": sendPubKey}, "latest"
     ];
 
     final result = await EvmService.rpc(req);
