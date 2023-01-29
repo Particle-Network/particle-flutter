@@ -31,9 +31,11 @@ class AuthLogic {
     debugPrint("login: $result");
     showToast("login: $result");
   }
+
   static void login() async {
     List<SupportAuthType> supportAuthType = <SupportAuthType>[];
     supportAuthType.add(SupportAuthType.google);
+    supportAuthType.add(SupportAuthType.email);
     String result = await ParticleAuth.login(LoginType.phone, "", supportAuthType);
 
     debugPrint("login: $result");

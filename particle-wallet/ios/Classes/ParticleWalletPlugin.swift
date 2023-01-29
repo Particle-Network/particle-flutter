@@ -8,6 +8,7 @@
 import Flutter
 import Foundation
 import ParticleWalletGUI
+import ParticleNetworkBase
 import RxSwift
 import SwiftyJSON
 
@@ -306,7 +307,7 @@ extension ParticleWalletPlugin {
          ZH_HANS,
          */
         if json.lowercased() == "system" {
-            ParticleWalletGUI.setLanguage(Language.unspecified)
+            ParticleWalletGUI.setLanguage(Language.en)
         } else if json.lowercased() == "en" {
             ParticleWalletGUI.setLanguage(Language.en)
         } else if json.lowercased() == "zh_hans" {
@@ -322,11 +323,11 @@ extension ParticleWalletPlugin {
          DARK,
          */
         if json.lowercased() == "system" {
-            ParticleWalletGUI.setInterfaceStyle(UIUserInterfaceStyle.unspecified)
+            ParticleNetwork.setInterfaceStyle(UIUserInterfaceStyle.unspecified)
         } else if json.lowercased() == "light" {
-            ParticleWalletGUI.setInterfaceStyle(UIUserInterfaceStyle.light)
+            ParticleNetwork.setInterfaceStyle(UIUserInterfaceStyle.light)
         } else if json.lowercased() == "dark" {
-            ParticleWalletGUI.setInterfaceStyle(UIUserInterfaceStyle.dark)
+            ParticleNetwork.setInterfaceStyle(UIUserInterfaceStyle.dark)
         }
     }
 
