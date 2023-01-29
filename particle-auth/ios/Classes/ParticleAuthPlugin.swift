@@ -437,11 +437,11 @@ public extension ParticleAuthPlugin {
          DARK,
          */
         if json.lowercased() == "system" {
-            ParticleAuthService.setInterfaceStyle(UIUserInterfaceStyle.unspecified)
+            ParticleNetwork.setInterfaceStyle(UIUserInterfaceStyle.unspecified)
         } else if json.lowercased() == "light" {
-            ParticleAuthService.setInterfaceStyle(UIUserInterfaceStyle.light)
+            ParticleNetwork.setInterfaceStyle(UIUserInterfaceStyle.light)
         } else if json.lowercased() == "dark" {
-            ParticleAuthService.setInterfaceStyle(UIUserInterfaceStyle.dark)
+            ParticleNetwork.setInterfaceStyle(UIUserInterfaceStyle.dark)
         }
     }
     

@@ -1,3 +1,4 @@
+## 0.9.6
 ## 0.9.5
 change native package name
 ## 0.9.4
