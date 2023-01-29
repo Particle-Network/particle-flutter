@@ -1,4 +1,4 @@
-package network.particle.flutter.bridge.utils;
+package network.particle.auth_flutter.bridge.utils;
 
 import java.util.Arrays;
 

@@ -1,7 +1,6 @@
 package network.particle.auth_plugin.particle_auth
 
 import android.app.Activity
-import androidx.annotation.NonNull
 
 import io.flutter.embedding.engine.plugins.FlutterPlugin
 import io.flutter.embedding.engine.plugins.activity.ActivityAware
@@ -9,8 +8,7 @@ import io.flutter.embedding.engine.plugins.activity.ActivityPluginBinding
 import io.flutter.plugin.common.MethodCall
 import io.flutter.plugin.common.MethodChannel
 import io.flutter.plugin.common.MethodChannel.MethodCallHandler
-import io.flutter.plugin.common.MethodChannel.Result
-import network.particle.flutter.bridge.module.AuthBridge
+import network.particle.auth_flutter.bridge.module.AuthBridge
 
 /** ParticleAuthPlugin */
 class ParticleAuthPlugin : FlutterPlugin, MethodCallHandler, ActivityAware {

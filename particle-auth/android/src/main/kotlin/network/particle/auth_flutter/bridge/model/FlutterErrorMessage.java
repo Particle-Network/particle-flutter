@@ -1,4 +1,4 @@
-package network.particle.flutter.bridge.model;
+package network.particle.auth_flutter.bridge.model;
 
 import com.google.gson.annotations.SerializedName;
 

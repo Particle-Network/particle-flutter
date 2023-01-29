@@ -1,9 +1,9 @@
-package network.particle.flutter.bridge.model;
+package network.particle.auth_flutter.bridge.model;
 
 import com.google.gson.annotations.SerializedName;
 
 
-public class ChainData {
+public class InitData {
 
     @SerializedName("chain_name")
     public String chainName;
@@ -16,4 +16,6 @@ public class ChainData {
 
     @SerializedName("env")
     public String env;
+
+
 }

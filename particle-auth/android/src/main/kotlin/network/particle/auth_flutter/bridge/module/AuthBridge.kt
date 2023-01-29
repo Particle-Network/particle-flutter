@@ -1,4 +1,4 @@
-package network.particle.flutter.bridge.module
+package network.particle.auth_flutter.bridge.module
 
 import android.app.Activity
 import android.text.TextUtils
@@ -27,9 +27,9 @@ import com.particle.network.service.SupportAuthType
 import com.particle.network.service.WebServiceCallback
 import com.particle.network.service.model.*
 import io.flutter.plugin.common.MethodChannel
-import network.particle.flutter.bridge.model.*
-import network.particle.flutter.bridge.utils.ChainUtils
-import network.particle.flutter.bridge.utils.EncodeUtils
+import network.particle.auth_flutter.bridge.model.*
+import network.particle.auth_flutter.bridge.utils.ChainUtils
+import network.particle.auth_flutter.bridge.utils.EncodeUtils
 
 
 object AuthBridge {
