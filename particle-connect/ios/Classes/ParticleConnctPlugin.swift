@@ -174,7 +174,9 @@ extension ParticleConnectPlugin {
         adapters.append(RainbowConnectAdapter())
         adapters.append(BitkeepConnectAdapter())
         adapters.append(ImtokenConnectAdapter())
+        adapters.append(TrustConnectAdapter())
         adapters.append(WalletConnectAdapter())
+        adapters.append(GnosisConnectAdapter())
 #endif
         
         ParticleConnect.initialize(env: devEnv, chainInfo: chainInfo, dAppData: dAppData) {
@@ -249,7 +251,11 @@ extension ParticleConnectPlugin {
                 supportAuthTypeArray = [.all]
             } else {
                 array.forEach {
-                    if $0 == "apple" {
+                    if $0 == "email" {
+                        supportAuthTypeArray.append(.email)
+                    } else if $0 == "phone" {
+                        supportAuthTypeArray.append(.phone)
+                    } else if $0 == "apple" {
                         supportAuthTypeArray.append(.apple)
                     } else if $0 == "google" {
                         supportAuthTypeArray.append(.google)

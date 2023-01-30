@@ -231,8 +231,12 @@ class ArbitrumChain implements ChainInfo {
     chainName = ChainName.Arbitrum.name;
   }
 
-  static ArbitrumChain mainnet() {
-    return ArbitrumChain(42161, "Mainnet");
+  static ArbitrumChain one() {
+    return ArbitrumChain(42161, "One");
+  }
+
+  static ArbitrumChain nova() {
+    return ArbitrumChain(42170, "Nova");
   }
 
   static ArbitrumChain goerli() {
@@ -355,6 +359,194 @@ class PlatONChain implements ChainInfo {
   }
 }
 
+class TronChain implements ChainInfo {
+  @override
+  int chainId;
+
+  @override
+  String chainIdName;
+
+  @override
+  String? chainName;
+
+  TronChain(this.chainId, this.chainIdName) {
+    chainName = ChainName.Tron.name;
+  }
+
+  static TronChain mainnet() {
+    return TronChain(728126428, "Mainnet");
+  }
+
+  static TronChain shasta() {
+    return TronChain(2494104990, "Shasta");
+  }
+
+  static TronChain nile() {
+    return TronChain(3448148188, "Nile");
+  }
+}
+
+class OKCChain implements ChainInfo {
+  @override
+  int chainId;
+
+  @override
+  String chainIdName;
+
+  @override
+  String? chainName;
+
+  OKCChain(this.chainId, this.chainIdName) {
+    chainName = ChainName.OKC.name;
+  }
+
+  static OKCChain mainnet() {
+    return OKCChain(66, "Mainnet");
+  }
+
+  static OKCChain testnet() {
+    return OKCChain(65, "Testnet");
+  }
+}
+
+class ThunderCoreChain implements ChainInfo {
+  @override
+  int chainId;
+
+  @override
+  String chainIdName;
+
+  @override
+  String? chainName;
+
+  ThunderCoreChain(this.chainId, this.chainIdName) {
+    chainName = ChainName.ThunderCore.name;
+  }
+
+  static ThunderCoreChain mainnet() {
+    return ThunderCoreChain(108, "Mainnet");
+  }
+
+  static ThunderCoreChain testnet() {
+    return ThunderCoreChain(18, "Testnet");
+  }
+}
+
+class CronosChain implements ChainInfo {
+  @override
+  int chainId;
+
+  @override
+  String chainIdName;
+
+  @override
+  String? chainName;
+
+  CronosChain(this.chainId, this.chainIdName) {
+    chainName = ChainName.Cronos.name;
+  }
+
+  static CronosChain mainnet() {
+    return CronosChain(25, "Mainnet");
+  }
+
+  static CronosChain testnet() {
+    return CronosChain(338, "Testnet");
+  }
+}
+
+class OasisEmeraldChain implements ChainInfo {
+  @override
+  int chainId;
+
+  @override
+  String chainIdName;
+
+  @override
+  String? chainName;
+
+  OasisEmeraldChain(this.chainId, this.chainIdName) {
+    chainName = ChainName.OasisEmerald.name;
+  }
+
+  static OasisEmeraldChain mainnet() {
+    return OasisEmeraldChain(42262, "Mainnet");
+  }
+
+  static OasisEmeraldChain testnet() {
+    return OasisEmeraldChain(42261, "Testnet");
+  }
+}
+
+class GnosisChain implements ChainInfo {
+  @override
+  int chainId;
+
+  @override
+  String chainIdName;
+
+  @override
+  String? chainName;
+
+  GnosisChain(this.chainId, this.chainIdName) {
+    chainName = ChainName.Gnosis.name;
+  }
+
+  static GnosisChain mainnet() {
+    return GnosisChain(102, "Mainnet");
+  }
+
+  static GnosisChain testnet() {
+    return GnosisChain(10200, "Testnet");
+  }
+}
+
+class CeloChain implements ChainInfo {
+  @override
+  int chainId;
+
+  @override
+  String chainIdName;
+
+  @override
+  String? chainName;
+
+  CeloChain(this.chainId, this.chainIdName) {
+    chainName = ChainName.Celo.name;
+  }
+
+  static CeloChain mainnet() {
+    return CeloChain(42220, "Mainnet");
+  }
+
+  static CeloChain testnet() {
+    return CeloChain(44787, "Testnet");
+  }
+}
+
+class KlaytnChain implements ChainInfo {
+  @override
+  int chainId;
+
+  @override
+  String chainIdName;
+
+  @override
+  String? chainName;
+
+  KlaytnChain(this.chainId, this.chainIdName) {
+    chainName = ChainName.Celo.name;
+  }
+
+  static KlaytnChain mainnet() {
+    return KlaytnChain(8217, "Mainnet");
+  }
+
+  static KlaytnChain testnet() {
+    return KlaytnChain(1001, "Testnet");
+  }
+}
+
 enum ChainName {
   Solana,
   Ethereum,
@@ -370,5 +562,13 @@ enum ChainName {
   Aurora,
   KCC,
   Optimism,
-  PlatON;
+  PlatON,
+  Tron,
+  OKC,
+  ThunderCore,
+  Cronos,
+  OasisEmerald,
+  Gnosis,
+  Celo,
+  Klaytn,
 }
