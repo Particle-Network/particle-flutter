@@ -5,6 +5,7 @@ import 'package:flutter/services.dart';
 import 'package:particle_connect/model/chain_info.dart';
 import 'package:particle_connect/model/connect_info.dart';
 import 'package:particle_wallet/model/buy_crypto_config.dart';
+import 'package:particle_wallet/model/fiat_coin.dart';
 import 'package:particle_wallet/model/language.dart';
 import 'package:particle_wallet/model/user_interface_style.dart';
 import 'package:particle_wallet/model/wallet_display.dart';
@@ -209,22 +210,44 @@ class ParticleWallet {
         }));
   }
 
-  /// Set language 
-  static setLanguage(Language language) {
-    if (Platform.isIOS) {
-      _channel.invokeMethod("setLanguage", language.name);
-    }
-  }
-
-  /// Set user interface style
-  static setInterfaceStyle(UserInterfaceStyle interfaceStyle) {
-    if (Platform.isIOS) {
-      _channel.invokeMethod("setInterfaceStyle", interfaceStyle.name);
-    }
-  }
-
   /// Set support wallet connect as a wallet.
   static supportWalletConnect(bool enable) {
     _channel.invokeMethod("supportWalletConnect", enable);
   }
+
+  /// Set show language setting button in setting page.
+  static showLanguageSetting(bool isShow) {
+    _channel.invokeMethod("showLanguageSetting", isShow);
+  }
+
+  /// Set show appearance setting button in setting page.
+  static showAppearanceSetting(bool isShow) {
+    _channel.invokeMethod("showAppearanceSetting", isShow);
+  }
+
+  static setLanguage(Language language) {
+    _channel.invokeMethod("setLanguage", language.name);
+  }
+
+  /// Set support add token, true will show add token button, false will hide add token button.
+  static setSupportAddToken(bool isShow) {
+    _channel.invokeMethod("setSupportAddToken", isShow);
+  }
+
+  static setDisplayTokenAddresses(List<String> tokenAddresses) {
+    _channel.invokeMethod("setDisplayTokenAddresses", tokenAddresses);
+  }
+
+  static setDisplayNFTContractAddresses(List<String> nftContractAddresses) {
+    _channel.invokeMethod("setDisplayNFTContractAddresses", nftContractAddresses);
+  }
+
+  static setFiatCoin(FiatCoin fiatCoin) {
+    _channel.invokeMethod("setFiatCoin", fiatCoin.name);
+  }
+
+  static loadCustomUIJsonString(String json) {
+    _channel.invokeMethod("loadCustomUIJsonString", json);
+  }
+
 }

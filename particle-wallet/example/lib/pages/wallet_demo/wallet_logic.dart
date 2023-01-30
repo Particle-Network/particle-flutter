@@ -2,6 +2,7 @@ import 'package:flutter/foundation.dart';
 import 'package:oktoast/oktoast.dart';
 import 'package:particle_connect/model/connect_info.dart';
 import 'package:particle_wallet/model/buy_crypto_config.dart';
+import 'package:particle_wallet/model/fiat_coin.dart';
 import 'package:particle_wallet/model/language.dart';
 import 'package:particle_wallet/model/open_buy_network.dart';
 import 'package:particle_wallet/model/user_interface_style.dart';
@@ -12,7 +13,6 @@ import 'package:particle_connect/model/chain_info.dart';
 class WalletLogic {
   static void init() {
     ParticleWallet.init();
-    ParticleWallet.supportWalletConnect(false);
   }
 
   static void navigatorWallet() {
@@ -115,9 +115,42 @@ class WalletLogic {
     ParticleWallet.setLanguage(language);
   }
 
-  static void setInterfaceStyle() {
-    UserInterfaceStyle interfaceStyle = UserInterfaceStyle.light;
-    ParticleWallet.setInterfaceStyle(interfaceStyle);
+  static void showLanguageSetting() {
+    const isShow = false;
+    ParticleWallet.showLanguageSetting(isShow);
+  }
+
+  static void showAppearanceSetting() {
+    const isShow = false;
+    ParticleWallet.showAppearanceSetting(isShow);
+  }
+
+  static void setSupportAddToken() {
+    const isShow = false;
+    ParticleWallet.setSupportAddToken(isShow);
+  }
+
+  static void setDisplayTokenAddresses() {
+    List<String> tokenAddresses = <String>["0x303b35f48684bea50D0e7D1AcDdeaf78A7188798"];
+
+   ParticleWallet.setDisplayTokenAddresses(tokenAddresses);
+  }
+
+  static void setDisplayNFTContractAddresses() {
+    List<String> nftContractAddresses = <String>["0xD18e451c11A6852Fb92291Dc59bE35a59d143836"];
+   ParticleWallet.setDisplayNFTContractAddresses(nftContractAddresses);
+  }
+
+  static void setFiatCoin() {
+    const fiatCoin = FiatCoin.HKD;
+    ParticleWallet.setFiatCoin(fiatCoin);
+  }
+
+  static void loadCustomUIJsonString() {
+    // your custom json string.
+    // example https://github.com/Particle-Network/particle-ios/blob/main/Demo/Demo/customUIConfig.json
+    const json = ""; 
+    ParticleWallet.loadCustomUIJsonString(json);
   }
 
 }

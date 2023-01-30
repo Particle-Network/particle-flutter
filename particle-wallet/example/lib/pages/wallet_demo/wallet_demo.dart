@@ -201,7 +201,6 @@ class _WalletDemoPageState extends State<WalletDemoPage> {
                     )),
               ),
             ),
-
             Padding(
               padding: const EdgeInsets.all(8.0),
               child: SizedBox(
@@ -273,16 +272,92 @@ class _WalletDemoPageState extends State<WalletDemoPage> {
                 width: double.infinity,
                 height: 50,
                 child: ElevatedButton(
-                    onPressed: () => {WalletLogic.setInterfaceStyle()},
+                    onPressed: () => {WalletLogic.showLanguageSetting()},
                     child: const Text(
-                      "Set Interface Style",
+                      "Set show language setting",
                       style: TextStyle(fontSize: 18),
                     )),
               ),
             ),
-
-
-
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: SizedBox(
+                width: double.infinity,
+                height: 50,
+                child: ElevatedButton(
+                    onPressed: () => {WalletLogic.showAppearanceSetting()},
+                    child: const Text(
+                      "Set appearance setting",
+                      style: TextStyle(fontSize: 18),
+                    )),
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: SizedBox(
+                width: double.infinity,
+                height: 50,
+                child: ElevatedButton(
+                    onPressed: () => {WalletLogic.setSupportAddToken()},
+                    child: const Text(
+                      "Set support add token",
+                      style: TextStyle(fontSize: 18),
+                    )),
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: SizedBox(
+                width: double.infinity,
+                height: 50,
+                child: ElevatedButton(
+                    onPressed: () => {WalletLogic.setDisplayTokenAddresses()},
+                    child: const Text(
+                      "Set display token addresses",
+                      style: TextStyle(fontSize: 18),
+                    )),
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: SizedBox(
+                width: double.infinity,
+                height: 50,
+                child: ElevatedButton(
+                    onPressed: () =>
+                        {WalletLogic.setDisplayNFTContractAddresses()},
+                    child: const Text(
+                      "Set display nft contract addresses",
+                      style: TextStyle(fontSize: 18),
+                    )),
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: SizedBox(
+                width: double.infinity,
+                height: 50,
+                child: ElevatedButton(
+                    onPressed: () => {WalletLogic.setFiatCoin()},
+                    child: const Text(
+                      "Set fiat coin",
+                      style: TextStyle(fontSize: 18),
+                    )),
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: SizedBox(
+                width: double.infinity,
+                height: 50,
+                child: ElevatedButton(
+                    onPressed: () => {WalletLogic.loadCustomUIJsonString()},
+                    child: const Text(
+                      "load custom ui json string",
+                      style: TextStyle(fontSize: 18),
+                    )),
+              ),
+            ),
           ],
         ),
       ),
