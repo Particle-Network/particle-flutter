@@ -33,6 +33,10 @@ public class ParticleAuthPlugin: NSObject, FlutterPlugin {
         case setModalPresentStyle
         case setDisplayWallet
         case openWebWallet
+        case setMediumScreen
+        case openAccountAndSecurity
+        case setSecurityAccountConfig
+        case setLanguage
     }
     
     public static func register(with registrar: FlutterPluginRegistrar) {
@@ -86,6 +90,14 @@ public class ParticleAuthPlugin: NSObject, FlutterPlugin {
             self.setDisplayWallet(json as? Bool ?? false)
         case .openWebWallet:
             self.openWebWallet()
+        case .setMediumScreen:
+            self.setMediumScreen(json as? Bool ?? false)
+        case .setSecurityAccountConfig:
+            self.setSecurityAccountConfig(json as? String)
+        case .openAccountAndSecurity:
+            self.openAccountAndSecurity(flutterResult: result)
+        case .setLanguage:
+            self.setLanguage(json as? String)
         }
     }
 }
@@ -127,9 +139,9 @@ public extension ParticleAuthPlugin {
         let data = JSON(parseJSON: json)
         let name = data["chain_name"].stringValue.lowercased()
         let chainId = data["chain_id"].intValue
-        guard let chainInfo = matchChain(name: name, chainId: chainId) else { 
+        guard let chainInfo = matchChain(name: name, chainId: chainId) else {
             flutterResult(false)
-            return  
+            return
         }
         ParticleNetwork.setChainInfo(chainInfo)
         flutterResult(true)
@@ -143,9 +155,9 @@ public extension ParticleAuthPlugin {
         let data = JSON(parseJSON: json)
         let name = data["chain_name"].stringValue.lowercased()
         let chainId = data["chain_id"].intValue
-        guard let chainInfo = matchChain(name: name, chainId: chainId) else { 
+        guard let chainInfo = matchChain(name: name, chainId: chainId) else {
             flutterResult(FlutterError(code: "", message: "did not find chain info for \(chainId)", details: nil))
-            return 
+            return
         }
         ParticleAuthService.setChainInfo(chainInfo).subscribe { [weak self] result in
             guard let self = self else { return }
@@ -175,7 +187,6 @@ public extension ParticleAuthPlugin {
     }
     
     func login(_ json: String?, flutterResult: @escaping FlutterResult) {
-        
         guard let json = json else {
             flutterResult(FlutterError(code: "", message: "json is nil", details: nil))
             return
@@ -419,7 +430,6 @@ public extension ParticleAuthPlugin {
         flutterResult(json ?? "")
     }
     
-    
     func setModalPresentStyle(_ json: String?) {
         guard let style = json else {
             return
@@ -455,5 +465,66 @@ public extension ParticleAuthPlugin {
     
     func openWebWallet() {
         ParticleAuthService.openWebWallet()
+    }
+    
+    func setMediumScreen(_ isMediumScreen: Bool) {
+        if #available(iOS 15.0, *) {
+            ParticleAuthService.setMediumScreen(isMediumScreen)
+        } else {
+            // Fallback on earlier versions
+        }
+    }
+    
+    func setSecurityAccountConfig(_ json: String?) {
+        guard let json = json else {
+            return
+        }
+        let data = JSON(parseJSON: json)
+        let promptSettingWhenSign = data["prompt_setting_when_sign"].boolValue
+        ParticleAuthService.setSecurityAccountConfig(config: .init(promptSettingWhenSign: promptSettingWhenSign))
+    }
+    
+    func openAccountAndSecurity(flutterResult: @escaping FlutterResult) {
+        ParticleAuthService.openAccountAndSecurity().subscribe { [weak self] result in
+            guard let self = self else { return }
+            switch result {
+            case .failure(let error):
+                let response = self.ResponseFromError(error)
+                let statusModel = FlutterStatusModel(status: false, data: response)
+                let data = try! JSONEncoder().encode(statusModel)
+                guard let json = String(data: data, encoding: .utf8) else { return }
+                flutterResult(json)
+            case .success:
+                let statusModel = FlutterStatusModel(status: true, data: "")
+                let data = try! JSONEncoder().encode(statusModel)
+                guard let json = String(data: data, encoding: .utf8) else { return }
+                flutterResult(json)
+            }
+        }.disposed(by: self.bag)
+    }
+    
+    func setLanguage(_ json: String?) {
+        guard let json = json else {
+            return
+        }
+        
+        /*
+         en,
+         zh_hans,
+         zh_hant,
+         ja,
+         ko
+         */
+        if json.lowercased() == "en" {
+            ParticleNetwork.setLanguage(.en)
+        } else if json.lowercased() == "zh_hans" {
+            ParticleNetwork.setLanguage(.zh_Hans)
+        } else if json.lowercased() == "zh_hant" {
+            ParticleNetwork.setLanguage(.zh_Hant)
+        } else if json.lowercased() == "ja" {
+            ParticleNetwork.setLanguage(.ja)
+        } else if json.lowercased() == "ko" {
+            ParticleNetwork.setLanguage(.ko)
+        }
     }
 }

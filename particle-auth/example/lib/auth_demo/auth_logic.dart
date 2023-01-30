@@ -1,8 +1,12 @@
 import 'dart:convert';
 import 'package:flutter/foundation.dart';
+import 'package:flutter/widgets.dart';
 import 'package:oktoast/oktoast.dart';
 import 'package:particle_auth/model/chain_info.dart';
+import 'package:particle_auth/model/ios_modal_present_style.dart';
+import 'package:particle_auth/model/language.dart';
 import 'package:particle_auth/model/login_info.dart';
+import 'package:particle_auth/model/security_account_config.dart';
 import 'package:particle_auth/model/typeddata_version.dart';
 import 'package:particle_auth/particle_auth.dart';
 import 'package:particle_auth_example/mock/transaction_mock.dart';
@@ -209,8 +213,10 @@ class AuthLogic {
       chainInfo = HecoChain.mainnet();
     } else if (chainId == HecoChain.testnet().chainId) {
       chainInfo = HecoChain.testnet();
-    } else if (chainId == ArbitrumChain.mainnet().chainId) {
-      chainInfo = ArbitrumChain.mainnet();
+    } else if (chainId == ArbitrumChain.one().chainId) {
+      chainInfo = ArbitrumChain.one();
+    } else if (chainId == ArbitrumChain.nova().chainId) {
+      chainInfo = ArbitrumChain.nova();
     } else if (chainId == ArbitrumChain.goerli().chainId) {
       chainInfo = ArbitrumChain.goerli();
     } else if (chainId == OptimismChain.mainnet().chainId) {
@@ -233,7 +239,64 @@ class AuthLogic {
       chainInfo = MoonriverChain.mainnet();
     } else if (chainId == MoonriverChain.testnet().chainId) {
       chainInfo = MoonriverChain.testnet();
+    } else if (chainId == TronChain.mainnet().chainId) {
+      chainInfo = TronChain.mainnet();
+    } else if (chainId == TronChain.shasta().chainId) {
+      chainInfo = TronChain.shasta();
+    } else if (chainId == TronChain.nile().chainId) {
+      chainInfo = TronChain.nile();
+    } else if (chainId == OKCChain.mainnet().chainId) {
+      chainInfo = OKCChain.mainnet();
+    } else if (chainId == OKCChain.testnet().chainId) {
+      chainInfo = OKCChain.testnet();
+    } else if (chainId == ThunderCoreChain.mainnet().chainId) {
+      chainInfo = ThunderCoreChain.mainnet();
+    } else if (chainId == ThunderCoreChain.testnet().chainId) {
+      chainInfo = ThunderCoreChain.testnet();
+    } else if (chainId == CronosChain.mainnet().chainId) {
+      chainInfo = CronosChain.mainnet();
+    } else if (chainId == CronosChain.testnet().chainId) {
+      chainInfo = CronosChain.testnet();
+    } else if (chainId == OasisEmeraldChain.mainnet().chainId) {
+      chainInfo = OasisEmeraldChain.mainnet();
+    } else if (chainId == OasisEmeraldChain.testnet().chainId) {
+      chainInfo = OasisEmeraldChain.testnet();
+    } else if (chainId == GnosisChain.mainnet().chainId) {
+      chainInfo = GnosisChain.mainnet();
+    } else if (chainId == GnosisChain.testnet().chainId) {
+      chainInfo = GnosisChain.testnet();
+    } else if (chainId == CeloChain.mainnet().chainId) {
+      chainInfo = CeloChain.mainnet();
+    } else if (chainId == CeloChain.testnet().chainId) {
+      chainInfo = CeloChain.testnet();
+    } else if (chainId == KlaytnChain.mainnet().chainId) {
+      chainInfo = KlaytnChain.mainnet();
+    } else if (chainId == KlaytnChain.testnet().chainId) {
+      chainInfo = KlaytnChain.testnet();
     }
     debugPrint("getChainInfo: $chainInfo");
+  }
+
+  static void setModalPresentStyle() {
+    ParticleAuth.setModalPresentStyle(IOSModalPresentStyle.fullScreen);
+  }
+
+  static void setMediumScreen() {
+    ParticleAuth.setMediumScreen(true);
+  }
+
+  static void openAccountAndSecurity() async {
+    String result = await ParticleAuth.openAccountAndSecurity();
+    print(result);
+  }
+
+  static void setSecurityAccountConfig() {
+    final config = SecurityAccountConfig(true);
+    ParticleAuth.setSecurityAccountConfig(config);
+  }
+
+  static void setLanguage() {
+    const language = Language.ja;
+    ParticleAuth.setLanguage(language);
   }
 }

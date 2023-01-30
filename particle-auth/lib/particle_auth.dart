@@ -4,6 +4,8 @@ import 'dart:io' show Platform;
 import 'package:flutter/services.dart';
 import 'package:particle_auth/model/chain_info.dart';
 import 'package:particle_auth/model/ios_modal_present_style.dart';
+import 'package:particle_auth/model/language.dart';
+import 'package:particle_auth/model/security_account_config.dart';
 import 'package:particle_auth/model/typeddata_version.dart';
 import 'package:particle_auth/model/user_interface_style.dart';
 
@@ -166,13 +168,13 @@ class ParticleAuth {
   }
 
   /// Open web wallet
-  static Future<void> openWebWallet() async {
-    return await _channel.invokeMethod('openWebWallet');
+  static openWebWallet() async {
+    _channel.invokeMethod('openWebWallet');
   }
 
   /// Set display wel wallet when sign and send transaction in web page.
-  static Future<void> setDisplayWallet(bool displayWallet) async {
-    return await _channel.invokeMethod('setDisplayWallet', displayWallet);
+  static setDisplayWallet(bool displayWallet) {
+    _channel.invokeMethod('setDisplayWallet', displayWallet);
   }
 
   /// Set user inerface style
@@ -182,10 +184,40 @@ class ParticleAuth {
     }
   }
 
-  /// Set ios modal present style.
+  /// Set security account config
+  static setSecurityAccountConfig(SecurityAccountConfig config) {
+      _channel.invokeMethod("setSecurityAccountConfig", jsonEncode(config));
+  }
+
+  /// Open account and security page in web.
+  /// 
+  /// If user is expired, should return error.
+  /// 
+  /// Don't wait this method call back.
+  static Future<String> openAccountAndSecurity() async {
+    return await _channel.invokeMethod("openAccountAndSecurity");
+  }
+
+  /// Set iOS modal present style.
   static setModalPresentStyle(IOSModalPresentStyle modalPresentStyle) {
     if (Platform.isIOS) {
       _channel.invokeMethod("setModalPresentStyle", modalPresentStyle.name);
     }
+  }
+
+  /// Set iOS midium screen, ture is medium screen, false is large screen,  default value if false.
+  ///
+  /// Only support iOS 15 or higher.
+  ///
+  /// If you want to set meduim screen, you can't setModalPresentStyle with IOSModalPresentStyle.fullScreen
+  static setMediumScreen(bool isMediumScreen) {
+    if (Platform.isIOS) {
+      _channel.invokeMethod("setMediumScreen", isMediumScreen);
+    }
+  }
+
+  /// Set language, default value is Language.en.
+  static setLanguage(Language language) {
+    _channel.invokeListMethod("setLanguage", language.name);
   }
 }

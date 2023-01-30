@@ -104,6 +104,38 @@ extension NSObject {
             } else if chainId == 2203181 {
                 chainInfo = .platON(.testnet)
             }
+        } else if name == "tron" {
+            if chainId == 728126428 {
+                chainInfo = .tron(.mainnet)
+            } else if chainId == 2494104990 {
+                chainInfo = .tron(.shasta)
+            } else if chainId == 3448148188 {
+                chainInfo = .tron(.nile)
+            }
+        } else if name == "okc" {
+            if chainId == 66 {
+                chainInfo = .okc(.mainnet)
+            } else if chainId == 65 {
+                chainInfo = .okc(.testnet)
+            }
+        } else if name == "thundercore" {
+            if chainId == 108 {
+                chainInfo = .thunderCore(.mainnet)
+            } else if chainId == 18 {
+                chainInfo = .thunderCore(.testnet)
+            }
+        } else if name == "cronos" {
+            if chainId == 25 {
+                chainInfo = .okc(.mainnet)
+            } else if chainId == 338 {
+                chainInfo = .okc(.testnet)
+            }
+        } else if name == "oasisemerald" {
+            if chainId == 42262 {
+                chainInfo = .oasisEmerald(.mainnet)
+            } else if chainId == 42261 {
+                chainInfo = .oasisEmerald(.testnet)
+            }
         }
         return chainInfo
     }
@@ -139,6 +171,18 @@ extension NSObject {
             chain = .kcc
         } else if name == "optimism" {
             chain = .optimism
+        } else if name == "platon" {
+            chain = .platON
+        } else if name == "tron" {
+            chain = .tron
+        } else if name == "okc" {
+            chain = .okc
+        } else if name == "thundercore" {
+            chain = .thunderCore
+        } else if name == "cronos" {
+            chain = .cronos
+        } else if name == "oasisemerald" {
+            chain = .oasisEmerald
         }
         return chain
     }
@@ -150,10 +194,6 @@ extension NSObject {
             return FlutterResponseError(code: nil, message: String(describing: error), data: nil)
         }
     }
-
-   
-
-    
 }
 
 struct FlutterResponseError: Codable {
@@ -171,5 +211,3 @@ struct FlutterConnectLoginResult: Codable {
     let message: String
     let signature: String
 }
-
-
