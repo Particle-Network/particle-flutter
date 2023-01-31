@@ -191,9 +191,7 @@ class ParticleAuth {
 
   /// Open account and security page in web.
   /// 
-  /// If user is expired, should return error.
-  /// 
-  /// Don't wait this method call back.
+  /// If user is expired, should return error, otherwise return nothing.
   static Future<String> openAccountAndSecurity() async {
     return await _channel.invokeMethod("openAccountAndSecurity");
   }
@@ -205,11 +203,11 @@ class ParticleAuth {
     }
   }
 
-  /// Set iOS midium screen, ture is medium screen, false is large screen,  default value if false.
+  /// Set iOS medium screen, true is medium screen, false is large screen,  default value if false.
   ///
   /// Only support iOS 15 or higher.
   ///
-  /// If you want to set meduim screen, you can't setModalPresentStyle with IOSModalPresentStyle.fullScreen
+  /// If you want to set medium screen, don't call setModalPresentStyle with IOSModalPresentStyle.fullScreen
   static setMediumScreen(bool isMediumScreen) {
     if (Platform.isIOS) {
       _channel.invokeMethod("setMediumScreen", isMediumScreen);
