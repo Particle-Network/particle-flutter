@@ -37,11 +37,11 @@ target 'Runner' do
   pod 'ConnectEVMAdapter', '0.1.44'
   pod 'ConnectCommon', '0.1.44'
   pod 'ConnectPhantomAdapter', '0.1.44'
-  pod 'ParticleNetworkBase', '0.9.10'
-  pod 'ParticleAuthService', '0.9.10'
-  pod 'ParticleWalletGUI', '0.9.10'
-  pod 'ParticleWalletAPI', '0.9.10'
-  pod 'ParticleWalletConnect', '0.9.10'
+  pod 'ParticleNetworkBase', '0.9.12'
+  pod 'ParticleAuthService', '0.9.12'
+  pod 'ParticleWalletGUI', '0.9.12'
+  pod 'ParticleWalletAPI', '0.9.12'
+  pod 'ParticleWalletConnect', '0.9.12'
 
   flutter_install_all_ios_pods File.dirname(File.realpath(__FILE__))
 end
