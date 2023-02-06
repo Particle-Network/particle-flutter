@@ -1,6 +1,5 @@
 package network.particle.auth_flutter.bridge.utils
 
-import com.connect.common.utils.HexUtils
 import com.particle.base.ParticleNetwork
 
 object EncodeUtils {

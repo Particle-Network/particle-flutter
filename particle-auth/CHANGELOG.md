@@ -1,4 +1,5 @@
-
+## 0.9.8
+fix HexUtils defined multiple
 ## 0.9.7
 
 ## 0.9.6
