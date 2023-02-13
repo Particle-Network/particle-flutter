@@ -6,6 +6,7 @@ import 'package:particle_connect/model/connect_info.dart';
 import 'package:particle_connect/model/dapp_meta_data.dart';
 import 'package:particle_connect/model/login_info.dart';
 import 'package:particle_connect/model/particle_connect_config.dart';
+import 'package:particle_connect/model/wallet_ready_state.dart';
 import 'package:particle_connect/particle_connect.dart';
 import 'package:particle_connect_example/mock/test_account.dart';
 import 'package:particle_connect_example/mock/transaction_mock.dart';
@@ -217,4 +218,8 @@ class ConnectLogic {
     print(result);
   }
 
+  static void walletTypeState() async {
+    WalletReadyState readyState = await ParticleConnect.walletReadyState(walletType);
+    print(readyState);
+  }
 }

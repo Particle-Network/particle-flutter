@@ -54,7 +54,9 @@ extension NSObject {
             }
         } else if name == "arbitrum" {
             if chainId == 42161 {
-                chainInfo = .arbitrum(.mainnet)
+                chainInfo = .arbitrum(.one)
+            } else if chainId == 42170 {
+                chainInfo = .arbitrum(.nova)
             } else if chainId == 421613 {
                 chainInfo = .arbitrum(.goerli)
             }
@@ -138,6 +140,42 @@ extension NSObject {
             } else if chainId == 42261 {
                 chainInfo = .oasisEmerald(.testnet)
             }
+        } else if name == "gnosis" {
+            if chainId == 100 {
+                chainInfo = .gnosis(.mainnet)
+            } else if chainId == 10200 {
+                chainInfo = .gnosis(.testnet)
+            }
+        } else if name == "celo" {
+            if chainId == 42220 {
+                chainInfo = .celo(.mainnet)
+            } else if chainId == 44787 {
+                chainInfo = .celo(.testnet)
+            }
+        } else if name == "klaytn" {
+            if chainId == 8217 {
+                chainInfo = .klaytn(.mainnet)
+            } else if chainId == 1001 {
+                chainInfo = .klaytn(.testnet)
+            }
+        } else if name == "scroll" {
+            if chainId == 534351 {
+                chainInfo = .scroll(.testnetL1)
+            } else if chainId == 534354 {
+                chainInfo = .scroll(.testnetL2)
+            }
+        } else if name == "zksyncv2" {
+            if chainId == 324 {
+                chainInfo = .zkSyncV2(.mainnet)
+            } else if chainId == 280 {
+                chainInfo = .zkSyncV2(.testnet)
+            }
+        } else if name == "metis" {
+            if chainId == 1088 {
+                chainInfo = .metis(.mainnet)
+            } else if chainId == 599 {
+                chainInfo = .metis(.goerli)
+            }
         }
         return chainInfo
     }
@@ -185,6 +223,18 @@ extension NSObject {
             chain = .cronos
         } else if name == "oasisemerald" {
             chain = .oasisEmerald
+        } else if name == "gnosis" {
+            chain = .gnosis
+        } else if name == "celo" {
+            chain = .celo
+        } else if name == "klaytn" {
+            chain = .klaytn
+        } else if name == "scroll" {
+            chain = .scroll
+        } else if name == "zksyncv2" {
+            chain = .zkSyncV2
+        } else if name == "metis" {
+            chain = .metis
         }
         return chain
     }

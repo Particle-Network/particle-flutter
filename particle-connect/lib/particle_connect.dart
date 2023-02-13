@@ -9,6 +9,7 @@ import 'dart:io' show Platform;
 import 'package:particle_connect/model/dapp_meta_data.dart';
 import 'package:particle_connect/model/particle_connect_config.dart';
 import 'package:particle_connect/model/rpc_url_config.dart';
+import 'package:particle_connect/model/wallet_ready_state.dart';
 
 class ParticleConnect {
   ParticleConnect._();
@@ -306,16 +307,38 @@ class ParticleConnect {
   /// Add ethereum chain, only support metamask
   /// Pass [walletType] and [publicAddress] to decide a wallet.
   /// [chainId] tell metamask which chain to add.
-  static Future<String> addEthereumChain(WalletType walletType, String publicAddress, int chainId) async {
-    return await _channel.invokeMethod('addEthereumChain',
-        jsonEncode({"public_address": publicAddress, "chain_id": chainId}));
+  static Future<String> addEthereumChain(
+      WalletType walletType, String publicAddress, int chainId) async {
+    return await _channel.invokeMethod(
+        'addEthereumChain',
+        jsonEncode({
+          "wallet_type": walletType.name,
+          "public_address": publicAddress,
+          "chain_id": chainId
+        }));
   }
 
   /// Add ethereum chain, only support metamask
   /// Pass [walletType] and [publicAddress] to decide a wallet.
   /// [chainId] tell metamask which chain to switch.
-  static Future<String> switchEthereumChain(WalletType walletType, String publicAddress, int chainId) async {
-    return await _channel.invokeMethod('switchEthereumChain',
-        jsonEncode({"public_address": publicAddress, "chain_id": chainId}));
+  static Future<String> switchEthereumChain(
+      WalletType walletType, String publicAddress, int chainId) async {
+    return await _channel.invokeMethod(
+        'switchEthereumChain',
+        jsonEncode({
+          "wallet_type": walletType.name,
+          "public_address": publicAddress,
+          "chain_id": chainId
+        }));
+  }
+
+  /// Add ethereum chain, only support metamask
+  /// Pass [walletType] and [publicAddress] to decide a wallet.
+  /// [chainId] tell metamask which chain to switch.
+  static Future<WalletReadyState> walletReadyState(
+      WalletType walletType) async {
+    String readyState = await _channel.invokeMethod(
+        'walletReadyState', jsonEncode({"wallet_type": walletType.name}));
+    return WalletReadyState.values.byName(readyState);
   }
 }

@@ -52,6 +52,7 @@ public class ParticleConnectPlugin: NSObject, FlutterPlugin {
         case exportPrivateKey
         case switchEthereumChain
         case addEthereumChain
+        case walletReadyState
     }
     
     public static func register(with registrar: FlutterPluginRegistrar) {
@@ -107,6 +108,8 @@ public class ParticleConnectPlugin: NSObject, FlutterPlugin {
             self.switchEthereumChain(json as? String, flutterResult: result)
         case .addEthereumChain:
             self.addEthereumChain(json as? String, flutterResult: result)
+        case .walletReadyState:
+            self.walletReadyState(json as? String, flutterResult: result)
         }
     }
 }
@@ -1051,5 +1054,53 @@ extension ParticleConnectPlugin {
                 flutterResult(json)
             }
         }.disposed(by: self.bag)
+    }
+    
+    func walletReadyState(_ json: String?, flutterResult: @escaping FlutterResult) {
+        guard let json = json else {
+            flutterResult(FlutterError(code: "", message: "json is nil", details: nil))
+            return
+        }
+        
+        let data = JSON(parseJSON: json)
+        let walletTypeString = data["wallet_type"].stringValue
+
+        guard let walletType = map2WalletType(from: walletTypeString) else {
+            print("walletType \(walletTypeString) is not existed ")
+            let response = FlutterResponseError(code: nil, message: "walletType \(walletTypeString) is not existed", data: nil)
+            let statusModel = FlutterStatusModel(status: false, data: response)
+            let data = try! JSONEncoder().encode(statusModel)
+            guard let json = String(data: data, encoding: .utf8) else { return }
+            flutterResult(json)
+            return
+        }
+        
+        guard let adapter = map2ConnectAdapter(from: walletType) else {
+            print("adapter for \(walletTypeString) is not init")
+            let response = FlutterResponseError(code: nil, message: "adapter for \(walletTypeString) is not init", data: nil)
+            let statusModel = FlutterStatusModel(status: false, data: response)
+            let data = try! JSONEncoder().encode(statusModel)
+            guard let json = String(data: data, encoding: .utf8) else { return }
+            flutterResult(json)
+            return
+        }
+        
+        var str: String
+        switch adapter.readyState {
+        case .installed:
+            str = "installed"
+        case .notDetected:
+            str = "notDetected"
+        case .loadable:
+            str = "loadable"
+        case .unsupported:
+            str = "unsupported"
+        case .undetectable:
+            str = "undetectable"
+        @unknown default:
+            str = "undetectable"
+        }
+        
+        flutterResult(str)
     }
 }
