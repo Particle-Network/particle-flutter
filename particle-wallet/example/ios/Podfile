@@ -31,17 +31,20 @@ target 'Runner' do
   use_frameworks! :linkage => :static
   use_modular_headers!
 
-  pod 'ParticleConnect', '0.1.44'
-  pod 'ConnectWalletConnectAdapter', '0.1.44'
-  pod 'ConnectSolanaAdapter', '0.1.44'
-  pod 'ConnectEVMAdapter', '0.1.44'
-  pod 'ConnectCommon', '0.1.44'
-  pod 'ConnectPhantomAdapter', '0.1.44'
-  pod 'ParticleNetworkBase', '0.9.12'
-  pod 'ParticleAuthService', '0.9.12'
-  pod 'ParticleWalletGUI', '0.9.12'
-  pod 'ParticleWalletAPI', '0.9.12'
-  pod 'ParticleWalletConnect', '0.9.12'
+  pod 'ParticleConnect', '0.1.47'
+  pod 'ConnectWalletConnectAdapter', '0.1.47'
+  pod 'ConnectSolanaAdapter', '0.1.47'
+  pod 'ConnectEVMAdapter', '0.1.47'
+  pod 'ConnectCommon', '0.1.47'
+  pod 'ConnectPhantomAdapter', '0.1.47'
+  pod 'ParticleNetworkBase', '0.10.0'
+  pod 'ParticleAuthService', '0.10.0'
+  pod 'ParticleWalletGUI', '0.10.0'
+  pod 'ParticleWalletAPI', '0.10.0'
+  pod 'ParticleWalletConnect', '0.10.0'
+  
+  pod 'SkeletonView', :git => 'https://github.com/SunZhiC/SkeletonView.git', :branch => 'main'
+  pod 'WalletConnectSwift', :git => 'https://github.com/SunZhiC/WalletConnectSwift', :branch => 'master'
 
   flutter_install_all_ios_pods File.dirname(File.realpath(__FILE__))
 end

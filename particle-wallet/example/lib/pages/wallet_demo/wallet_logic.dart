@@ -28,13 +28,13 @@ class WalletLogic {
     String tokenAddress = "8ci2fZwQSmArbeHkuA7M8h5rsRwwh4FMTXrZxb3KsDpb";
     String toAddress = "1232fZwQSmArbeHkuA7M8h5rsRwwh4FMTXrZxb3KsDpb";
     int amount = 1000000;
-    ParticleWallet.navigatorTokenSend(tokenAddress: tokenAddress, toAddress: toAddress, amount: amount);
+    ParticleWallet.navigatorTokenSend(
+        tokenAddress: tokenAddress, toAddress: toAddress, amount: amount);
   }
 
   static void navigatorTokenTransactionRecords() {
     String tokenAddress = "8ci2fZwQSmArbeHkuA7M8h5rsRwwh4FMTXrZxb3KsDpb";
-    ParticleWallet.navigatorTokenTransactionRecords(
-        tokenAddress: tokenAddress);
+    ParticleWallet.navigatorTokenTransactionRecords(tokenAddress: tokenAddress);
   }
 
   static void navigatorNFTSend() {
@@ -50,7 +50,7 @@ class WalletLogic {
   }
 
   static void enablePay() {
-     bool enable = true;
+    bool enable = true;
     ParticleWallet.enablePay(enable);
   }
 
@@ -70,7 +70,12 @@ class WalletLogic {
   }
 
   static void navigatorBuyCrypto() {
-    final config = BuyCryptoConfig(walletAddress:"your wallet address", cryptoCoin:"USDT", fiatCoin:"USD", fiatAmt:1000, network:OpenBuyNetwork.ethereum);
+    final config = BuyCryptoConfig(
+        walletAddress: "your wallet address",
+        cryptoCoin: "USDT",
+        fiatCoin: "USD",
+        fiatAmt: 1000,
+        network: OpenBuyNetwork.ethereum);
     ParticleWallet.navigatorBuyCrypto(config: config);
   }
 
@@ -95,7 +100,8 @@ class WalletLogic {
   static void switchWallet() async {
     WalletType walletType = WalletType.particle;
     String publicAddress = "";
-    String result = await ParticleWallet.switchWallet(walletType, publicAddress);
+    String result =
+        await ParticleWallet.switchWallet(walletType, publicAddress);
     print("result:$result");
     showToast("result: $result");
   }
@@ -109,7 +115,7 @@ class WalletLogic {
     bool enable = true;
     ParticleWallet.showManageWallet(enable);
   }
-  
+
   static void setLanguage() {
     Language language = Language.system;
     ParticleWallet.setLanguage(language);
@@ -131,14 +137,33 @@ class WalletLogic {
   }
 
   static void setDisplayTokenAddresses() {
-    List<String> tokenAddresses = <String>["0x303b35f48684bea50D0e7D1AcDdeaf78A7188798"];
+    List<String> tokenAddresses = <String>[
+      "0x303b35f48684bea50D0e7D1AcDdeaf78A7188798"
+    ];
 
-   ParticleWallet.setDisplayTokenAddresses(tokenAddresses);
+    ParticleWallet.setDisplayTokenAddresses(tokenAddresses);
   }
 
   static void setDisplayNFTContractAddresses() {
-    List<String> nftContractAddresses = <String>["0xD18e451c11A6852Fb92291Dc59bE35a59d143836"];
-   ParticleWallet.setDisplayNFTContractAddresses(nftContractAddresses);
+    List<String> nftContractAddresses = <String>[
+      "0xD18e451c11A6852Fb92291Dc59bE35a59d143836"
+    ];
+    ParticleWallet.setDisplayNFTContractAddresses(nftContractAddresses);
+  }
+
+  static void setPriorityTokenAddresses() {
+    List<String> tokenAddresses = <String>[
+      "0x303b35f48684bea50D0e7D1AcDdeaf78A7188798"
+    ];
+
+    ParticleWallet.setPriorityTokenAddresses(tokenAddresses);
+  }
+
+  static void setPriorityNFTContractAddresses() {
+    List<String> nftContractAddresses = <String>[
+      "0xD18e451c11A6852Fb92291Dc59bE35a59d143836"
+    ];
+    ParticleWallet.setPriorityNFTContractAddresses(nftContractAddresses);
   }
 
   static void setFiatCoin() {
@@ -149,8 +174,7 @@ class WalletLogic {
   static void loadCustomUIJsonString() {
     // your custom json string.
     // example https://github.com/Particle-Network/particle-ios/blob/main/Demo/Demo/customUIConfig.json
-    const json = ""; 
+    const json = "";
     ParticleWallet.loadCustomUIJsonString(json);
   }
-
 }

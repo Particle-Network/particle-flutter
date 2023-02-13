@@ -225,6 +225,7 @@ class ParticleWallet {
     _channel.invokeMethod("showAppearanceSetting", isShow);
   }
 
+  /// Set language for GUI
   static setLanguage(Language language) {
     _channel.invokeMethod("setLanguage", language.name);
   }
@@ -234,18 +235,32 @@ class ParticleWallet {
     _channel.invokeMethod("setSupportAddToken", isShow);
   }
 
+  /// Set display token addresses
   static setDisplayTokenAddresses(List<String> tokenAddresses) {
     _channel.invokeMethod("setDisplayTokenAddresses", tokenAddresses);
   }
 
+  /// Set display NFT contract addresses
   static setDisplayNFTContractAddresses(List<String> nftContractAddresses) {
     _channel.invokeMethod("setDisplayNFTContractAddresses", nftContractAddresses);
   }
 
+  /// Set priority token addresses
+  static setPriorityTokenAddresses(List<String> tokenAddresses) {
+    _channel.invokeMethod("setPriorityTokenAddresses", tokenAddresses);
+  }
+
+  /// Set priority NFT contract addresses
+  static setPriorityNFTContractAddresses(List<String> nftContractAddresses) {
+    _channel.invokeMethod("setPriorityNFTContractAddresses", nftContractAddresses);
+  }
+
+  /// Set fait coin for GUI.
   static setFiatCoin(FiatCoin fiatCoin) {
     _channel.invokeMethod("setFiatCoin", fiatCoin.name);
   }
 
+  /// load custom ui config json
   static loadCustomUIJsonString(String json) {
     _channel.invokeMethod("loadCustomUIJsonString", json);
   }

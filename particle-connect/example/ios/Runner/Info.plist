@@ -37,13 +37,19 @@
 	<string>$(FLUTTER_BUILD_NUMBER)</string>
 	<key>LSApplicationQueriesSchemes</key>
 	<array>
-		<string>metamask</string>
-		<string>phantom</string>
-		<string>bitkeep</string>
-		<string>imtokenv2</string>
-		<string>rainbow</string>
-		<string>trust</string>
-		<string>gnosissafe</string>
+        <string>metamask</string>
+        <string>phantom</string>
+        <string>bitkeep</string>
+        <string>imtokenv2</string>
+        <string>rainbow</string>
+        <string>trust</string>
+        <string>gnosissafe</string>
+        <string>zerion</string>
+        <string>mathwallet</string>
+        <string>argent</string>
+        <string>1inch</string>
+        <string>awallet</string>
+        <string>bitpie</string>
 	</array>
 	<key>LSRequiresIPhoneOS</key>
 	<true/>

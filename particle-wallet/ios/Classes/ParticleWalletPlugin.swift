@@ -42,6 +42,8 @@ public class ParticleWalletPlugin: NSObject, FlutterPlugin {
         case setSupportAddToken
         case setDisplayTokenAddresses
         case setDisplayNFTContractAddresses
+        case setPriorityTokenAddresses
+        case setPriorityNFTContractAddresses
         case setFiatCoin
         case loadCustomUIJsonString
     }
@@ -113,10 +115,15 @@ public class ParticleWalletPlugin: NSObject, FlutterPlugin {
             self.setDisplayTokenAddresses(json as? String)
         case .setDisplayNFTContractAddresses:
             self.setDisplayNFTContractAddresses(json as? String)
+        case .setPriorityTokenAddresses:
+            self.setPriorityTokenAddresses(json as? String)
+        case .setPriorityNFTContractAddresses:
+            self.setPriorityNFTContractAddresses(json as? String)
         case .setFiatCoin:
             self.setFiatCoin(json as? String)
         case .loadCustomUIJsonString:
             self.loadCustomUIJsonString(json as? String)
+            
         }
     }
 }
@@ -378,6 +385,28 @@ extension ParticleWalletPlugin {
             $0.stringValue
         }
         ParticleWalletGUI.setDisplayNFTContractAddresses(nftContractAddresses)
+    }
+    
+    func setPriorityTokenAddresses(_ json: String?) {
+        guard let json = json else {
+            return
+        }
+        let data = JSON(parseJSON: json)
+        let tokenAddresses = data.arrayValue.map {
+            $0.stringValue
+        }
+        ParticleWalletGUI.setPriorityTokenAddresses(tokenAddresses)
+    }
+
+    func setPriorityNFTContractAddresses(_ json: String?) {
+        guard let json = json else {
+            return
+        }
+        let data = JSON(parseJSON: json)
+        let nftContractAddresses = data.arrayValue.map {
+            $0.stringValue
+        }
+        ParticleWalletGUI.setPriorityNFTContractAddresses(nftContractAddresses)
     }
 
     func setFiatCoin(_ json: String?) {
