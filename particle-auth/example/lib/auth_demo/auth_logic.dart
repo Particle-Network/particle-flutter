@@ -12,9 +12,7 @@ import 'package:particle_auth/particle_auth.dart';
 import 'package:particle_auth_example/mock/transaction_mock.dart';
 import 'package:particle_auth_example/model/pn_account_info_entity.dart';
 
-
 class AuthLogic {
-
   static late ChainInfo currChainInfo;
 
   static void setChain() {
@@ -28,21 +26,15 @@ class AuthLogic {
   static String? evmPubAddress;
   static String? solPubAddress;
 
-  void loginA() async {
-    List<SupportAuthType> supportAuthType = <SupportAuthType>[];
-    supportAuthType.add(SupportAuthType.google);
-    String result = await ParticleAuth.login(LoginType.phone, "", supportAuthType);
-    debugPrint("login: $result");
-    showToast("login: $result");
-  }
-
   static void login() async {
     List<SupportAuthType> supportAuthType = <SupportAuthType>[];
     supportAuthType.add(SupportAuthType.google);
     supportAuthType.add(SupportAuthType.email);
-    String result = await ParticleAuth.login(LoginType.phone, "", supportAuthType);
+    String result = await ParticleAuth.login(
+        LoginType.phone, "", supportAuthType,
+        socialLoginPrompt: SocialLoginPrompt.select_account);
 
-    debugPrint("login: $result");
+    print("login: $result");
     showToast("login: $result");
 
     if (jsonDecode(result)["status"] == true ||
@@ -83,7 +75,7 @@ class AuthLogic {
   }
 
   static void fastLogout() async {
-  String result = await ParticleAuth.fastLogout();
+    String result = await ParticleAuth.fastLogout();
     debugPrint("logout: $result");
     showToast("logout: $result");
   }

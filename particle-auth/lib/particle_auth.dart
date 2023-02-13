@@ -55,16 +55,20 @@ class ParticleAuth {
   /// [loginFormMode] set false will show full login form, set true will show light
   /// login form, default value is false.
   ///
+  /// [socialLoginPrompt] social login prompt, optional.
+  /// 
   /// Return userinfo or error
   static Future<String> login(LoginType loginType, String account,
       List<SupportAuthType> supportAuthTypes,
-      {bool loginFormMode = false}) async {
+      {bool loginFormMode = false, SocialLoginPrompt? socialLoginPrompt}) async {
     final params = jsonEncode({
       "login_type": loginType.name,
       "account": account,
       "support_auth_type_values": supportAuthTypes.map((e) => e.name).toList(),
       "login_form_mode": loginFormMode,
+      "social_login_prompt": socialLoginPrompt?.name,
     });
+    
     return await _channel.invokeMethod('login', params);
   }
 

@@ -26,3 +26,10 @@ enum SupportAuthType {
   linkedin,
   all,
 }
+
+enum SocialLoginPrompt {
+  none,
+  consent,
+  // ignore: constant_identifier_names
+  select_account
+}

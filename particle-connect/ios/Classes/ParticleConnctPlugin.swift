@@ -285,7 +285,10 @@ extension ParticleConnectPlugin {
             }
             
             let loginFormMode = configJson["login_form_mode"].boolValue
-            connectConfig = ParticleConnectConfig(loginType: loginType, supportAuthType: supportAuthTypeArray, loginFormMode: loginFormMode, phoneOrEmailAccount: account)
+            let socialLoginPromptString = configJson["social_login_prompt"].stringValue
+            let socialLoginPrompt: SocialLoginPrompt? = SocialLoginPrompt(rawValue: socialLoginPromptString)
+            
+            connectConfig = ParticleConnectConfig(loginType: loginType, supportAuthType: supportAuthTypeArray, loginFormMode: loginFormMode, phoneOrEmailAccount: account, socialLoginPrompt: socialLoginPrompt)
         }
         
         guard let walletType = map2WalletType(from: walletTypeString) else {

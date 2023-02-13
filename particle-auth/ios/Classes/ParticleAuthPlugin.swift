@@ -201,6 +201,8 @@ public extension ParticleAuthPlugin {
         let account = data["account"].string
         let supportAuthType = data["support_auth_type_values"].arrayValue
         let loginFormMode = data["login_form_mode"].bool ?? false
+        let socialLoginPromptString = data["social_login_prompt"].stringValue
+        let socialLoginPrompt: SocialLoginPrompt? = SocialLoginPrompt(rawValue: socialLoginPromptString)
         
         let loginType = LoginType(rawValue: type) ?? .email
         var supportAuthTypeArray: [SupportAuthType] = []
@@ -242,7 +244,7 @@ public extension ParticleAuthPlugin {
             acc = nil
         }
         
-        ParticleAuthService.login(type: loginType, account: acc, supportAuthType: supportAuthTypeArray, loginFormMode: loginFormMode).subscribe { [weak self] result in
+        ParticleAuthService.login(type: loginType, account: acc, supportAuthType: supportAuthTypeArray, loginFormMode: loginFormMode, socialLoginPrompt: socialLoginPrompt).subscribe { [weak self] result in
             guard let self = self else { return }
             switch result {
             case .failure(let error):
