@@ -108,6 +108,19 @@ class AuthDemoPageState extends State<AuthDemoPage> {
                 width: double.infinity,
                 height: 50,
                 child: ElevatedButton(
+                    onPressed: () => {AuthLogic.fastLogout()},
+                    child: const Text(
+                      "Fast logout",
+                      style: TextStyle(fontSize: 18),
+                    )),
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: SizedBox(
+                width: double.infinity,
+                height: 50,
+                child: ElevatedButton(
                     onPressed: () => {AuthLogic.signMessage()},
                     child: const Text(
                       "Sign Message",

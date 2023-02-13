@@ -68,9 +68,14 @@ class ParticleAuth {
     return await _channel.invokeMethod('login', params);
   }
 
-  /// Logout
+  /// Logout, with webview page.
   static Future<String> logout() async {
     return await _channel.invokeMethod('logout');
+  }
+
+  /// Fast logout, without any UI, logout silently.
+  static Future<String> fastLogout() async {
+    return await _channel.invokeMethod("fastLogout");
   }
 
   /// Get public address

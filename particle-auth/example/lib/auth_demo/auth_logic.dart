@@ -82,6 +82,12 @@ class AuthLogic {
     showToast("logout: $result");
   }
 
+  static void fastLogout() async {
+  String result = await ParticleAuth.fastLogout();
+    debugPrint("logout: $result");
+    showToast("logout: $result");
+  }
+
   static void signMessage() async {
     String result = await ParticleAuth.signMessage("Hello Particle");
     debugPrint("signMessage: $result");
@@ -291,7 +297,7 @@ class AuthLogic {
   }
 
   static void setSecurityAccountConfig() {
-    final config = SecurityAccountConfig(true);
+    final config = SecurityAccountConfig(2);
     ParticleAuth.setSecurityAccountConfig(config);
   }
 

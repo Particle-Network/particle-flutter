@@ -37,6 +37,7 @@ public class ParticleAuthPlugin: NSObject, FlutterPlugin {
         case openAccountAndSecurity
         case setSecurityAccountConfig
         case setLanguage
+        case fastLogout
     }
     
     public static func register(with registrar: FlutterPluginRegistrar) {
@@ -98,6 +99,8 @@ public class ParticleAuthPlugin: NSObject, FlutterPlugin {
             self.openAccountAndSecurity(flutterResult: result)
         case .setLanguage:
             self.setLanguage(json as? String)
+        case .fastLogout:
+            self.fastLogout(flutterResult: result)
         }
     }
 }
@@ -260,6 +263,25 @@ public extension ParticleAuthPlugin {
     
     func logout(flutterResult: @escaping FlutterResult) {
         ParticleAuthService.logout().subscribe { [weak self] result in
+            guard let self = self else { return }
+            switch result {
+            case .failure(let error):
+                let response = self.ResponseFromError(error)
+                let statusModel = FlutterStatusModel(status: false, data: response)
+                let data = try! JSONEncoder().encode(statusModel)
+                guard let json = String(data: data, encoding: .utf8) else { return }
+                flutterResult(json)
+            case .success(let success):
+                let statusModel = FlutterStatusModel(status: true, data: success)
+                let data = try! JSONEncoder().encode(statusModel)
+                guard let json = String(data: data, encoding: .utf8) else { return }
+                flutterResult(json)
+            }
+        }.disposed(by: self.bag)
+    }
+    
+    func fastLogout(flutterResult: @escaping FlutterResult) {
+        ParticleAuthService.fastLogout().subscribe { [weak self] result in
             guard let self = self else { return }
             switch result {
             case .failure(let error):
@@ -480,7 +502,7 @@ public extension ParticleAuthPlugin {
             return
         }
         let data = JSON(parseJSON: json)
-        let promptSettingWhenSign = data["prompt_setting_when_sign"].boolValue
+        let promptSettingWhenSign = data["prompt_setting_when_sign"].intValue
         ParticleAuthService.setSecurityAccountConfig(config: .init(promptSettingWhenSign: promptSettingWhenSign))
     }
     

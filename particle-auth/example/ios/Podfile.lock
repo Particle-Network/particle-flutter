@@ -1,23 +1,23 @@
 PODS:
   - Alamofire (5.6.4)
   - BigInt (5.2.0)
-  - CryptoSwift (1.5.1)
+  - CryptoSwift (1.6.0)
   - Flutter (1.0.0)
   - particle_auth (0.0.1):
     - BigInt (~> 5.2.0)
     - Flutter
     - ParticleAuthService
-  - ParticleAuthService (0.9.10):
-    - CryptoSwift (~> 1.5.1)
+  - ParticleAuthService (0.10.0):
+    - CryptoSwift
     - ParticleNetworkBase
     - RxAlamofire (~> 6.1.1)
     - RxCocoa (= 6.5.0)
     - RxSwift (= 6.5.0)
     - SwiftyJSON (~> 5.0)
     - SwiftyUserDefaults (~> 5.3.0)
-  - ParticleNetworkBase (0.9.10):
+  - ParticleNetworkBase (0.10.0):
     - BigInt (~> 5.2.0)
-    - CryptoSwift (~> 1.5.1)
+    - CryptoSwift
   - RxAlamofire (6.1.1):
     - RxAlamofire/Core (= 6.1.1)
   - RxAlamofire/Core (6.1.1):
@@ -35,8 +35,8 @@ PODS:
 DEPENDENCIES:
   - Flutter (from `Flutter`)
   - particle_auth (from `.symlinks/plugins/particle_auth/ios`)
-  - ParticleAuthService (= 0.9.10)
-  - ParticleNetworkBase (= 0.9.10)
+  - ParticleAuthService (= 0.10.0)
+  - ParticleNetworkBase (= 0.10.0)
 
 SPEC REPOS:
   trunk:
@@ -61,11 +61,11 @@ EXTERNAL SOURCES:
 SPEC CHECKSUMS:
   Alamofire: 4e95d97098eacb88856099c4fc79b526a299e48c
   BigInt: f668a80089607f521586bbe29513d708491ef2f7
-  CryptoSwift: c4f2debceb38bf44c80659afe009f71e23e4a082
+  CryptoSwift: 562f8eceb40e80796fffc668b0cad9313284cfa6
   Flutter: f04841e97a9d0b0a8025694d0796dd46242b2854
   particle_auth: ab2f562eed02a8ad39aa15843c3f5d9faa079aaa
-  ParticleAuthService: bed8a8688802eba09d29f6cd34df06a5789ac857
-  ParticleNetworkBase: a079ed10aa3f5f951fe52d141a0c2641ff53a7cd
+  ParticleAuthService: 5989e60849a0cc355e8cd6d891990d3fe2161059
+  ParticleNetworkBase: e2445bb903401b61ce1a572ecb32c5ebcea1faa8
   RxAlamofire: beb75a1c452d0de225651db4903f5d29d034a620
   RxCocoa: 94f817b71c07517321eb4f9ad299112ca8af743b
   RxRelay: 1de1523e604c72b6c68feadedd1af3b1b4d0ecbd
@@ -73,6 +73,6 @@ SPEC CHECKSUMS:
   SwiftyJSON: 2f33a42c6fbc52764d96f13368585094bfd8aa5e
   SwiftyUserDefaults: 63f80248cf5bfb3458825d9a78f2eb7e1293a040
 
-PODFILE CHECKSUM: a852d0d84891c9583ac48950decbd4ea26fd7c53
+PODFILE CHECKSUM: ed78754746d142a980e9b0ba25786bb7236e117c
 
 COCOAPODS: 1.11.3

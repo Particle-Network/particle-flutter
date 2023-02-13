@@ -535,7 +535,7 @@ class KlaytnChain implements ChainInfo {
   String? chainName;
 
   KlaytnChain(this.chainId, this.chainIdName) {
-    chainName = ChainName.Celo.name;
+    chainName = ChainName.Klaytn.name;
   }
 
   static KlaytnChain mainnet() {
@@ -544,6 +544,75 @@ class KlaytnChain implements ChainInfo {
 
   static KlaytnChain testnet() {
     return KlaytnChain(1001, "Testnet");
+  }
+}
+
+class ScrollChain implements ChainInfo {
+  @override
+  int chainId;
+
+  @override
+  String chainIdName;
+
+  @override
+  String? chainName;
+
+  ScrollChain(this.chainId, this.chainIdName) {
+    chainName = ChainName.Scroll.name;
+  }
+
+  static ScrollChain mainnet() {
+    return ScrollChain(534351, "Testnet L1");
+  }
+
+  static ScrollChain testnet() {
+    return ScrollChain(534354, "Testnet L2");
+  }
+}
+
+class ZkSyncV2Chain implements ChainInfo {
+  @override
+  int chainId;
+
+  @override
+  String chainIdName;
+
+  @override
+  String? chainName;
+
+  ZkSyncV2Chain(this.chainId, this.chainIdName) {
+    chainName = ChainName.ZkSyncV2.name;
+  }
+
+  static ZkSyncV2Chain mainnet() {
+    return ZkSyncV2Chain(324, "Mainnet");
+  }
+
+  static ZkSyncV2Chain testnet() {
+    return ZkSyncV2Chain(280, "Testnet");
+  }
+}
+
+class MetisChain implements ChainInfo {
+  @override
+  int chainId;
+
+  @override
+  String chainIdName;
+
+  @override
+  String? chainName;
+
+  MetisChain(this.chainId, this.chainIdName) {
+    chainName = ChainName.Metis.name;
+  }
+
+  static MetisChain mainnet() {
+    return MetisChain(1088, "Mainnet");
+  }
+
+  static MetisChain testnet() {
+    return MetisChain(599, "Testnet");
   }
 }
 
@@ -571,4 +640,7 @@ enum ChainName {
   Gnosis,
   Celo,
   Klaytn,
+  Scroll,
+  ZkSyncV2,
+  Metis,
 }
