@@ -201,7 +201,7 @@ public extension ParticleAuthPlugin {
         let account = data["account"].string
         let supportAuthType = data["support_auth_type_values"].arrayValue
         let loginFormMode = data["login_form_mode"].bool ?? false
-        let socialLoginPromptString = data["social_login_prompt"].stringValue
+        let socialLoginPromptString = data["social_login_prompt"].stringValue.lowercased()
         let socialLoginPrompt: SocialLoginPrompt? = SocialLoginPrompt(rawValue: socialLoginPromptString)
         
         let loginType = LoginType(rawValue: type) ?? .email

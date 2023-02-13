@@ -285,7 +285,7 @@ extension ParticleConnectPlugin {
             }
             
             let loginFormMode = configJson["login_form_mode"].boolValue
-            let socialLoginPromptString = configJson["social_login_prompt"].stringValue
+            let socialLoginPromptString = configJson["social_login_prompt"].stringValue.lowercased()
             let socialLoginPrompt: SocialLoginPrompt? = SocialLoginPrompt(rawValue: socialLoginPromptString)
             
             connectConfig = ParticleConnectConfig(loginType: loginType, supportAuthType: supportAuthTypeArray, loginFormMode: loginFormMode, phoneOrEmailAccount: account, socialLoginPrompt: socialLoginPrompt)
