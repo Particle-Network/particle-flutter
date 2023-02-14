@@ -2,7 +2,7 @@ import 'dart:convert';
 
 import 'package:oktoast/oktoast.dart';
 import 'package:particle_connect/model/chain_info.dart';
-import 'package:particle_connect/model/connect_info.dart';
+import 'package:particle_connect/model/wallet_type.dart';
 import 'package:particle_connect/model/dapp_meta_data.dart';
 import 'package:particle_connect/model/login_info.dart';
 import 'package:particle_connect/model/particle_connect_config.dart';

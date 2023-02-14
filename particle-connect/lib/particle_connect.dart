@@ -2,14 +2,13 @@ import 'dart:convert';
 
 import 'package:flutter/services.dart';
 import 'package:particle_connect/model/chain_info.dart';
-import 'package:particle_connect/model/connect_info.dart';
-
 import 'dart:io' show Platform;
 
 import 'package:particle_connect/model/dapp_meta_data.dart';
 import 'package:particle_connect/model/particle_connect_config.dart';
 import 'package:particle_connect/model/rpc_url_config.dart';
 import 'package:particle_connect/model/wallet_ready_state.dart';
+import 'package:particle_connect/model/wallet_type.dart';
 
 class ParticleConnect {
   ParticleConnect._();
