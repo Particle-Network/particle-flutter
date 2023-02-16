@@ -11,5 +11,6 @@ data class ParticleConnectConfig(
     @SerializedName("login_type") var loginType: String,
     @SerializedName("account") var account: String = "",
     @SerializedName("login_form_mode") var loginFormMode: Boolean = false,
-    @SerializedName("support_auth_type_values") var supportAuthTypeValues: List<String> = arrayListOf()
+    @SerializedName("support_auth_type_values") var supportAuthTypeValues: List<String> = arrayListOf(),
+    @SerializedName("social_login_prompt") var prompt: String? = null
 )

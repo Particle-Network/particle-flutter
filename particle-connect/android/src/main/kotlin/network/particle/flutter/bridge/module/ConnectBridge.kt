@@ -19,6 +19,7 @@ import com.particle.connect.ParticleConnect.setChain
 import com.particle.connect.ParticleConnectAdapter
 import com.particle.connect.ParticleConnectConfig
 import com.particle.connect.model.AdapterAccount
+import com.particle.network.service.LoginPrompt
 import com.particle.network.service.LoginType
 import com.particle.network.service.SupportAuthType
 import com.phantom.adapter.PhantomConnectAdapter
@@ -74,6 +75,8 @@ object ConnectBridge {
 
     fun connect(connectJson: String, result: MethodChannel.Result) {
         LogUtils.d("connectJson", connectJson)
+
+
         val connectData: ConnectData = GsonUtils.fromJson(
             connectJson, ConnectData::class.java
         )
@@ -91,7 +94,7 @@ object ConnectBridge {
                     val supportType: String = pnConfig.supportAuthTypeValues.get(i).uppercase()
                     val authType = SupportAuthType.valueOf(supportType)
                     supportAuthType = supportAuthType or authType.value
-                } catch (e:Exception) {
+                } catch (e: Exception) {
                     e.printStackTrace()
                 }
             }
@@ -101,11 +104,18 @@ object ConnectBridge {
             } catch (e: Exception) {
                 e.printStackTrace()
             }
+            var prompt: LoginPrompt? = null
+            try {
+                if (pnConfig.prompt != null)
+                    prompt = LoginPrompt.valueOf(pnConfig.prompt!!)
+            } catch (e: Exception) {
+                e.printStackTrace()
+            }
             particleConnectConfig = ParticleConnectConfig(
                 LoginType.valueOf(pnConfig.loginType.uppercase()),
                 supportAuthType,
                 loginFormMode,
-                account
+                account, prompt
             )
         }
 

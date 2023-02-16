@@ -1,3 +1,4 @@
+## 0.10.0
 ## 0.9.4
 native auth:0.9.10
 native connect:0.9.60

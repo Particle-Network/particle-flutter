@@ -8,23 +8,23 @@ import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import com.particle.base.ChainInfo
 import com.particle.base.Env
+import com.particle.base.LanguageEnum
 import com.particle.base.ParticleNetwork
 import com.particle.network.ParticleNetworkAuth.getAddress
 import com.particle.network.ParticleNetworkAuth.getUserInfo
 import com.particle.network.ParticleNetworkAuth.isLogin
 import com.particle.network.ParticleNetworkAuth.login
 import com.particle.network.ParticleNetworkAuth.logout
+import com.particle.network.ParticleNetworkAuth.openAccountAndSecurity
 import com.particle.network.ParticleNetworkAuth.setChainInfo
+import com.particle.network.ParticleNetworkAuth.setSecurityAccountConfig
 import com.particle.network.ParticleNetworkAuth.signAllTransactions
 import com.particle.network.ParticleNetworkAuth.signAndSendTransaction
 import com.particle.network.ParticleNetworkAuth.signMessage
 import com.particle.network.ParticleNetworkAuth.signTransaction
 import com.particle.network.ParticleNetworkAuth.signTypedData
 import com.particle.network.SignTypedDataVersion
-import com.particle.network.service.ChainChangeCallBack
-import com.particle.network.service.LoginType
-import com.particle.network.service.SupportAuthType
-import com.particle.network.service.WebServiceCallback
+import com.particle.network.service.*
 import com.particle.network.service.model.*
 import io.flutter.plugin.common.MethodChannel
 import network.particle.auth_flutter.bridge.model.*
@@ -79,10 +79,16 @@ object AuthBridge {
                 }
             }
         }
-
+        var prompt: LoginPrompt? = null
+        try {
+            if (loginData.prompt != null)
+                prompt = LoginPrompt.valueOf(loginData.prompt)
+        } catch (e: Exception) {
+            e.printStackTrace()
+        }
         ParticleNetwork.login(LoginType.valueOf(loginData.loginType.uppercase()),
             account,
-            supportAuthType, false, object : WebServiceCallback<LoginOutput> {
+            supportAuthType, loginData.loginFormMode, prompt, object : WebServiceCallback<LoginOutput> {
                 override fun success(output: LoginOutput) {
                     result.success(FlutterCallBack.success(output).toGson())
                 }
@@ -259,6 +265,38 @@ object AuthBridge {
         map["chain_id"] = chainInfo.chainId.value()
         result.success(Gson().toJson(map))
     }
+
+    fun setSecurityAccountConfig(configJson: String) {
+        LogUtils.d("setSecurityAccountConfig", configJson)
+        try {
+            val config = GsonUtils.fromJson(configJson, SecurityAccountConfig::class.java)
+            ParticleNetwork.setSecurityAccountConfig(config)
+        } catch (e: Exception) {
+            e.printStackTrace()
+        }
+    }
+
+    fun setLanguage(language: String) {
+        LogUtils.d("setLanguage", language)
+        if (language.isEmpty()) {
+            return
+        }
+        if (language.equals("zh_hans")) {
+            ParticleNetwork.setAppliedLanguage(LanguageEnum.ZH_CN)
+        } else if (language.equals("zh_hant")) {
+            ParticleNetwork.setAppliedLanguage(LanguageEnum.ZH_TW)
+        } else if (language.equals("ja")) {
+            ParticleNetwork.setAppliedLanguage(LanguageEnum.JA)
+        } else if (language.equals("ko")) {
+            ParticleNetwork.setAppliedLanguage(LanguageEnum.KO)
+        } else {
+            ParticleNetwork.setAppliedLanguage(LanguageEnum.EN)
+        }
+    }
+    fun openAccountAndSecurity(){
+        ParticleNetwork.openAccountAndSecurity()
+    }
+
 //
 //    val chainInfo: String
 //        get() {
