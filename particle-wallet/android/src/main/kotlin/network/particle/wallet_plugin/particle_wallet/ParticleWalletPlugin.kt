@@ -95,12 +95,28 @@ class ParticleWalletPlugin : FlutterPlugin, MethodCallHandler, ActivityAware {
             "switchWallet" -> {
                 WalletBridge.switchWallet(call.arguments as String, result)
             }
-            "setWallet"->{
+            "setWallet" -> {
                 WalletBridge.setWallet(call.arguments as String)
             }
 
-            "supportWalletConnect" ->{
+            "supportWalletConnect" -> {
                 WalletBridge.supportWalletConnect(call.arguments as Boolean)
+            }
+
+            "showLanguageSetting" -> {
+                WalletBridge.showLanguageSetting(call.arguments as Boolean)
+            }
+            "showAppearanceSetting" -> {
+                WalletBridge.showSettingAppearance(call.arguments as Boolean)
+            }
+            "setSupportAddToken" -> {
+                WalletBridge.setSupportAddToken(call.arguments as Boolean)
+            }
+            "setDisplayTokenAddresses" -> {
+                WalletBridge.setDisplayTokenAddresses(call.arguments as String)
+            }
+            "setDisplayNFTContractAddresses" -> {
+                WalletBridge.setDisplayNFTContractAddresses(call.arguments as String)
             }
 
             else -> result.notImplemented()

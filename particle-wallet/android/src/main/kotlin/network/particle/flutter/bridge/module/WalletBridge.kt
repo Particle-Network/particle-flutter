@@ -14,6 +14,8 @@ import com.particle.base.ChainName
 import com.particle.base.ParticleNetwork
 import com.particle.base.utils.PrefUtils
 import com.particle.gui.ParticleWallet
+import com.particle.gui.ParticleWallet.displayNFTContractAddresses
+import com.particle.gui.ParticleWallet.displayTokenAddresses
 import com.particle.gui.ParticleWallet.enablePay
 import com.particle.gui.ParticleWallet.enableSwap
 import com.particle.gui.ParticleWallet.getEnablePay
@@ -25,6 +27,7 @@ import com.particle.gui.router.RouterPath
 import com.particle.gui.ui.nft_detail.NftDetailParams
 import com.particle.gui.ui.receive.ReceiveData
 import com.particle.gui.ui.send.WalletSendParams
+import com.particle.gui.ui.swap.SwapConfig
 import com.particle.gui.ui.token_detail.TokenTransactionRecordsParams
 import com.particle.gui.utils.WalletUtils
 import com.particle.network.ParticleNetworkAuth.getAddress
@@ -226,12 +229,12 @@ object WalletBridge {
             val toTokenAddress = jsonObject.opt("to_token_address") as? String;
             val amount = jsonObject.opt("amount") as? String;
             if (fromTokenAddress != null) {
-                PNRouter.navigatorSwap(fromTokenAddress)
+                PNRouter.navigatorSwap(SwapConfig(fromTokenAddress, toTokenAddress?:"", amount?:"0"))
             } else {
-                PNRouter.navigatorSwap("native");
+                PNRouter.navigatorSwap(null);
             };
         } catch (e: Exception) {
-            PNRouter.navigatorSwap("native");
+            PNRouter.navigatorSwap(null);
         }
 
 
@@ -317,6 +320,25 @@ object WalletBridge {
         LogUtils.d("supportWalletConnect", enable.toString());
         ParticleNetwork.supportWalletConnect(enable);
     }
-
-
+    fun showLanguageSetting(isShow: Boolean){
+        ParticleWallet.showSettingLanguage(isShow)
+    }
+    fun showSettingAppearance(isShow: Boolean){
+        ParticleWallet.showSettingAppearance(isShow)
+    }
+    fun setSupportAddToken(isShow: Boolean){
+        ParticleWallet.setSupportAddToken(isShow)
+    }
+    fun setDisplayTokenAddresses(tokenAddressJson: String) {
+        val tokenAddresses = GsonUtils.fromJson<List<String>>(
+            tokenAddressJson, object : TypeToken<List<String>>() {}.type
+        )
+        ParticleNetwork.displayTokenAddresses(tokenAddresses as MutableList<String>)
+    }
+    fun setDisplayNFTContractAddresses(nftContractAddresses: String) {
+        val nftContractAddressList = GsonUtils.fromJson<List<String>>(
+            nftContractAddresses, object : TypeToken<List<String>>() {}.type
+        )
+        ParticleNetwork.displayNFTContractAddresses(nftContractAddressList as MutableList<String>)
+    }
 }

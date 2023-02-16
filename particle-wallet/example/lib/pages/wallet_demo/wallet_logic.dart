@@ -1,6 +1,6 @@
 import 'package:flutter/foundation.dart';
 import 'package:oktoast/oktoast.dart';
-import 'package:particle_connect/model/connect_info.dart';
+import 'package:particle_connect/model/wallet_type.dart';
 import 'package:particle_wallet/model/buy_crypto_config.dart';
 import 'package:particle_wallet/model/fiat_coin.dart';
 import 'package:particle_wallet/model/language.dart';

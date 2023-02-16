@@ -3,7 +3,6 @@ import 'dart:convert';
 import 'package:flutter/foundation.dart';
 import 'package:oktoast/oktoast.dart';
 import 'package:particle_connect/model/chain_info.dart';
-import 'package:particle_connect/model/connect_info.dart';
 import 'package:particle_connect/particle_connect.dart';
 import 'package:particle_connect/model/dapp_meta_data.dart';
 import 'package:particle_wallet/particle_wallet.dart';
@@ -11,7 +10,7 @@ import 'package:particle_wallet_example/mock/test_account.dart';
 import 'package:particle_wallet_example/mock/transaction_mock.dart';
 import 'package:particle_connect/model/particle_connect_config.dart';
 import 'package:particle_connect/model/login_info.dart';
-
+import 'package:particle_connect/model/wallet_type.dart';
 class ConnectLogic {
   static late ChainInfo currChainInfo;
   static WalletType walletType = WalletType.particle;
@@ -42,7 +41,7 @@ class ConnectLogic {
 
   static void connect() async {
     final config = ParticleConnectConfig(
-        LoginType.google, "", [SupportAuthType.all], false);
+        LoginType.google, "", [SupportAuthType.all], false,null);
     final result = await ParticleConnect.connect(walletType, config: config);
     showToast('connect: $result');
     print("connect: $result");
