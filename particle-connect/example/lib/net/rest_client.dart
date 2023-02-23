@@ -13,7 +13,7 @@ part 'rest_client.g.dart';
 
 String projectId = ""; //your project id
 String clientKey = ""; //your project client key
-const baseUrl = "https://api.particle.network/";
+const baseUrl = "https://rpc.particle.network/";
 
 @RestApi()
 abstract class SolanaRpcApi {
@@ -21,14 +21,14 @@ abstract class SolanaRpcApi {
 
   static SolanaRpcApi? _instace;
 
-  @POST("/solana/rpc")
+  @POST("solana")
   Future<String> rpc(@Body() RequestBodyEntity requestBody);
 
-  @POST("/solana/rpc")
+  @POST("solana")
   Future<SerializeTransResultEntity> enhancedSerializeTransaction(
       @Body() RequestBodyEntity requestBody);
 
-  @POST("/solana/rpc")
+  @POST("solana")
   Future<dynamic> enhancedSerializeTransactionDynamic(
       @Body() RequestBodyEntity requestBody);
 
@@ -48,7 +48,7 @@ abstract class SolanaRpcApi {
 abstract class EvmRpcApi {
   factory EvmRpcApi(Dio dio, {String baseUrl}) = _EvmRpcApi;
 
-  @POST("evm-chain/rpc")
+  @POST("evm-chain")
   Future<String> rpc(@Body() RequestBodyEntity requestBody);
 
   static EvmRpcApi? _instace;

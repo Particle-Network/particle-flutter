@@ -32,7 +32,7 @@ class _SolanaRpcApi implements SolanaRpcApi {
     )
         .compose(
           _dio.options,
-          '/solana/rpc',
+          'solana',
           queryParameters: queryParameters,
           data: _data,
         )
@@ -57,7 +57,7 @@ class _SolanaRpcApi implements SolanaRpcApi {
     )
             .compose(
               _dio.options,
-              '/solana/rpc',
+              'solana',
               queryParameters: queryParameters,
               data: _data,
             )
@@ -80,7 +80,7 @@ class _SolanaRpcApi implements SolanaRpcApi {
     )
         .compose(
           _dio.options,
-          '/solana/rpc',
+          'solana',
           queryParameters: queryParameters,
           data: _data,
         )
@@ -129,7 +129,7 @@ class _EvmRpcApi implements EvmRpcApi {
     )
         .compose(
           _dio.options,
-          'evm-chain/rpc',
+          'evm-chain',
           queryParameters: queryParameters,
           data: _data,
         )
