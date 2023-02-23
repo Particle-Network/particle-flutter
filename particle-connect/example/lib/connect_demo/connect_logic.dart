@@ -222,4 +222,8 @@ class ConnectLogic {
     WalletReadyState readyState = await ParticleConnect.walletReadyState(walletType);
     print(readyState);
   }
+
+  static void reconnectIfNeed() {
+    ParticleConnect.reconnectIfNeeded(walletType, getPublicAddress());
+  }
 }

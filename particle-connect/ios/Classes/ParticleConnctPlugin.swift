@@ -53,6 +53,7 @@ public class ParticleConnectPlugin: NSObject, FlutterPlugin {
         case switchEthereumChain
         case addEthereumChain
         case walletReadyState
+        case reconnectIfNeeded
     }
     
     public static func register(with registrar: FlutterPluginRegistrar) {
@@ -110,6 +111,8 @@ public class ParticleConnectPlugin: NSObject, FlutterPlugin {
             self.addEthereumChain(json as? String, flutterResult: result)
         case .walletReadyState:
             self.walletReadyState(json as? String, flutterResult: result)
+        case .reconnectIfNeeded:
+            self.reconnectIfNeeded(json as? String)
         }
     }
 }
@@ -1105,5 +1108,37 @@ extension ParticleConnectPlugin {
         }
         
         flutterResult(str)
+    }
+    
+    func reconnectIfNeeded(_ json: String?) {
+        guard let json = json else {
+            return
+        }
+        
+        let data = JSON(parseJSON: json)
+        let walletTypeString = data["wallet_type"].stringValue
+        let publicAddress = data["public_address"].stringValue
+        
+        guard let walletType = map2WalletType(from: walletTypeString) else {
+            print("walletType \(walletTypeString) is not existed ")
+//            let response = FlutterResponseError(code: nil, message: "walletType \(walletTypeString) is not existed", data: nil)
+//            let statusModel = FlutterStatusModel(status: false, data: response)
+//            let data = try! JSONEncoder().encode(statusModel)
+//            guard let json = String(data: data, encoding: .utf8) else { return }
+//            flutterResult(json)
+            return
+        }
+        
+        guard let adapter = map2ConnectAdapter(from: walletType) else {
+            print("adapter for \(walletTypeString) is not init")
+//            let response = FlutterResponseError(code: nil, message: "adapter for \(walletTypeString) is not init", data: nil)
+//            let statusModel = FlutterStatusModel(status: false, data: response)
+//            let data = try! JSONEncoder().encode(statusModel)
+//            guard let json = String(data: data, encoding: .utf8) else { return }
+//            flutterResult(json)
+            return
+        }
+        
+        (adapter as? WalletConnectAdapter)?.reconnectIfNeeded(publicAddress: publicAddress)
     }
 }

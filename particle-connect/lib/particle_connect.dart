@@ -332,12 +332,24 @@ class ParticleConnect {
   }
 
   /// Add ethereum chain, only support metamask
-  /// Pass [walletType] and [publicAddress] to decide a wallet.
-  /// [chainId] tell metamask which chain to switch.
+  /// Pass [walletType] to decide a wallet.
   static Future<WalletReadyState> walletReadyState(
       WalletType walletType) async {
     String readyState = await _channel.invokeMethod(
         'walletReadyState', jsonEncode({"wallet_type": walletType.name}));
     return WalletReadyState.values.byName(readyState);
+  }
+
+  /// reconnect wallet connect wallet, only support iOS
+  /// Pass [walletType] and [publicAddress] to decide a wallet.
+  static reconnectIfNeeded(WalletType walletType, String publicAddress) {
+    if (Platform.isIOS) {
+      _channel.invokeMethod(
+          "reconnectIfNeeded",
+          jsonEncode({
+            "wallet_type": walletType.name,
+            "public_address": publicAddress,
+          }));
+    }
   }
 }

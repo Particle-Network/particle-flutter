@@ -240,6 +240,19 @@ class _ConnectDemoPageState extends State<ConnectDemoPage> {
                     )),
               ),
             ),
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: SizedBox(
+                width: double.infinity,
+                height: 50,
+                child: ElevatedButton(
+                    onPressed: () => {ConnectLogic.reconnectIfNeed()},
+                    child: const Text(
+                      "Reconnect wallet",
+                      style: TextStyle(fontSize: 18),
+                    )),
+              ),
+            ),
           ],
         ),
       ),
