@@ -283,6 +283,7 @@ class AuthLogic {
     ParticleAuth.setMediumScreen(true);
   }
 
+
   static void openAccountAndSecurity() async {
     String result = await ParticleAuth.openAccountAndSecurity();
     print(result);
@@ -296,5 +297,13 @@ class AuthLogic {
   static void setLanguage() {
     const language = Language.ja;
     ParticleAuth.setLanguage(language);
+  }
+
+  static void openWebWallet() {
+    ParticleAuth.openWebWallet();
+  }
+
+  static void setDisplayWallet() {
+    ParticleAuth.setDisplayWallet(true);
   }
 }
