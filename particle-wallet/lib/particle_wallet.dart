@@ -145,6 +145,15 @@ class ParticleWallet {
           "amount": amount,
         }));
   }
+
+  /// Navigator dapp browser page.
+  /// 
+  /// [url] optional
+  static Future<void> navigatorDappBrowser({String? url}) async {
+      await _channel.invokeMethod('navigatorDappBrowser', jsonEncode({
+          "url": url
+        }));
+  }
   
   /// Navigator login list page.
   /// 
@@ -210,9 +219,14 @@ class ParticleWallet {
         }));
   }
 
-  /// Set support wallet connect as a wallet.
+  /// Set support wallet connect as a wallet, default is true
   static supportWalletConnect(bool enable) {
     _channel.invokeMethod("supportWalletConnect", enable);
+  }
+
+  /// Set support dapp broswer in wallet page, default is true
+  static supportDappBrowser(bool enable) {
+    _channel.invokeMethod("supportDappBrowser", enable);
   }
 
   /// Set show language setting button in setting page.

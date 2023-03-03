@@ -142,6 +142,19 @@ class _WalletDemoPageState extends State<WalletDemoPage> {
                 width: double.infinity,
                 height: 50,
                 child: ElevatedButton(
+                    onPressed: () => {WalletLogic.navigatorDappBrowser()},
+                    child: const Text(
+                      "Navigator Dapp browser",
+                      style: TextStyle(fontSize: 18),
+                    )),
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: SizedBox(
+                width: double.infinity,
+                height: 50,
+                child: ElevatedButton(
                     onPressed: () => {WalletLogic.navigatorLoginList()},
                     child: const Text(
                       "Navigator Login List",

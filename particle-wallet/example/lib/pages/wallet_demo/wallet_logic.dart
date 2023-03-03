@@ -83,6 +83,11 @@ class WalletLogic {
     ParticleWallet.navigatorSwap();
   }
 
+  static void navigatorDappBrowser() {
+    const url = "https://opensea.io";
+    ParticleWallet.navigatorDappBrowser(url: url);
+  }
+
   static void navigatorLoginList() async {
     String result = await ParticleWallet.navigatorLoginList();
     print("result:$result");

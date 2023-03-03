@@ -26,6 +26,7 @@ public class ParticleWalletPlugin: NSObject, FlutterPlugin {
         case navigatorBuyCrypto
         case navigatorLoginList
         case navigatorSwap
+        case navigatorDappBrowser
         case showTestNetwork
         case showManageWallet
         case supportChain
@@ -36,7 +37,7 @@ public class ParticleWalletPlugin: NSObject, FlutterPlugin {
         case switchWallet
         case setLanguage
         case supportWalletConnect
-
+        case supportDappBrowser
         case showLanguageSetting
         case showAppearanceSetting
         case setSupportAddToken
@@ -85,6 +86,8 @@ public class ParticleWalletPlugin: NSObject, FlutterPlugin {
             self.navigatorLoginList(flutterResult: result)
         case .navigatorSwap:
             self.navigatorSwap(json as? String)
+        case .navigatorDappBrowser:
+            self.navigatorDappBrowser(json as? String)
         case .showTestNetwork:
             self.showTestNetwork((json as? Bool) ?? false)
         case .showManageWallet:
@@ -104,7 +107,9 @@ public class ParticleWalletPlugin: NSObject, FlutterPlugin {
         case .setLanguage:
             self.setLanguage(json as? String)
         case .supportWalletConnect:
-            self.supportWalletConnect((json as? Bool) ?? false)
+            self.supportWalletConnect((json as? Bool) ?? true)
+        case .supportDappBrowser:
+            self.supportDappBrowser((json as? Bool) ?? true)
         case .showLanguageSetting:
             self.showLanguageSetting((json as? Bool) ?? true)
         case .showAppearanceSetting:
@@ -259,6 +264,20 @@ extension ParticleWalletPlugin {
             PNRouter.navigatorSwap()
         }
     }
+    
+    func navigatorDappBrowser(_ json: String?) {
+        if let json = json {
+            let data = JSON(parseJSON: json)
+            let urlStr = data["url"].stringValue
+            if let url = URL(string: urlStr) {
+                PNRouter.navigatorDappBrowser(url: url)
+            } else {
+                PNRouter.navigatorDappBrowser(url: nil)
+            }
+        } else {
+            PNRouter.navigatorDappBrowser(url: nil)
+        }
+    }
 
     func showTestNetwork(_ isShow: Bool) {
         ParticleWalletGUI.showTestNetwork(isShow)
@@ -351,6 +370,10 @@ extension ParticleWalletPlugin {
 
     func supportWalletConnect(_ enable: Bool) {
         ParticleWalletGUI.supportWalletConnect(enable)
+    }
+    
+    func supportDappBrowser(_ enable: Bool) {
+        ParticleWalletGUI.supportDappBrowser(enable)
     }
 
     func showLanguageSetting(_ isShow: Bool) {
