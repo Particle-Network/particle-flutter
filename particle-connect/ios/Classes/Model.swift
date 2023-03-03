@@ -272,9 +272,23 @@ extension NSObject {
             walletType = .walletConnect
         } else if str == "phantom" {
             walletType = .phantom
+        } else if str == "zerion" {
+            walletType = .zerion
+        } else if str == "math" {
+            walletType = .math
+        } else if str == "omni" {
+            walletType = .omni
+        } else if str == "zengo" {
+            walletType = .zengo
+        } else if str == "alpha" {
+            walletType = .alpha
+        } else if str == "bitpie" {
+            walletType = .bitpie
+        } else if str == "inch1" {
+            walletType = .inch1
         } else {
             walletType = nil
-        }
+        } 
 
         return walletType
     }

@@ -9,4 +9,12 @@ enum WalletType {
   bitKeep,
   walletConnect,
   phantom,
+  zerion,
+  math,
+  omni,
+  zengo,
+  alpha,
+  bitpie,
+  inch1,
+  tokenPocket, // iOS not support by 0.10.0
 }
