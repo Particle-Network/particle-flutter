@@ -33,6 +33,8 @@ import ConnectWalletConnectAdapter
 public class ParticleConnectPlugin: NSObject, FlutterPlugin {
     let bag = DisposeBag()
     
+    var eventSink: FlutterEventSink?
+    
     public enum Method: String {
         case initialize
         case setChainInfo
@@ -54,12 +56,17 @@ public class ParticleConnectPlugin: NSObject, FlutterPlugin {
         case addEthereumChain
         case walletReadyState
         case reconnectIfNeeded
+        case connectWalletConnect
     }
     
     public static func register(with registrar: FlutterPluginRegistrar) {
         let channel = FlutterMethodChannel(name: "connect_bridge", binaryMessenger: registrar.messenger())
         
         let instance = ParticleConnectPlugin()
+        
+        let eventChannel = FlutterEventChannel(name: "connect_event_bridge", binaryMessenger: registrar.messenger())
+        
+        eventChannel.setStreamHandler(instance)
         
         registrar.addMethodCallDelegate(instance, channel: channel)
     }
@@ -113,6 +120,8 @@ public class ParticleConnectPlugin: NSObject, FlutterPlugin {
             self.walletReadyState(json as? String, flutterResult: result)
         case .reconnectIfNeeded:
             self.reconnectIfNeeded(json as? String)
+        case .connectWalletConnect:
+            self.connectWalletConnect(flutterResult: result)
         }
     }
 }
@@ -1135,24 +1144,54 @@ extension ParticleConnectPlugin {
         
         guard let walletType = map2WalletType(from: walletTypeString) else {
             print("walletType \(walletTypeString) is not existed ")
-//            let response = FlutterResponseError(code: nil, message: "walletType \(walletTypeString) is not existed", data: nil)
-//            let statusModel = FlutterStatusModel(status: false, data: response)
-//            let data = try! JSONEncoder().encode(statusModel)
-//            guard let json = String(data: data, encoding: .utf8) else { return }
-//            flutterResult(json)
             return
         }
         
         guard let adapter = map2ConnectAdapter(from: walletType) else {
             print("adapter for \(walletTypeString) is not init")
-//            let response = FlutterResponseError(code: nil, message: "adapter for \(walletTypeString) is not init", data: nil)
-//            let statusModel = FlutterStatusModel(status: false, data: response)
-//            let data = try! JSONEncoder().encode(statusModel)
-//            guard let json = String(data: data, encoding: .utf8) else { return }
-//            flutterResult(json)
             return
         }
         
         (adapter as? WalletConnectAdapter)?.reconnectIfNeeded(publicAddress: publicAddress)
+    }
+    
+    func connectWalletConnect(flutterResult: @escaping FlutterResult) {
+        guard let adapter = map2ConnectAdapter(from: .walletConnect) else {
+            print("adapter for walletConnect is not init")
+            return
+        }
+        
+        let (uri, observable) = (adapter as! WalletConnectAdapter).getConnectionUrl()
+        
+        observable.subscribe { [weak self] result in
+            guard let self = self else { return }
+            switch result {
+            case .failure(let error):
+                let response = self.ResponseFromError(error)
+                let statusModel = FlutterStatusModel(status: false, data: response)
+                let data = try! JSONEncoder().encode(statusModel)
+                guard let json = String(data: data, encoding: .utf8) else { return }
+                flutterResult(json)
+            case .success(let account):
+                guard let account = account else { return }
+                let statusModel = FlutterStatusModel(status: true, data: account)
+                let data = try! JSONEncoder().encode(statusModel)
+                guard let json = String(data: data, encoding: .utf8) else { return }
+                flutterResult(json)
+            }
+        }.disposed(by: self.bag)
+        
+        self.eventSink?(uri)
+    }
+}
+
+extension ParticleConnectPlugin: FlutterStreamHandler {
+    public func onListen(withArguments arguments: Any?, eventSink events: @escaping FlutterEventSink) -> FlutterError? {
+        self.eventSink = events
+        return nil
+    }
+    
+    public func onCancel(withArguments arguments: Any?) -> FlutterError? {
+        return nil
     }
 }

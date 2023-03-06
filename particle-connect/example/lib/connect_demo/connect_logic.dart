@@ -52,9 +52,7 @@ class ConnectLogic {
       showToast("connect failed!");
     }
   }
-  ///
-  /// use static const EventChannel _eventChannel =EventChannel('connect_event_bridge'); getQrUri
-  ///
+
   static void connectWalletConnect() async {
     final result = await ParticleConnect.connectWalletConnect();
     showToast('connect: $result');

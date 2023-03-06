@@ -1,6 +1,6 @@
 # Uncomment this line to define a global platform for your project
 platform :ios, '13.0'
-
+source 'https://github.com/CocoaPods/Specs.git'
 # CocoaPods analytics sends network stats synchronously affecting flutter build latency.
 ENV['COCOAPODS_DISABLE_STATS'] = 'true'
 
@@ -30,12 +30,12 @@ flutter_ios_podfile_setup
 target 'Runner' do
   use_frameworks! :linkage => :static
   use_modular_headers!
-  pod 'ParticleConnect', '0.1.47'
-  pod 'ConnectWalletConnectAdapter', '0.1.47'
-  pod 'ConnectSolanaAdapter', '0.1.47'
-  pod 'ConnectEVMAdapter', '0.1.47'
-  pod 'ConnectCommon', '0.1.47'
-  pod 'ConnectPhantomAdapter', '0.1.47'
+  pod 'ParticleConnect', '0.1.48'
+  pod 'ConnectWalletConnectAdapter', '0.1.48'
+  pod 'ConnectSolanaAdapter', '0.1.48'
+  pod 'ConnectEVMAdapter', '0.1.48'
+  pod 'ConnectCommon', '0.1.48'
+  pod 'ConnectPhantomAdapter', '0.1.48'
   pod 'ParticleNetworkBase', '0.10.3'
   pod 'ParticleAuthService', '0.10.3'
   

@@ -11,14 +11,14 @@ class ConnectDemoPage extends StatefulWidget {
 }
 
 class _ConnectDemoPageState extends State<ConnectDemoPage> {
-  static const EventChannel _eventChannel =
+  static const EventChannel _walletConnectEventChannel =
       EventChannel('connect_event_bridge');
   var walletConnectUri = "";
 
   @override
   void initState() {
     super.initState();
-    _eventChannel.receiveBroadcastStream().listen((event) {
+    _walletConnectEventChannel.receiveBroadcastStream().listen((event) {
       _onEvent(event);
     });
   }
