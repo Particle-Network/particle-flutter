@@ -52,6 +52,22 @@ class ConnectLogic {
       showToast("connect failed!");
     }
   }
+  ///
+  /// use static const EventChannel _eventChannel =EventChannel('connect_event_bridge'); getQrUri
+  ///
+  static void connectWalletConnect() async {
+    final result = await ParticleConnect.connectWalletConnect();
+    showToast('connect: $result');
+    print("connect: $result");
+    Map<String, dynamic> jsonResult = jsonDecode(result);
+    if (jsonResult["status"]  == 1 || jsonResult["status"]  == true) {
+      pubAddress = jsonResult["data"]["publicAddress"];
+      print("pubAddress:$pubAddress");
+      showToast("connect: $result  pubAddress:$pubAddress");
+    } else {
+      showToast("connect failed!");
+    }
+  }
 
   static void isConnected() async {
     bool result =

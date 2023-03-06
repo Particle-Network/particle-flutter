@@ -25,6 +25,7 @@ import com.particle.network.service.SupportAuthType
 import com.phantom.adapter.PhantomConnectAdapter
 import com.solana.adapter.SolanaConnectAdapter
 import com.wallet.connect.adapter.*
+import io.flutter.plugin.common.EventChannel
 import io.flutter.plugin.common.MethodChannel
 import kotlinx.coroutines.launch
 import network.particle.flutter.bridge.model.*
@@ -73,10 +74,17 @@ object ConnectBridge {
         }
     }
 
-    fun connect(connectJson: String, result: MethodChannel.Result) {
+    var connectAdapter: IConnectAdapter? = null
+    fun qrCodeUri(result: MethodChannel.Result) {
+        var url: String? = null
+        if (connectAdapter is WalletConnectAdapter) {
+            url = (connectAdapter as WalletConnectAdapter)?.qrCodeUri()
+        }
+        result.success(url ?: "")
+    }
+
+    fun connect(connectJson: String, result: MethodChannel.Result, events: EventChannel.EventSink?) {
         LogUtils.d("connectJson", connectJson)
-
-
         val connectData: ConnectData = GsonUtils.fromJson(
             connectJson, ConnectData::class.java
         )
@@ -107,7 +115,12 @@ object ConnectBridge {
             var prompt: LoginPrompt? = null
             try {
                 if (pnConfig.prompt != null)
-                    prompt = LoginPrompt.valueOf(pnConfig.prompt!!)
+                    if("none".equals(pnConfig.prompt, ignoreCase = true))
+                        prompt = LoginPrompt.None
+                    else if("consent".equals(pnConfig.prompt, ignoreCase = true))
+                        prompt = LoginPrompt.ConSent
+                    else if("select_account".equals(pnConfig.prompt, ignoreCase = true))
+                        prompt = LoginPrompt.SelectAccount
             } catch (e: Exception) {
                 e.printStackTrace()
             }
@@ -119,7 +132,6 @@ object ConnectBridge {
             )
         }
 
-        var connectAdapter: IConnectAdapter? = null
         val adapters = ParticleConnect.getAdapters()
         for (adapter in adapters) {
             if (adapter.name.equals(connectData.walletType, ignoreCase = true)) {
@@ -138,7 +150,27 @@ object ConnectBridge {
                 result.success(FlutterCallBack.failed(connectError.message).toGson())
             }
         })
+        if (connectAdapter is WalletConnectAdapter) {
+            events?.success((connectAdapter as WalletConnectAdapter).qrCodeUri())
+        }
     }
+
+    fun connectWalletConnect(result: MethodChannel.Result, events: EventChannel.EventSink?) {
+        val connectAdapter = ParticleConnect.getAdapters().first { it is WalletConnectAdapter } as WalletConnectAdapter
+        connectAdapter.connect<ConnectConfig>(null, object : ConnectCallback {
+            override fun onConnected(account: Account) {
+                LogUtils.d("onConnected", account.toString())
+                result.success(FlutterCallBack.success(account).toGson())
+            }
+
+            override fun onError(connectError: ConnectError) {
+                LogUtils.d("onError", connectError.toString())
+                result.success(FlutterCallBack.failed(connectError.message).toGson())
+            }
+        })
+        events?.success(connectAdapter.qrCodeUri())
+    }
+
 
     fun isConnect(jsonParams: String, result: MethodChannel.Result) {
         LogUtils.d("isConnect", jsonParams)

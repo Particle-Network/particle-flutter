@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:particle_connect_example/connect_demo/connect_logic.dart';
+import 'package:qr_flutter/qr_flutter.dart';
 
 class ConnectDemoPage extends StatefulWidget {
   const ConnectDemoPage({Key? key}) : super(key: key);
@@ -9,6 +11,25 @@ class ConnectDemoPage extends StatefulWidget {
 }
 
 class _ConnectDemoPageState extends State<ConnectDemoPage> {
+  static const EventChannel _eventChannel =
+      EventChannel('connect_event_bridge');
+  var walletConnectUri = "";
+
+  @override
+  void initState() {
+    super.initState();
+    _eventChannel.receiveBroadcastStream().listen((event) {
+      _onEvent(event);
+    });
+  }
+
+  void _onEvent(Object event) {
+    print('connectUri: $event');
+    setState(() {
+      walletConnectUri = event.toString();
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -71,6 +92,22 @@ class _ConnectDemoPageState extends State<ConnectDemoPage> {
                     )),
               ),
             ),
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: SizedBox(
+                width: double.infinity,
+                height: 50,
+                child: ElevatedButton(
+                    onPressed: () => {ConnectLogic.connectWalletConnect()},
+                    child: const Text(
+                      "ConnectWalletConnect",
+                      style: TextStyle(fontSize: 18),
+                    )),
+              ),
+            ),
+            Offstage(
+                offstage: walletConnectUri.isEmpty ?true : false,
+                child: QrImage(data: walletConnectUri, size: 200)),
             Padding(
               padding: const EdgeInsets.all(8.0),
               child: SizedBox(

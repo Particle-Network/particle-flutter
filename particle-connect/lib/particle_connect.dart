@@ -84,6 +84,13 @@ class ParticleConnect {
         }));
   }
 
+  static Future<String> connectWalletConnect() async {
+    return await _channel.invokeMethod('connectWalletConnect');
+  }
+  ///if wallectType is walletConnect ,you can use this method to get qrCodeUri
+  static Future<String> getQrCodeUri() async {
+    return await _channel.invokeMethod('qrCodeUri');
+  }
   /// Disconnect a wallet
   ///
   /// [walletType] is which wallet you want to disconnect.
