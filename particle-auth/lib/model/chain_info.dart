@@ -561,16 +561,16 @@ class ScrollChain implements ChainInfo {
     chainName = ChainName.Scroll.name;
   }
 
-  static ScrollChain mainnet() {
+  static ScrollChain testnetL1() {
     return ScrollChain(534351, "Testnet L1");
   }
 
-  static ScrollChain testnet() {
+  static ScrollChain testnetL2() {
     return ScrollChain(534354, "Testnet L2");
   }
 }
 
-class ZkSyncV2Chain implements ChainInfo {
+class ZkSyncChain implements ChainInfo {
   @override
   int chainId;
 
@@ -580,16 +580,16 @@ class ZkSyncV2Chain implements ChainInfo {
   @override
   String? chainName;
 
-  ZkSyncV2Chain(this.chainId, this.chainIdName) {
-    chainName = ChainName.ZkSyncV2.name;
+  ZkSyncChain(this.chainId, this.chainIdName) {
+    chainName = ChainName.ZkSync.name;
   }
 
-  static ZkSyncV2Chain mainnet() {
-    return ZkSyncV2Chain(324, "Mainnet");
+  static ZkSyncChain mainnet() {
+    return ZkSyncChain(324, "Mainnet");
   }
 
-  static ZkSyncV2Chain testnet() {
-    return ZkSyncV2Chain(280, "Testnet");
+  static ZkSyncChain testnet() {
+    return ZkSyncChain(280, "Testnet");
   }
 }
 
@@ -641,6 +641,6 @@ enum ChainName {
   Celo,
   Klaytn,
   Scroll,
-  ZkSyncV2,
+  ZkSync,
   Metis,
 }

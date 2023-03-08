@@ -20,12 +20,12 @@ class TransactionMock {
     return resultEntity.result.transaction.serialized;
   }
 
-  /// Mock a transaction 
+  /// Mock a transaction
   /// Send contract token in our test account, chain id 5.
-  /// Chain id 5 is Ethereum goerli, supports eip 1155, so the transaction is type2.
-  /// If your chain id did not support eip 1155, go to method mockEvmTransactionNoSupportEip1155.
+  /// Chain id 5 is Ethereum goerli, supports eip 1559, so the transaction is type2.
+  /// If your chain id did not support eip 1559, go to method `mockEvmSendTokenUnsupportEip1559`.
   static Future<String> mockEvmSendToken(String sendPubKey) async {
-    String sender = sendPubKey;
+    String from = sendPubKey;
     String receiver = TestAccount.evm.receiverAddress;
     String contractAddress = TestAccount.evm.tokenContractAddress;
     BigInt amount = TestAccount.evm.amount;
@@ -34,8 +34,8 @@ class TransactionMock {
         await EvmService.erc20Transfer(contractAddress, receiver, amount);
     final data = jsonDecode(erc20Resp)["result"];
 
-    final gasLimitResult = await EvmService.ethEstimateGas(
-        sender, to, "0x0", data);
+    final gasLimitResult =
+        await EvmService.ethEstimateGas(from, to, "0x0", data);
     final jsonObj = jsonDecode(gasLimitResult);
     final gasLimit = jsonObj["result"];
 
@@ -52,7 +52,7 @@ class TransactionMock {
 
     // evm transaction
     final req = {
-      "from": sender,
+      "from": from,
       "to": to,
       "gasLimit": gasLimit,
       "value": "0x0",
@@ -72,15 +72,15 @@ class TransactionMock {
 
   /// Mock a transaction
   /// Send native token in our test account, chain id 5.
-  /// Chain id 5 is Ethereum goerli, supports eip 1155.
+  /// Chain id 5 is Ethereum goerli, supports eip 1559.
   static Future<String> mockEvmSendNative(String sendPubKey) async {
-    String sender = sendPubKey;
+    String from = sendPubKey;
     String receiver = TestAccount.evm.receiverAddress;
     BigInt amount = TestAccount.evm.amount;
     String to = receiver;
     const data = "0x";
-    final gasLimitResult = await EvmService.ethEstimateGas(
-        sender, to, "0x0", data);
+    final gasLimitResult =
+        await EvmService.ethEstimateGas(from, to, "0x0", data);
     final jsonObj = jsonDecode(gasLimitResult);
     final gasLimit = jsonObj["result"];
 
@@ -90,13 +90,19 @@ class TransactionMock {
     final maxFeePerGasHex =
         "0x${BigInt.from(maxFeePerGas * pow(10, 9)).toRadixString(16)}";
 
+    final maxPriorityFeePerGas = double.parse(
+        jsonDecode(gasFeesResult)["result"]["high"]["maxPriorityFeePerGas"]);
+    final maxPriorityFeePerGasHex =
+        "0x${BigInt.from(maxPriorityFeePerGas * pow(10, 9)).toRadixString(16)}";
+
     // evm transaction
     final req = {
-      "from": sender,
+      "from": from,
       "to": to,
       "gasLimit": gasLimit,
       "value": "0x${amount.toRadixString(16)}",
-      "gasPrice": maxFeePerGasHex,
+      "maxFeePerGas": maxFeePerGasHex,
+      "maxPriorityFeePerGas": maxPriorityFeePerGasHex,
       "data": data,
       "type": "0x0",
       "nonce": "0x0",
@@ -109,11 +115,12 @@ class TransactionMock {
     return "0x$reqHex";
   }
 
-  /// Mock a transaction that chain not support eip1155. 
+  /// Mock a transaction that chain not support eip1559.
   /// The example show you how to config a type0/legacy transaction.
-  /// You can replease parameters to test.
-  static Future<String> mockEvmSendTokenUnsupportEip1559(String sendPubKey) async {
-    String sender = sendPubKey;
+  /// You can replace parameters to test.
+  static Future<String> mockEvmSendTokenUnsupportEip1559(
+      String sendPubKey) async {
+    String from = sendPubKey;
     String receiver = TestAccount.evm.receiverAddress;
     String contractAddress = TestAccount.evm.tokenContractAddress;
     BigInt amount = TestAccount.evm.amount;
@@ -122,8 +129,8 @@ class TransactionMock {
         await EvmService.erc20Transfer(contractAddress, receiver, amount);
     final data = jsonDecode(erc20Resp)["result"];
 
-    final gasLimitResult = await EvmService.ethEstimateGas(
-        sender, to, "0x0", data);
+    final gasLimitResult =
+        await EvmService.ethEstimateGas(from, to, "0x0", data);
     final jsonObj = jsonDecode(gasLimitResult);
     final gasLimit = jsonObj["result"];
 
@@ -135,7 +142,7 @@ class TransactionMock {
 
     // evm transaction
     final req = {
-      "from": sender,
+      "from": from,
       "to": to,
       "gasLimit": gasLimit,
       "value": "0x0",
@@ -152,23 +159,23 @@ class TransactionMock {
     return "0x$reqHex";
   }
 
-  /// Mock a transaction 
+  /// Mock a transaction
   /// Send erc721 nft in our test account, chain id 5.
   /// Chain id 5 is Ethereum goerli, supports eip 1559, so the transaction is type2.
   /// If your chain id did not support eip 1559, go to method mockEvmSendTokenUnsupportEip1559.
   static Future<String> mockEvmErc721NFT(String sendPubKey) async {
-    String sender = sendPubKey;
+    String from = sendPubKey;
     String receiver = TestAccount.evm.receiverAddress;
     String contractAddress = TestAccount.evm.nftContractAddress;
     String tokenId = TestAccount.evm.nftTokenId;
     String to = contractAddress;
 
-    final erc20Resp =
-        await EvmService.erc721SafeTransferFrom(contractAddress, sender, receiver, tokenId);
+    final erc20Resp = await EvmService.erc721SafeTransferFrom(
+        contractAddress, from, receiver, tokenId);
     final data = jsonDecode(erc20Resp)["result"];
 
-    final gasLimitResult = await EvmService.ethEstimateGas(
-        sender, to, "0x0", data);
+    final gasLimitResult =
+        await EvmService.ethEstimateGas(from, to, "0x0", data);
     final jsonObj = jsonDecode(gasLimitResult);
     final gasLimit = jsonObj["result"];
 
@@ -185,7 +192,7 @@ class TransactionMock {
 
     // evm transaction
     final req = {
-      "from": sender,
+      "from": from,
       "to": to,
       "gasLimit": gasLimit,
       "value": "0x0",
@@ -203,23 +210,23 @@ class TransactionMock {
     return "0x$reqHex";
   }
 
-  /// Mock a transaction 
+  /// Mock a transaction
   /// Send erc1155 nft in our test account, chain id 5.
   /// Chain id 5 is Ethereum goerli, supports eip 1559, so the transaction is type2.
   /// If your chain id did not support eip 1559, go to method mockEvmSendTokenUnsupportEip1559.
   static Future<String> mockEvmErc1155NFT(String sendPubKey) async {
-    String sender = sendPubKey;
+    String from = sendPubKey;
     String receiver = TestAccount.evm.receiverAddress;
     String contractAddress = TestAccount.evm.nftContractAddress;
     String tokenId = TestAccount.evm.nftTokenId;
     String to = contractAddress;
     String amount = "1";
-    final erc20Resp =
-        await EvmService.erc1155SafeTransferFrom(contractAddress, sender, receiver, tokenId, amount, "0x");
+    final erc20Resp = await EvmService.erc1155SafeTransferFrom(
+        contractAddress, from, receiver, tokenId, amount, "0x");
     final data = jsonDecode(erc20Resp)["result"];
 
-    final gasLimitResult = await EvmService.ethEstimateGas(
-        sender, to, "0x0", data);
+    final gasLimitResult =
+        await EvmService.ethEstimateGas(from, to, "0x0", data);
     final jsonObj = jsonDecode(gasLimitResult);
     final gasLimit = jsonObj["result"];
 
@@ -236,7 +243,7 @@ class TransactionMock {
 
     // evm transaction
     final req = {
-      "from": sender,
+      "from": from,
       "to": to,
       "gasLimit": gasLimit,
       "value": "0x0",
@@ -254,13 +261,13 @@ class TransactionMock {
     return "0x$reqHex";
   }
 
-
-  /// Mock a transaction, write contract 
+  /// Mock a transaction, write contract
   /// write contract is same with send transaction.
   static Future<String> mockWriteContract(String sendPubKey) async {
-    String sender = sendPubKey;
+    String from = sendPubKey;
     String contractAddress = "your contract address";
-    String methodName = "mint"; // this is your contract method name, like balanceOf, mint.
+    String methodName =
+        "mint"; // this is your contract method name, like balanceOf, mint.
     String to = contractAddress;
     List<Object> params = <Object>["1"]; // this is the method params.
 
@@ -268,12 +275,12 @@ class TransactionMock {
     // if you can get data from your server or other, just pass to here.
     // and data must begin with "0x", it is required.
     const abiJson = null;
-    final customMethodCall =
-        await EvmService.customMethod(contractAddress, methodName, params, abiJson);
+    final customMethodCall = await EvmService.customMethod(
+        contractAddress, methodName, params, abiJson);
     final data = jsonDecode(customMethodCall)["result"];
 
-    final gasLimitResult = await EvmService.ethEstimateGas(
-        sender, to, "0x0", data);
+    final gasLimitResult =
+        await EvmService.ethEstimateGas(from, to, "0x0", data);
     final jsonObj = jsonDecode(gasLimitResult);
     final gasLimit = jsonObj["result"];
 
@@ -290,7 +297,7 @@ class TransactionMock {
 
     // evm transaction
     final req = {
-      "from": sender,
+      "from": from,
       "to": to,
       "gasLimit": gasLimit,
       "value": "0x0",
@@ -308,16 +315,19 @@ class TransactionMock {
     return "0x$reqHex";
   }
 
-  /// Mock read contract 
+  /// Mock read contract
   /// read data from chain
   static Future<String> mockReadContract(String sendPubKey) async {
+    String from = sendPubKey;
     String contractAddress = "your contract address";
-    String methodName = "mint"; // this is your contract method name, like balanceOf, mint.
+    String methodName =
+        "mint"; // this is your contract method name, like balanceOf, mint.
     List<Object> params = <Object>["1"]; // this is the method params.
+    // this is your contract ABI json string
     const abiJson = null;
     // first, get the data
-    final customMethodCall =
-        await EvmService.customMethod(contractAddress, methodName, params, abiJson);
+    final customMethodCall = await EvmService.customMethod(
+        contractAddress, methodName, params, abiJson);
     final data = jsonDecode(customMethodCall)["result"];
 
     // second, rpc request eth_call
@@ -328,7 +338,8 @@ class TransactionMock {
     req.id = const Uuid().v4();
     req.method = "eth_call";
     req.params = [
-      {"to": contractAddress, "data": data, "from": sendPubKey}, "latest"
+      {"to": contractAddress, "data": data, "from": from},
+      "latest"
     ];
 
     final result = await EvmService.rpc(req);

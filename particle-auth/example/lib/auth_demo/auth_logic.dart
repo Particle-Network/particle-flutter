@@ -16,7 +16,7 @@ class AuthLogic {
   static late ChainInfo currChainInfo;
 
   static void setChain() {
-    currChainInfo = SolanaChain.devnet();
+    currChainInfo = EthereumChain.goerli();
   }
 
   static void init(Env env) {
@@ -137,20 +137,13 @@ class AuthLogic {
       showToast("only evm chain support!");
       return;
     }
-    String typedData = '''[
-      {
-        "type":"string",
-        "name":"Message",
-        "value":"Hi, Alice!"
-      },
-      {
-        "type":"uint32",
-        "name":"A nunmber",
-        "value":"1337"
-      }
-    ]''';
+    // This typed data is version 4
+    // and has a chainId 5
+    String typedData = '''
+{        "types": {            "EIP712Domain": [                {                    "name": "name",                    "type": "string"                },                {                    "name": "version",                    "type": "string"                },                {                    "name": "chainId",                    "type": "uint256"                },                {                    "name": "verifyingContract",                    "type": "address"                }            ],            "Person": [                {                    "name": "name",                    "type": "string"                },                {                    "name": "wallet",                    "type": "address"                }            ],            "Mail": [                {                    "name": "from",                    "type": "Person"                },                {                    "name": "to",                    "type": "Person"                },                {                    "name": "contents",                    "type": "string"                }            ]        },        "primaryType": "Mail",        "domain": {            "name": "Ether Mail",            "version": "1",            "chainId": 5,            "verifyingContract": "0xCcCCccccCCCCcCCCCCCcCcCccCcCCCcCcccccccC"        },        "message": {            "from": {                "name": "Cow",                "wallet": "0xCD2a3d9F938E13CD947Ec05AbC7FE734Df8DD826"            },            "to": {                "name": "Bob",                "wallet": "0xbBbBBBBbbBBBbbbBbbBbbbbBBbBbbbbBbBbbBBbB"            },            "contents": "Hello, Bob!"        }}
+    ''';
     String result =
-        await ParticleAuth.signTypedData(typedData, SignTypedDataVersion.v1);
+        await ParticleAuth.signTypedData(typedData, SignTypedDataVersion.v4);
     debugPrint("signTypedData: $result");
     showToast("signTypedData: $result");
   }
@@ -271,8 +264,22 @@ class AuthLogic {
       chainInfo = KlaytnChain.mainnet();
     } else if (chainId == KlaytnChain.testnet().chainId) {
       chainInfo = KlaytnChain.testnet();
+    } else if (chainId == ScrollChain.testnetL1().chainId) {
+      chainInfo = ScrollChain.testnetL1();
+    } else if (chainId == ScrollChain.testnetL2().chainId) {
+      chainInfo = ScrollChain.testnetL2();
+    } else if (chainId == ZkSyncChain.mainnet().chainId) {
+      chainInfo = ZkSyncChain.mainnet();
+    } else if (chainId == ZkSyncChain.testnet().chainId) {
+      chainInfo = ZkSyncChain.testnet();
+    } else if (chainId == MetisChain.mainnet().chainId) {
+      chainInfo = MetisChain.mainnet();
+    } else if (chainId == MetisChain.testnet().chainId) {
+      chainInfo = MetisChain.testnet();
     }
+
     debugPrint("getChainInfo: $chainInfo");
+    showToast("getChainInfo: $chainInfo");
   }
 
   static void setModalPresentStyle() {
