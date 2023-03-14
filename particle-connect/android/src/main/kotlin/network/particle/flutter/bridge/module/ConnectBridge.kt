@@ -531,6 +531,65 @@ object ConnectBridge {
         }
     }
 
+    fun addEthereumChain(jsonParams: String, result: MethodChannel.Result) {
+        LogUtils.d("addEthereumChain", jsonParams)
+        val addSwitchChain = GsonUtils.fromJson(jsonParams, AddSwitchChain::class.java)
+        val connectAdapter = getConnectAdapter(addSwitchChain.publicAddress, addSwitchChain.walletType)
+        if (connectAdapter == null) {
+            result.success(
+                FlutterCallBack.failed(
+                    FlutterErrorMessage.parseConnectError(
+                        ConnectError.Unauthorized()
+                    )
+                ).toGson()
+            )
+            return
+        }
+        val chainInfo: ChainInfo = getChainInfo(addSwitchChain.chainName, addSwitchChain.chainIdName)
+
+        connectAdapter.addEthereumChain(addSwitchChain.publicAddress, chainInfo, object : AddETHChainCallback {
+            override fun onAdded() {
+                result.success(FlutterCallBack.success("success").toGson())
+            }
+
+            override fun onError(error: ConnectError) {
+                result.success(FlutterCallBack.failed(FlutterErrorMessage.parseConnectError(error)).toGson())
+            }
+
+        })
+
+
+    }
+
+    fun switchEthereumChain(jsonParams: String, result: MethodChannel.Result) {
+        LogUtils.d("switchEthereumChain", jsonParams)
+        val addSwitchChain = GsonUtils.fromJson(jsonParams, AddSwitchChain::class.java)
+        val connectAdapter = getConnectAdapter(addSwitchChain.publicAddress, addSwitchChain.walletType)
+        if (connectAdapter == null) {
+            result.success(
+                FlutterCallBack.failed(
+                    FlutterErrorMessage.parseConnectError(
+                        ConnectError.Unauthorized()
+                    )
+                ).toGson()
+            )
+            return
+        }
+        val chainInfo: ChainInfo = getChainInfo(addSwitchChain.chainName, addSwitchChain.chainIdName)
+
+        connectAdapter.switchEthereumChain(addSwitchChain.publicAddress, chainInfo.chainId.value(), object : SwitchETHChainCallback {
+
+            override fun onError(error: ConnectError) {
+                result.success(FlutterCallBack.failed(FlutterErrorMessage.parseConnectError(error)).toGson())
+            }
+
+            override fun onSwitched() {
+                result.success(FlutterCallBack.success("success").toGson())
+            }
+
+        })
+    }
+
     //get adapter
     fun getConnectAdapter(publicAddress: String, walletType: String): IConnectAdapter? {
         val adapters = ParticleConnect.getAdapterByAddress(publicAddress)

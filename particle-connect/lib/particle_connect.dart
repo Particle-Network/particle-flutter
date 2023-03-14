@@ -85,12 +85,12 @@ class ParticleConnect {
   }
 
   /// Before call this method, add a event 'connect_event_bridge', to receive uri string
-  /// 
+  ///
   /// Result account or error.
   static Future<String> connectWalletConnect() async {
     return await _channel.invokeMethod('connectWalletConnect');
   }
-  
+
   /// Disconnect a wallet
   ///
   /// [walletType] is which wallet you want to disconnect.
@@ -314,13 +314,15 @@ class ParticleConnect {
   /// Pass [walletType] and [publicAddress] to decide a wallet.
   /// [chainId] tell metamask which chain to add.
   static Future<String> addEthereumChain(
-      WalletType walletType, String publicAddress, int chainId) async {
+      WalletType walletType, String publicAddress, ChainInfo chainInfo) async {
     return await _channel.invokeMethod(
         'addEthereumChain',
         jsonEncode({
           "wallet_type": walletType.name,
           "public_address": publicAddress,
-          "chain_id": chainId
+          "chain_name": chainInfo.chainName,
+          "chain_id": chainInfo.chainId,
+          "chain_id_name": chainInfo.chainIdName,
         }));
   }
 
@@ -328,13 +330,15 @@ class ParticleConnect {
   /// Pass [walletType] and [publicAddress] to decide a wallet.
   /// [chainId] tell metamask which chain to switch.
   static Future<String> switchEthereumChain(
-      WalletType walletType, String publicAddress, int chainId) async {
+      WalletType walletType, String publicAddress, ChainInfo chainInfo) async {
     return await _channel.invokeMethod(
         'switchEthereumChain',
         jsonEncode({
           "wallet_type": walletType.name,
           "public_address": publicAddress,
-          "chain_id": chainId
+          "chain_name": chainInfo.chainName,
+          "chain_id": chainInfo.chainId,
+          "chain_id_name": chainInfo.chainIdName,
         }));
   }
 

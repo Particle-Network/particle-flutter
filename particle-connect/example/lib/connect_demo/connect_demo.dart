@@ -290,6 +290,32 @@ class _ConnectDemoPageState extends State<ConnectDemoPage> {
                     )),
               ),
             ),
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: SizedBox(
+                width: double.infinity,
+                height: 50,
+                child: ElevatedButton(
+                    onPressed: () => {ConnectLogic.addEthereumChain()},
+                    child: const Text(
+                      "addEthereumChain",
+                      style: TextStyle(fontSize: 18),
+                    )),
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: SizedBox(
+                width: double.infinity,
+                height: 50,
+                child: ElevatedButton(
+                    onPressed: () => {ConnectLogic.switchEthereumChain()},
+                    child: const Text(
+                      "switchEthereumChain",
+                      style: TextStyle(fontSize: 18),
+                    )),
+              ),
+            ),
           ],
         ),
       ),

@@ -52,10 +52,10 @@ class ParticleConnectPlugin : FlutterPlugin, MethodCallHandler, ActivityAware, E
                 ConnectBridge.setChainInfo(call.arguments as String, result)
             }
             "connect" -> {
-                ConnectBridge.connect(call.arguments as String, result,events)
+                ConnectBridge.connect(call.arguments as String, result, events)
             }
             "connectWalletConnect" -> {
-                ConnectBridge.connectWalletConnect(result,events)
+                ConnectBridge.connectWalletConnect(result, events)
             }
             "qrCodeUri" -> {
                 ConnectBridge.qrCodeUri(result)
@@ -99,6 +99,12 @@ class ParticleConnectPlugin : FlutterPlugin, MethodCallHandler, ActivityAware, E
             }
             "verify" -> {
                 ConnectBridge.verify(call.arguments as String, result)
+            }
+            "addEthereumChain" -> {
+                ConnectBridge.addEthereumChain(call.arguments as String, result)
+            }
+            "switchEthereumChain" -> {
+                ConnectBridge.switchEthereumChain(call.arguments as String, result)
             }
 
             else -> result.notImplemented()
