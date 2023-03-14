@@ -114,21 +114,14 @@ object ConnectBridge {
             }
             var prompt: LoginPrompt? = null
             try {
-                if (pnConfig.prompt != null)
-                    if("none".equals(pnConfig.prompt, ignoreCase = true))
-                        prompt = LoginPrompt.None
-                    else if("consent".equals(pnConfig.prompt, ignoreCase = true))
-                        prompt = LoginPrompt.ConSent
-                    else if("select_account".equals(pnConfig.prompt, ignoreCase = true))
-                        prompt = LoginPrompt.SelectAccount
+                if (pnConfig.prompt != null) if ("none".equals(pnConfig.prompt, ignoreCase = true)) prompt = LoginPrompt.None
+                else if ("consent".equals(pnConfig.prompt, ignoreCase = true)) prompt = LoginPrompt.ConSent
+                else if ("select_account".equals(pnConfig.prompt, ignoreCase = true)) prompt = LoginPrompt.SelectAccount
             } catch (e: Exception) {
                 e.printStackTrace()
             }
             particleConnectConfig = ParticleConnectConfig(
-                LoginType.valueOf(pnConfig.loginType.uppercase()),
-                supportAuthType,
-                loginFormMode,
-                account, prompt
+                LoginType.valueOf(pnConfig.loginType.uppercase()), supportAuthType, loginFormMode, account, prompt
             )
         }
 
@@ -230,8 +223,7 @@ object ConnectBridge {
                 override fun onError(error: ConnectError) {
                     LogUtils.d("onError", error.toString())
                     result.success(
-                        FlutterCallBack.failed(FlutterErrorMessage.parseConnectError(error))
-                            .toGson()
+                        FlutterCallBack.failed(FlutterErrorMessage.parseConnectError(error)).toGson()
                     )
                 }
             })
@@ -292,24 +284,21 @@ object ConnectBridge {
             )
             return
         }
-        connectAdapter.signAndSendTransaction(signData.publicAddress,
-            transaction,
-            object : TransactionCallback {
+        connectAdapter.signAndSendTransaction(signData.publicAddress, transaction, object : TransactionCallback {
 
-                override fun onError(error: ConnectError) {
-                    LogUtils.d("onError", error.toString())
-                    result.success(
-                        FlutterCallBack.failed(FlutterErrorMessage.parseConnectError(error))
-                            .toGson()
-                    )
+            override fun onError(error: ConnectError) {
+                LogUtils.d("onError", error.toString())
+                result.success(
+                    FlutterCallBack.failed(FlutterErrorMessage.parseConnectError(error)).toGson()
+                )
 
-                }
+            }
 
-                override fun onTransaction(transactionId: String?) {
-                    LogUtils.d("onTransaction", transactionId)
-                    result.success(FlutterCallBack.success(transactionId).toGson())
-                }
-            })
+            override fun onTransaction(transactionId: String?) {
+                LogUtils.d("onTransaction", transactionId)
+                result.success(FlutterCallBack.success(transactionId).toGson())
+            }
+        })
     }
 
     fun signTransaction(jsonParams: String, result: MethodChannel.Result) {
@@ -357,23 +346,20 @@ object ConnectBridge {
             )
             return
         }
-        connectAdapter.signAllTransactions(signData.publicAddress,
-            signData.transactions.toTypedArray(),
-            object : SignAllCallback {
+        connectAdapter.signAllTransactions(signData.publicAddress, signData.transactions.toTypedArray(), object : SignAllCallback {
 
-                override fun onError(error: ConnectError) {
-                    LogUtils.d("onError", error.toString())
-                    result.success(
-                        FlutterCallBack.failed(FlutterErrorMessage.parseConnectError(error))
-                            .toGson()
-                    )
-                }
+            override fun onError(error: ConnectError) {
+                LogUtils.d("onError", error.toString())
+                result.success(
+                    FlutterCallBack.failed(FlutterErrorMessage.parseConnectError(error)).toGson()
+                )
+            }
 
-                override fun onSigned(signatures: List<String>) {
-                    LogUtils.d("onSigned", signatures.toString())
-                    result.success(FlutterCallBack.success(signatures).toGson())
-                }
-            })
+            override fun onSigned(signatures: List<String>) {
+                LogUtils.d("onSigned", signatures.toString())
+                result.success(FlutterCallBack.success(signatures).toGson())
+            }
+        })
 
     }
 
@@ -390,27 +376,20 @@ object ConnectBridge {
             )
             return
         }
-        val typedData = if (connectAdapter is ParticleConnectAdapter) {
-            EncodeUtils.encode(signData.message)
-        } else {
-            signData.message
-        }
-        connectAdapter.signTypedData(signData.publicAddress,
-            typedData,
-            object : SignCallback {
-                override fun onError(error: ConnectError) {
-                    LogUtils.d("onError", error.toString())
-                    result.success(
-                        FlutterCallBack.failed(FlutterErrorMessage.parseConnectError(error))
-                            .toGson()
-                    )
-                }
+        val typedData = EncodeUtils.encode(signData.message)
+        connectAdapter.signTypedData(signData.publicAddress, typedData, object : SignCallback {
+            override fun onError(error: ConnectError) {
+                LogUtils.d("onError", error.toString())
+                result.success(
+                    FlutterCallBack.failed(FlutterErrorMessage.parseConnectError(error)).toGson()
+                )
+            }
 
-                override fun onSigned(signature: String) {
-                    LogUtils.d("onSigned", signature)
-                    result.success(FlutterCallBack.success(signature).toGson())
-                }
-            })
+            override fun onSigned(signature: String) {
+                LogUtils.d("onSigned", signature)
+                result.success(FlutterCallBack.success(signature).toGson())
+            }
+        })
     }
 
     fun importMnemonic(jsonParams: String, result: MethodChannel.Result) {
@@ -508,9 +487,7 @@ object ConnectBridge {
             return
         }
         val message = Eip4361Message.createWithRequiredParameter(
-            signData.domain,
-            signData.uri,
-            signData.publicAddress
+            signData.domain, signData.uri, signData.publicAddress
         )
 
         connectAdapter.login(signData.publicAddress, message, object : SignCallback {
@@ -518,8 +495,7 @@ object ConnectBridge {
             override fun onError(error: ConnectError) {
                 LogUtils.d("onError", error.toString())
                 result.success(
-                    FlutterCallBack.failed(FlutterErrorMessage.parseConnectError(error))
-                        .toGson()
+                    FlutterCallBack.failed(FlutterErrorMessage.parseConnectError(error)).toGson()
                 )
             }
 
@@ -546,9 +522,7 @@ object ConnectBridge {
             return
         }
         if (connectAdapter.verify(
-                signData.publicAddress,
-                signData.signature,
-                signData.message
+                signData.publicAddress, signData.signature, signData.message
             )
         ) {
             result.success(FlutterCallBack.success("success").toGson())
@@ -643,10 +617,8 @@ object ConnectBridge {
             chainNameTmp = "Bsc"
         }
         return try {
-            val clazz1 =
-                Class.forName("com.particle.base." + chainNameTmp + "Chain")
-            val cons =
-                clazz1.getConstructor(String::class.java)
+            val clazz1 = Class.forName("com.particle.base." + chainNameTmp + "Chain")
+            val cons = clazz1.getConstructor(String::class.java)
             cons.newInstance(chainIdName) as ChainInfo
         } catch (e: java.lang.Exception) {
             e.printStackTrace()
