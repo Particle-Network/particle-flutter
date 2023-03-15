@@ -31,8 +31,8 @@ target 'Runner' do
   use_frameworks! :linkage => :static
   # use_modular_headers!
 
-  pod 'ParticleNetworkBase', '0.10.0'
-  pod 'ParticleAuthService', '0.10.0'
+  pod 'ParticleNetworkBase', '0.10.3'
+  pod 'ParticleAuthService', '0.10.3'
   
 
   flutter_install_all_ios_pods File.dirname(File.realpath(__FILE__))
