@@ -72,6 +72,15 @@ class ParticleAuth {
     return await _channel.invokeMethod('login', params);
   }
 
+  /// Set user info
+  /// 
+  /// [json] user info json, it should be the same struct with our web auth service.
+  /// 
+  /// Return userinfo or error
+  static Future<String> setUserInfo(String json) async {
+    return await _channel.invokeMethod('setUserInfo', json);
+  }
+
   /// Logout, with webview page.
   static Future<String> logout() async {
     return await _channel.invokeMethod('logout');

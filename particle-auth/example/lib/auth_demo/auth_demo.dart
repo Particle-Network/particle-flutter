@@ -69,6 +69,19 @@ class AuthDemoPageState extends State<AuthDemoPage> {
                 width: double.infinity,
                 height: 50,
                 child: ElevatedButton(
+                    onPressed: () => {AuthLogic.simpleUserInfo()},
+                    child: const Text(
+                      "Simple user info",
+                      style: TextStyle(fontSize: 18),
+                    )),
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: SizedBox(
+                width: double.infinity,
+                height: 50,
+                child: ElevatedButton(
                     onPressed: () => {AuthLogic.getAddress()},
                     child: const Text(
                       "Get Address",
@@ -306,6 +319,19 @@ class AuthDemoPageState extends State<AuthDemoPage> {
                     onPressed: () => {AuthLogic.openWebWallet()},
                     child: const Text(
                       "Open web wallet",
+                      style: TextStyle(fontSize: 18),
+                    )),
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: SizedBox(
+                width: double.infinity,
+                height: 50,
+                child: ElevatedButton(
+                    onPressed: () => {AuthLogic.setUserInfo()},
+                    child: const Text(
+                      "Set user info",
                       style: TextStyle(fontSize: 18),
                     )),
               ),

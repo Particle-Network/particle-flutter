@@ -10,11 +10,10 @@ import '../generated/json/base/json_field.dart';
 
 part 'rest_client.g.dart';
 
-String projectId = ""; //your project id
-String clientKey = ""; //your project client key
-const baseUrl = "https://rpc.particle.network/";
+String projectId = "b0991b94-8219-4499-bf8e-d92ce6087f72"; //your project id
+String clientKey = "cEpW3oDxg8JoFK2WR4OT04d0mMffdBRPiQIbu0xF"; //your project client key
 
-@RestApi()
+@RestApi(baseUrl: "https://rpc.particle.network/")
 abstract class SolanaRpcApi {
   factory SolanaRpcApi(Dio dio, {String baseUrl}) = _SolanaRpcApi;
 
@@ -39,12 +38,12 @@ abstract class SolanaRpcApi {
     final dio = Dio();
     dio.options.headers["Content-Type"] = "application/json";
     dio.options.headers["Authorization"] = authenticate(projectId, clientKey);
-    _instace = SolanaRpcApi(dio, baseUrl: baseUrl);
+    _instace = SolanaRpcApi(dio);
     return _instace!;
   }
 }
 
-@RestApi()
+@RestApi(baseUrl: "https://rpc.particle.network/")
 abstract class EvmRpcApi {
   factory EvmRpcApi(Dio dio, {String baseUrl}) = _EvmRpcApi;
 
@@ -61,7 +60,29 @@ abstract class EvmRpcApi {
     final dio = Dio();
     dio.options.headers["Content-Type"] = "application/json";
     dio.options.headers["Authorization"] = authenticate(projectId, clientKey);
-    _instace = EvmRpcApi(dio, baseUrl: baseUrl);
+    _instace = EvmRpcApi(dio);
+    return _instace!;
+  }
+}
+
+@RestApi(baseUrl: "https://api.particle.network/")
+abstract class ServiceApi {
+  factory ServiceApi(Dio dio, {String baseUrl}) = _ServiceApi;
+
+  @GET("/apps/{projectAppId}/user-simple-info")
+  Future<String> rpc(@Path("projectAppId") String projectAppId, @Queries() Map<String, dynamic> queries);
+  
+  static ServiceApi? _instace;
+
+  static ServiceApi getClient() {
+    if (_instace != null) return _instace!;
+    if (projectId.isEmpty || clientKey.isEmpty) {
+      throw Exception("projectId or clientKey must be not empty!!! Click here to get: https://dashboard.particle.network/");
+    }
+    final dio = Dio();
+    dio.options.headers["Content-Type"] = "application/json";
+    dio.options.headers["Authorization"] = authenticate(projectId, clientKey);
+    _instace = ServiceApi(dio);
     return _instace!;
   }
 }

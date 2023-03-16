@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:io';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/widgets.dart';
 import 'package:oktoast/oktoast.dart';
@@ -11,6 +12,7 @@ import 'package:particle_auth/model/typeddata_version.dart';
 import 'package:particle_auth/particle_auth.dart';
 import 'package:particle_auth_example/mock/transaction_mock.dart';
 import 'package:particle_auth_example/model/pn_account_info_entity.dart';
+import 'package:particle_auth_example/net/rest_client.dart';
 
 class AuthLogic {
   static late ChainInfo currChainInfo;
@@ -264,10 +266,8 @@ class AuthLogic {
       chainInfo = KlaytnChain.mainnet();
     } else if (chainId == KlaytnChain.testnet().chainId) {
       chainInfo = KlaytnChain.testnet();
-    } else if (chainId == ScrollChain.testnetL1().chainId) {
-      chainInfo = ScrollChain.testnetL1();
-    } else if (chainId == ScrollChain.testnetL2().chainId) {
-      chainInfo = ScrollChain.testnetL2();
+    } else if (chainId == ScrollChain.testnet().chainId) {
+      chainInfo = ScrollChain.testnet();
     } else if (chainId == ZkSyncChain.mainnet().chainId) {
       chainInfo = ZkSyncChain.mainnet();
     } else if (chainId == ZkSyncChain.testnet().chainId) {
@@ -290,14 +290,13 @@ class AuthLogic {
     ParticleAuth.setMediumScreen(true);
   }
 
-
   static void openAccountAndSecurity() async {
     String result = await ParticleAuth.openAccountAndSecurity();
     print(result);
   }
 
   static void setSecurityAccountConfig() {
-    final config = SecurityAccountConfig(2);
+    final config = SecurityAccountConfig(1, 2);
     ParticleAuth.setSecurityAccountConfig(config);
   }
 
@@ -312,5 +311,55 @@ class AuthLogic {
 
   static void setDisplayWallet() {
     ParticleAuth.setDisplayWallet(true);
+  }
+
+  static void setUserInfo() async {
+    // user info json, it should be the same struct with our web auth service.
+    String json = "";
+    String result = await ParticleAuth.setUserInfo(json);
+
+    print("login: $result");
+    showToast("login: $result");
+    if (jsonDecode(result)["status"] == true ||
+        jsonDecode(result)["status"] == 1) {
+      final userInfo = jsonDecode(result)["data"];
+      List<Map<String, dynamic>> wallets = (userInfo["wallets"] as List)
+          .map((dynamic e) => e as Map<String, dynamic>)
+          .toList();
+
+      for (var element in wallets) {
+        if (element["chainName"] == "solana") {
+          solPubAddress = element["publicAddress"];
+        } else if (element["chainName"] == "evm_chain") {
+          evmPubAddress = element["publicAddress"];
+        }
+      }
+      print("login: $userInfo");
+    } else {
+      final error = RpcError.fromJson(jsonDecode(result)["data"]);
+      print(error);
+    }
+  }
+
+  static void simpleUserInfo() async {
+    String projectAppId = "";
+    if (Platform.isIOS) {
+      // use ios project app id
+      projectAppId = "";
+    } else {
+      // use android project app id
+      projectAppId = "";
+    }
+    // get token from getUserInfo, after login success, 
+    String token = "";
+    Map<String, dynamic> queries = {'token': token};
+    String result = await ServiceApi.getClient().rpc(projectAppId, queries);
+    final errorCode = jsonDecode(result)["error_code"];
+    if (errorCode == null) {
+      print("token is valid");
+    } else {
+      String message = jsonDecode(result)["message"];
+      print("$errorCode $message");
+    }
   }
 }

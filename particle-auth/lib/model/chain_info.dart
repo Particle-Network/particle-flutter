@@ -355,7 +355,7 @@ class PlatONChain implements ChainInfo {
   }
 
   static PlatONChain testnet() {
-    return PlatONChain(60801, "Testnet");
+    return PlatONChain(2206132, "Testnet");
   }
 }
 
@@ -561,12 +561,8 @@ class ScrollChain implements ChainInfo {
     chainName = ChainName.Scroll.name;
   }
 
-  static ScrollChain testnetL1() {
-    return ScrollChain(534351, "Testnet L1");
-  }
-
-  static ScrollChain testnetL2() {
-    return ScrollChain(534354, "Testnet L2");
+  static ScrollChain testnet() {
+    return ScrollChain(534353, "Testnet");
   }
 }
 

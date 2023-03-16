@@ -38,6 +38,7 @@ public class ParticleAuthPlugin: NSObject, FlutterPlugin {
         case setSecurityAccountConfig
         case setLanguage
         case fastLogout
+        case setUserInfo
     }
     
     public static func register(with registrar: FlutterPluginRegistrar) {
@@ -101,6 +102,8 @@ public class ParticleAuthPlugin: NSObject, FlutterPlugin {
             self.setLanguage(json as? String)
         case .fastLogout:
             self.fastLogout(flutterResult: result)
+        case .setUserInfo:
+            self.setUserInfo(json as? String, flutterResult: result)
         }
     }
 }
@@ -235,6 +238,8 @@ public extension ParticleAuthPlugin {
                     supportAuthTypeArray.append(.linkedin)
                 } else if $0 == "discord" {
                     supportAuthTypeArray.append(.discord)
+                } else if $0 == "twitter" {
+                    supportAuthTypeArray.append(.twitter)
                 }
             }
         }
@@ -260,6 +265,31 @@ public extension ParticleAuthPlugin {
                 guard let json = String(data: data, encoding: .utf8) else { return }
                 flutterResult(json)
             }
+        }.disposed(by: self.bag)
+    }
+    
+    func setUserInfo(_ json: String?, flutterResult: @escaping FlutterResult) {
+        guard let json = json else {
+            flutterResult(FlutterError(code: "", message: "json is nil", details: nil))
+            return
+        }
+        ParticleAuthService.setUserInfo(json: json).subscribe { [weak self] result in
+            guard let self = self else { return }
+            switch result {
+            case .failure(let error):
+                let response = self.ResponseFromError(error)
+                let statusModel = FlutterStatusModel(status: false, data: response)
+                let data = try! JSONEncoder().encode(statusModel)
+                guard let json = String(data: data, encoding: .utf8) else { return }
+                flutterResult(json)
+            case .success(let userInfo):
+                guard let userInfo = userInfo else { return }
+                let statusModel = FlutterStatusModel(status: true, data: userInfo)
+                let data = try! JSONEncoder().encode(statusModel)
+                guard let json = String(data: data, encoding: .utf8) else { return }
+                flutterResult(json)
+            }
+            
         }.disposed(by: self.bag)
     }
     
@@ -505,7 +535,8 @@ public extension ParticleAuthPlugin {
         }
         let data = JSON(parseJSON: json)
         let promptSettingWhenSign = data["prompt_setting_when_sign"].intValue
-        ParticleAuthService.setSecurityAccountConfig(config: .init(promptSettingWhenSign: promptSettingWhenSign))
+        let promptMasterPasswordSettingWhenLogin = data["prompt_master_password_setting_when_login"].intValue
+        ParticleAuthService.setSecurityAccountConfig(config: .init(promptSettingWhenSign: promptSettingWhenSign, promptMasterPasswordSettingWhenLogin: promptMasterPasswordSettingWhenLogin))
     }
     
     func openAccountAndSecurity(flutterResult: @escaping FlutterResult) {
