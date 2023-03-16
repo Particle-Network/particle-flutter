@@ -60,6 +60,11 @@ class AuthLogic {
     }
   }
 
+  static void isLogin() async {
+    final result = await ParticleAuth.isLogin();
+     print("isLogin: $result");
+  }
+
   static void getAddress() async {
     final address = await ParticleAuth.getAddress();
     print("getAddress: $address");

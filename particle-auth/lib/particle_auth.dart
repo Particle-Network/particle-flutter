@@ -81,6 +81,10 @@ class ParticleAuth {
     return await _channel.invokeMethod('setUserInfo', json);
   }
 
+  static Future<bool> isLogin() async {
+    return await _channel.invokeMethod('isLogin');
+  }
+
   /// Logout, with webview page.
   static Future<String> logout() async {
     return await _channel.invokeMethod('logout');
