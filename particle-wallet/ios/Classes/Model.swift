@@ -105,7 +105,7 @@ extension NSObject {
         } else if name == "platon" {
             if chainId == 210425 {
                 chainInfo = .platON(.mainnet)
-            } else if chainId == 2203181 {
+            } else if chainId == 2206132 {
                 chainInfo = .platON(.testnet)
             }
         } else if name == "tron" {
@@ -159,16 +159,14 @@ extension NSObject {
                 chainInfo = .klaytn(.testnet)
             }
         } else if name == "scroll" {
-            if chainId == 534351 {
-                chainInfo = .scroll(.testnetL1)
-            } else if chainId == 534354 {
-                chainInfo = .scroll(.testnetL2)
+            if chainId == 534353 {
+                chainInfo = .scroll(.testnet)
             }
-        } else if name == "zksyncv2" {
+        } else if name == "zksync" {
             if chainId == 324 {
-                chainInfo = .zkSyncV2(.mainnet)
+                chainInfo = .zkSync(.mainnet)
             } else if chainId == 280 {
-                chainInfo = .zkSyncV2(.testnet)
+                chainInfo = .zkSync(.testnet)
             }
         } else if name == "metis" {
             if chainId == 1088 {
@@ -231,8 +229,8 @@ extension NSObject {
             chain = .klaytn
         } else if name == "scroll" {
             chain = .scroll
-        } else if name == "zksyncv2" {
-            chain = .zkSyncV2
+        } else if name == "zksync" {
+            chain = .zkSync
         } else if name == "metis" {
             chain = .metis
         }
@@ -272,9 +270,23 @@ extension NSObject {
             walletType = .walletConnect
         } else if str == "phantom" {
             walletType = .phantom
+        } else if str == "zerion" {
+            walletType = .zerion
+        } else if str == "math" {
+            walletType = .math
+        } else if str == "omni" {
+            walletType = .omni
+        } else if str == "zengo" {
+            walletType = .zengo
+        } else if str == "alpha" {
+            walletType = .alpha
+        } else if str == "bitpie" {
+            walletType = .bitpie
+        } else if str == "inch1" {
+            walletType = .inch1
         } else {
             walletType = nil
-        }
+        } 
 
         return walletType
     }

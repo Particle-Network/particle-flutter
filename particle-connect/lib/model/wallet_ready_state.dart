@@ -5,7 +5,7 @@ enum WalletReadyState {
   /// User not install the wallet.
   notDetected,
 
-  /// Loadable wallets are always available to you. Since you can load them at any tim
+  /// Loadable wallets are always available to you. Since you can load them at any time
   loadable,
 
   /// The wallet is not support current chain

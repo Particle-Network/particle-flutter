@@ -128,7 +128,6 @@ public class ParticleWalletPlugin: NSObject, FlutterPlugin {
             self.setFiatCoin(json as? String)
         case .loadCustomUIJsonString:
             self.loadCustomUIJsonString(json as? String)
-            
         }
     }
 }
@@ -202,31 +201,48 @@ extension ParticleWalletPlugin {
         let walletAddress = data["wallet_address"].string
         let networkString = data["network"].stringValue.lowercased()
         var network: OpenBuyNetwork?
-        /*
-         Solana,
-         Ethereum,
-         BinanceSmartChain,
-         Avalanche,
-         Polygon,
-         */
+
         if networkString == "solana" {
             network = .solana
         } else if networkString == "ethereum" {
             network = .ethereum
         } else if networkString == "binancesmartchain" {
             network = .binanceSmartChain
-        } else if networkString == "avalanche" {
-            network = .avalanche
+        } else if networkString == "optimism" {
+            network = .optimism
         } else if networkString == "polygon" {
             network = .polygon
+        } else if networkString == "tron" {
+            network = .tron
+        } else if networkString == "arbitrumOne" {
+            network = .arbitrumOne
         } else {
             network = nil
         }
         let fiatCoin = data["fiat_coin"].string
         let fiatAmt = data["fiat_amt"].int
         let cryptoCoin = data["crypto_coin"].string
+        let fixCryptoCoin = data["fix_crypto_coin"].boolValue
+        let fixFiatAmt = data["fix_fiat_amt"].boolValue
+        let fixFiatCoin = data["fix_fiat_coin"].boolValue
+        let theme = data["theme"].stringValue.lowercased()
+        let language = self.getLanguage(from: data["language"].stringValue.lowercased())
 
-        PNRouter.navigatorBuy(walletAddress: walletAddress, network: network, cryptoCoin: cryptoCoin, fiatCoin: fiatCoin, fiatAmt: fiatAmt)
+        var buyConfig = BuyCryptoConfig()
+        buyConfig.network = network
+        buyConfig.walletAddress = walletAddress
+        buyConfig.cryptoCoin = cryptoCoin
+        buyConfig.fiatAmt = fiatAmt
+        if fiatCoin != nil {
+            buyConfig.fiatCoin = fiatCoin!
+        }
+        buyConfig.fixCryptoCoin = fixCryptoCoin
+        buyConfig.fixFiatCoin = fixFiatCoin
+        buyConfig.fixFiatAmt = fixFiatAmt
+        buyConfig.theme = theme
+        buyConfig.language = language.webString
+
+        PNRouter.navigatorBuy(buyCryptoConfig: buyConfig)
     }
 
     func navigatorLoginList(flutterResult: @escaping FlutterResult) {
@@ -264,7 +280,7 @@ extension ParticleWalletPlugin {
             PNRouter.navigatorSwap()
         }
     }
-    
+
     func navigatorDappBrowser(_ json: String?) {
         if let json = json {
             let data = JSON(parseJSON: json)
@@ -355,23 +371,30 @@ extension ParticleWalletPlugin {
          ja,
          ko
          */
+        let language = self.getLanguage(from: json)
+        ParticleWalletGUI.setLanguage(language)
+    }
+
+    private func getLanguage(from json: String) -> Language {
+        var language: Language = .en
         if json.lowercased() == "en" {
-            ParticleNetwork.setLanguage(.en)
+            language = .en
         } else if json.lowercased() == "zh_hans" {
-            ParticleNetwork.setLanguage(.zh_Hans)
+            language = .zh_Hans
         } else if json.lowercased() == "zh_hant" {
-            ParticleNetwork.setLanguage(.zh_Hant)
+            language = .zh_Hant
         } else if json.lowercased() == "ja" {
-            ParticleNetwork.setLanguage(.ja)
+            language = .ja
         } else if json.lowercased() == "ko" {
-            ParticleNetwork.setLanguage(.ko)
+            language = .ko
         }
+        return language
     }
 
     func supportWalletConnect(_ enable: Bool) {
         ParticleWalletGUI.supportWalletConnect(enable)
     }
-    
+
     func supportDappBrowser(_ enable: Bool) {
         ParticleWalletGUI.supportDappBrowser(enable)
     }
@@ -409,7 +432,7 @@ extension ParticleWalletPlugin {
         }
         ParticleWalletGUI.setDisplayNFTContractAddresses(nftContractAddresses)
     }
-    
+
     func setPriorityTokenAddresses(_ json: String?) {
         guard let json = json else {
             return

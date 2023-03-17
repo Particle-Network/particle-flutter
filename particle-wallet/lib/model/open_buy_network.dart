@@ -1,9 +1,9 @@
-enum OpenBuyNetwork
-{
-    solana,
-    ethereum,
-    binanceSmartChain,
-    avalanche,
-    polygon,
+enum OpenBuyNetwork {
+  solana,
+  ethereum,
+  binanceSmartChain,
+  optimism,
+  polygon,
+  tron,
+  arbitrumOne,
 }
-

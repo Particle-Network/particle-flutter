@@ -5,7 +5,6 @@ import 'package:particle_wallet/model/buy_crypto_config.dart';
 import 'package:particle_wallet/model/fiat_coin.dart';
 import 'package:particle_wallet/model/language.dart';
 import 'package:particle_wallet/model/open_buy_network.dart';
-import 'package:particle_wallet/model/user_interface_style.dart';
 import 'package:particle_wallet/model/wallet_display.dart';
 import 'package:particle_wallet/particle_wallet.dart';
 import 'package:particle_connect/model/chain_info.dart';
@@ -122,7 +121,7 @@ class WalletLogic {
   }
 
   static void setLanguage() {
-    Language language = Language.system;
+    Language language = Language.ja;
     ParticleWallet.setLanguage(language);
   }
 
