@@ -344,18 +344,18 @@ extension ParticleWalletPlugin {
         if let walletType = map2WalletType(from: walletTypeString) {
             let result = ParticleWalletGUI.switchWallet(walletType: walletType, publicAddress: publicAddress)
 
-            let statusModel = FlutterStatusModel(status: true, data: result == true ? "success" : "failed")
-
-            let data = try! JSONEncoder().encode(statusModel)
-            guard let json = String(data: data, encoding: .utf8) else { return }
-            flutterResult(json)
+//            let statusModel = FlutterStatusModel(status: true, data: result == true ? "success" : "failed")
+//
+//            let data = try! JSONEncoder().encode(statusModel)
+//            guard let json = String(data: data, encoding: .utf8) else { return }
+            flutterResult(result)
         } else {
             print("walletType \(walletTypeString) is not existed")
-            let response = FlutterResponseError(code: nil, message: "walletType \(walletTypeString) is not existed", data: nil)
-            let statusModel = FlutterStatusModel(status: false, data: response)
-            let data = try! JSONEncoder().encode(statusModel)
-            guard let json = String(data: data, encoding: .utf8) else { return }
-            flutterResult(json)
+//            let response = FlutterResponseError(code: nil, message: "walletType \(walletTypeString) is not existed", data: nil)
+//            let statusModel = FlutterStatusModel(status: false, data: response)
+//            let data = try! JSONEncoder().encode(statusModel)
+//            guard let json = String(data: data, encoding: .utf8) else { return }
+            flutterResult(false)
         }
     }
 

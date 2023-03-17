@@ -269,7 +269,7 @@ packages:
       name: particle_connect
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "0.10.5"
+    version: "0.11.0"
   particle_wallet:
     dependency: "direct main"
     description:

@@ -238,7 +238,7 @@ class ConnectLogic {
 
   static void walletTypeState() async {
     WalletReadyState readyState =
-        await ParticleConnect.walletReadyState(walletType);
+        await ParticleConnect.walletReadyState(WalletType.metaMask);
     print(readyState);
   }
 
