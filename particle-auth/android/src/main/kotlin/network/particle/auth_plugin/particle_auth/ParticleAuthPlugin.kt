@@ -75,16 +75,21 @@ class ParticleAuthPlugin : FlutterPlugin, MethodCallHandler, ActivityAware {
             "getUserInfo" -> {
                 AuthBridge.getUserInfo(result)
             }
-            "setSecurityAccountConfig"->{
+            "setSecurityAccountConfig" -> {
                 AuthBridge.setSecurityAccountConfig(call.arguments as String)
             }
-            "setLanguage"->{
+            "setLanguage" -> {
                 AuthBridge.setLanguage(call.arguments as String)
             }
-            "openAccountAndSecurity"->{
+            "openAccountAndSecurity" -> {
                 AuthBridge.openAccountAndSecurity()
             }
-
+            "setUserInfo" -> {
+                AuthBridge.setUserInfo(call.arguments as String, result)
+            }
+            "isLogin" -> {
+                AuthBridge.isLogin(result)
+            }
 
 
             else -> result.notImplemented()

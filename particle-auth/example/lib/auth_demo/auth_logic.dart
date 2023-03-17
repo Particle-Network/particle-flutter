@@ -62,7 +62,8 @@ class AuthLogic {
 
   static void isLogin() async {
     final result = await ParticleAuth.isLogin();
-     print("isLogin: $result");
+    showToast("isLogin: $result");
+    print("isLogin: $result");
   }
 
   static void getAddress() async {
@@ -321,28 +322,15 @@ class AuthLogic {
   static void setUserInfo() async {
     // user info json, it should be the same struct with our web auth service.
     String json = "";
-    String result = await ParticleAuth.setUserInfo(json);
-
-    print("login: $result");
-    showToast("login: $result");
-    if (jsonDecode(result)["status"] == true ||
-        jsonDecode(result)["status"] == 1) {
-      final userInfo = jsonDecode(result)["data"];
-      List<Map<String, dynamic>> wallets = (userInfo["wallets"] as List)
-          .map((dynamic e) => e as Map<String, dynamic>)
-          .toList();
-
-      for (var element in wallets) {
-        if (element["chainName"] == "solana") {
-          solPubAddress = element["publicAddress"];
-        } else if (element["chainName"] == "evm_chain") {
-          evmPubAddress = element["publicAddress"];
-        }
-      }
-      print("login: $userInfo");
+    bool isSuccess = await ParticleAuth.setUserInfo(json);
+    print("setUserInfo: $isSuccess");
+    showToast("setUserInfo: $isSuccess");
+    if (isSuccess) {
+      // do something
+      String userInfo = await ParticleAuth.getUserInfo();
+      print("setUserInfo: $userInfo");
     } else {
-      final error = RpcError.fromJson(jsonDecode(result)["data"]);
-      print(error);
+      print("setUserInfo failed");
     }
   }
 
@@ -355,7 +343,7 @@ class AuthLogic {
       // use android project app id
       projectAppId = "";
     }
-    // get token from getUserInfo, after login success, 
+    // get token from getUserInfo, after login success,
     String token = "";
     Map<String, dynamic> queries = {'token': token};
     String result = await ServiceApi.getClient().rpc(projectAppId, queries);

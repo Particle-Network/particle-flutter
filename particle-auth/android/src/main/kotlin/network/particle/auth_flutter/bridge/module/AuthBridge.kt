@@ -18,6 +18,7 @@ import com.particle.network.ParticleNetworkAuth.logout
 import com.particle.network.ParticleNetworkAuth.openAccountAndSecurity
 import com.particle.network.ParticleNetworkAuth.setChainInfo
 import com.particle.network.ParticleNetworkAuth.setSecurityAccountConfig
+import com.particle.network.ParticleNetworkAuth.setUserInfo
 import com.particle.network.ParticleNetworkAuth.signAllTransactions
 import com.particle.network.ParticleNetworkAuth.signAndSendTransaction
 import com.particle.network.ParticleNetworkAuth.signMessage
@@ -30,6 +31,7 @@ import io.flutter.plugin.common.MethodChannel
 import network.particle.auth_flutter.bridge.model.*
 import network.particle.auth_flutter.bridge.utils.ChainUtils
 import network.particle.auth_flutter.bridge.utils.EncodeUtils
+import org.json.JSONObject
 
 
 object AuthBridge {
@@ -269,7 +271,13 @@ object AuthBridge {
     fun setSecurityAccountConfig(configJson: String) {
         LogUtils.d("setSecurityAccountConfig", configJson)
         try {
-            val config = GsonUtils.fromJson(configJson, SecurityAccountConfig::class.java)
+            val jobj = JSONObject(configJson)
+            val promptSettingWhenSign = jobj.getInt("prompt_setting_when_sign")
+            val promptMasterPasswordSettingWhenLogin = jobj.getInt("prompt_master_password_setting_when_login")
+            val config = SecurityAccountConfig(
+                promptSettingWhenSign,
+                promptMasterPasswordSettingWhenLogin
+            )
             ParticleNetwork.setSecurityAccountConfig(config)
         } catch (e: Exception) {
             e.printStackTrace()
@@ -293,7 +301,21 @@ object AuthBridge {
             ParticleNetwork.setAppliedLanguage(LanguageEnum.EN)
         }
     }
-    fun openAccountAndSecurity(){
+
+    fun openAccountAndSecurity() {
         ParticleNetwork.openAccountAndSecurity()
+    }
+
+    fun setUserInfo(json: String, result: MethodChannel.Result) {
+        LogUtils.d("setUserInfo", json)
+        result.success(
+            ParticleNetwork.setUserInfo(json)
+        )
+    }
+
+    fun isLogin(result: MethodChannel.Result) {
+        result.success(
+            ParticleNetwork.isLogin()
+        )
     }
 }
