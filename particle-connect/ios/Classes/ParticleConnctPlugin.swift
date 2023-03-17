@@ -300,6 +300,8 @@ extension ParticleConnectPlugin {
                         supportAuthTypeArray.append(.linkedin)
                     } else if $0 == "discord" {
                         supportAuthTypeArray.append(.discord)
+                    } else if $0 == "twitter" {
+                        supportAuthTypeArray.append(.twitter)
                     }
                 }
             }

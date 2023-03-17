@@ -9,6 +9,7 @@ enum LoginType {
   twitch,
   microsoft,
   linkedin,
+  twitter,
   jwt,
 }
 
@@ -24,6 +25,7 @@ enum SupportAuthType {
   twitch,
   microsoft,
   linkedin,
+  twitter,
   all,
 }
 

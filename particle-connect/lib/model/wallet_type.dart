@@ -16,5 +16,5 @@ enum WalletType {
   alpha,
   bitpie,
   inch1,
-  tokenPocket, // iOS not support by 0.10.0
+  tokenPocket, // iOS not support
 }
