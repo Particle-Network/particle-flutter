@@ -76,7 +76,7 @@ class ParticleAuth {
   /// 
   /// [json] user info json, it should be the same struct with our web auth service.
   /// 
-  /// Return userinfo or error
+  /// Return result or error
   static Future<bool> setUserInfo(String json) async {
     return await _channel.invokeMethod('setUserInfo', json);
   }

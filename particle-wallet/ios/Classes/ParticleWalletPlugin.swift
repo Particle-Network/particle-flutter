@@ -363,7 +363,11 @@ extension ParticleWalletPlugin {
         guard let json = json else {
             return
         }
+        let language = self.getLanguage(from: json)
+        ParticleWalletGUI.setLanguage(language)
+    }
 
+    private func getLanguage(from json: String) -> Language {
         /*
          en,
          zh_hans,
@@ -371,11 +375,6 @@ extension ParticleWalletPlugin {
          ja,
          ko
          */
-        let language = self.getLanguage(from: json)
-        ParticleWalletGUI.setLanguage(language)
-    }
-
-    private func getLanguage(from json: String) -> Language {
         var language: Language = .en
         if json.lowercased() == "en" {
             language = .en

@@ -277,17 +277,17 @@ public extension ParticleAuthPlugin {
             guard let self = self else { return }
             switch result {
             case .failure(let error):
-                let response = self.ResponseFromError(error)
-                let statusModel = FlutterStatusModel(status: false, data: response)
-                let data = try! JSONEncoder().encode(statusModel)
-                guard let json = String(data: data, encoding: .utf8) else { return }
-                flutterResult(json)
-            case .success(let userInfo):
-                guard let userInfo = userInfo else { return }
-                let statusModel = FlutterStatusModel(status: true, data: userInfo)
-                let data = try! JSONEncoder().encode(statusModel)
-                guard let json = String(data: data, encoding: .utf8) else { return }
-                flutterResult(json)
+//                let response = self.ResponseFromError(error)
+//                let statusModel = FlutterStatusModel(status: false, data: response)
+//                let data = try! JSONEncoder().encode(statusModel)
+//                guard let json = String(data: data, encoding: .utf8) else { return }
+                flutterResult(false)
+            case .success(let _):
+//                guard let userInfo = userInfo else { return }
+//                let statusModel = FlutterStatusModel(status: true, data: userInfo)
+//                let data = try! JSONEncoder().encode(statusModel)
+//                guard let json = String(data: data, encoding: .utf8) else { return }
+                flutterResult(true)
             }
             
         }.disposed(by: self.bag)
