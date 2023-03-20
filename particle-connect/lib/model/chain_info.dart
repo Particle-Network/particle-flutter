@@ -561,7 +561,7 @@ class ScrollChain implements ChainInfo {
     chainName = ChainName.Scroll.name;
   }
 
-  static ScrollChain mainnet() {
+  static ScrollChain testnet() {
     return ScrollChain(534353, "Testnet");
   }
 }

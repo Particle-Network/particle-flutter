@@ -4,6 +4,7 @@ import android.app.Activity
 import android.text.TextUtils
 import com.blankj.utilcode.util.GsonUtils
 import com.blankj.utilcode.util.LogUtils
+import com.google.gson.Gson
 import com.connect.common.*
 import com.connect.common.eip4361.Eip4361Message
 import com.connect.common.model.Account
@@ -670,7 +671,16 @@ object ConnectBridge {
         }
     }
 
-    fun getChainInfo(chainName: String, chainIdName: String?): ChainInfo {
+    fun getChainInfo(result: MethodChannel.Result) {
+        val chainInfo: ChainInfo = ParticleNetwork.chainInfo
+        val map: MutableMap<String, Any> = HashMap()
+        map["chain_name"] = chainInfo.chainName.name
+        map["chain_id_name"] = chainInfo.chainId.toString()
+        map["chain_id"] = chainInfo.chainId.value()
+        result.success(Gson().toJson(map))
+    }
+
+    private fun getChainInfo(chainName: String, chainIdName: String?): ChainInfo {
         var chainNameTmp = chainName
         if (ChainName.BSC.toString() == chainName) {
             chainNameTmp = "Bsc"

@@ -38,6 +38,7 @@ public class ParticleConnectPlugin: NSObject, FlutterPlugin {
     public enum Method: String {
         case initialize
         case setChainInfo
+        case getChainInfo
         case getAccounts
         case connect
         case disconnect
@@ -84,6 +85,8 @@ public class ParticleConnectPlugin: NSObject, FlutterPlugin {
             self.initialize(json as? String)
         case .setChainInfo:
             self.setChainInfo(json as? String, flutterResult: result)
+        case .getChainInfo:
+            self.getChainInfo(flutterResult: result)
         case .getAccounts:
             self.getAccounts(json as? String, flutterResult: result)
         case .connect:
@@ -228,6 +231,14 @@ extension ParticleConnectPlugin {
         }
         ParticleNetwork.setChainInfo(chainInfo)
         flutterResult(true)
+    }
+    
+    func getChainInfo(flutterResult: FlutterResult) {
+        let chainInfo = ParticleNetwork.getChainInfo()
+            
+        let jsonString = ["chain_name": chainInfo.name, "chain_id": chainInfo.chainId, "chain_id_name": chainInfo.network].jsonString() ?? ""
+            
+        flutterResult(jsonString)
     }
     
     func getAccounts(_ json: String?, flutterResult: FlutterResult) {

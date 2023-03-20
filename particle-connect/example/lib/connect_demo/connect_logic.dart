@@ -40,6 +40,128 @@ class ConnectLogic {
     print("setChainInfo: $isSuccess");
   }
 
+static void getChainInfo() async {
+    String result = await ParticleConnect.getChainInfo();
+    print(result);
+    String chainName = jsonDecode(result)["chain_name"];
+    int chainId = jsonDecode(result)["chain_id"];
+    String chainIdName = jsonDecode(result)["chain_id_name"];
+
+    ChainInfo? chainInfo;
+    if (chainId == EthereumChain.mainnet().chainId) {
+      chainInfo = EthereumChain.mainnet();
+    } else if (chainId == EthereumChain.goerli().chainId) {
+      chainInfo = EthereumChain.goerli();
+    } else if (chainId == SolanaChain.mainnet().chainId) {
+      chainInfo = SolanaChain.mainnet();
+    } else if (chainId == SolanaChain.testnet().chainId) {
+      chainInfo = SolanaChain.testnet();
+    } else if (chainId == SolanaChain.devnet().chainId) {
+      chainInfo = SolanaChain.devnet();
+    } else if (chainId == BSCChain.mainnet().chainId) {
+      chainInfo = BSCChain.mainnet();
+    } else if (chainId == BSCChain.testnet().chainId) {
+      chainInfo = BSCChain.testnet();
+    } else if (chainId == PolygonChain.mainnet().chainId) {
+      chainInfo = PolygonChain.mainnet();
+    } else if (chainId == PolygonChain.mumbai().chainId) {
+      chainInfo = PolygonChain.mumbai();
+    } else if (chainId == AvalancheChain.mainnet().chainId) {
+      chainInfo = AvalancheChain.mainnet();
+    } else if (chainId == AvalancheChain.testnet().chainId) {
+      chainInfo = AvalancheChain.testnet();
+    } else if (chainId == AuroraChain.mainnet().chainId) {
+      chainInfo = AuroraChain.mainnet();
+    } else if (chainId == AuroraChain.testnet().chainId) {
+      chainInfo = AuroraChain.testnet();
+    } else if (chainId == KccChain.mainnet().chainId) {
+      chainInfo = KccChain.mainnet();
+    } else if (chainId == KccChain.testnet().chainId) {
+      chainInfo = KccChain.testnet();
+    } else if (chainId == PlatONChain.mainnet().chainId) {
+      chainInfo = PlatONChain.mainnet();
+    } else if (chainId == PlatONChain.testnet().chainId) {
+      chainInfo = PlatONChain.testnet();
+    } else if (chainId == HecoChain.mainnet().chainId) {
+      chainInfo = HecoChain.mainnet();
+    } else if (chainId == HecoChain.testnet().chainId) {
+      chainInfo = HecoChain.testnet();
+    } else if (chainId == ArbitrumChain.one().chainId) {
+      chainInfo = ArbitrumChain.one();
+    } else if (chainId == ArbitrumChain.nova().chainId) {
+      chainInfo = ArbitrumChain.nova();
+    } else if (chainId == ArbitrumChain.goerli().chainId) {
+      chainInfo = ArbitrumChain.goerli();
+    } else if (chainId == OptimismChain.mainnet().chainId) {
+      chainInfo = OptimismChain.mainnet();
+    } else if (chainId == OptimismChain.goerli().chainId) {
+      chainInfo = OptimismChain.goerli();
+    } else if (chainId == HarmonyChain.mainnet().chainId) {
+      chainInfo = HarmonyChain.mainnet();
+    } else if (chainId == HarmonyChain.testnet().chainId) {
+      chainInfo = HarmonyChain.testnet();
+    } else if (chainId == FantomChain.mainnet().chainId) {
+      chainInfo = FantomChain.mainnet();
+    } else if (chainId == FantomChain.testnet().chainId) {
+      chainInfo = FantomChain.testnet();
+    } else if (chainId == MoonbeamChain.mainnet().chainId) {
+      chainInfo = MoonbeamChain.mainnet();
+    } else if (chainId == MoonbeamChain.testnet().chainId) {
+      chainInfo = MoonbeamChain.testnet();
+    } else if (chainId == MoonriverChain.mainnet().chainId) {
+      chainInfo = MoonriverChain.mainnet();
+    } else if (chainId == MoonriverChain.testnet().chainId) {
+      chainInfo = MoonriverChain.testnet();
+    } else if (chainId == TronChain.mainnet().chainId) {
+      chainInfo = TronChain.mainnet();
+    } else if (chainId == TronChain.shasta().chainId) {
+      chainInfo = TronChain.shasta();
+    } else if (chainId == TronChain.nile().chainId) {
+      chainInfo = TronChain.nile();
+    } else if (chainId == OKCChain.mainnet().chainId) {
+      chainInfo = OKCChain.mainnet();
+    } else if (chainId == OKCChain.testnet().chainId) {
+      chainInfo = OKCChain.testnet();
+    } else if (chainId == ThunderCoreChain.mainnet().chainId) {
+      chainInfo = ThunderCoreChain.mainnet();
+    } else if (chainId == ThunderCoreChain.testnet().chainId) {
+      chainInfo = ThunderCoreChain.testnet();
+    } else if (chainId == CronosChain.mainnet().chainId) {
+      chainInfo = CronosChain.mainnet();
+    } else if (chainId == CronosChain.testnet().chainId) {
+      chainInfo = CronosChain.testnet();
+    } else if (chainId == OasisEmeraldChain.mainnet().chainId) {
+      chainInfo = OasisEmeraldChain.mainnet();
+    } else if (chainId == OasisEmeraldChain.testnet().chainId) {
+      chainInfo = OasisEmeraldChain.testnet();
+    } else if (chainId == GnosisChain.mainnet().chainId) {
+      chainInfo = GnosisChain.mainnet();
+    } else if (chainId == GnosisChain.testnet().chainId) {
+      chainInfo = GnosisChain.testnet();
+    } else if (chainId == CeloChain.mainnet().chainId) {
+      chainInfo = CeloChain.mainnet();
+    } else if (chainId == CeloChain.testnet().chainId) {
+      chainInfo = CeloChain.testnet();
+    } else if (chainId == KlaytnChain.mainnet().chainId) {
+      chainInfo = KlaytnChain.mainnet();
+    } else if (chainId == KlaytnChain.testnet().chainId) {
+      chainInfo = KlaytnChain.testnet();
+    } else if (chainId == ScrollChain.testnet().chainId) {
+      chainInfo = ScrollChain.testnet();
+    } else if (chainId == ZkSyncChain.mainnet().chainId) {
+      chainInfo = ZkSyncChain.mainnet();
+    } else if (chainId == ZkSyncChain.testnet().chainId) {
+      chainInfo = ZkSyncChain.testnet();
+    } else if (chainId == MetisChain.mainnet().chainId) {
+      chainInfo = MetisChain.mainnet();
+    } else if (chainId == MetisChain.testnet().chainId) {
+      chainInfo = MetisChain.testnet();
+    }
+
+    print("getChainInfo: $chainInfo");
+    showToast("getChainInfo: $chainInfo, chainId: ${chainInfo?.chainId}");
+  }
+
   static void connect() async {
     final config = ParticleConnectConfig(LoginType.google, "",
         [SupportAuthType.all], false, SocialLoginPrompt.select_account);

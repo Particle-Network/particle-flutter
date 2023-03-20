@@ -67,6 +67,13 @@ class ParticleConnect {
         }));
   }
 
+  /// Get chain info
+  ///
+  /// Result chain info object.
+  static Future<String> getChainInfo() async {
+    return await _channel.invokeMethod('getChainInfo');
+  }
+
   /// Connect a wallet.
   ///
   /// [walletType] is which wallet you want to connect.

@@ -51,6 +51,9 @@ class ParticleConnectPlugin : FlutterPlugin, MethodCallHandler, ActivityAware, E
             "setChainInfo" -> {
                 ConnectBridge.setChainInfo(call.arguments as String, result)
             }
+            "getChainInfo" -> {
+                ConnectBridge.getChainInfo(result)
+            }
             "connect" -> {
                 ConnectBridge.connect(call.arguments as String, result, events)
             }
