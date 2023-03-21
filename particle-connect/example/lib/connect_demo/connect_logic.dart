@@ -359,9 +359,17 @@ static void getChainInfo() async {
   }
 
   static void walletTypeState() async {
-    WalletReadyState readyState =
-        await ParticleConnect.walletReadyState(WalletType.metaMask);
-    print(readyState);
+    print(await ParticleConnect.walletReadyState(WalletType.metaMask));
+    print(await ParticleConnect.walletReadyState(WalletType.rainbow));
+    print(await ParticleConnect.walletReadyState(WalletType.trust));
+    print(await ParticleConnect.walletReadyState(WalletType.imToken));
+    print(await ParticleConnect.walletReadyState(WalletType.bitKeep));
+    print(await ParticleConnect.walletReadyState(WalletType.math));
+    print(await ParticleConnect.walletReadyState(WalletType.tokenPocket));
+    print(await ParticleConnect.walletReadyState(WalletType.omni));
+    print(await ParticleConnect.walletReadyState(WalletType.zerion));
+    print(await ParticleConnect.walletReadyState(WalletType.alpha));
+    print(await ParticleConnect.walletReadyState(WalletType.ttWallet));
   }
 
   static void reconnectIfNeed() {

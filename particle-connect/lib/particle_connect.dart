@@ -351,11 +351,13 @@ class ParticleConnect {
 
   /// Add ethereum chain, only support metamask
   /// Pass [walletType] to decide a wallet.
+  /// android supported wallet:MetaMask,Rainbow,Trust,ImToken,BitKeep,MathWallet,TokenPocket,Omni,Zerion,Coin98,Bitpie,ZenGo,Alpha,TTWallet
   static Future<WalletReadyState> walletReadyState(
       WalletType walletType) async {
-    String readyState = await _channel.invokeMethod(
-        'walletReadyState', jsonEncode({"wallet_type": walletType.name}));
-    return WalletReadyState.values.byName(readyState);
+      String readyState = await _channel.invokeMethod(
+          'walletReadyState', jsonEncode({"wallet_type": walletType.name}));
+      return WalletReadyState.values.byName(readyState);
+
   }
 
   /// reconnect wallet connect wallet, only support iOS

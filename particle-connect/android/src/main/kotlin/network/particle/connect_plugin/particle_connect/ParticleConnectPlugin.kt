@@ -109,6 +109,9 @@ class ParticleConnectPlugin : FlutterPlugin, MethodCallHandler, ActivityAware, E
             "switchEthereumChain" -> {
                 ConnectBridge.switchEthereumChain(call.arguments as String, result)
             }
+            "walletReadyState" -> {
+                ConnectBridge.walletReadyState(call.arguments as String, result)
+            }
 
             else -> result.notImplemented()
         }

@@ -15,6 +15,7 @@ enum WalletType {
   zengo,
   alpha,
   bitpie,
-  inch1,
+  inch1, // android not support
+  ttWallet, // iOS not support
   tokenPocket, // iOS not support
 }

@@ -7,9 +7,8 @@ import com.blankj.utilcode.util.LogUtils
 import com.google.gson.Gson
 import com.connect.common.*
 import com.connect.common.eip4361.Eip4361Message
-import com.connect.common.model.Account
-import com.connect.common.model.ConnectError
-import com.connect.common.model.DAppMetadata
+import com.connect.common.model.*
+import com.connect.common.utils.AppUtils
 import com.evm.adapter.EVMConnectAdapter
 import com.particle.base.ChainInfo
 import com.particle.base.ChainName
@@ -26,6 +25,7 @@ import com.particle.network.service.SupportAuthType
 import com.phantom.adapter.PhantomConnectAdapter
 import com.solana.adapter.SolanaConnectAdapter
 import com.wallet.connect.adapter.*
+import com.wallet.connect.adapter.model.MobileWCWallet
 import io.flutter.plugin.common.EventChannel
 import io.flutter.plugin.common.MethodChannel
 import kotlinx.coroutines.launch
@@ -589,6 +589,48 @@ object ConnectBridge {
             }
 
         })
+    }
+
+    val supportChains: List<ChainType> = listOf(ChainType.EVM)
+    fun walletReadyState(jsonParams: String, result: MethodChannel.Result) {
+        LogUtils.d("walletReadyState", jsonParams)
+        val data = GsonUtils.fromJson(jsonParams, ConnectSignData::class.java)
+        val walletType = data.walletType
+
+        val allWallets = listOf<MobileWCWallet>(
+            MobileWCWallet.MetaMask,
+            MobileWCWallet.Rainbow,
+            MobileWCWallet.Trust,
+            MobileWCWallet.ImToken,
+            MobileWCWallet.BitKeep,
+            MobileWCWallet.MathWallet,
+            MobileWCWallet.TokenPocket,
+            MobileWCWallet.Omni,
+            MobileWCWallet.Zerion,
+            MobileWCWallet.Coin98,
+            MobileWCWallet.Bitpie,
+            MobileWCWallet.ZenGo,
+            MobileWCWallet.Alpha,
+            MobileWCWallet.TTWallet,
+        )
+        val firstWallet = allWallets.first {
+            it.name.lowercase() == walletType.lowercase() || it.name.lowercase().contains(walletType.lowercase()) || walletType.lowercase()
+                .contains(it.name.lowercase())
+        }
+        if (firstWallet == null) {
+            result.success("notDetected")
+        }
+        if (supportChains.contains(ConnectManager.chainType)) {
+
+            if (AppUtils.isAppInstalled(ConnectManager.context, firstWallet.packageName)) {
+                result.success("installed")
+            } else {
+                result.success("notDetected")
+            }
+        } else {
+            result.success("unsupported")
+        }
+
     }
 
     //get adapter
