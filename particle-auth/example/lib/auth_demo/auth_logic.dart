@@ -60,7 +60,7 @@ class AuthLogic {
   }
 
   static void isLogin() async {
-    final result = await ParticleAuth.isLogin();
+    bool result = await ParticleAuth.isLogin();
     showToast("isLogin: $result");
     print("isLogin: $result");
   }
