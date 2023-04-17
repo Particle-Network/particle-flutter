@@ -54,6 +54,10 @@ class EthereumChain implements ChainInfo {
   static EthereumChain goerli() {
     return EthereumChain(5, "Goerli");
   }
+
+  static EthereumChain sepolia() {
+    return EthereumChain(11155111, "Sepolia");
+  }
 }
 
 class BSCChain implements ChainInfo {
@@ -612,6 +616,100 @@ class MetisChain implements ChainInfo {
   }
 }
 
+class ConfluxESpaceChain implements ChainInfo {
+  @override
+  int chainId;
+
+  @override
+  String chainIdName;
+
+  @override
+  String? chainName;
+
+  ConfluxESpaceChain(this.chainId, this.chainIdName) {
+    chainName = ChainName.ConfluxESpace.name;
+  }
+
+  static ConfluxESpaceChain mainnet() {
+    return ConfluxESpaceChain(1030, "Mainnet");
+  }
+
+  static ConfluxESpaceChain testnet() {
+    return ConfluxESpaceChain(71, "Testnet");
+  }
+}
+
+class MapoChain implements ChainInfo {
+  @override
+  int chainId;
+
+  @override
+  String chainIdName;
+
+  @override
+  String? chainName;
+
+  MapoChain(this.chainId, this.chainIdName) {
+    chainName = ChainName.Mapo.name;
+  }
+
+  static MapoChain mainnet() {
+    return MapoChain(22776, "Mainnet");
+  }
+
+  static MapoChain testnet() {
+    return MapoChain(212, "Testnet");
+  }
+}
+
+class PolygonZkEVMChain implements ChainInfo {
+  @override
+  int chainId;
+
+  @override
+  String chainIdName;
+
+  @override
+  String? chainName;
+
+  PolygonZkEVMChain(this.chainId, this.chainIdName) {
+    chainName = ChainName.PolygonZkEVM.name;
+  }
+
+  static PolygonZkEVMChain mainnet() {
+    return PolygonZkEVMChain(1101, "Mainnet");
+  }
+
+  static PolygonZkEVMChain testnet() {
+    return PolygonZkEVMChain(1442, "Testnet");
+  }
+}
+
+class BaseChain implements ChainInfo {
+  @override
+  int chainId;
+
+  @override
+  String chainIdName;
+
+  @override
+  String? chainName;
+
+  BaseChain(this.chainId, this.chainIdName) {
+    chainName = ChainName.Base.name;
+  }
+
+  // static PolygonZkEVMChain mainnet() {
+  //   return PolygonZkEVMChain(1101, "Mainnet");
+  // }
+
+  static BaseChain testnet() {
+    return BaseChain(84531, "Testnet");
+  }
+}
+
+
+
 enum ChainName {
   Solana,
   Ethereum,
@@ -639,4 +737,9 @@ enum ChainName {
   Scroll,
   ZkSync,
   Metis,
+  ConfluxESpace,
+  Mapo,
+  PolygonZkEVM,
+  Base,
+
 }

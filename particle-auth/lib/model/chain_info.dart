@@ -54,6 +54,10 @@ class EthereumChain implements ChainInfo {
   static EthereumChain goerli() {
     return EthereumChain(5, "Goerli");
   }
+
+  static EthereumChain sepolia() {
+    return EthereumChain(11155111, "Sepolia");
+  }
 }
 
 class BSCChain implements ChainInfo {
