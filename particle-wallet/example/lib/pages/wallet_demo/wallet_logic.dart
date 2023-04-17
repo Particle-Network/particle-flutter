@@ -39,7 +39,7 @@ class WalletLogic {
   static void navigatorNFTSend() {
     String mintAddress = "0xD000F000Aa1F8accbd5815056Ea32A54777b2Fc4";
     String tokenId = "1412";
-    ParticleWallet.navigatorNFTSend(mintAddress, tokenId, receiverAddress: "");
+    ParticleWallet.navigatorNFTSend(mintAddress, tokenId, amount: null, receiverAddress: "");
   }
 
   static void navigatorNFTDetails() {

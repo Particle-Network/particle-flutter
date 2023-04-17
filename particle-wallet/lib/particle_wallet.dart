@@ -68,16 +68,19 @@ class ParticleWallet {
   /// [mint] is NFT mint address or contract address.
   ///
   /// [tokenId] is NFT tokenId, in solana chain, should pass "".
+  /// 
+  /// [amount] optional, for solana nft or erc721 nft, it is a useless parameter, for erc1155 nft, you can pass amount, such as "1", "100", "10000", default value is null
   ///
   /// [receiveAddress] is a receiver address, default value if empty string.
   static navigatorNFTSend(String mint, String tokenId,
-      {String receiverAddress = ""}) {
+      {String? amount, String receiverAddress = ""}) {
     _channel.invokeMethod(
         'navigatorNFTSend',
         jsonEncode({
           "mint": mint,
           "receiver_address": receiverAddress,
           "token_id": tokenId,
+          "amount": amount
         }));
   }
 

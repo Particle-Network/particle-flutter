@@ -175,10 +175,11 @@ extension ParticleWalletPlugin {
 
         let data = JSON(parseJSON: json)
         let address = data["mint"].stringValue
-        let toAddress = data["receiver_address"].stringValue
         let tokenId = data["token_id"].stringValue
-        let config = NFTSendConfig(address: address, toAddress: toAddress.isEmpty ? nil : toAddress, tokenId: tokenId)
-        PNRouter.navigatroNFTSend(nftSendConfig: config)
+        let toAddress = data["receiver_address"].string
+        let amount = data["amount"].int
+        let config = NFTSendConfig(address: address, toAddress: toAddress, tokenId: tokenId, amount: UInt(amount ?? 1))
+        PNRouter.navigatorNFTSend(nftSendConfig: config)
     }
 
     func navigatorNFTDetails(_ json: String?) {
