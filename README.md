@@ -1,4 +1,7 @@
 # Particle Flutter SDKs
+
+![](https://img.shields.io/pub/v/particle_auth?color=blue&style=round) 
+
 Particle Auth is a simple self-custodial auth infra for Web3 apps and wallets.
 
 Particle Connect is the best way to onboard any user for your dApp.
