@@ -1,6 +1,8 @@
+## 0.12.0
 
 ## 0.11.0
 ## 0.10.2
+
 ## 0.10.0
 ## 0.9.8
 fix HexUtils defined multiple

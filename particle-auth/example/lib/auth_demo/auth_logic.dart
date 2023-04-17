@@ -36,9 +36,6 @@ class AuthLogic {
         LoginType.phone, "", supportAuthType,
         socialLoginPrompt: SocialLoginPrompt.select_account);
 
-    print("login: $result");
-    showToast("login: $result");
-
     if (jsonDecode(result)["status"] == true ||
         jsonDecode(result)["status"] == 1) {
       final userInfo = jsonDecode(result)["data"];
@@ -54,9 +51,11 @@ class AuthLogic {
         }
       }
       print("login: $userInfo");
+      showToast("login: $userInfo");
     } else {
       final error = RpcError.fromJson(jsonDecode(result)["data"]);
       print(error);
+      showToast("login: $error");
     }
   }
 
@@ -64,6 +63,31 @@ class AuthLogic {
     final result = await ParticleAuth.isLogin();
     showToast("isLogin: $result");
     print("isLogin: $result");
+  }
+
+  static void isLoginAsync() async {
+    String result = await ParticleAuth.isLoginAsync();
+    if (jsonDecode(result)["status"] == true ||
+        jsonDecode(result)["status"] == 1) {
+      final userInfo = jsonDecode(result)["data"];
+      List<Map<String, dynamic>> wallets = (userInfo["wallets"] as List)
+          .map((dynamic e) => e as Map<String, dynamic>)
+          .toList();
+
+      for (var element in wallets) {
+        if (element["chainName"] == "solana") {
+          solPubAddress = element["publicAddress"];
+        } else if (element["chainName"] == "evm_chain") {
+          evmPubAddress = element["publicAddress"];
+        }
+      }
+      print("isLoginAsync: $userInfo");
+      showToast("isLoginAsync: $userInfo");
+    } else {
+      final error = RpcError.fromJson(jsonDecode(result)["data"]);
+      print("isLoginAsync: $error");
+      showToast("isLoginAsync: $error");
+    }
   }
 
   static void getAddress() async {
@@ -331,28 +355,6 @@ class AuthLogic {
       print("setUserInfo: $userInfo");
     } else {
       print("setUserInfo failed");
-    }
-  }
-
-  static void simpleUserInfo() async {
-    String projectAppId = "";
-    if (Platform.isIOS) {
-      // use ios project app id
-      projectAppId = "";
-    } else {
-      // use android project app id
-      projectAppId = "";
-    }
-    // get token from getUserInfo, after login success,
-    String token = "";
-    Map<String, dynamic> queries = {'token': token};
-    String result = await ServiceApi.getClient().rpc(projectAppId, queries);
-    final errorCode = jsonDecode(result)["error_code"];
-    if (errorCode == null) {
-      print("token is valid");
-    } else {
-      String message = jsonDecode(result)["message"];
-      print("$errorCode $message");
     }
   }
 }

@@ -271,12 +271,16 @@ class TransactionMock {
     String to = contractAddress;
     List<Object> params = <Object>["1"]; // this is the method params.
 
+    // abi json string, you can get it from your contract developer.
+    // such as
+    // [{\"inputs\":[{\"internalType\":\"uint256\",\"name\":\"quantity\",\"type\":\"uint256\"},{\"internalType\":\"uint256\",\"name\":\"amount\",\"type\":\"uint256\"}],\"name\":\"mint\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"}]
+    const abiJsonString = null;
+
     // use evm service to get data.
-    // if you can get data from your server or other, just pass to here.
+    // if you can get data from your server or other, just pass it to here.
     // and data must begin with "0x", it is required.
-    const abiJson = null;
     final customMethodCall = await EvmService.customMethod(
-        contractAddress, methodName, params, abiJson);
+        contractAddress, methodName, params, abiJsonString);
     final data = jsonDecode(customMethodCall)["result"];
 
     final gasLimitResult =
@@ -324,10 +328,14 @@ class TransactionMock {
         "mint"; // this is your contract method name, like balanceOf, mint.
     List<Object> params = <Object>["1"]; // this is the method params.
     // this is your contract ABI json string
-    const abiJson = null;
+
+    // abi json string, you can get it from your contract developer.
+    // such as
+    // [{\"inputs\":[{\"internalType\":\"uint256\",\"name\":\"quantity\",\"type\":\"uint256\"},{\"internalType\":\"uint256\",\"name\":\"amount\",\"type\":\"uint256\"}],\"name\":\"mint\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"}]
+    const abiJsonString = null;
     // first, get the data
     final customMethodCall = await EvmService.customMethod(
-        contractAddress, methodName, params, abiJson);
+        contractAddress, methodName, params, abiJsonString);
     final data = jsonDecode(customMethodCall)["result"];
 
     // second, rpc request eth_call

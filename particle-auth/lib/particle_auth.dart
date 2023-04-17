@@ -81,9 +81,17 @@ class ParticleAuth {
     return await _channel.invokeMethod('setUserInfo', json);
   }
 
+  /// Is user login, check locally.
   static Future<bool> isLogin() async {
     return await _channel.invokeMethod('isLogin');
   }
+
+  /// Check is user login from server side.
+  /// If user login state is valid, return userinfo. otherwist return error
+  static Future<String> isLoginAsync() async {
+    return await _channel.invokeMethod('isLoginAsync');
+  }
+
 
   /// Logout, with webview page.
   static Future<String> logout() async {

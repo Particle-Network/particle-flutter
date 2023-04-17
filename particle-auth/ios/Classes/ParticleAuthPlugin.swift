@@ -23,6 +23,7 @@ public class ParticleAuthPlugin: NSObject, FlutterPlugin {
         case login
         case logout
         case isLogin
+        case isLoginAsync
         case signMessage
         case signTransaction
         case signAllTransactions
@@ -72,6 +73,8 @@ public class ParticleAuthPlugin: NSObject, FlutterPlugin {
             self.logout(flutterResult: result)
         case .isLogin:
             self.isLogin(flutterResult: result)
+        case .isLoginAsync:
+            self.isLoginAsync(flutterResult: result)
         case .signMessage:
             self.signMessage(json as? String, flutterResult: result)
         case .signTransaction:
@@ -282,7 +285,7 @@ public extension ParticleAuthPlugin {
 //                let data = try! JSONEncoder().encode(statusModel)
 //                guard let json = String(data: data, encoding: .utf8) else { return }
                 flutterResult(false)
-            case .success(let _):
+            case .success:
 //                guard let userInfo = userInfo else { return }
 //                let statusModel = FlutterStatusModel(status: true, data: userInfo)
 //                let data = try! JSONEncoder().encode(statusModel)
@@ -333,6 +336,25 @@ public extension ParticleAuthPlugin {
     
     func isLogin(flutterResult: @escaping FlutterResult) {
         flutterResult(ParticleAuthService.isLogin())
+    }
+
+    func isLoginAsync(flutterResult: @escaping FlutterResult) {
+        ParticleAuthService.isLoginAsync().subscribe { [weak self] result in
+            guard let self = self else { return }
+            switch result {
+            case .failure(let error):
+                let response = self.ResponseFromError(error)
+                let statusModel = FlutterStatusModel(status: false, data: response)
+                let data = try! JSONEncoder().encode(statusModel)
+                guard let json = String(data: data, encoding: .utf8) else { return }
+                flutterResult(json)
+            case .success(let userInfo):
+                let statusModel = FlutterStatusModel(status: true, data: userInfo)
+                let data = try! JSONEncoder().encode(statusModel)
+                guard let json = String(data: data, encoding: .utf8) else { return }
+                flutterResult(json)
+            }
+        }.disposed(by: self.bag)
     }
     
     func signMessage(_ json: String?, flutterResult: @escaping FlutterResult) {

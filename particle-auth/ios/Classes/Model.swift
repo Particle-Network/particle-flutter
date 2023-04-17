@@ -25,6 +25,8 @@ extension NSObject {
                 chainInfo = .ethereum(.mainnet)
             } else if chainId == 5 {
                 chainInfo = .ethereum(.goerli)
+            } else if chainId == 11155111 {
+                chainInfo = .ethereum(.sepolia)
             }
         } else if name == "bsc" {
             if chainId == 56 {
@@ -172,6 +174,28 @@ extension NSObject {
             } else if chainId == 599 {
                 chainInfo = .metis(.goerli)
             }
+        } else if name == "confluxespace" {
+            if chainId == 1030 {
+                chainInfo = .confluxESpace(.mainnet)
+            } else if chainId == 71 {
+                chainInfo = .confluxESpace(.testnet)
+            }
+        } else if name == "mapo" {
+            if chainId == 22776 {
+                chainInfo = .mapo(.mainnet)
+            } else if chainId == 212 {
+                chainInfo = .mapo(.testnet)
+            }
+        } else if name == "polygonzkevm" {
+            if chainId == 1101 {
+                chainInfo = .polygonZkEVM(.mainnet)
+            } else if chainId == 1442 {
+                chainInfo = .polygonZkEVM(.testnet)
+            }
+        } else if name == "base" {
+            if chainId == 84531 {
+                chainInfo = .base(.testnet)
+            }
         }
         return chainInfo
     }
@@ -231,6 +255,14 @@ extension NSObject {
             chain = .zkSync
         } else if name == "metis" {
             chain = .metis
+        } else if name == "confluxespace" {
+            chain = .confluxESpace
+        } else if name == "mapo" {
+            chain = .mapo
+        } else if name == "polygonzkevm" {
+            chain = .polygonZkEVM
+        } else if name == "base" {
+            chain = .base
         }
         return chain
     }
