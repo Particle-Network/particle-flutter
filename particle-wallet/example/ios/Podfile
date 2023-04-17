@@ -1,5 +1,5 @@
 # Uncomment this line to define a global platform for your project
-# platform :ios, '11.0'
+ platform :ios, '13.0'
 
 # CocoaPods analytics sends network stats synchronously affecting flutter build latency.
 ENV['COCOAPODS_DISABLE_STATS'] = 'true'
@@ -31,20 +31,21 @@ target 'Runner' do
   use_frameworks! :linkage => :static
   use_modular_headers!
 
-  pod 'ParticleConnect', '0.1.50'
-  pod 'ConnectWalletConnectAdapter', '0.1.50'
-  pod 'ConnectSolanaAdapter', '0.1.50'
-  pod 'ConnectEVMAdapter', '0.1.50'
-  pod 'ConnectCommon', '0.1.50'
-  pod 'ConnectPhantomAdapter', '0.1.50'
-  pod 'ParticleNetworkBase', '0.11.1'
-  pod 'ParticleAuthService', '0.11.1'
-  pod 'ParticleWalletGUI', '0.11.1'
-  pod 'ParticleWalletAPI', '0.11.1'
-  pod 'ParticleWalletConnect', '0.11.1'
+  pod 'ParticleConnect', '0.1.52'
+  pod 'ConnectWalletConnectAdapter', '0.1.52'
+  pod 'ConnectSolanaAdapter', '0.1.52'
+  pod 'ConnectEVMAdapter', '0.1.52'
+  pod 'ConnectCommon', '0.1.52'
+  pod 'ConnectPhantomAdapter', '0.1.52'
+  pod 'ParticleNetworkBase', '0.12.0'
+  pod 'ParticleAuthService', '0.12.0'
+  pod 'ParticleWalletGUI', '0.12.0'
+  pod 'ParticleWalletAPI', '0.12.0'
+  pod 'ParticleWalletConnect', '0.12.0'
   
   pod 'SkeletonView', :git => 'https://github.com/SunZhiC/SkeletonView.git', :branch => 'main'
   pod 'WalletConnectSwift', :git => 'https://github.com/SunZhiC/WalletConnectSwift', :branch => 'master'
+  pod 'SwiftMessages', :git => 'https://github.com/SunZhiC/SwiftMessages', :branch => 'master'
 
   flutter_install_all_ios_pods File.dirname(File.realpath(__FILE__))
 end
