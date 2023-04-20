@@ -21,6 +21,7 @@ import com.particle.gui.ParticleWallet.enableSwap
 import com.particle.gui.ParticleWallet.getEnablePay
 import com.particle.gui.ParticleWallet.getEnableSwap
 import com.particle.gui.ParticleWallet.navigatorBuy
+import com.particle.gui.ParticleWallet.openBuy
 import com.particle.gui.ParticleWallet.supportWalletConnect
 import com.particle.gui.router.PNRouter
 import com.particle.gui.router.RouterPath
@@ -30,7 +31,9 @@ import com.particle.gui.ui.send.WalletSendParams
 import com.particle.gui.ui.swap.SwapConfig
 import com.particle.gui.ui.token_detail.TokenTransactionRecordsParams
 import com.particle.gui.utils.WalletUtils
+import com.particle.network.ParticleNetworkAuth
 import com.particle.network.ParticleNetworkAuth.getAddress
+import com.particle.network.ParticleNetworkAuth.openBuy
 import io.flutter.plugin.common.MethodChannel
 import kotlinx.coroutines.launch
 import network.particle.flutter.bridge.ui.FlutterLoginOptActivity
@@ -192,34 +195,42 @@ object WalletBridge {
     }
 
     fun navigatorBuyCrypto(json: String) {
+        LogUtils.d("navigatorBuyCrypto", json)
         if (!isUIModuleInit()) return;
+        val jsonObject = JSONObject(json)
+        val walletAddress = jsonObject.optString("wallet_address")
+        val chainName = jsonObject.optString("network")
+        val cryptoCoin = jsonObject.optString("crypto_coin")
+        val fiatCoin = jsonObject.optString("fiat_coin")
+        val fiatAmt = jsonObject.optInt("fiat_amt")
+        val fixCryptoCoin = jsonObject.optBoolean("fix_crypto_coin")
+        val fixFiatAmt = jsonObject.optBoolean("fix_fiat_amt")
+        val fixFiatCoin = jsonObject.optBoolean("fix_fiat_coin")
+        val theme = jsonObject.optString("theme")
+        val language = jsonObject.optString("language")
+//        ParticleNetwork.openBuy(walletAddress, fiatAmt, fiatCoin, cryptoCoin, fixFiatCoin, fixFiatAmt, fixCryptoCoin, theme, language, chainName
+//        )
+        ParticleNetwork.openBuy(
+            walletAddress = walletAddress,
+            amount = fiatAmt,
+            fiatCoin = fiatCoin,
+            cryptoCoin = cryptoCoin,
+            fixFiatCoin = fixFiatCoin,
+            fixFiatAmt = fixFiatAmt,
+            fixCryptoCoin = fixCryptoCoin,
+            theme = theme,
+            language = language,
+            chainName = chainName
+        )
+//        try {
+//
+//
+//
+//        } catch (e: Exception) {
+//            ParticleNetworkAuth.openBuy(ParticleNetwork.INSTANCE, "", 0, "", "", false, false, false, "", "", "");
+//            e.printStackTrace();
+//        }
 
-        try {
-            val jsonObject = JSONObject(json);
-
-            val walletAddress = jsonObject.opt("wallet_address") as? String;
-            val fiatCoin = jsonObject.opt("fiat_coin") as? String;
-            val cryptoCoin = jsonObject.opt("crypto_coin") as? String;
-            val fiatAmt = jsonObject.opt("fiat_amt") as? Int;
-            val networkString = (jsonObject.opt("network") as? String)?.lowercase();
-            var network: ChainName? = null;
-
-            if (networkString == "solana") {
-                network = ChainName.Solana;
-            } else if (networkString == "ethereum") {
-                network = ChainName.Ethereum;
-            } else if (networkString == "binancesmartchain") {
-                network = ChainName.BSC;
-            } else if (networkString == "avalanche")  {
-                network = ChainName.Avalanche;
-            } else if (networkString == "polygon")  {
-                network = ChainName.Polygon;
-            }
-
-            ParticleNetwork.navigatorBuy(walletAddress, network, cryptoCoin, fiatCoin, fiatAmt);
-        } catch (e: Exception) {
-            ParticleNetwork.navigatorBuy();
-        }
     }
 
     fun navigatorSwap(activity: Activity, json: String) {
@@ -229,14 +240,13 @@ object WalletBridge {
             val toTokenAddress = jsonObject.opt("to_token_address") as? String;
             val amount = jsonObject.opt("amount") as? String;
             if (fromTokenAddress != null) {
-                PNRouter.navigatorSwap(SwapConfig(fromTokenAddress, toTokenAddress?:"", amount?:"0"))
+                PNRouter.navigatorSwap(SwapConfig(fromTokenAddress, toTokenAddress ?: "", amount ?: "0"))
             } else {
                 PNRouter.navigatorSwap(null);
             };
         } catch (e: Exception) {
             PNRouter.navigatorSwap(null);
         }
-
 
 
     }
@@ -299,6 +309,7 @@ object WalletBridge {
     fun getEnableSwap(result: MethodChannel.Result) {
         result.success(ParticleNetwork.getEnableSwap())
     }
+
     fun getChainInfo(chainName: String, chainIdName: String?): ChainInfo {
         var chainNameTmp = chainName
         if (ChainName.BSC.toString() == chainName) {
@@ -320,21 +331,26 @@ object WalletBridge {
         LogUtils.d("supportWalletConnect", enable.toString());
         ParticleNetwork.supportWalletConnect(enable);
     }
-    fun showLanguageSetting(isShow: Boolean){
+
+    fun showLanguageSetting(isShow: Boolean) {
         ParticleWallet.showSettingLanguage(isShow)
     }
-    fun showSettingAppearance(isShow: Boolean){
+
+    fun showSettingAppearance(isShow: Boolean) {
         ParticleWallet.showSettingAppearance(isShow)
     }
-    fun setSupportAddToken(isShow: Boolean){
+
+    fun setSupportAddToken(isShow: Boolean) {
         ParticleWallet.setSupportAddToken(isShow)
     }
+
     fun setDisplayTokenAddresses(tokenAddressJson: String) {
         val tokenAddresses = GsonUtils.fromJson<List<String>>(
             tokenAddressJson, object : TypeToken<List<String>>() {}.type
         )
         ParticleNetwork.displayTokenAddresses(tokenAddresses as MutableList<String>)
     }
+
     fun setDisplayNFTContractAddresses(nftContractAddresses: String) {
         val nftContractAddressList = GsonUtils.fromJson<List<String>>(
             nftContractAddresses, object : TypeToken<List<String>>() {}.type

@@ -283,6 +283,19 @@ class _ConnectDemoPageState extends State<ConnectDemoPage> {
                 width: double.infinity,
                 height: 50,
                 child: ElevatedButton(
+                    onPressed: () => {ConnectLogic.getAccounts()},
+                    child: const Text(
+                      "getAccounts",
+                      style: TextStyle(fontSize: 18),
+                    )),
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: SizedBox(
+                width: double.infinity,
+                height: 50,
+                child: ElevatedButton(
                     onPressed: () => {ConnectLogic.walletTypeState()},
                     child: const Text(
                       "Wallet ready state",

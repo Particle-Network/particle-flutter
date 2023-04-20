@@ -10,9 +10,12 @@ import com.particle.base.ChainInfo
 import com.particle.base.Env
 import com.particle.base.LanguageEnum
 import com.particle.base.ParticleNetwork
+import com.particle.base.analytics.AnalyticsService
+import com.particle.network.ParticleNetworkAuth.fastLogout
 import com.particle.network.ParticleNetworkAuth.getAddress
 import com.particle.network.ParticleNetworkAuth.getUserInfo
 import com.particle.network.ParticleNetworkAuth.isLogin
+import com.particle.network.ParticleNetworkAuth.isLoginAsync
 import com.particle.network.ParticleNetworkAuth.login
 import com.particle.network.ParticleNetworkAuth.logout
 import com.particle.network.ParticleNetworkAuth.openAccountAndSecurity
@@ -28,6 +31,9 @@ import com.particle.network.SignTypedDataVersion
 import com.particle.network.service.*
 import com.particle.network.service.model.*
 import io.flutter.plugin.common.MethodChannel
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import network.particle.auth_flutter.bridge.model.*
 import network.particle.auth_flutter.bridge.utils.ChainUtils
 import network.particle.auth_flutter.bridge.utils.EncodeUtils
@@ -111,6 +117,19 @@ object AuthBridge {
             override fun success(output: WebOutput) {
                 result.success(FlutterCallBack.success(output).toGson())
             }
+        })
+    }
+    fun fastLogout(result: MethodChannel.Result) {
+        LogUtils.d("fastLogout")
+        ParticleNetwork.fastLogout(object:FastLogoutCallBack{
+            override fun failure() {
+                result.success(FlutterCallBack.failed("failed").toGson())
+            }
+
+            override fun success() {
+                result.success(FlutterCallBack.success("success").toGson())
+            }
+
         })
     }
 
@@ -317,5 +336,16 @@ object AuthBridge {
         result.success(
             ParticleNetwork.isLogin()
         )
+    }
+
+    fun isLoginAsync(result: MethodChannel.Result) {
+        CoroutineScope(Dispatchers.IO).launch {
+            try {
+                val userInfo = ParticleNetwork.isLoginAsync()
+                result.success(FlutterCallBack.success(userInfo).toGson())
+            } catch (e: Exception) {
+                result.success(FlutterCallBack.failed("failed").toGson())
+            }
+        }
     }
 }

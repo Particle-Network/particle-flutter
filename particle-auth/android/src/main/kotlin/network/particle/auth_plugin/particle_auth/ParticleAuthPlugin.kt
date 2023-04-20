@@ -45,6 +45,9 @@ class ParticleAuthPlugin : FlutterPlugin, MethodCallHandler, ActivityAware {
             "logout" -> {
                 AuthBridge.logout(result)
             }
+            "fastLogout" -> {
+                AuthBridge.fastLogout(result)
+            }
             "getAddress" -> {
                 AuthBridge.getAddress(result)
             }
@@ -89,6 +92,9 @@ class ParticleAuthPlugin : FlutterPlugin, MethodCallHandler, ActivityAware {
             }
             "isLogin" -> {
                 AuthBridge.isLogin(result)
+            }
+            "isLoginAsync" -> {
+                AuthBridge.isLoginAsync(result)
             }
 
 

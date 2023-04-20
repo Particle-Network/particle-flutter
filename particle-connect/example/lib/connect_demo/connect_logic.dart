@@ -197,6 +197,10 @@ static void getChainInfo() async {
         await ParticleConnect.isConnected(walletType, getPublicAddress());
     showToast("isConnected: $result");
   }
+  static void getAccounts() async {
+    String result =  await ParticleConnect.getAccounts(walletType);
+    showToast("getAccounts: $result");
+  }
 
   static void logout() async {
     String result =

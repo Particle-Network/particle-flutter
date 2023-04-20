@@ -67,9 +67,11 @@ class AuthLogic {
 
   static void isLoginAsync() async {
     String result = await ParticleAuth.isLoginAsync();
+    print("isLoginAsync:"+result);
     if (jsonDecode(result)["status"] == true ||
         jsonDecode(result)["status"] == 1) {
       final userInfo = jsonDecode(result)["data"];
+      print("userInfo:"+userInfo);
       List<Map<String, dynamic>> wallets = (userInfo["wallets"] as List)
           .map((dynamic e) => e as Map<String, dynamic>)
           .toList();

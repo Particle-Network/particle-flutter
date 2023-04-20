@@ -70,7 +70,7 @@ class WalletLogic {
 
   static void navigatorBuyCrypto() {
     final config = BuyCryptoConfig(
-        walletAddress: "your wallet address",
+        walletAddress: "0xD000F000Aa1F8accbd5815056Ea32A54777b2Fc4",
         cryptoCoin: "USDT",
         fiatCoin: "USD",
         fiatAmt: 1000,

@@ -190,7 +190,7 @@ object ConnectBridge {
         val adapterAccounts: List<AdapterAccount> = ParticleConnect.getAccounts()
         var accounts: List<Account> = ArrayList()
         for (adapterAccount in adapterAccounts) {
-            if (adapterAccount.connectAdapter.name.equals(walletType)) {
+            if (adapterAccount.connectAdapter.name.equals(walletType,true)) {
                 accounts = adapterAccount.accounts
                 break
             }
