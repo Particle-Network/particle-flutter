@@ -119,9 +119,10 @@ object AuthBridge {
             }
         })
     }
+
     fun fastLogout(result: MethodChannel.Result) {
         LogUtils.d("fastLogout")
-        ParticleNetwork.fastLogout(object:FastLogoutCallBack{
+        ParticleNetwork.fastLogout(object : FastLogoutCallBack {
             override fun failure() {
                 result.success(FlutterCallBack.failed("failed").toGson())
             }
@@ -342,7 +343,11 @@ object AuthBridge {
         CoroutineScope(Dispatchers.IO).launch {
             try {
                 val userInfo = ParticleNetwork.isLoginAsync()
-                result.success(FlutterCallBack.success(userInfo).toGson())
+                if (userInfo != null) {
+                    result.success(FlutterCallBack.success(userInfo).toGson())
+                } else {
+                    result.success(FlutterCallBack.failed("failed").toGson())
+                }
             } catch (e: Exception) {
                 result.success(FlutterCallBack.failed("failed").toGson())
             }

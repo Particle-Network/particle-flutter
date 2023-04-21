@@ -70,25 +70,11 @@ class AuthLogic {
     print("isLoginAsync:"+result);
     if (jsonDecode(result)["status"] == true ||
         jsonDecode(result)["status"] == 1) {
-      final userInfo = jsonDecode(result)["data"];
-      print("userInfo:"+userInfo);
-      List<Map<String, dynamic>> wallets = (userInfo["wallets"] as List)
-          .map((dynamic e) => e as Map<String, dynamic>)
-          .toList();
-
-      for (var element in wallets) {
-        if (element["chainName"] == "solana") {
-          solPubAddress = element["publicAddress"];
-        } else if (element["chainName"] == "evm_chain") {
-          evmPubAddress = element["publicAddress"];
-        }
-      }
-      print("isLoginAsync: $userInfo");
-      showToast("isLoginAsync: $userInfo");
+        print("isLoginAsync: $result");
+        showToast("isLoginAsync: $result");
     } else {
-      final error = RpcError.fromJson(jsonDecode(result)["data"]);
-      print("isLoginAsync: $error");
-      showToast("isLoginAsync: $error");
+      print("isLoginAsync: $result");
+      showToast("isLoginAsync: $result");
     }
   }
 
