@@ -694,7 +694,7 @@ extension ParticleConnectPlugin {
             return
         }
         
-        adapter.signTypeData(publicAddress: publicAddress, data: message).subscribe { [weak self] result in
+        adapter.signTypedData(publicAddress: publicAddress, data: message).subscribe { [weak self] result in
             guard let self = self else { return }
             switch result {
             case .failure(let error):

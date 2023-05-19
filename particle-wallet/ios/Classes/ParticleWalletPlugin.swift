@@ -178,7 +178,7 @@ extension ParticleWalletPlugin {
         let tokenId = data["token_id"].stringValue
         let toAddress = data["receiver_address"].string
         let amount = data["amount"].int
-        let config = NFTSendConfig(address: address, toAddress: toAddress, tokenId: tokenId, amount: UInt(amount ?? 1))
+        let config = NFTSendConfig(address: address, toAddress: toAddress, tokenId: tokenId, amount: BInt(amount ?? 1))
         PNRouter.navigatorNFTSend(nftSendConfig: config)
     }
 
@@ -468,17 +468,17 @@ extension ParticleWalletPlugin {
              KRW,
          */
         if json.lowercased() == "usd" {
-            ParticleWalletGUI.setFiatCoin("USD")
+            ParticleNetwork.setFiatCoin(.usd)
         } else if json.lowercased() == "cny" {
-            ParticleWalletGUI.setFiatCoin("CNY")
+            ParticleNetwork.setFiatCoin(.cny)
         } else if json.lowercased() == "jpy" {
-            ParticleWalletGUI.setFiatCoin("JPY")
+            ParticleNetwork.setFiatCoin(.jpy)
         } else if json.lowercased() == "hkd" {
-            ParticleWalletGUI.setFiatCoin("HKD")
+            ParticleNetwork.setFiatCoin(.hkd)
         } else if json.lowercased() == "inr" {
-            ParticleWalletGUI.setFiatCoin("INR")
+            ParticleNetwork.setFiatCoin(.inr)
         } else if json.lowercased() == "krw" {
-            ParticleWalletGUI.setFiatCoin("KRW")
+            ParticleNetwork.setFiatCoin(.krw)
         }
     }
 
