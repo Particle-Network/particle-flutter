@@ -1,13 +1,8 @@
-package network.particle.auth_flutter.bridge.model;
+package network.particle.auth_flutter.bridge.model
 
-public class SignTypedData {
-
-    public String message;
-
-    public String version;
-
-//    public String getVersion() {
-//        return version.toLowerCase();
-//    }
-
+class SignTypedData {
+    var message: String? = null
+    var version: String? = null //    public String getVersion() {
+    //        return version.toLowerCase();
+    //    }
 }

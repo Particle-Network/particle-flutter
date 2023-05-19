@@ -10,7 +10,10 @@ import com.particle.base.ChainInfo
 import com.particle.base.Env
 import com.particle.base.LanguageEnum
 import com.particle.base.ParticleNetwork
-import com.particle.base.analytics.AnalyticsService
+import com.particle.base.data.SignOutput
+import com.particle.base.data.WebOutput
+import com.particle.base.data.WebServiceCallback
+import com.particle.base.data.WebServiceError
 import com.particle.network.ParticleNetworkAuth.fastLogout
 import com.particle.network.ParticleNetworkAuth.getAddress
 import com.particle.network.ParticleNetworkAuth.getUserInfo
@@ -54,8 +57,8 @@ object AuthBridge {
     fun init(activity: Activity, initParams: String?) {
         LogUtils.d("init", initParams)
         val initData = GsonUtils.fromJson(initParams, InitData::class.java)
-        val chainInfo = ChainUtils.getChainInfo(initData.chainName, initData.chainIdName)
-        ParticleNetwork.init(activity, Env.valueOf(initData.env.uppercase()), chainInfo)
+        val chainInfo = ChainUtils.getChainInfo(initData.chainName!!, initData.chainIdName)
+        ParticleNetwork.init(activity, Env.valueOf(initData.env!!.uppercase()), chainInfo)
     }
 
     /**
@@ -74,12 +77,12 @@ object AuthBridge {
             loginData.account
         }
         var supportAuthType = SupportAuthType.NONE.value
-        if (loginData.supportAuthTypeValues.contains("all")) {
+        if (loginData.supportAuthTypeValues!!.contains("all")) {
             supportAuthType = SupportAuthType.ALL.value
         } else {
-            for (i in 0 until loginData.supportAuthTypeValues.size) {
+            for (i in 0 until loginData.supportAuthTypeValues!!.size) {
                 try {
-                    val supportType = loginData.supportAuthTypeValues[i]
+                    val supportType = loginData.supportAuthTypeValues!![i]
                     val authType = SupportAuthType.valueOf(supportType.uppercase())
                     supportAuthType = supportAuthType or authType.value
                 } catch (e: Exception) {
@@ -90,14 +93,15 @@ object AuthBridge {
         var prompt: LoginPrompt? = null
         try {
             if (loginData.prompt != null)
-                prompt = LoginPrompt.valueOf(loginData.prompt)
+                prompt = LoginPrompt.valueOf(loginData.prompt!!)
         } catch (e: Exception) {
             e.printStackTrace()
         }
-        ParticleNetwork.login(LoginType.valueOf(loginData.loginType.uppercase()),
-            account,
-            supportAuthType, loginData.loginFormMode, prompt, object : WebServiceCallback<LoginOutput> {
+        ParticleNetwork.login(LoginType.valueOf(loginData.loginType!!.uppercase()),
+            account!!,
+            supportAuthType, loginData.loginFormMode?:false, prompt, object : WebServiceCallback<LoginOutput> {
                 override fun success(output: LoginOutput) {
+
                     result.success(FlutterCallBack.success(output).toGson())
                 }
 
@@ -203,8 +207,8 @@ object AuthBridge {
             SignTypedData::class.java
         )
         ParticleNetwork.signTypedData(
-            EncodeUtils.encode(signTypedData.message),
-            SignTypedDataVersion.valueOf(signTypedData.version.uppercase()),
+            EncodeUtils.encode(signTypedData.message!!),
+            SignTypedDataVersion.valueOf(signTypedData.version!!.uppercase()),
             object : WebServiceCallback<SignOutput> {
                 override fun failure(errMsg: WebServiceError) {
                     result.success(FlutterCallBack.failed(errMsg).toGson())
@@ -224,7 +228,7 @@ object AuthBridge {
             ChainData::class.java
         )
         try {
-            val chainInfo = ChainUtils.getChainInfo(chainData.chainName, chainData.chainIdName)
+            val chainInfo = ChainUtils.getChainInfo(chainData.chainName!!, chainData.chainIdName)
             if (!ParticleNetwork.isLogin()) {
                 ParticleNetwork.setChainInfo(chainInfo)
                 result.success(true)
@@ -257,7 +261,7 @@ object AuthBridge {
             chainParams,
             ChainData::class.java
         )
-        val chainInfo = ChainUtils.getChainInfo(chainData.chainName, chainData.chainIdName)
+        val chainInfo = ChainUtils.getChainInfo(chainData.chainName!!, chainData.chainIdName)
         ParticleNetwork.setChainInfo(chainInfo, object : ChainChangeCallBack {
             override fun success() {
                 result.success(true)

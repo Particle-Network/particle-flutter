@@ -1,27 +1,25 @@
-package network.particle.auth_flutter.bridge.model;
+package network.particle.auth_flutter.bridge.model
 
-import com.google.gson.annotations.SerializedName;
+import com.google.gson.annotations.SerializedName
 
-public class FlutterErrorMessage {
-    public static final int ExceptionCode = 10000;
+class FlutterErrorMessage {
     @SerializedName("code")
-    public int code;
+    var code = 0
 
     @SerializedName("message")
-    public String message;
+    var message: String? = null
 
-
-    public FlutterErrorMessage(int code, String message) {
-        this.code = code;
-        this.message = message;
+    constructor(code: Int, message: String?) {
+        this.code = code
+        this.message = message
     }
 
-    public FlutterErrorMessage() {
+    constructor() {}
+
+    companion object {
+        const val ExceptionCode = 10000
+        fun exceptionMsg(message: String?): FlutterErrorMessage {
+            return FlutterErrorMessage(ExceptionCode, message)
+        }
     }
-
-    public static FlutterErrorMessage exceptionMsg(String message) {
-        return new FlutterErrorMessage(ExceptionCode, message);
-    }
-
-
 }

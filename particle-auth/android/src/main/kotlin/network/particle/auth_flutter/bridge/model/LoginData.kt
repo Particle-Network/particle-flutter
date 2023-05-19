@@ -1,23 +1,18 @@
-package network.particle.auth_flutter.bridge.model;
+package network.particle.auth_flutter.bridge.model
 
-import com.google.gson.annotations.SerializedName;
+import com.google.gson.annotations.SerializedName
 
-import java.util.List;
-
-
-public class LoginData {
-
+class LoginData {
     @SerializedName("login_type")
-    public String loginType;
-
-    public String account;
+    var loginType: String? = null
+    var account: String? = null
 
     @SerializedName("support_auth_type_values")
-    public List<String> supportAuthTypeValues;
+    var supportAuthTypeValues: List<String>? = null
 
     @SerializedName("social_login_prompt")
-    public String prompt;
+    var prompt: String? = null
 
     @SerializedName("login_form_mode")
-    public Boolean loginFormMode;
+    var loginFormMode: Boolean? = null
 }

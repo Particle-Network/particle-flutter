@@ -1,12 +1,11 @@
-package network.particle.auth_flutter.bridge.model;
+package network.particle.auth_flutter.bridge.model
 
-import com.google.gson.annotations.SerializedName;
+import com.google.gson.annotations.SerializedName
 
-public class RpcUrl {
-
+class RpcUrl {
     @SerializedName("evm_url")
-    public String evmUrl;
+    var evmUrl: String? = null
 
     @SerializedName("sol_url")
-    public String solUrl;
+    var solUrl: String? = null
 }

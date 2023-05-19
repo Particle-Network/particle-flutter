@@ -1,38 +1,43 @@
-package network.particle.auth_flutter.bridge.model;
+package network.particle.auth_flutter.bridge.model
 
-import com.google.gson.Gson;
-import com.google.gson.annotations.SerializedName;
+import com.google.gson.Gson
+import com.google.gson.annotations.SerializedName
 
-public class FlutterCallBack<T> {
-
-    public enum FlutterCallBackStatus {
-        Failed, Success;
+class FlutterCallBack<T>(status: FlutterCallBackStatus, t: T) {
+    enum class FlutterCallBackStatus {
+        Failed, Success
     }
 
     @SerializedName("status")
-    public int status;
+    var status: Int
 
     @SerializedName("data")
-    public T t;
+    var t: T
 
-    public FlutterCallBack(FlutterCallBackStatus status, T t) {
-        this.status = status.ordinal();
-        this.t = t;
-    }
-    public static  FlutterCallBack successStr() {
-        return new FlutterCallBack(FlutterCallBackStatus.Success,"success");
-    }
-    public static <T> FlutterCallBack success(T t) {
-        return new FlutterCallBack(FlutterCallBackStatus.Success, t);
-    }
-    public static FlutterCallBack failedStr() {
-        return new FlutterCallBack(FlutterCallBackStatus.Failed, "failed");
-    }
-    public static <T> FlutterCallBack failed(T t) {
-        return new FlutterCallBack(FlutterCallBackStatus.Failed, t);
+    init {
+        this.status = status.ordinal
+        this.t = t
     }
 
-    public String toGson() {
-        return new Gson().toJson(this);
+    fun toGson(): String {
+        return Gson().toJson(this)
+    }
+
+    companion object {
+        fun successStr(): FlutterCallBack<*> {
+            return FlutterCallBack<Any?>(FlutterCallBackStatus.Success, "success")
+        }
+
+        fun <T> success(t: T): FlutterCallBack<*> {
+            return FlutterCallBack<Any?>(FlutterCallBackStatus.Success, t)
+        }
+
+        fun failedStr(): FlutterCallBack<*> {
+            return FlutterCallBack<Any?>(FlutterCallBackStatus.Failed, "failed")
+        }
+
+        fun <T> failed(t: T): FlutterCallBack<*> {
+            return FlutterCallBack<Any?>(FlutterCallBackStatus.Failed, t)
+        }
     }
 }

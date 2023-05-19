@@ -1,19 +1,17 @@
-package network.particle.auth_flutter.bridge.model;
+package network.particle.auth_flutter.bridge.model
 
-import com.google.gson.annotations.SerializedName;
+import com.google.gson.annotations.SerializedName
 
-
-public class ChainData {
-
+class ChainData {
     @SerializedName("chain_name")
-    public String chainName;
+    var chainName: String? = null
 
     @SerializedName("chain_id")
-    public int chainId;
+    var chainId = 0
 
     @SerializedName("chain_id_name")
-    public String chainIdName;
+    var chainIdName: String? = null
 
     @SerializedName("env")
-    public String env;
+    var env: String? = null
 }
