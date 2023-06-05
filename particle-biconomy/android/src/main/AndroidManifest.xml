@@ -1,0 +1,34 @@
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="network.particle.biconomy_plugin.particle_biconomy">
+
+    <application>
+        <!--   Particle Network config start     -->
+        <activity
+            android:name="com.particle.network.controller.WebActivity"
+            android:configChanges="orientation|keyboardHidden|screenSize"
+            android:exported="true"
+            android:launchMode="singleTask"
+            android:theme="@style/ThemeAuthWeb">
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+
+                <category android:name="android.intent.category.BROWSABLE" />
+
+                <data android:scheme="pn${PN_APP_ID}" />
+            </intent-filter>
+        </activity>
+
+        <meta-data
+            android:name="particle.network.project_id"
+            android:value="${PN_PROJECT_ID}" />
+        <meta-data
+            android:name="particle.network.project_client_key"
+            android:value="${PN_PROJECT_CLIENT_KEY}" />
+        <meta-data
+            android:name="particle.network.app_id"
+            android:value="${PN_APP_ID}" />
+        <!--   Particle Network config end     -->
+    </application>
+</manifest>

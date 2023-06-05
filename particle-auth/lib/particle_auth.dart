@@ -163,7 +163,6 @@ class ParticleAuth {
   ///
   /// [chainInfo] Chain info, for example EthereumChain, BscChain.
   static Future<bool> setChainInfo(ChainInfo chainInfo) async {
-    if (Platform.isIOS) {}
     return await _channel.invokeMethod(
         'setChainInfo',
         jsonEncode({
