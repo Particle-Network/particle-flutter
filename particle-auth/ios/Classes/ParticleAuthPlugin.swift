@@ -483,10 +483,22 @@ public extension ParticleAuthPlugin {
         let data = JSON(parseJSON: json)
         let transaction = data["transaction"].stringValue
         let mode = data["fee_mode"]["option"].stringValue
-        var feeMode: Biconomy.FeeMode
-        if mode ==
+        var feeMode: Biconomy.FeeMode?
+        if mode == "auto" {
+            feeMode = .auto
+        } else if mode == "gasless" {
+            feeMode = .gasless
+        } else if mode == "custom" {
+            let feeQuoteJson = JSON(parseJSON:  data["fee_mode"]["fee_quote"].stringValue)
+            let feeQuote = Biconomy.FeeQuote.init(json: feeQuoteJson)
+            feeMode = .custom(feeQuote)
+        }
+        guard let feeMode = feeMode else {
+            flutterResult(FlutterError(code: "", message: "json is wrong", details: nil))
+            return
+        }
         
-        ParticleAuthService.signAndSendTransaction(transaction, feeMode: .auto).subscribe { [weak self] result in
+        ParticleAuthService.signAndSendTransaction(transaction, feeMode: feeMode).subscribe { [weak self] result in
             guard let self = self else { return }
             switch result {
             case .failure(let error):

@@ -13,13 +13,13 @@ class BiconomyFeeMode {
   // toJson
   Map<String, dynamic> toJson() => {
         'option': option,
-        'feeQuote': feeQuote,
+        'fee_quote': feeQuote,
       };
 
   // fromJson
   BiconomyFeeMode.fromJson(Map<String, dynamic> json)
       : option = json['option'],
-        feeQuote = json['feeQuote'];
+        feeQuote = json['fee_quote'];
 
 }
 
