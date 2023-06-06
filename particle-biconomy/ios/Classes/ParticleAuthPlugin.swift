@@ -149,8 +149,8 @@ public extension ParticleBiconomyPlugin {
         biconomy.rpcGetFeeQuotes(eoaAddress: eoaAddress, transactions: transactions).subscribe { [weak self] result in
             guard let self = self else { return }
             switch result {
-            case .success(let quetes):
-                let objects =  quetes.map {
+            case .success(let quotes):
+                let objects =  quotes.map {
                     let data = try! JSONEncoder().encode( $0.jsonObject)
                     return String(data: data, encoding: .utf8)!
                 }

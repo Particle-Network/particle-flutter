@@ -2,8 +2,10 @@ import 'dart:convert';
 import 'dart:io' show Platform;
 import 'dart:math';
 
+import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
 import 'package:particle_auth/model/chain_info.dart';
+import 'package:particle_auth/network/model/rpc_error.dart';
 import 'package:particle_biconomy/model/biconomy_version.dart';
 
 class ParticleBiconomy {
@@ -66,7 +68,19 @@ class ParticleBiconomy {
 
   static Future<List<String>> rpcGetFeeQuotes(
       String eoaAddress, List<String> transactions) async {
-    return await _channel.invokeMethod("rpcGetFeeQuotes",
+    final result = await _channel.invokeMethod("rpcGetFeeQuotes",
         jsonEncode({"eoa_address": eoaAddress, "transactions": transactions}));
+    final status = jsonDecode(result)["status"];
+    final data = jsonDecode(result)["data"];
+    if (status == true || status == 1) {
+      List<String> stringList = <String>[];
+      for (var item in data) {
+        stringList.add(item as String);
+      }
+      return stringList;
+    } else {
+      final error = RpcError.fromJson(data);
+      throw error;
+    }
   }
 }

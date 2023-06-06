@@ -70,6 +70,7 @@ class BiconomyLogic {
         await ParticleBiconomy.rpcGetFeeQuotes(publicAddress, transactions);
 
     print(result);
+    
     showToast("rpcGetFeeQuotes: $result");
   }
 

@@ -145,7 +145,7 @@ class BiconomyDemoPageState extends State<BiconomyDemoPage> {
                 child: ElevatedButton(
                     onPressed: () => {BiconomyLogic.signAndSendTransactionWithBiconomyAuto()},
                     child: const Text(
-                      "Is support chain info",
+                      "send with biconomy auto",
                       style: TextStyle(fontSize: 18),
                     )),
               ),
@@ -158,7 +158,7 @@ class BiconomyDemoPageState extends State<BiconomyDemoPage> {
                 child: ElevatedButton(
                     onPressed: () => {BiconomyLogic.signAndSendTransactionWithBiconomyGasless()},
                     child: const Text(
-                      "Is support chain info",
+                      "send with biconomy gasless",
                       style: TextStyle(fontSize: 18),
                     )),
               ),
@@ -171,7 +171,7 @@ class BiconomyDemoPageState extends State<BiconomyDemoPage> {
                 child: ElevatedButton(
                     onPressed: () => {BiconomyLogic.signAndSendTransactionWithBiconomyCustom()},
                     child: const Text(
-                      "Is support chain info",
+                      "send with biconomy custom",
                       style: TextStyle(fontSize: 18),
                     )),
               ),
