@@ -1,13 +1,8 @@
 import 'dart:convert';
 import 'dart:io';
-
-import 'package:particle_auth_example/model/serialize_trans_result_entity.dart';
-import 'package:particle_auth_example/net/request_body_entity.dart';
+import 'package:particle_auth/network/net/request_body_entity.dart';
 import 'package:retrofit/retrofit.dart';
 import 'package:dio/dio.dart';
-
-import '../generated/json/base/json_field.dart';
-
 part 'rest_client.g.dart';
 
 String projectId = ""; //your project id
@@ -21,14 +16,6 @@ abstract class SolanaRpcApi {
 
   @POST("solana")
   Future<String> rpc(@Body() RequestBodyEntity requestBody);
-
-  @POST("solana")
-  Future<SerializeTransResultEntity> enhancedSerializeTransaction(
-      @Body() RequestBodyEntity requestBody);
-
-  @POST("solana")
-  Future<dynamic> enhancedSerializeTransactionDynamic(
-      @Body() RequestBodyEntity requestBody);
 
   static SolanaRpcApi getClient() {
     if (_instace != null) return _instace!;
@@ -93,3 +80,4 @@ authenticate(String projectId, String clientKey) {
   auth = "Basic $auth";
   return auth;
 }
+

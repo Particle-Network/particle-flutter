@@ -1,5 +1,4 @@
 import 'dart:convert';
-import 'dart:io';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/widgets.dart';
 import 'package:oktoast/oktoast.dart';
@@ -9,10 +8,10 @@ import 'package:particle_auth/model/language.dart';
 import 'package:particle_auth/model/login_info.dart';
 import 'package:particle_auth/model/security_account_config.dart';
 import 'package:particle_auth/model/typeddata_version.dart';
+import 'package:particle_auth/network/model/rpc_error.dart';
 import 'package:particle_auth/particle_auth.dart';
 import 'package:particle_auth_example/mock/transaction_mock.dart';
-import 'package:particle_auth_example/model/pn_account_info_entity.dart';
-import 'package:particle_auth_example/net/rest_client.dart';
+
 
 class AuthLogic {
   static late ChainInfo currChainInfo;

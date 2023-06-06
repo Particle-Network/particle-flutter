@@ -17,9 +17,7 @@ A flutter plugin project for particle auth
   s.dependency 'Flutter'
   s.platform = :ios, '13.0'
 
-  s.swift_version = '5.0'
-
-
+  s.swift_version = '5.7'
   s.dependency 'ParticleAuthService'
-  s.dependency 'BigInt', '~> 5.2.0'
+
 end

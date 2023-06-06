@@ -195,6 +195,13 @@ class ParticleAuth {
     return await _channel.invokeMethod('getChainInfo');
   }
 
+static Future<int> getChainId() async {
+ String result = await getChainInfo();
+    int chainId = jsonDecode(result)["chain_id"];
+    return chainId;
+  }
+
+
   /// Open web wallet
   static openWebWallet() async {
     _channel.invokeMethod('openWebWallet');

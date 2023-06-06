@@ -1,12 +1,9 @@
 import 'dart:convert';
 import 'dart:math';
-
+import 'package:particle_auth/network/model/serialize_sol_transreqentity.dart';
+import 'package:particle_auth/network/net/particle_rpc.dart';
+import 'package:particle_auth/network/net/request_body_entity.dart';
 import 'package:particle_auth_example/mock/test_account.dart';
-import 'package:particle_auth_example/model/serialize_sol_transreqentity.dart';
-import 'package:particle_auth_example/model/serialize_trans_result_entity.dart';
-import 'package:particle_auth_example/net/particle_rpc.dart';
-import 'package:particle_auth_example/net/request_body_entity.dart';
-import 'package:uuid/uuid.dart';
 
 class TransactionMock {
   static Future<String> mockSolanaTransaction(String sendPubKey) async {
@@ -15,9 +12,9 @@ class TransactionMock {
     req.receiver = TestAccount.solana.publicAddress;
     req.sender = sendPubKey;
 
-    SerializeTransResultEntity resultEntity =
+    final response =
         await SolanaService.enhancedSerializeTransaction(req);
-    return resultEntity.result.transaction.serialized;
+       return jsonDecode(response)["result"]["transaction"]["serialized"];
   }
 
   /// Mock a transaction
@@ -326,7 +323,7 @@ class TransactionMock {
     String contractAddress = "your contract address";
     String methodName =
         "mint"; // this is your contract method name, like balanceOf, mint.
-    List<Object> params = <Object>["1"]; // this is the method params.
+    List<Object> parameters = <Object>["1"]; // this is the method params.
     // this is your contract ABI json string
 
     // abi json string, you can get it from your contract developer.
@@ -335,22 +332,22 @@ class TransactionMock {
     const abiJsonString = null;
     // first, get the data
     final customMethodCall = await EvmService.customMethod(
-        contractAddress, methodName, params, abiJsonString);
+        contractAddress, methodName, parameters, abiJsonString);
     final data = jsonDecode(customMethodCall)["result"];
 
     // second, rpc request eth_call
     final req = RequestBodyEntity();
     // be sure the chain id is what you want
     req.chainId = TestAccount.evm.chainId;
-    req.jsonrpc = "2.0";
-    req.id = const Uuid().v4();
-    req.method = "eth_call";
-    req.params = [
+
+
+    const method = "eth_call";
+    final params = [
       {"to": contractAddress, "data": data, "from": from},
       "latest"
     ];
 
-    final result = await EvmService.rpc(req);
+    final result = await EvmService.rpc(method, params);
     return result;
   }
 }
