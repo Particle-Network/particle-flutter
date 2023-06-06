@@ -66,16 +66,18 @@ class ParticleBiconomy {
     _channel.invokeMethod("disableBiconomyMode");
   }
 
-  static Future<String> rpcGetFeeQuotes(
+  static Future<dynamic> rpcGetFeeQuotes(
       String eoaAddress, List<String> transactions) async {
     final result = await _channel.invokeMethod("rpcGetFeeQuotes",
         jsonEncode({"eoa_address": eoaAddress, "transactions": transactions}));
     final status = jsonDecode(result)["status"];
     final data = jsonDecode(result)["data"];
     if (status == true || status == 1) {
-      List<String> stringList = <String>[];
-      for (var item in data) {
-        stringList.add(item as String);
+      var data = jsonDecode(result)["data"];
+      var dataList = jsonDecode(data);
+      List<dynamic> stringList = <dynamic>[];
+      for (var item in dataList) {
+        stringList.add(item);
       }
       return stringList;
     } else {

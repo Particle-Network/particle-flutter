@@ -71,13 +71,7 @@ class BiconomyLogic {
     List<String> transactions = <String>[transaction];
     var result =
         await ParticleBiconomy.rpcGetFeeQuotes(publicAddress, transactions);
-    if (jsonDecode(result)["status"] == true ||
-        jsonDecode(result)["status"] == 1) {
-        var data = jsonDecode(result)["data"];
-        var data0 = jsonDecode(data)[0];
-        print(jsonEncode(data0));
-    }
-    // print(result);
+    print(result[0]["address"]);
     showToast("rpcGetFeeQuotes: $result");
   }
 
