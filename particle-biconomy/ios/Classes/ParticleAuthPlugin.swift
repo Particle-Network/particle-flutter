@@ -150,12 +150,10 @@ public extension ParticleBiconomyPlugin {
             guard let self = self else { return }
             switch result {
             case .success(let quotes):
-                let objects =  quotes.map {
-                    let data = try! JSONEncoder().encode( $0.jsonObject)
-                    return String(data: data, encoding: .utf8)!
+                let feeQuotes = quotes.map {
+                    $0.jsonObject
                 }
-                
-                let statusModel = FlutterStatusModel(status: true, data: objects)
+                let statusModel = FlutterStatusModel(status: true, data: feeQuotes)
                 let data = try! JSONEncoder().encode(statusModel)
                 guard let json = String(data: data, encoding: .utf8) else { return }
                 flutterResult(json)

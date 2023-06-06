@@ -40,6 +40,9 @@ class ParticleBiconomy {
     }
   }
 
+  /// Is support chain info
+  /// 
+  /// [chainInfo] Chain info
   static Future<bool> isSupportChainInfo(ChainInfo chainInfo) async {
     return await _channel.invokeMethod(
         'isSupportChainInfo',
@@ -50,36 +53,39 @@ class ParticleBiconomy {
         }));
   }
 
+  /// Has eoa address deployed contract in current chain.
+  /// 
+  /// [eoaAddress] Eoa address
   static Future<String> isDeploy(String eoaAddress) async {
     return await _channel.invokeMethod('isDeploy', eoaAddress);
   }
 
+  /// Is biconomy mode enable
   static Future<bool> isBiconomyModeEnable() async {
     return await _channel.invokeMethod("isBiconomyModeEnable");
   }
 
+  /// Enable biconomy mode
   static enableBiconomyMode() {
     _channel.invokeMethod("enableBiconomyMode");
   }
 
+  /// Disable biconomy mode
   static disableBiconomyMode() {
     _channel.invokeMethod("disableBiconomyMode");
   }
 
+  /// Rpc get fee quotes
   static Future<List<dynamic>> rpcGetFeeQuotes(
       String eoaAddress, List<String> transactions) async {
     final result = await _channel.invokeMethod("rpcGetFeeQuotes",
         jsonEncode({"eoa_address": eoaAddress, "transactions": transactions}));
+
     final status = jsonDecode(result)["status"];
     final data = jsonDecode(result)["data"];
     if (status == true || status == 1) {
       var data = jsonDecode(result)["data"];
-      var dataList = jsonDecode(data);
-      List<dynamic> stringList = <dynamic>[];
-      for (var item in dataList) {
-        stringList.add(item);
-      }
-      return stringList;
+      return data;
     } else {
       final error = RpcError.fromJson(data);
       throw error;

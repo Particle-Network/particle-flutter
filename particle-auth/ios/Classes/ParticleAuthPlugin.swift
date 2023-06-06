@@ -489,7 +489,7 @@ public extension ParticleAuthPlugin {
         } else if mode == "gasless" {
             feeMode = .gasless
         } else if mode == "custom" {
-            let feeQuoteJson = JSON(parseJSON:  data["fee_mode"]["fee_quote"].stringValue)
+            let feeQuoteJson = JSON( data["fee_mode"]["fee_quote"].dictionaryValue)
             let feeQuote = Biconomy.FeeQuote.init(json: feeQuoteJson)
             feeMode = .custom(feeQuote)
         }
