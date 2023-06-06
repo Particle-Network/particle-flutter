@@ -42,6 +42,7 @@ public class ParticleAuthPlugin: NSObject, FlutterPlugin {
         case fastLogout
         case setUserInfo
         case getSmartAccount
+        case batchSendTransactions
     }
     
     public static func register(with registrar: FlutterPluginRegistrar) {
@@ -113,6 +114,8 @@ public class ParticleAuthPlugin: NSObject, FlutterPlugin {
             self.setUserInfo(json as? String, flutterResult: result)
         case .getSmartAccount:
             self.getSmartAccount(flutterResult: result)
+        case .batchSendTransactions:
+            self.batchSendTransactions(json as? String, flutterResult: result)
         }
     }
 }
@@ -518,6 +521,61 @@ public extension ParticleAuthPlugin {
         }.disposed(by: self.bag)
     }
     
+    func batchSendTransactions(_ json: String?, flutterResult: @escaping FlutterResult) {
+        guard let json = json else {
+            flutterResult(FlutterError(code: "", message: "json is nil", details: nil))
+            return
+        }
+        
+        let data = JSON(parseJSON: json)
+        let transactions = data["transactions"].arrayValue.map {
+            $0.stringValue
+        }
+        let mode = data["fee_mode"]["option"].stringValue
+        var feeMode: Biconomy.FeeMode?
+        if mode == "auto" {
+            feeMode = .auto
+        } else if mode == "gasless" {
+            feeMode = .gasless
+        } else if mode == "custom" {
+            let feeQuoteJson = JSON(data["fee_mode"]["fee_quote"].dictionaryValue)
+            let feeQuote = Biconomy.FeeQuote(json: feeQuoteJson)
+            feeMode = .custom(feeQuote)
+        }
+        guard let feeMode = feeMode else {
+            flutterResult(FlutterError(code: "", message: "json is wrong", details: nil))
+            return
+        }
+        
+        guard let biconomy = ParticleNetwork.getBiconomyService() else {
+            flutterResult(FlutterError(code: "", message: "biconomy is not init", details: nil))
+            return
+        }
+        
+        guard biconomy.isBiconomyModeEnable() else {
+            flutterResult(FlutterError(code: "", message: "biconomy is not enable", details: nil))
+            return
+        }
+        
+        biconomy.quickSendTransactions(transactions, feeMode: feeMode, messageSigner: self).subscribe {
+            [weak self] result in
+                guard let self = self else { return }
+                switch result {
+                case .failure(let error):
+                    let response = self.ResponseFromError(error)
+                    let statusModel = FlutterStatusModel(status: false, data: response)
+                    let data = try! JSONEncoder().encode(statusModel)
+                    guard let json = String(data: data, encoding: .utf8) else { return }
+                    flutterResult(json)
+                case .success(let signature):
+                    let statusModel = FlutterStatusModel(status: true, data: signature)
+                    let data = try! JSONEncoder().encode(statusModel)
+                    guard let json = String(data: data, encoding: .utf8) else { return }
+                    flutterResult(json)
+                }
+        }.disposed(by: self.bag)
+    }
+    
     func signTypedData(_ json: String?, flutterResult: @escaping FlutterResult) {
         guard let json = json else {
             flutterResult(FlutterError(code: "", message: "json is nil", details: nil))
@@ -694,4 +752,20 @@ public extension ParticleAuthPlugin {
                 }
         }.disposed(by: self.bag)
     }
+}
+
+extension ParticleAuthPlugin: MessageSigner {
+    public func signTypedData(_ message: String) -> RxSwift.Single<String> {
+        return ParticleAuthService.signTypedData(message, version: .v4)
+    }
+    
+    public func signMessage(_ message: String) -> RxSwift.Single<String> {
+        return ParticleAuthService.signMessage(message)
+    }
+    
+    public func getEoaAddress() -> String {
+        ParticleAuthService.getAddress()
+    }
+    
+    
 }

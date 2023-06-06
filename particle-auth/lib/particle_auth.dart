@@ -165,6 +165,18 @@ class ParticleAuth {
     return await _channel.invokeMethod('signAndSendTransaction', json);
   }
 
+  /// Batch send transactions
+  /// 
+  /// [transactions] transactions you want to sign and send.
+  /// 
+  /// [feeMode] is optional, works with biconomy service.
+  /// 
+  /// Result signature or error.
+  static Future<String> batchSendTransactions(List<String> transactions, {BiconomyFeeMode? feeMode}) async {
+     final json = jsonEncode({"transactions": transactions, "fee_mode": feeMode});
+    return await _channel.invokeMethod('batchSendTransactions', json);
+  }
+
   /// Sign typed data, only support evm chain.
   ///
   /// [typedData] typed data you want to sign.

@@ -76,6 +76,14 @@ class ParticleBiconomy {
   }
 
   /// Rpc get fee quotes
+  /// 
+  /// Pick one fee quote, then send with BiconomyFeeMode.custom
+  ///  
+  /// [eoaAddress] Eoa address
+  /// 
+  /// [transactions] transactions
+  /// 
+  /// return fee quote list
   static Future<List<dynamic>> rpcGetFeeQuotes(
       String eoaAddress, List<String> transactions) async {
     final result = await _channel.invokeMethod("rpcGetFeeQuotes",

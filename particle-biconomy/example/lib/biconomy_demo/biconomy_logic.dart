@@ -120,4 +120,13 @@ class BiconomyLogic {
     final result = await ParticleAuth.setChainInfo(PolygonChain.mumbai());
     print(result);
   }
+
+  static void batchSendTransactions() async {
+     final publicAddress = await ParticleAuth.getAddress();
+    final transaction = await TransactionMock.mockEvmSendNative(publicAddress);
+
+    List<String> transactions = <String>[transaction, transaction];
+    final signature = await ParticleAuth.batchSendTransactions(transactions, feeMode: BiconomyFeeMode.auto());
+    showToast("signature $signature");
+  }
 }

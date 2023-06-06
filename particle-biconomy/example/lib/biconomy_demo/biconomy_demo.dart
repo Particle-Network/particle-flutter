@@ -176,6 +176,19 @@ class BiconomyDemoPageState extends State<BiconomyDemoPage> {
                     )),
               ),
             ),
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: SizedBox(
+                width: double.infinity,
+                height: 50,
+                child: ElevatedButton(
+                    onPressed: () => {BiconomyLogic.batchSendTransactions()},
+                    child: const Text(
+                      "batch send transactions",
+                      style: TextStyle(fontSize: 18),
+                    )),
+              ),
+            ),
           ],
         ),
       ),
