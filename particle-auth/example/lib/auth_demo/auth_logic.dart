@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/widgets.dart';
 import 'package:oktoast/oktoast.dart';
+import 'package:particle_auth/model/biconomy_version.dart';
 import 'package:particle_auth/model/chain_info.dart';
 import 'package:particle_auth/model/ios_modal_present_style.dart';
 import 'package:particle_auth/model/language.dart';
@@ -10,6 +11,7 @@ import 'package:particle_auth/model/particle_info.dart';
 import 'package:particle_auth/model/security_account_config.dart';
 import 'package:particle_auth/model/typeddata_version.dart';
 import 'package:particle_auth/network/model/rpc_error.dart';
+import 'package:particle_auth/network/net/particle_rpc.dart';
 import 'package:particle_auth/particle_auth.dart';
 import 'package:particle_auth_example/mock/transaction_mock.dart';
 
@@ -89,7 +91,8 @@ class AuthLogic {
 
 
   static void getSmartAccount() async {
-    String result = await ParticleAuth.getSmartAccount();
+    const eoaAddress = "";
+    String result = await EvmService.getSmartAccount([eoaAddress], BiconomyVersion.v1_0_0);
     print("getSmartAccount:" + result);
     if (jsonDecode(result)["status"] == true ||
         jsonDecode(result)["status"] == 1) {

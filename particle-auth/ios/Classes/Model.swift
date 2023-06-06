@@ -196,6 +196,22 @@ extension NSObject {
             if chainId == 84531 {
                 chainInfo = .base(.testnet)
             }
+        } else if name == "linea" {
+            if chainId == 59140 {
+                chainInfo = .linea(.goerli)
+            }
+        } else if name == "combo" {
+            if chainId == 91715 {
+                chainInfo = .combo(.testnet)
+            }
+        } else if name == "mantle" {
+            if chainId == 5001 {
+                chainInfo = .mantle(.testnet)
+            }
+        } else if name == "zkmeta" {
+            if chainId == 23122 {
+                chainInfo = .zkMeta(.testnet)
+            }
         }
         return chainInfo
     }
@@ -263,6 +279,14 @@ extension NSObject {
             chain = .polygonZkEVM
         } else if name == "base" {
             chain = .base
+        } else if name == "linea" {
+            chain = .linea
+        } else if name == "combo" {
+            chain = .combo
+        } else if name == "mantle" {
+            chain = .mantle
+        } else if name == "zkmeta" {
+            chain = .zkMeta
         }
         return chain
     }

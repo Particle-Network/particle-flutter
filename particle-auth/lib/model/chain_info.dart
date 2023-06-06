@@ -772,7 +772,7 @@ class MantleChain implements ChainInfo {
   // }
 
   static MantleChain testnet() {
-    return MantleChain(59140, "Testnet");
+    return MantleChain(5001, "Testnet");
   }
 }
 

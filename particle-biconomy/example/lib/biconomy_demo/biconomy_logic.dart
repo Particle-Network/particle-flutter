@@ -6,6 +6,7 @@ import 'package:particle_auth/model/biconomy_version.dart';
 import 'package:particle_auth/model/chain_info.dart';
 import 'package:particle_auth/model/login_info.dart';
 import 'package:particle_auth/model/particle_info.dart';
+import 'package:particle_auth/network/model/rpc_error.dart';
 import 'package:particle_biconomy/particle_biconomy.dart';
 import 'package:particle_auth/particle_auth.dart';
 import 'package:particle_biconomy_example/mock/transaction_mock.dart';
@@ -47,7 +48,16 @@ class BiconomyLogic {
   static void isDeploy() async {
     const eoaAddress = "0x16380a03f21e5a5e339c15ba8ebe581d194e0db3";
     var result = await ParticleBiconomy.isDeploy(eoaAddress);
-    print(result);
+    final status = jsonDecode(result)["status"];
+    final data = jsonDecode(result)["data"];
+    if (status == true || status == 1) {
+      var isDelpoy = jsonDecode(result)["data"];
+      print(isDelpoy);
+    } else {
+      final error = RpcError.fromJson(data);
+      print(error);
+    }
+
     showToast("isDeploy: $result");
   }
 

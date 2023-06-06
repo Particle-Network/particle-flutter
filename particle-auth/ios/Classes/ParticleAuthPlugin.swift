@@ -41,7 +41,6 @@ public class ParticleAuthPlugin: NSObject, FlutterPlugin {
         case setLanguage
         case fastLogout
         case setUserInfo
-        case getSmartAccount
         case batchSendTransactions
     }
     
@@ -112,8 +111,7 @@ public class ParticleAuthPlugin: NSObject, FlutterPlugin {
             self.fastLogout(flutterResult: result)
         case .setUserInfo:
             self.setUserInfo(json as? String, flutterResult: result)
-        case .getSmartAccount:
-            self.getSmartAccount(flutterResult: result)
+     
         case .batchSendTransactions:
             self.batchSendTransactions(json as? String, flutterResult: result)
         }
@@ -732,26 +730,6 @@ public extension ParticleAuthPlugin {
             ParticleNetwork.setLanguage(.ko)
         }
     }
-    
-    func getSmartAccount(flutterResult: @escaping FlutterResult) {
-        ParticleAuthService.getSmartAccount().subscribe {
-            [weak self] result in
-                guard let self = self else { return }
-                switch result {
-                case .failure(let error):
-                    let response = self.ResponseFromError(error)
-                    let statusModel = FlutterStatusModel(status: false, data: response)
-                    let data = try! JSONEncoder().encode(statusModel)
-                    guard let json = String(data: data, encoding: .utf8) else { return }
-                    flutterResult(json)
-                case .success(let smartAccount):
-                    let statusModel = FlutterStatusModel(status: true, data: smartAccount)
-                    let data = try! JSONEncoder().encode(statusModel)
-                    guard let json = String(data: data, encoding: .utf8) else { return }
-                    flutterResult(json)
-                }
-        }.disposed(by: self.bag)
-    }
 }
 
 extension ParticleAuthPlugin: MessageSigner {
@@ -766,6 +744,4 @@ extension ParticleAuthPlugin: MessageSigner {
     public func getEoaAddress() -> String {
         ParticleAuthService.getAddress()
     }
-    
-    
 }
