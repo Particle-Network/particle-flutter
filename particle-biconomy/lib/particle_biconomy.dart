@@ -66,7 +66,7 @@ class ParticleBiconomy {
     _channel.invokeMethod("disableBiconomyMode");
   }
 
-  static Future<String> rpcGetFeeQuotes(
+  static Future<List<String>> rpcGetFeeQuotes(
       String eoaAddress, List<String> transactions) async {
     final result = await _channel.invokeMethod("rpcGetFeeQuotes",
         jsonEncode({"eoa_address": eoaAddress, "transactions": transactions}));

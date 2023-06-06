@@ -474,12 +474,19 @@ public extension ParticleAuthPlugin {
     }
     
     func signAndSendTransaction(_ json: String?, flutterResult: @escaping FlutterResult) {
-        guard let transaction = json else {
+        
+        guard let json = json else {
             flutterResult(FlutterError(code: "", message: "json is nil", details: nil))
             return
         }
         
-        ParticleAuthService.signAndSendTransaction(transaction).subscribe { [weak self] result in
+        let data = JSON(parseJSON: json)
+        let transaction = data["transaction"].stringValue
+        let mode = data["fee_mode"]["option"].stringValue
+        var feeMode: Biconomy.FeeMode
+        if mode ==
+        
+        ParticleAuthService.signAndSendTransaction(transaction, feeMode: .auto).subscribe { [weak self] result in
             guard let self = self else { return }
             switch result {
             case .failure(let error):

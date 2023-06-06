@@ -68,33 +68,35 @@ class BiconomyLogic {
     final publicAddress = await ParticleAuth.getAddress();
     final transaction = await TransactionMock.mockEvmSendNative(publicAddress);
 
-    List<String> transactions = <String>[transaction];
-    var result =
-        await ParticleBiconomy.rpcGetFeeQuotes(publicAddress, transactions);
-    if (jsonDecode(result)["status"] == true ||
-        jsonDecode(result)["status"] == 1) {
-        var data = jsonDecode(result)["data"];
-        var data0 = jsonDecode(data)[0];
-        print(jsonEncode(data0));
-    }
+    // List<String> transactions = <String>[transaction];
+    // var result =
+    //     await ParticleBiconomy.rpcGetFeeQuotes(publicAddress, transactions);
+    // if (jsonDecode(result)["status"] == true ||
+    //     jsonDecode(result)["status"] == 1) {
+    //     var data = jsonDecode(result)["data"];
+    //     var data0 = jsonDecode(data)[0];
+    //     print(jsonEncode(data0));
+    // }
     // print(result);
-    showToast("rpcGetFeeQuotes: $result");
+    // showToast("rpcGetFeeQuotes: $result");
   }
 
   static void signAndSendTransactionWithBiconomyAuto() async {
     final publicAddress = await ParticleAuth.getAddress();
     final transaction = await TransactionMock.mockEvmSendNative(publicAddress);
 
-    await ParticleAuth.signAndSendTransaction(transaction,
+    final signature = await ParticleAuth.signAndSendTransaction(transaction,
         feeMode: BiconomyFeeMode.auto());
+        showToast("signature $signature");
   }
 
   static void signAndSendTransactionWithBiconomyGasless() async {
     final publicAddress = await ParticleAuth.getAddress();
     final transaction = await TransactionMock.mockEvmSendNative(publicAddress);
 
-    await ParticleAuth.signAndSendTransaction(transaction,
+     final signature =  await ParticleAuth.signAndSendTransaction(transaction,
         feeMode: BiconomyFeeMode.gasless());
+        showToast("signature $signature");
   }
 
   static void signAndSendTransactionWithBiconomyCustom() async {
@@ -106,8 +108,9 @@ class BiconomyLogic {
         await ParticleBiconomy.rpcGetFeeQuotes(publicAddress, transactions);
 
     final feeQuote = "";
-    await ParticleAuth.signAndSendTransaction(transaction,
+    final signature =   await ParticleAuth.signAndSendTransaction(transaction,
         feeMode: BiconomyFeeMode.custom(feeQuote));
+        showToast("signature $signature");
   }
 
   static void loginParticle() async {
