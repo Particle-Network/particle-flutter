@@ -27,10 +27,11 @@ class BiconomyLogic {
     // Get your project id and client from dashboard, https://dashboard.particle.network
     const projectId = "772f7499-1d2e-40f4-8e2c-7b6dd47db9de";
     const clientKey = "ctWeIc2UBA6sYTKJknT9cu9LBikF00fbk1vmQjsV";
-    if (projectId.isEmpty || clientKey.isEmpty ) {
-      throw const FormatException('You need set project info, get your project id and client key from dashboard, https://dashboard.particle.network');
+    if (projectId.isEmpty || clientKey.isEmpty) {
+      throw const FormatException(
+          'You need set project info, get your project id and client key from dashboard, https://dashboard.particle.network');
     }
-    
+
     ParticleInfo.set(projectId, clientKey);
 
     ParticleBiconomy.init(version, dappKeys);
@@ -68,17 +69,11 @@ class BiconomyLogic {
     final publicAddress = await ParticleAuth.getAddress();
     final transaction = await TransactionMock.mockEvmSendNative(publicAddress);
 
-    // List<String> transactions = <String>[transaction];
-    // var result =
-    //     await ParticleBiconomy.rpcGetFeeQuotes(publicAddress, transactions);
-    // if (jsonDecode(result)["status"] == true ||
-    //     jsonDecode(result)["status"] == 1) {
-    //     var data = jsonDecode(result)["data"];
-    //     var data0 = jsonDecode(data)[0];
-    //     print(jsonEncode(data0));
-    // }
-    // print(result);
-    // showToast("rpcGetFeeQuotes: $result");
+    List<String> transactions = <String>[transaction];
+    var result =
+        await ParticleBiconomy.rpcGetFeeQuotes(publicAddress, transactions);
+    print(result[0]["address"]);
+    showToast("rpcGetFeeQuotes: $result");
   }
 
   static void signAndSendTransactionWithBiconomyAuto() async {
@@ -87,16 +82,16 @@ class BiconomyLogic {
 
     final signature = await ParticleAuth.signAndSendTransaction(transaction,
         feeMode: BiconomyFeeMode.auto());
-        showToast("signature $signature");
+    showToast("signature $signature");
   }
 
   static void signAndSendTransactionWithBiconomyGasless() async {
     final publicAddress = await ParticleAuth.getAddress();
     final transaction = await TransactionMock.mockEvmSendNative(publicAddress);
 
-     final signature =  await ParticleAuth.signAndSendTransaction(transaction,
+    final signature = await ParticleAuth.signAndSendTransaction(transaction,
         feeMode: BiconomyFeeMode.gasless());
-        showToast("signature $signature");
+    showToast("signature $signature");
   }
 
   static void signAndSendTransactionWithBiconomyCustom() async {
@@ -104,13 +99,15 @@ class BiconomyLogic {
     final transaction = await TransactionMock.mockEvmSendNative(publicAddress);
 
     List<String> transactions = <String>[transaction];
+
     var result =
         await ParticleBiconomy.rpcGetFeeQuotes(publicAddress, transactions);
 
-    final feeQuote = "";
-    final signature =   await ParticleAuth.signAndSendTransaction(transaction,
+    var feeQuote = result[0];
+
+    final signature = await ParticleAuth.signAndSendTransaction(transaction,
         feeMode: BiconomyFeeMode.custom(feeQuote));
-        showToast("signature $signature");
+    showToast("signature $signature");
   }
 
   static void loginParticle() async {

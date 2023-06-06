@@ -1,7 +1,7 @@
 
 class BiconomyFeeMode {
   final String option;
-  final String? feeQuote;
+  final dynamic? feeQuote;
 
   /// select native for fee
   BiconomyFeeMode.auto() : option = 'auto', feeQuote = null;
