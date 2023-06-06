@@ -17,19 +17,23 @@ class ParticleBiconomy {
   ///
   /// [dappKeys] Biconomy dapp keys
   static init(BiconomyVersion version, Map<int, String> dappKeys) {
+    // Convert integer keys to strings
+    var stringKeyMap =
+        dappKeys.map((key, value) => MapEntry(key.toString(), value));
+
     if (Platform.isIOS) {
       _channel.invokeMethod(
           'initialize',
           jsonEncode({
-            "version": version,
-            "dapp_app_keys": dappKeys,
+            "version": version.name,
+            "dapp_app_keys": stringKeyMap,
           }));
     } else {
       _channel.invokeMethod(
           'init',
           jsonEncode({
-            "version": version,
-            "dapp_app_keys": dappKeys,
+            "version": version.name,
+            "dapp_app_keys": stringKeyMap,
           }));
     }
   }
@@ -44,7 +48,7 @@ class ParticleBiconomy {
         }));
   }
 
-  static Future<bool> isDeploy(String eoaAddress) async {
+  static Future<String> isDeploy(String eoaAddress) async {
     return await _channel.invokeMethod('isDeploy', eoaAddress);
   }
 
@@ -62,9 +66,7 @@ class ParticleBiconomy {
 
   static Future<dynamic> rpcGetFeeQuotes(
       String eoaAddress, List<String> transactions) async {
-    return await _channel.invokeMethod("rpcGetFeeQuotes", jsonEncode({
-      "eoa_address": eoaAddress,
-      "transactions": transactions
-    }));
+    return await _channel.invokeMethod("rpcGetFeeQuotes",
+        jsonEncode({"eoa_address": eoaAddress, "transactions": transactions}));
   }
 }

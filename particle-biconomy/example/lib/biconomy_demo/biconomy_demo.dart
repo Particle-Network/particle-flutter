@@ -20,7 +20,19 @@ class BiconomyDemoPageState extends State<BiconomyDemoPage> {
       body: SingleChildScrollView(
         child: Column(
           children: <Widget>[
-            
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: SizedBox(
+                width: double.infinity,
+                height: 50,
+                child: ElevatedButton(
+                    onPressed: () => {BiconomyLogic.init()},
+                    child: const Text(
+                      "Init",
+                      style: TextStyle(fontSize: 18),
+                    )),
+              ),
+            ),
             Padding(
               padding: const EdgeInsets.all(8.0),
               child: SizedBox(
@@ -81,7 +93,7 @@ class BiconomyDemoPageState extends State<BiconomyDemoPage> {
                 child: ElevatedButton(
                     onPressed: () => {BiconomyLogic.rpcGetFeeQuotes()},
                     child: const Text(
-                      "Get Address",
+                      "Rpc get fee quotes",
                       style: TextStyle(fontSize: 18),
                     )),
               ),

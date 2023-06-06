@@ -11,16 +11,19 @@ import 'package:particle_auth/model/security_account_config.dart';
 import 'package:particle_auth/model/typeddata_version.dart';
 import 'package:particle_biconomy/model/biconomy_version.dart';
 import 'package:particle_biconomy/particle_biconomy.dart';
+import 'package:particle_auth/particle_auth.dart';
 import 'package:particle_biconomy_example/mock/transaction_mock.dart';
 import 'package:particle_biconomy_example/model/pn_account_info_entity.dart';
 import 'package:particle_biconomy_example/net/rest_client.dart';
 
 class BiconomyLogic {
-  static late ChainInfo currChainInfo;
-
   static void init() {
     const version = BiconomyVersion.v1_0_0;
-    Map<int, String> dappKeys = {};
+    Map<int, String> dappKeys = {
+      1: "your ethereum mainnet key",
+      5: "your ethereum goerli key",
+      137: "your polygon mainnet key"
+    };
 
     ParticleBiconomy.init(version, dappKeys);
   }
@@ -55,6 +58,7 @@ class BiconomyLogic {
 
   static void rpcGetFeeQuotes() async {
     const eoaAddress = "0x16380a03f21e5a5e339c15ba8ebe581d194e0db3";
+
     List<String> transactions = <String>["", ""];
     var result =
         await ParticleBiconomy.rpcGetFeeQuotes(eoaAddress, transactions);

@@ -79,10 +79,12 @@ public extension ParticleBiconomyPlugin {
             if let chainId = Int(key) {
                 dappAppKeys[chainId] = value.stringValue
             }
-            
         }
         
         BiconomyService.initialize(version: .init(rawValue: version) ?? .v1_0_0, dappApiKeys: dappAppKeys)
+        ParticleNetwork.initialize(config:.init(chainInfo: .ethereum(.mainnet), devEnv: .debug))
+        
+        
     }
     
     func isSupportChainInfo(_ json: String?, flutterResult: @escaping FlutterResult) {
@@ -151,8 +153,10 @@ public extension ParticleBiconomyPlugin {
             switch result {
             case .success(let quetes):
                 let objects =  quetes.map {
-                    $0.jsonObject
+                    let data = try! JSONEncoder().encode( $0.jsonObject)
+                    return String(data: data, encoding: .utf8)!
                 }
+                
                 let statusModel = FlutterStatusModel(status: true, data: objects)
                 let data = try! JSONEncoder().encode(statusModel)
                 guard let json = String(data: data, encoding: .utf8) else { return }

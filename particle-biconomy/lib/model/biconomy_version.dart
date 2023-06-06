@@ -4,5 +4,5 @@ class BiconomyVersion {
 
   const BiconomyVersion._(this.name);
 
-  static const BiconomyVersion v1_0_0 = BiconomyVersion._('v1.0.0');
+  static const BiconomyVersion v1_0_0 = BiconomyVersion._('1.0.0');
 }
