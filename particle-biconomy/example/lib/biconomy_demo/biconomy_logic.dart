@@ -1,29 +1,23 @@
-import 'dart:convert';
-import 'dart:io';
-import 'package:flutter/foundation.dart';
-import 'package:flutter/widgets.dart';
 import 'package:oktoast/oktoast.dart';
 import 'package:particle_auth/model/biconmoy_fee_mode.dart';
 import 'package:particle_auth/model/chain_info.dart';
-import 'package:particle_auth/model/ios_modal_present_style.dart';
-import 'package:particle_auth/model/language.dart';
 import 'package:particle_auth/model/login_info.dart';
-import 'package:particle_auth/model/security_account_config.dart';
-import 'package:particle_auth/model/typeddata_version.dart';
 import 'package:particle_biconomy/model/biconomy_version.dart';
 import 'package:particle_biconomy/particle_biconomy.dart';
 import 'package:particle_auth/particle_auth.dart';
 import 'package:particle_biconomy_example/mock/transaction_mock.dart';
-import 'package:particle_biconomy_example/model/pn_account_info_entity.dart';
-import 'package:particle_biconomy_example/net/rest_client.dart';
 
 class BiconomyLogic {
   static void init() {
+    // should call ParticleAuth init first.
+    ParticleAuth.init(PolygonChain.mumbai(), Env.dev);
+
     const version = BiconomyVersion.v1_0_0;
     Map<int, String> dappKeys = {
       1: "your ethereum mainnet key",
       5: "your ethereum goerli key",
-      137: "your polygon mainnet key"
+      137: "your polygon mainnet key",
+      80001: "hYZIwIsf2.e18c790b-cafb-4c4e-a438-0289fc25dba1"
     };
 
     ParticleBiconomy.init(version, dappKeys);
@@ -89,12 +83,23 @@ class BiconomyLogic {
     final publicAddress = await ParticleAuth.getAddress();
     final transaction = await TransactionMock.mockEvmSendNative(publicAddress);
 
-     List<String> transactions = <String>[transaction];
+    List<String> transactions = <String>[transaction];
     var result =
         await ParticleBiconomy.rpcGetFeeQuotes(publicAddress, transactions);
 
     final feeQuote = "";
     await ParticleAuth.signAndSendTransaction(transaction,
         feeMode: BiconomyFeeMode.custom(feeQuote));
+  }
+
+  static void loginParticle() async {
+    final result =
+        await ParticleAuth.login(LoginType.email, "", [SupportAuthType.all]);
+    print(result);
+  }
+
+  static void setChainInfo() async {
+    final result = await ParticleAuth.setChainInfo(PolygonChain.mumbai());
+    print(result);
   }
 }

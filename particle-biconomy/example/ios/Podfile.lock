@@ -4,7 +4,6 @@ PODS:
   - CryptoSwift (1.7.1)
   - Flutter (1.0.0)
   - particle_auth (0.0.1):
-    - BigInt (~> 5.2.0)
     - Flutter
     - ParticleAuthService
   - particle_biconomy (0.0.1):
@@ -77,7 +76,7 @@ SPEC CHECKSUMS:
   BigInt: f668a80089607f521586bbe29513d708491ef2f7
   CryptoSwift: d3d18dc357932f7e6d580689e065cf1f176007c1
   Flutter: f04841e97a9d0b0a8025694d0796dd46242b2854
-  particle_auth: ab2f562eed02a8ad39aa15843c3f5d9faa079aaa
+  particle_auth: 7df9934788402bd80156fa5f56422d941af0745c
   particle_biconomy: 732e548a456869d9da5a8a3a1910c4c0813a188a
   ParticleAuthService: 0e1f0fec7613f1bd7da5bfed2c0b134242f90ef8
   ParticleBiconomy: f93ff2c54012c2a705ef81e5f9584c8259248226
