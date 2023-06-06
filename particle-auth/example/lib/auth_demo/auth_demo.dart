@@ -161,6 +161,19 @@ class AuthDemoPageState extends State<AuthDemoPage> {
                 width: double.infinity,
                 height: 50,
                 child: ElevatedButton(
+                    onPressed: () => {AuthLogic.signMessageUnique()},
+                    child: const Text(
+                      "Sign Message Unique",
+                      style: TextStyle(fontSize: 18),
+                    )),
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: SizedBox(
+                width: double.infinity,
+                height: 50,
+                child: ElevatedButton(
                     onPressed: () => {AuthLogic.signTransaction()},
                     child: const Text(
                       "Sign Transaction",
@@ -203,6 +216,19 @@ class AuthDemoPageState extends State<AuthDemoPage> {
                     onPressed: () => {AuthLogic.signTypedData()},
                     child: const Text(
                       "Sign Typed Data",
+                      style: TextStyle(fontSize: 18),
+                    )),
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: SizedBox(
+                width: double.infinity,
+                height: 50,
+                child: ElevatedButton(
+                    onPressed: () => {AuthLogic.signTypedDataUnique()},
+                    child: const Text(
+                      "Sign Typed Data V4 Unique",
                       style: TextStyle(fontSize: 18),
                     )),
               ),

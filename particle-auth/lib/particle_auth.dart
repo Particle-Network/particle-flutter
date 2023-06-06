@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'dart:io' show Platform;
 
 import 'package:flutter/services.dart';
+import 'package:particle_auth/model/biconmoy_fee_mode.dart';
 import 'package:particle_auth/model/chain_info.dart';
 import 'package:particle_auth/model/ios_modal_present_style.dart';
 import 'package:particle_auth/model/language.dart';
@@ -56,11 +57,12 @@ class ParticleAuth {
   /// login form, default value is false.
   ///
   /// [socialLoginPrompt] social login prompt, optional.
-  /// 
+  ///
   /// Return userinfo or error
   static Future<String> login(LoginType loginType, String account,
       List<SupportAuthType> supportAuthTypes,
-      {bool loginFormMode = false, SocialLoginPrompt? socialLoginPrompt}) async {
+      {bool loginFormMode = false,
+      SocialLoginPrompt? socialLoginPrompt}) async {
     final params = jsonEncode({
       "login_type": loginType.name,
       "account": account,
@@ -68,14 +70,14 @@ class ParticleAuth {
       "login_form_mode": loginFormMode,
       "social_login_prompt": socialLoginPrompt?.name,
     });
-    
+
     return await _channel.invokeMethod('login', params);
   }
 
   /// Set user info
-  /// 
+  ///
   /// [json] user info json, it should be the same struct with our web auth service.
-  /// 
+  ///
   /// Return result or error
   static Future<bool> setUserInfo(String json) async {
     return await _channel.invokeMethod('setUserInfo', json);
@@ -119,6 +121,13 @@ class ParticleAuth {
     return await _channel.invokeMethod('signMessage', message);
   }
 
+  /// Sign message unique
+  ///
+  /// [message] message you want to sign
+  static Future<String> signMessageUnique(String message) async {
+    return await _channel.invokeMethod('signMessageUnique', message);
+  }
+
   /// Sign transaction, only support solana chain.
   ///
   /// [transaction] transaction you want to sign.
@@ -142,9 +151,12 @@ class ParticleAuth {
   ///
   /// [transaction] transaction you want to sign and send.
   ///
+  /// [feeMode] is optional, works with biconomy service.
+  /// 
   /// Result signature or error.
-  static Future<String> signAndSendTransaction(String transaction) async {
-    return await _channel.invokeMethod('signAndSendTransaction', transaction);
+  static Future<String> signAndSendTransaction(String transaction, {BiconomyFeeMode? feeMode}) async {
+    final json = jsonEncode({"transaction": transaction, "fee_mode": feeMode});
+    return await _channel.invokeMethod('signAndSendTransaction', json);
   }
 
   /// Sign typed data, only support evm chain.
@@ -195,12 +207,11 @@ class ParticleAuth {
     return await _channel.invokeMethod('getChainInfo');
   }
 
-static Future<int> getChainId() async {
- String result = await getChainInfo();
+  static Future<int> getChainId() async {
+    String result = await getChainInfo();
     int chainId = jsonDecode(result)["chain_id"];
     return chainId;
   }
-
 
   /// Open web wallet
   static openWebWallet() async {
@@ -221,11 +232,11 @@ static Future<int> getChainId() async {
 
   /// Set security account config
   static setSecurityAccountConfig(SecurityAccountConfig config) {
-      _channel.invokeMethod("setSecurityAccountConfig", jsonEncode(config));
+    _channel.invokeMethod("setSecurityAccountConfig", jsonEncode(config));
   }
 
   /// Open account and security page in web.
-  /// 
+  ///
   /// If user is expired, should return error, otherwise return nothing.
   static Future<String> openAccountAndSecurity() async {
     return await _channel.invokeMethod("openAccountAndSecurity");
@@ -253,4 +264,8 @@ static Future<int> getChainId() async {
   static setLanguage(Language language) {
     _channel.invokeListMethod("setLanguage", language.name);
   }
+
+  
+
+
 }

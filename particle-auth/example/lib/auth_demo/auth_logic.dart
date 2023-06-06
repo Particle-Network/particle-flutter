@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/widgets.dart';
 import 'package:oktoast/oktoast.dart';
+import 'package:particle_auth/model/biconmoy_fee_mode.dart';
 import 'package:particle_auth/model/chain_info.dart';
 import 'package:particle_auth/model/ios_modal_present_style.dart';
 import 'package:particle_auth/model/language.dart';
@@ -11,7 +12,6 @@ import 'package:particle_auth/model/typeddata_version.dart';
 import 'package:particle_auth/network/model/rpc_error.dart';
 import 'package:particle_auth/particle_auth.dart';
 import 'package:particle_auth_example/mock/transaction_mock.dart';
-
 
 class AuthLogic {
   static late ChainInfo currChainInfo;
@@ -66,11 +66,11 @@ class AuthLogic {
 
   static void isLoginAsync() async {
     String result = await ParticleAuth.isLoginAsync();
-    print("isLoginAsync:"+result);
+    print("isLoginAsync:" + result);
     if (jsonDecode(result)["status"] == true ||
         jsonDecode(result)["status"] == 1) {
-        print("isLoginAsync: $result");
-        showToast("isLoginAsync: $result");
+      print("isLoginAsync: $result");
+      showToast("isLoginAsync: $result");
     } else {
       print("isLoginAsync: $result");
       showToast("isLoginAsync: $result");
@@ -101,6 +101,12 @@ class AuthLogic {
 
   static void signMessage() async {
     String result = await ParticleAuth.signMessage("Hello Particle");
+    debugPrint("signMessage: $result");
+    showToast("signMessage: $result");
+  }
+
+  static void signMessageUnique() async {
+    String result = await ParticleAuth.signMessageUnique("Hello Particle");
     debugPrint("signMessage: $result");
     showToast("signMessage: $result");
   }
@@ -156,13 +162,32 @@ class AuthLogic {
       showToast("only evm chain support!");
       return;
     }
+
+    final chainId = await ParticleAuth.getChainId();
     // This typed data is version 4
-    // and has a chainId 5
+
     String typedData = '''
-{        "types": {            "EIP712Domain": [                {                    "name": "name",                    "type": "string"                },                {                    "name": "version",                    "type": "string"                },                {                    "name": "chainId",                    "type": "uint256"                },                {                    "name": "verifyingContract",                    "type": "address"                }            ],            "Person": [                {                    "name": "name",                    "type": "string"                },                {                    "name": "wallet",                    "type": "address"                }            ],            "Mail": [                {                    "name": "from",                    "type": "Person"                },                {                    "name": "to",                    "type": "Person"                },                {                    "name": "contents",                    "type": "string"                }            ]        },        "primaryType": "Mail",        "domain": {            "name": "Ether Mail",            "version": "1",            "chainId": 5,            "verifyingContract": "0xCcCCccccCCCCcCCCCCCcCcCccCcCCCcCcccccccC"        },        "message": {            "from": {                "name": "Cow",                "wallet": "0xCD2a3d9F938E13CD947Ec05AbC7FE734Df8DD826"            },            "to": {                "name": "Bob",                "wallet": "0xbBbBBBBbbBBBbbbBbbBbbbbBBbBbbbbBbBbbBBbB"            },            "contents": "Hello, Bob!"        }}
+{        "types": {            "EIP712Domain": [                {                    "name": "name",                    "type": "string"                },                {                    "name": "version",                    "type": "string"                },                {                    "name": "chainId",                    "type": "uint256"                },                {                    "name": "verifyingContract",                    "type": "address"                }            ],            "Person": [                {                    "name": "name",                    "type": "string"                },                {                    "name": "wallet",                    "type": "address"                }            ],            "Mail": [                {                    "name": "from",                    "type": "Person"                },                {                    "name": "to",                    "type": "Person"                },                {                    "name": "contents",                    "type": "string"                }            ]        },        "primaryType": "Mail",        "domain": {            "name": "Ether Mail",            "version": "1",            "chainId": $chainId,            "verifyingContract": "0xCcCCccccCCCCcCCCCCCcCcCccCcCCCcCcccccccC"        },        "message": {            "from": {                "name": "Cow",                "wallet": "0xCD2a3d9F938E13CD947Ec05AbC7FE734Df8DD826"            },            "to": {                "name": "Bob",                "wallet": "0xbBbBBBBbbBBBbbbBbbBbbbbBBbBbbbbBbBbbBBbB"            },            "contents": "Hello, Bob!"        }}
     ''';
     String result =
         await ParticleAuth.signTypedData(typedData, SignTypedDataVersion.v4);
+    debugPrint("signTypedData: $result");
+    showToast("signTypedData: $result");
+  }
+
+  static void signTypedDataUnique() async {
+    if (currChainInfo is SolanaChain) {
+      showToast("only evm chain support!");
+      return;
+    }
+    // This typed data is version 4
+    final chainId = await ParticleAuth.getChainId();
+
+    String typedData = '''
+{        "types": {            "EIP712Domain": [                {                    "name": "name",                    "type": "string"                },                {                    "name": "version",                    "type": "string"                },                {                    "name": "chainId",                    "type": "uint256"                },                {                    "name": "verifyingContract",                    "type": "address"                }            ],            "Person": [                {                    "name": "name",                    "type": "string"                },                {                    "name": "wallet",                    "type": "address"                }            ],            "Mail": [                {                    "name": "from",                    "type": "Person"                },                {                    "name": "to",                    "type": "Person"                },                {                    "name": "contents",                    "type": "string"                }            ]        },        "primaryType": "Mail",        "domain": {            "name": "Ether Mail",            "version": "1",            "chainId": $chainId,            "verifyingContract": "0xCcCCccccCCCCcCCCCCCcCcCccCcCCCcCcccccccC"        },        "message": {            "from": {                "name": "Cow",                "wallet": "0xCD2a3d9F938E13CD947Ec05AbC7FE734Df8DD826"            },            "to": {                "name": "Bob",                "wallet": "0xbBbBBBBbbBBBbbbBbbBbbbbBBbBbbbbBbBbbBBbB"            },            "contents": "Hello, Bob!"        }}
+    ''';
+    String result =
+        await ParticleAuth.signTypedData(typedData, SignTypedDataVersion.v4Unique);
     debugPrint("signTypedData: $result");
     showToast("signTypedData: $result");
   }
@@ -293,6 +318,28 @@ class AuthLogic {
       chainInfo = MetisChain.mainnet();
     } else if (chainId == MetisChain.testnet().chainId) {
       chainInfo = MetisChain.testnet();
+    } else if (chainId == ConfluxESpaceChain.mainnet().chainId) {
+       chainInfo = ConfluxESpaceChain.mainnet();
+    } else if (chainId == ConfluxESpaceChain.testnet().chainId) {
+       chainInfo = ConfluxESpaceChain.testnet();
+    } else if (chainId == MapoChain.mainnet().chainId) {
+       chainInfo = MapoChain.mainnet();
+    } else if (chainId == MapoChain.testnet().chainId) {
+       chainInfo = MapoChain.testnet();
+    } else if (chainId == PolygonZkEVMChain.mainnet().chainId) {
+       chainInfo = PolygonZkEVMChain.mainnet();
+    } else if (chainId == PolygonZkEVMChain.testnet().chainId) {
+       chainInfo = PolygonZkEVMChain.testnet();
+    } else if (chainId == BaseChain.testnet().chainId) {
+       chainInfo = BaseChain.testnet();
+    } else if (chainId == LineaChain.testnet().chainId) {
+       chainInfo = LineaChain.testnet();
+    } else if (chainId == ComboChain.testnet().chainId) {
+       chainInfo = ComboChain.testnet();
+    } else if (chainId == MantleChain.testnet().chainId) {
+       chainInfo = MantleChain.testnet();
+    } else if (chainId == ZkMetaChain.testnet().chainId) {
+       chainInfo = ZkMetaChain.testnet();
     }
 
     debugPrint("getChainInfo: $chainInfo");
@@ -345,3 +392,4 @@ class AuthLogic {
     }
   }
 }
+

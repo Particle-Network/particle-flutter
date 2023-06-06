@@ -25,6 +25,7 @@ public class ParticleAuthPlugin: NSObject, FlutterPlugin {
         case isLogin
         case isLoginAsync
         case signMessage
+        case signMessageUnique
         case signTransaction
         case signAllTransactions
         case signAndSendTransaction
@@ -77,6 +78,8 @@ public class ParticleAuthPlugin: NSObject, FlutterPlugin {
             self.isLoginAsync(flutterResult: result)
         case .signMessage:
             self.signMessage(json as? String, flutterResult: result)
+        case .signMessageUnique:
+            self.signMessageUnique(json as? String, flutterResult: result)
         case .signTransaction:
             self.signTransaction(json as? String, flutterResult: result)
         case .signAllTransactions:
@@ -389,6 +392,38 @@ public extension ParticleAuthPlugin {
         }.disposed(by: self.bag)
     }
     
+    func signMessageUnique(_ json: String?, flutterResult: @escaping FlutterResult) {
+        guard let message = json else {
+            flutterResult(FlutterError(code: "", message: "json is nil", details: nil))
+            return
+        }
+        
+        var serializedMessage = ""
+        switch ParticleNetwork.getChainInfo().chain {
+        case .solana:
+            serializedMessage = Base58.encode(message.data(using: .utf8)!)
+        default:
+            serializedMessage = "0x" + message.data(using: .utf8)!.map { String(format: "%02x", $0) }.joined()
+        }
+        
+        ParticleAuthService.signMessageUnique(serializedMessage).subscribe { [weak self] result in
+            guard let self = self else { return }
+            switch result {
+            case .failure(let error):
+                let response = self.ResponseFromError(error)
+                let statusModel = FlutterStatusModel(status: false, data: response)
+                let data = try! JSONEncoder().encode(statusModel)
+                guard let json = String(data: data, encoding: .utf8) else { return }
+                flutterResult(json)
+            case .success(let signedMessage):
+                let statusModel = FlutterStatusModel(status: true, data: signedMessage)
+                let data = try! JSONEncoder().encode(statusModel)
+                guard let json = String(data: data, encoding: .utf8) else { return }
+                flutterResult(json)
+            }
+        }.disposed(by: self.bag)
+    }
+    
     func signTransaction(_ json: String?, flutterResult: @escaping FlutterResult) {
         guard let transaction = json else {
             flutterResult(FlutterError(code: "", message: "json is nil", details: nil))
@@ -471,10 +506,24 @@ public extension ParticleAuthPlugin {
         let data = JSON(parseJSON: json)
         let message = data["message"].stringValue
         let version = data["version"].stringValue.lowercased()
+        var signTypedDataVersion: EVMSignTypedDataVersion?
+        if version == "v1" {
+            signTypedDataVersion = .v1
+        } else if version == "v3" {
+            signTypedDataVersion = .v3
+        } else if version == "v4" {
+            signTypedDataVersion = .v4
+        } else if version == "v4unique" {
+            signTypedDataVersion = .v4Unique
+        }
+        guard let signTypedDataVersion = signTypedDataVersion else {
+            flutterResult(FlutterError(code: "", message: "version is wrong", details: nil))
+            return
+        }
         
         let hexString = "0x" + message.data(using: .utf8)!.map { String(format: "%02x", $0) }.joined()
        
-        ParticleAuthService.signTypedData(hexString, version: EVMSignTypedDataVersion(rawValue: version) ?? .v1).subscribe { [weak self] result in
+        ParticleAuthService.signTypedData(hexString, version: signTypedDataVersion).subscribe { [weak self] result in
             guard let self = self else { return }
             switch result {
             case .failure(let error):

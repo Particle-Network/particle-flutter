@@ -708,7 +708,96 @@ class BaseChain implements ChainInfo {
   }
 }
 
+class LineaChain implements ChainInfo {
+  @override
+  int chainId;
 
+  @override
+  String chainIdName;
+
+  @override
+  String? chainName;
+
+  LineaChain(this.chainId, this.chainIdName) {
+    chainName = ChainName.Base.name;
+  }
+
+  // static PolygonZkEVMChain mainnet() {
+  //   return PolygonZkEVMChain(1101, "Mainnet");
+  // }
+
+  static LineaChain testnet() {
+    return LineaChain(59140, "Goerli");
+  }
+}
+
+class ComboChain implements ChainInfo {
+  @override
+  int chainId;
+
+  @override
+  String chainIdName;
+
+  @override
+  String? chainName;
+
+  ComboChain(this.chainId, this.chainIdName) {
+    chainName = ChainName.Base.name;
+  }
+
+  // static PolygonZkEVMChain mainnet() {
+  //   return PolygonZkEVMChain(1101, "Mainnet");
+  // }
+
+  static ComboChain testnet() {
+    return ComboChain(91715, "Testnet");
+  }
+}
+class MantleChain implements ChainInfo {
+  @override
+  int chainId;
+
+  @override
+  String chainIdName;
+
+  @override
+  String? chainName;
+
+  MantleChain(this.chainId, this.chainIdName) {
+    chainName = ChainName.Base.name;
+  }
+
+  // static PolygonZkEVMChain mainnet() {
+  //   return PolygonZkEVMChain(1101, "Mainnet");
+  // }
+
+  static MantleChain testnet() {
+    return MantleChain(59140, "Testnet");
+  }
+}
+
+class ZkMetaChain implements ChainInfo {
+  @override
+  int chainId;
+
+  @override
+  String chainIdName;
+
+  @override
+  String? chainName;
+
+  ZkMetaChain(this.chainId, this.chainIdName) {
+    chainName = ChainName.Base.name;
+  }
+
+  // static PolygonZkEVMChain mainnet() {
+  //   return PolygonZkEVMChain(1101, "Mainnet");
+  // }
+
+  static ZkMetaChain testnet() {
+    return ZkMetaChain(23122, "Testnet");
+  }
+}
 
 enum ChainName {
   Solana,
@@ -741,5 +830,8 @@ enum ChainName {
   Mapo,
   PolygonZkEVM,
   Base,
-
+  Linea,
+  Combo,
+  Mantle,
+  ZkMeta,
 }
