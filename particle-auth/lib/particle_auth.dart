@@ -110,6 +110,7 @@ class ParticleAuth {
   }
 
   /// Get smart account, request add particle_biconomy and enable biconomy mode.
+  /// Only support evm chain and request login
   static Future<String> getSmartAccount() async {
     return await _channel.invokeMethod('getSmartAccount');
   }

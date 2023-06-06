@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:particle_auth/model/biconomy_version.dart';
 import 'package:particle_auth/network/model/serialize_sol_transreqentity.dart';
 import 'package:particle_auth/network/net/request_body_entity.dart';
 import 'package:particle_auth/network/net/rest_client.dart';
@@ -231,6 +232,19 @@ class EvmService {
     final params = [tokenAddresses, currencies];
     return await EvmService.rpc(method, params);
   }
+
+  /// Get smart account
+  /// 
+  /// [eoaAddresses] Eoa address list
+  /// 
+  /// [version] biconomy version
+  /// 
+  /// return json object
+  static Future<String> getSmartAccount(List<String> eoaAddresses, BiconomyVersion version) async {
+    const method = "particle_biconomy_getSmartAccount";
+    final params = [version.name, eoaAddresses];
+    return await EvmService.rpc(method, params);
+  }
 }
 
 class SolanaService {
@@ -257,4 +271,6 @@ class SolanaService {
     final params = ["transfer-sol", reqEntity];
     return await SolanaService.rpc(method, params);
   }
+
+  
 }

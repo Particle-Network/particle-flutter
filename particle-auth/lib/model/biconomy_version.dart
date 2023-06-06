@@ -1,4 +1,3 @@
-
 class BiconomyVersion {
   final String name;
 

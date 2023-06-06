@@ -2,10 +2,10 @@ import 'dart:convert';
 
 import 'package:oktoast/oktoast.dart';
 import 'package:particle_auth/model/biconmoy_fee_mode.dart';
+import 'package:particle_auth/model/biconomy_version.dart';
 import 'package:particle_auth/model/chain_info.dart';
 import 'package:particle_auth/model/login_info.dart';
 import 'package:particle_auth/model/particle_info.dart';
-import 'package:particle_biconomy/model/biconomy_version.dart';
 import 'package:particle_biconomy/particle_biconomy.dart';
 import 'package:particle_auth/particle_auth.dart';
 import 'package:particle_biconomy_example/mock/transaction_mock.dart';

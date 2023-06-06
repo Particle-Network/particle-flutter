@@ -4,9 +4,9 @@ import 'dart:math';
 
 import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
+import 'package:particle_auth/model/biconomy_version.dart';
 import 'package:particle_auth/model/chain_info.dart';
 import 'package:particle_auth/network/model/rpc_error.dart';
-import 'package:particle_biconomy/model/biconomy_version.dart';
 
 class ParticleBiconomy {
   ParticleBiconomy._();
