@@ -109,6 +109,11 @@ class ParticleAuth {
     return await _channel.invokeMethod("getAddress");
   }
 
+  /// Get smart account, request add particle_biconomy and enable biconomy mode.
+  static Future<String> getSmartAccount() async {
+    return await _channel.invokeMethod('getSmartAccount');
+  }
+
   /// Get userinfo
   static Future<String> getUserInfo() async {
     return await _channel.invokeMethod("getUserInfo");

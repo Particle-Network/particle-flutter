@@ -87,6 +87,20 @@ class AuthLogic {
     }
   }
 
+
+  static void getSmartAccount() async {
+    String result = await ParticleAuth.getSmartAccount();
+    print("getSmartAccount:" + result);
+    if (jsonDecode(result)["status"] == true ||
+        jsonDecode(result)["status"] == 1) {
+      print("getSmartAccount: $result");
+      showToast("getSmartAccount: $result");
+    } else {
+      print("getSmartAccount: $result");
+      showToast("getSmartAccount: $result");
+    }
+  }
+
   static void getAddress() async {
     final address = await ParticleAuth.getAddress();
     print("getAddress: $address");

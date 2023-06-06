@@ -41,6 +41,7 @@ public class ParticleAuthPlugin: NSObject, FlutterPlugin {
         case setLanguage
         case fastLogout
         case setUserInfo
+        case getSmartAccount
     }
     
     public static func register(with registrar: FlutterPluginRegistrar) {
@@ -110,6 +111,8 @@ public class ParticleAuthPlugin: NSObject, FlutterPlugin {
             self.fastLogout(flutterResult: result)
         case .setUserInfo:
             self.setUserInfo(json as? String, flutterResult: result)
+        case .getSmartAccount:
+            self.getSmartAccount(flutterResult: result)
         }
     }
 }
@@ -474,7 +477,6 @@ public extension ParticleAuthPlugin {
     }
     
     func signAndSendTransaction(_ json: String?, flutterResult: @escaping FlutterResult) {
-        
         guard let json = json else {
             flutterResult(FlutterError(code: "", message: "json is nil", details: nil))
             return
@@ -489,8 +491,8 @@ public extension ParticleAuthPlugin {
         } else if mode == "gasless" {
             feeMode = .gasless
         } else if mode == "custom" {
-            let feeQuoteJson = JSON( data["fee_mode"]["fee_quote"].dictionaryValue)
-            let feeQuote = Biconomy.FeeQuote.init(json: feeQuoteJson)
+            let feeQuoteJson = JSON(data["fee_mode"]["fee_quote"].dictionaryValue)
+            let feeQuote = Biconomy.FeeQuote(json: feeQuoteJson)
             feeMode = .custom(feeQuote)
         }
         guard let feeMode = feeMode else {
@@ -671,5 +673,25 @@ public extension ParticleAuthPlugin {
         } else if json.lowercased() == "ko" {
             ParticleNetwork.setLanguage(.ko)
         }
+    }
+    
+    func getSmartAccount(flutterResult: @escaping FlutterResult) {
+        ParticleAuthService.getSmartAccount().subscribe {
+            [weak self] result in
+                guard let self = self else { return }
+                switch result {
+                case .failure(let error):
+                    let response = self.ResponseFromError(error)
+                    let statusModel = FlutterStatusModel(status: false, data: response)
+                    let data = try! JSONEncoder().encode(statusModel)
+                    guard let json = String(data: data, encoding: .utf8) else { return }
+                    flutterResult(json)
+                case .success(let smartAccount):
+                    let statusModel = FlutterStatusModel(status: true, data: smartAccount)
+                    let data = try! JSONEncoder().encode(statusModel)
+                    guard let json = String(data: data, encoding: .utf8) else { return }
+                    flutterResult(json)
+                }
+        }.disposed(by: self.bag)
     }
 }

@@ -109,6 +109,19 @@ class AuthDemoPageState extends State<AuthDemoPage> {
                 width: double.infinity,
                 height: 50,
                 child: ElevatedButton(
+                    onPressed: () => {AuthLogic.getSmartAccount()},
+                    child: const Text(
+                      "Get Smart Account",
+                      style: TextStyle(fontSize: 18),
+                    )),
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: SizedBox(
+                width: double.infinity,
+                height: 50,
+                child: ElevatedButton(
                     onPressed: () => {AuthLogic.getUserInfo()},
                     child: const Text(
                       "Get UserInfo",
