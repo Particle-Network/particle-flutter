@@ -11,3 +11,9 @@ data class TransactionParams(
     @SerializedName("transaction") val transaction: String,
     @SerializedName("fee_mode") val feeMode: BiconomyFeeMode?,
 )
+
+@Keep
+data class TransactionsParams(
+    @SerializedName("transactions") val transactions: List<String>,
+    @SerializedName("fee_mode") val feeMode: BiconomyFeeMode?,
+)

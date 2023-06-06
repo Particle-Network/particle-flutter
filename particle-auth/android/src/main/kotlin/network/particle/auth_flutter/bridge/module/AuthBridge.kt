@@ -18,15 +18,18 @@ import com.particle.base.ibiconomy.FeeMode
 import com.particle.base.ibiconomy.FeeModeAuto
 import com.particle.base.ibiconomy.FeeModeCustom
 import com.particle.base.ibiconomy.FeeModeGasless
+import com.particle.base.ibiconomy.MessageSigner
 import com.particle.base.model.Erc4337FeeQuote
 import com.particle.network.ParticleNetworkAuth.fastLogout
 import com.particle.network.ParticleNetworkAuth.getAddress
+import com.particle.network.ParticleNetworkAuth.getSmartAccount
 import com.particle.network.ParticleNetworkAuth.getUserInfo
 import com.particle.network.ParticleNetworkAuth.isLogin
 import com.particle.network.ParticleNetworkAuth.isLoginAsync
 import com.particle.network.ParticleNetworkAuth.login
 import com.particle.network.ParticleNetworkAuth.logout
 import com.particle.network.ParticleNetworkAuth.openAccountAndSecurity
+import com.particle.network.ParticleNetworkAuth.openWebWallet
 import com.particle.network.ParticleNetworkAuth.setChainInfo
 import com.particle.network.ParticleNetworkAuth.setSecurityAccountConfig
 import com.particle.network.ParticleNetworkAuth.setUserInfo
@@ -202,18 +205,82 @@ object AuthBridge {
         })
     }
 
+    fun batchSendTransactions(transactions: String, result: MethodChannel.Result) {
+        LogUtils.d("batchSendTransactions", transactions)
+        val transParams = GsonUtils.fromJson<TransactionsParams>(transactions, TransactionsParams::class.java)
+
+        var feeMode: FeeMode = FeeModeAuto()
+        if (transParams.feeMode != null) {
+            val option = transParams.feeMode.option
+            if (option == "custom") {
+                val feeQuote = GsonUtils.fromJson<Erc4337FeeQuote>(transParams.feeMode.feeQuote!!, Erc4337FeeQuote::class.java)
+                feeMode = FeeModeCustom(feeQuote)
+            } else if (option == "gasless") {
+                feeMode = FeeModeGasless()
+            } else {
+                feeMode = FeeModeAuto()
+            }
+        }
+        CoroutineScope(Dispatchers.IO).launch {
+            try {
+                ParticleNetwork.getBiconomyService().quickSendTransaction(transParams.transactions, feeMode, object : MessageSigner {
+                    override fun signTypedData(message: String, callback: WebServiceCallback<SignOutput>) {
+
+                        ParticleNetwork.signTypedData(message, SignTypedDataVersion.V4, object : WebServiceCallback<SignOutput> {
+                            override fun success(output: SignOutput) {
+                                callback.success(output)
+                            }
+
+                            override fun failure(errMsg: WebServiceError) {
+                                callback.failure(errMsg)
+                            }
+                        })
+                    }
+
+                    override fun signMessage(message: String, callback: WebServiceCallback<SignOutput>) {
+                        ParticleNetwork.signMessage(message, object : WebServiceCallback<SignOutput> {
+                            override fun success(output: SignOutput) {
+                                callback.success(output)
+                            }
+
+                            override fun failure(errMsg: WebServiceError) {
+                                callback.failure(errMsg)
+                            }
+                        })
+                    }
+
+                    override fun eoaAddress(): String {
+                        return ParticleNetwork.getAddress()
+                    }
+
+                }, object : WebServiceCallback<SignOutput> {
+                    override fun success(output: SignOutput) {
+                        result.success(FlutterCallBack.success(output.signature!!).toGson())
+                    }
+
+                    override fun failure(errMsg: WebServiceError) {
+                        result.success(FlutterCallBack.failed(errMsg).toGson())
+                    }
+                })
+            } catch (e: Exception) {
+                e.printStackTrace()
+                result.success(FlutterCallBack.failed("failed").toGson())
+            }
+        }
+    }
+
     fun signAndSendTransaction(transactionParams: String, result: MethodChannel.Result) {
         LogUtils.d("signAndSendTransaction", transactionParams)
         val transParams = GsonUtils.fromJson<TransactionParams>(transactionParams, TransactionParams::class.java)
         if (transParams.feeMode != null) {
-            val feeMode:FeeMode
+            val feeMode: FeeMode
             val option = transParams.feeMode.option
             if (option == "custom") {
-                val feeQuote =  GsonUtils.fromJson<Erc4337FeeQuote>(transParams.feeMode.feeQuote!!,Erc4337FeeQuote::class.java)
+                val feeQuote = GsonUtils.fromJson<Erc4337FeeQuote>(transParams.feeMode.feeQuote!!, Erc4337FeeQuote::class.java)
                 feeMode = FeeModeCustom(feeQuote)
             } else if (option == "gasless") {
                 feeMode = FeeModeGasless()
-            }else{
+            } else {
                 feeMode = FeeModeAuto()
             }
             ParticleNetwork.signAndSendTransaction(transParams.transaction, object : WebServiceCallback<SignOutput> {
@@ -225,7 +292,7 @@ object AuthBridge {
                 override fun success(output: SignOutput) {
                     result.success(FlutterCallBack.success(output.signature).toGson())
                 }
-            },feeMode)
+            }, feeMode)
         }
     }
 
@@ -365,6 +432,10 @@ object AuthBridge {
         result.success(
             ParticleNetwork.isLogin()
         )
+    }
+
+    fun openWebWallet(result: MethodChannel.Result) {
+        ParticleNetwork.openWebWallet()
     }
 
     fun isLoginAsync(result: MethodChannel.Result) {

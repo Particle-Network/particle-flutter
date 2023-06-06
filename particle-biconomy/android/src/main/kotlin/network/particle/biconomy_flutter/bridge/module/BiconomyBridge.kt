@@ -2,6 +2,7 @@ package network.particle.biconomy_flutter.bridge.module
 
 import android.app.Activity
 import android.text.TextUtils
+import androidx.annotation.Keep
 import com.blankj.utilcode.util.GsonUtils
 import com.blankj.utilcode.util.LogUtils
 import com.particle.base.Env
@@ -23,7 +24,7 @@ import network.particle.auth_flutter.bridge.model.FlutterCallBack
 import network.particle.biconomy_flutter.bridge.model.*
 import network.particle.biconomy_flutter.bridge.utils.ChainUtils
 
-
+@Keep
 object BiconomyBridge {
     ///////////////////////////////////////////////////////////////////////////
     //////////////////////////// AUTH //////////////////////////////////////////
@@ -94,7 +95,7 @@ object BiconomyBridge {
                 val resp = ParticleNetwork.getBiconomyService().rpcGetFeeQuotes(feeQuotesParams.eoaAddress, feeQuotesParams.transactions)
                 LogUtils.d("rpcGetFeeQuotes", resp)
                 if (resp.isSuccess()) {
-                    result.success(FlutterCallBack.success(GsonUtils.toJson(resp.result)).toGson())
+                    result.success(FlutterCallBack.success(resp.result).toGson())
                 } else {
                     result.success(FlutterCallBack.failed(WebServiceError(resp.error?.message ?: "failed", resp.error?.code ?: 10000)).toGson())
                 }

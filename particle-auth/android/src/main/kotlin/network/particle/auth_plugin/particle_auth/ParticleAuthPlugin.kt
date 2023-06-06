@@ -39,65 +39,92 @@ class ParticleAuthPlugin : FlutterPlugin, MethodCallHandler, ActivityAware {
             "init" -> {
                 AuthBridge.init(activity!!, call.arguments as String)
             }
+
             "login" -> {
                 AuthBridge.login(call.arguments as String, result)
             }
+
             "logout" -> {
                 AuthBridge.logout(result)
             }
+
             "fastLogout" -> {
                 AuthBridge.fastLogout(result)
             }
+
             "getAddress" -> {
                 AuthBridge.getAddress(result)
             }
+
             "signMessage" -> {
                 AuthBridge.signMessage(call.arguments as String, result)
             }
+
             "signMessageUnique" -> {
                 AuthBridge.signMessageUnique(call.arguments as String, result)
             }
+
             "signTransaction" -> {
                 AuthBridge.signTransaction(call.arguments as String, result)
             }
+
             "signAllTransactions" -> {
                 AuthBridge.signAllTransactions(call.arguments as String, result)
             }
+            "batchSendTransactions" -> {
+                AuthBridge.batchSendTransactions(call.arguments as String, result)
+            }
+
             "signAndSendTransaction" -> {
                 AuthBridge.signAndSendTransaction(call.arguments as String, result)
             }
+
             "signTypedData" -> {
                 AuthBridge.signTypedData(call.arguments as String, result)
             }
+
             "setChainInfo" -> {
                 AuthBridge.setChainInfo(call.arguments as String, result)
             }
+
             "setChainInfoAsync" -> {
                 AuthBridge.setChainInfoAsync(call.arguments as String, result)
             }
+
             "getChainInfo" -> {
                 AuthBridge.getChainInfo(result)
             }
+
             "getUserInfo" -> {
                 AuthBridge.getUserInfo(result)
             }
+
             "setSecurityAccountConfig" -> {
                 AuthBridge.setSecurityAccountConfig(call.arguments as String)
             }
+
             "setLanguage" -> {
                 AuthBridge.setLanguage(call.arguments as String)
             }
+
             "openAccountAndSecurity" -> {
                 AuthBridge.openAccountAndSecurity()
             }
+
             "setUserInfo" -> {
                 AuthBridge.setUserInfo(call.arguments as String, result)
             }
+
             "isLogin" -> {
                 AuthBridge.isLogin(result)
             }
+
+
             "isLoginAsync" -> {
                 AuthBridge.isLoginAsync(result)
+            }
+            "openWebWallet" -> {
+                AuthBridge.openWebWallet(result)
             }
 
 
