@@ -2,6 +2,7 @@ import 'package:oktoast/oktoast.dart';
 import 'package:particle_auth/model/biconmoy_fee_mode.dart';
 import 'package:particle_auth/model/chain_info.dart';
 import 'package:particle_auth/model/login_info.dart';
+import 'package:particle_auth/model/particle_info.dart';
 import 'package:particle_biconomy/model/biconomy_version.dart';
 import 'package:particle_biconomy/particle_biconomy.dart';
 import 'package:particle_auth/particle_auth.dart';
@@ -19,6 +20,15 @@ class BiconomyLogic {
       137: "your polygon mainnet key",
       80001: "hYZIwIsf2.e18c790b-cafb-4c4e-a438-0289fc25dba1"
     };
+
+    // Get your project id and client from dashboard, https://dashboard.particle.network
+    const projectId = "772f7499-1d2e-40f4-8e2c-7b6dd47db9de";
+    const clientKey = "ctWeIc2UBA6sYTKJknT9cu9LBikF00fbk1vmQjsV";
+    if (projectId.isEmpty || clientKey.isEmpty ) {
+      throw const FormatException('You need set project info, get your project id and client key from dashboard, https://dashboard.particle.network');
+    }
+    
+    ParticleInfo.set(projectId, clientKey);
 
     ParticleBiconomy.init(version, dappKeys);
   }

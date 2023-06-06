@@ -82,7 +82,6 @@ public extension ParticleBiconomyPlugin {
         }
         
         BiconomyService.initialize(version: .init(rawValue: version) ?? .v1_0_0, dappApiKeys: dappAppKeys)
-        ParticleNetwork.initialize(config:.init(chainInfo: .ethereum(.mainnet), devEnv: .debug))
         ParticleNetwork.setBiconomyService(self.biconomy)
     }
     

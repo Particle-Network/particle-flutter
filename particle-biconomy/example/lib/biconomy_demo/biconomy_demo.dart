@@ -26,6 +26,19 @@ class BiconomyDemoPageState extends State<BiconomyDemoPage> {
                 width: double.infinity,
                 height: 50,
                 child: ElevatedButton(
+                    onPressed: () => {BiconomyLogic.init()},
+                    child: const Text(
+                      "Init",
+                      style: TextStyle(fontSize: 18),
+                    )),
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: SizedBox(
+                width: double.infinity,
+                height: 50,
+                child: ElevatedButton(
                     onPressed: () => {BiconomyLogic.loginParticle()},
                     child: const Text(
                       "Login particle",
@@ -42,19 +55,6 @@ class BiconomyDemoPageState extends State<BiconomyDemoPage> {
                     onPressed: () => {BiconomyLogic.setChainInfo()},
                     child: const Text(
                       "Set Chain Info",
-                      style: TextStyle(fontSize: 18),
-                    )),
-              ),
-            ),
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: SizedBox(
-                width: double.infinity,
-                height: 50,
-                child: ElevatedButton(
-                    onPressed: () => {BiconomyLogic.init()},
-                    child: const Text(
-                      "Init",
                       style: TextStyle(fontSize: 18),
                     )),
               ),

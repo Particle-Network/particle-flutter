@@ -1,12 +1,10 @@
 import 'dart:convert';
 import 'dart:io';
+import 'package:particle_auth/model/particle_info.dart';
 import 'package:particle_auth/network/net/request_body_entity.dart';
 import 'package:retrofit/retrofit.dart';
 import 'package:dio/dio.dart';
 part 'rest_client.g.dart';
-
-String projectId = ""; //your project id
-String clientKey = ""; //your project client key
 
 @RestApi(baseUrl: "https://rpc.particle.network/")
 abstract class SolanaRpcApi {
@@ -19,12 +17,12 @@ abstract class SolanaRpcApi {
 
   static SolanaRpcApi getClient() {
     if (_instace != null) return _instace!;
-    if (projectId.isEmpty || clientKey.isEmpty) {
+    if (ParticleInfo.projectId.isEmpty || ParticleInfo.clientKey.isEmpty) {
       throw Exception("projectId or clientKey must be not empty!!! Click here to get : https://dashboard.particle.network/");
     }
     final dio = Dio();
     dio.options.headers["Content-Type"] = "application/json";
-    dio.options.headers["Authorization"] = authenticate(projectId, clientKey);
+    dio.options.headers["Authorization"] = authenticate(ParticleInfo.projectId, ParticleInfo.clientKey);
     _instace = SolanaRpcApi(dio);
     return _instace!;
   }
@@ -41,12 +39,12 @@ abstract class EvmRpcApi {
 
   static EvmRpcApi getClient() {
     if (_instace != null) return _instace!;
-    if (projectId.isEmpty || clientKey.isEmpty) {
+    if (ParticleInfo.projectId.isEmpty || ParticleInfo.clientKey.isEmpty) {
       throw Exception("projectId or clientKey must be not empty!!! Click here to get: https://dashboard.particle.network/");
     }
     final dio = Dio();
     dio.options.headers["Content-Type"] = "application/json";
-    dio.options.headers["Authorization"] = authenticate(projectId, clientKey);
+    dio.options.headers["Authorization"] = authenticate(ParticleInfo.projectId, ParticleInfo.clientKey);
     _instace = EvmRpcApi(dio);
     return _instace!;
   }
@@ -63,12 +61,12 @@ abstract class ServiceApi {
 
   static ServiceApi getClient() {
     if (_instace != null) return _instace!;
-    if (projectId.isEmpty || clientKey.isEmpty) {
+    if (ParticleInfo.projectId.isEmpty || ParticleInfo.clientKey.isEmpty) {
       throw Exception("projectId or clientKey must be not empty!!! Click here to get: https://dashboard.particle.network/");
     }
     final dio = Dio();
     dio.options.headers["Content-Type"] = "application/json";
-    dio.options.headers["Authorization"] = authenticate(projectId, clientKey);
+    dio.options.headers["Authorization"] = authenticate(ParticleInfo.projectId, ParticleInfo.clientKey);
     _instace = ServiceApi(dio);
     return _instace!;
   }

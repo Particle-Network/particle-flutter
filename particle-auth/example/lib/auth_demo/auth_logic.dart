@@ -6,6 +6,7 @@ import 'package:particle_auth/model/chain_info.dart';
 import 'package:particle_auth/model/ios_modal_present_style.dart';
 import 'package:particle_auth/model/language.dart';
 import 'package:particle_auth/model/login_info.dart';
+import 'package:particle_auth/model/particle_info.dart';
 import 'package:particle_auth/model/security_account_config.dart';
 import 'package:particle_auth/model/typeddata_version.dart';
 import 'package:particle_auth/network/model/rpc_error.dart';
@@ -20,6 +21,16 @@ class AuthLogic {
   }
 
   static void init(Env env) {
+    
+
+    // Get your project id and client from dashboard, https://dashboard.particle.network
+    const projectId = "772f7499-1d2e-40f4-8e2c-7b6dd47db9de";
+    const clientKey = "ctWeIc2UBA6sYTKJknT9cu9LBikF00fbk1vmQjsV";
+    if (projectId.isEmpty || clientKey.isEmpty ) {
+      throw const FormatException('You need set project info, get your project id and client key from dashboard, https://dashboard.particle.network');
+    }
+    ParticleInfo.set(projectId, clientKey);
+
     ParticleAuth.init(currChainInfo, env);
   }
 

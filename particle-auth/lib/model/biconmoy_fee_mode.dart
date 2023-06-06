@@ -1,4 +1,3 @@
-import 'dart:html';
 
 class BiconomyFeeMode {
   final String option;
