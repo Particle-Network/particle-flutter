@@ -9,11 +9,11 @@ import 'package:particle_biconomy_example/net/request_body_entity.dart';
 import 'package:uuid/uuid.dart';
 
 class TransactionMock {
-  static Future<String> mockSolanaTransaction(String sendPubKey) async {
+  static Future<String> mockSolanaTransaction(String publicAddress) async {
     final req = SerializeSOLTransReqEntity();
     req.lamports = TestAccount.solana.amount;
     req.receiver = TestAccount.solana.publicAddress;
-    req.sender = sendPubKey;
+    req.sender = publicAddress;
 
     SerializeTransResultEntity resultEntity =
         await SolanaService.enhancedSerializeTransaction(req);
@@ -24,8 +24,8 @@ class TransactionMock {
   /// Send contract token in our test account, chain id 5.
   /// Chain id 5 is Ethereum goerli, supports eip 1559, so the transaction is type2.
   /// If your chain id did not support eip 1559, go to method `mockEvmSendTokenUnsupportEip1559`.
-  static Future<String> mockEvmSendToken(String sendPubKey) async {
-    String from = sendPubKey;
+  static Future<String> mockEvmSendToken(String publicAddress) async {
+    String from = publicAddress;
     String receiver = TestAccount.evm.receiverAddress;
     String contractAddress = TestAccount.evm.tokenContractAddress;
     BigInt amount = TestAccount.evm.amount;
@@ -73,8 +73,8 @@ class TransactionMock {
   /// Mock a transaction
   /// Send native token in our test account, chain id 5.
   /// Chain id 5 is Ethereum goerli, supports eip 1559.
-  static Future<String> mockEvmSendNative(String sendPubKey) async {
-    String from = sendPubKey;
+  static Future<String> mockEvmSendNative(String publicAddress) async {
+    String from = publicAddress;
     String receiver = TestAccount.evm.receiverAddress;
     BigInt amount = TestAccount.evm.amount;
     String to = receiver;
@@ -119,8 +119,8 @@ class TransactionMock {
   /// The example show you how to config a type0/legacy transaction.
   /// You can replace parameters to test.
   static Future<String> mockEvmSendTokenUnsupportEip1559(
-      String sendPubKey) async {
-    String from = sendPubKey;
+      String publicAddress) async {
+    String from = publicAddress;
     String receiver = TestAccount.evm.receiverAddress;
     String contractAddress = TestAccount.evm.tokenContractAddress;
     BigInt amount = TestAccount.evm.amount;
@@ -163,8 +163,8 @@ class TransactionMock {
   /// Send erc721 nft in our test account, chain id 5.
   /// Chain id 5 is Ethereum goerli, supports eip 1559, so the transaction is type2.
   /// If your chain id did not support eip 1559, go to method mockEvmSendTokenUnsupportEip1559.
-  static Future<String> mockEvmErc721NFT(String sendPubKey) async {
-    String from = sendPubKey;
+  static Future<String> mockEvmErc721NFT(String publicAddress) async {
+    String from = publicAddress;
     String receiver = TestAccount.evm.receiverAddress;
     String contractAddress = TestAccount.evm.nftContractAddress;
     String tokenId = TestAccount.evm.nftTokenId;
@@ -214,8 +214,8 @@ class TransactionMock {
   /// Send erc1155 nft in our test account, chain id 5.
   /// Chain id 5 is Ethereum goerli, supports eip 1559, so the transaction is type2.
   /// If your chain id did not support eip 1559, go to method mockEvmSendTokenUnsupportEip1559.
-  static Future<String> mockEvmErc1155NFT(String sendPubKey) async {
-    String from = sendPubKey;
+  static Future<String> mockEvmErc1155NFT(String publicAddress) async {
+    String from = publicAddress;
     String receiver = TestAccount.evm.receiverAddress;
     String contractAddress = TestAccount.evm.nftContractAddress;
     String tokenId = TestAccount.evm.nftTokenId;
@@ -263,8 +263,8 @@ class TransactionMock {
 
   /// Mock a transaction, write contract
   /// write contract is same with send transaction.
-  static Future<String> mockWriteContract(String sendPubKey) async {
-    String from = sendPubKey;
+  static Future<String> mockWriteContract(String publicAddress) async {
+    String from = publicAddress;
     String contractAddress = "your contract address";
     String methodName =
         "mint"; // this is your contract method name, like balanceOf, mint.
@@ -321,8 +321,8 @@ class TransactionMock {
 
   /// Mock read contract
   /// read data from chain
-  static Future<String> mockReadContract(String sendPubKey) async {
-    String from = sendPubKey;
+  static Future<String> mockReadContract(String publicAddress) async {
+    String from = publicAddress;
     String contractAddress = "your contract address";
     String methodName =
         "mint"; // this is your contract method name, like balanceOf, mint.

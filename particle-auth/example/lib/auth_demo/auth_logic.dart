@@ -2,7 +2,6 @@ import 'dart:convert';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/widgets.dart';
 import 'package:oktoast/oktoast.dart';
-import 'package:particle_auth/model/biconmoy_fee_mode.dart';
 import 'package:particle_auth/model/chain_info.dart';
 import 'package:particle_auth/model/ios_modal_present_style.dart';
 import 'package:particle_auth/model/language.dart';

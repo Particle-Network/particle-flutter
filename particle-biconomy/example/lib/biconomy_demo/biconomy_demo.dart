@@ -111,6 +111,45 @@ class BiconomyDemoPageState extends State<BiconomyDemoPage> {
                     )),
               ),
             ),
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: SizedBox(
+                width: double.infinity,
+                height: 50,
+                child: ElevatedButton(
+                    onPressed: () => {BiconomyLogic.signAndSendTransactionWithBiconomyAuto()},
+                    child: const Text(
+                      "Is support chain info",
+                      style: TextStyle(fontSize: 18),
+                    )),
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: SizedBox(
+                width: double.infinity,
+                height: 50,
+                child: ElevatedButton(
+                    onPressed: () => {BiconomyLogic.signAndSendTransactionWithBiconomyGasless()},
+                    child: const Text(
+                      "Is support chain info",
+                      style: TextStyle(fontSize: 18),
+                    )),
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: SizedBox(
+                width: double.infinity,
+                height: 50,
+                child: ElevatedButton(
+                    onPressed: () => {BiconomyLogic.signAndSendTransactionWithBiconomyCustom()},
+                    child: const Text(
+                      "Is support chain info",
+                      style: TextStyle(fontSize: 18),
+                    )),
+              ),
+            ),
           ],
         ),
       ),
