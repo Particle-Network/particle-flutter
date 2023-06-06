@@ -21,5 +21,4 @@ A flutter plugin project for particle biconomy
 
 
   s.dependency 'ParticleBiconomy'
-  s.dependency 'BigInt', '~> 5.2.0'
 end

@@ -62,6 +62,9 @@ class ParticleBiconomy {
 
   static Future<dynamic> rpcGetFeeQuotes(
       String eoaAddress, List<String> transactions) async {
-    return await _channel.invokeMethod("rpcGetFeeQuotes");
+    return await _channel.invokeMethod("rpcGetFeeQuotes", jsonEncode({
+      "eoa_address": eoaAddress,
+      "transactions": transactions
+    }));
   }
 }
