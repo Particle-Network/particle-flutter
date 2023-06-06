@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:oktoast/oktoast.dart';
 import 'package:particle_auth/model/biconmoy_fee_mode.dart';
 import 'package:particle_auth/model/chain_info.dart';
@@ -20,6 +22,7 @@ class BiconomyLogic {
       137: "your polygon mainnet key",
       80001: "hYZIwIsf2.e18c790b-cafb-4c4e-a438-0289fc25dba1"
     };
+    ParticleAuth.init(PolygonChain.mainnet(), Env.production);
 
     // Get your project id and client from dashboard, https://dashboard.particle.network
     const projectId = "772f7499-1d2e-40f4-8e2c-7b6dd47db9de";
@@ -68,8 +71,13 @@ class BiconomyLogic {
     List<String> transactions = <String>[transaction];
     var result =
         await ParticleBiconomy.rpcGetFeeQuotes(publicAddress, transactions);
-
-    print(result);
+    if (jsonDecode(result)["status"] == true ||
+        jsonDecode(result)["status"] == 1) {
+        var data = jsonDecode(result)["data"];
+        var data0 = jsonDecode(data)[0];
+        print(jsonEncode(data0));
+    }
+    // print(result);
     showToast("rpcGetFeeQuotes: $result");
   }
 
