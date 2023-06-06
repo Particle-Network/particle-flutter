@@ -4,6 +4,8 @@ buildscript {
         google()
         mavenCentral()
         maven { setUrl("https://jitpack.io") }
+        maven { setUrl("https://s01.oss.sonatype.org/content/groups/staging/") }
+        maven { setUrl("https://s01.oss.sonatype.org/content/repositories/releases/") }
     }
 
     dependencies {
@@ -17,6 +19,8 @@ allprojects {
         google()
         mavenCentral()
         maven { setUrl("https://jitpack.io") }
+        maven { setUrl("https://s01.oss.sonatype.org/content/groups/staging/") }
+        maven { setUrl("https://s01.oss.sonatype.org/content/repositories/releases/") }
     }
 }
 

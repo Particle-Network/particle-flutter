@@ -54,6 +54,9 @@ class ParticleAuthPlugin : FlutterPlugin, MethodCallHandler, ActivityAware {
             "signMessage" -> {
                 AuthBridge.signMessage(call.arguments as String, result)
             }
+            "signMessageUnique" -> {
+                AuthBridge.signMessageUnique(call.arguments as String, result)
+            }
             "signTransaction" -> {
                 AuthBridge.signTransaction(call.arguments as String, result)
             }

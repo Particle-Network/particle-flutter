@@ -8,7 +8,7 @@ import io.flutter.embedding.engine.plugins.activity.ActivityPluginBinding
 import io.flutter.plugin.common.MethodCall
 import io.flutter.plugin.common.MethodChannel
 import io.flutter.plugin.common.MethodChannel.MethodCallHandler
-import network.particle.biconomy_flutter.bridge.module.AuthBridge
+import network.particle.biconomy_flutter.bridge.module.BiconomyBridge
 
 /** ParticleAuthPlugin */
 class ParticleBiconomyPlugin : FlutterPlugin, MethodCallHandler, ActivityAware {
@@ -21,11 +21,11 @@ class ParticleBiconomyPlugin : FlutterPlugin, MethodCallHandler, ActivityAware {
 
     companion object {
         @JvmStatic
-        lateinit var instance: ParticleAuthPlugin
+        lateinit var instance: ParticleBiconomyPlugin
     }
 
     override fun onAttachedToEngine(binding: FlutterPlugin.FlutterPluginBinding) {
-        channel = MethodChannel(binding.binaryMessenger, "auth_bridge")
+        channel = MethodChannel(binding.binaryMessenger, "biconomy_bridge")
         channel?.setMethodCallHandler(this)
     }
 
@@ -37,64 +37,31 @@ class ParticleBiconomyPlugin : FlutterPlugin, MethodCallHandler, ActivityAware {
     override fun onMethodCall(call: MethodCall, result: MethodChannel.Result) {
         when (call.method) {
             "init" -> {
-                AuthBridge.init(activity!!, call.arguments as String)
+                BiconomyBridge.init(activity!!, call.arguments as String)
             }
-            "login" -> {
-                AuthBridge.login(call.arguments as String, result)
+
+            "isSupportChainInfo" -> {
+                BiconomyBridge.isSupportChainInfo(call.arguments as String, result)
             }
-            "logout" -> {
-                AuthBridge.logout(result)
+
+            "isDeploy" -> {
+                BiconomyBridge.isDeploy(call.arguments as String, result)
             }
-            "fastLogout" -> {
-                AuthBridge.fastLogout(result)
+
+            "isBiconomyModeEnable" -> {
+                BiconomyBridge.isBiconomyModeEnable(result)
             }
-            "getAddress" -> {
-                AuthBridge.getAddress(result)
+
+            "enableBiconomyMode" -> {
+                BiconomyBridge.enableBiconomyMode()
             }
-            "signMessage" -> {
-                AuthBridge.signMessage(call.arguments as String, result)
+
+            "disableBiconomyMode" -> {
+                BiconomyBridge.disableBiconomyMode()
             }
-            "signTransaction" -> {
-                AuthBridge.signTransaction(call.arguments as String, result)
-            }
-            "signAllTransactions" -> {
-                AuthBridge.signAllTransactions(call.arguments as String, result)
-            }
-            "signAndSendTransaction" -> {
-                AuthBridge.signAndSendTransaction(call.arguments as String, result)
-            }
-            "signTypedData" -> {
-                AuthBridge.signTypedData(call.arguments as String, result)
-            }
-            "setChainInfo" -> {
-                AuthBridge.setChainInfo(call.arguments as String, result)
-            }
-            "setChainInfoAsync" -> {
-                AuthBridge.setChainInfoAsync(call.arguments as String, result)
-            }
-            "getChainInfo" -> {
-                AuthBridge.getChainInfo(result)
-            }
-            "getUserInfo" -> {
-                AuthBridge.getUserInfo(result)
-            }
-            "setSecurityAccountConfig" -> {
-                AuthBridge.setSecurityAccountConfig(call.arguments as String)
-            }
-            "setLanguage" -> {
-                AuthBridge.setLanguage(call.arguments as String)
-            }
-            "openAccountAndSecurity" -> {
-                AuthBridge.openAccountAndSecurity()
-            }
-            "setUserInfo" -> {
-                AuthBridge.setUserInfo(call.arguments as String, result)
-            }
-            "isLogin" -> {
-                AuthBridge.isLogin(result)
-            }
-            "isLoginAsync" -> {
-                AuthBridge.isLoginAsync(result)
+
+            "rpcGetFeeQuotes" -> {
+                BiconomyBridge.rpcGetFeeQuotes(call.arguments as String, result)
             }
 
 
