@@ -193,12 +193,13 @@ class ParticleConnect {
   ///
   /// Pass [walletType] and [publicAddress] to decide a wallet to sign and send the
   /// [transaction].
-  /// 
+  ///
   /// [feeMode] is optional, works with biconomy service.
-  /// 
+  ///
   /// Result signature or error.
   static Future<String> signAndSendTransaction(
-      WalletType walletType, String publicAddress, String transaction, {BiconomyFeeMode? feeMode}) async {
+      WalletType walletType, String publicAddress, String transaction,
+      {BiconomyFeeMode? feeMode}) async {
     return await _channel.invokeMethod(
         'signAndSendTransaction',
         jsonEncode({
@@ -210,21 +211,23 @@ class ParticleConnect {
   }
 
   /// Batch send transactions
-  /// 
+  ///
   /// Pass [walletType] and [publicAddress] to decide a wallet to sign and send
-  /// 
+  ///
   /// [transactions] transactions you want to sign and send.
-  /// 
+  ///
   /// [feeMode] is optional, works with biconomy service.
-  /// 
+  ///
   /// Result signature or error.
-  static Future<String> batchSendTransactions(WalletType walletType, String publicAddress, List<String> transactions, {BiconomyFeeMode? feeMode}) async {
-     final json = jsonEncode({
+  static Future<String> batchSendTransactions(
+      WalletType walletType, String publicAddress, List<String> transactions,
+      {BiconomyFeeMode? feeMode}) async {
+    final json = jsonEncode({
       "wallet_type": walletType.name,
-          "public_address": publicAddress,
-      "transactions": transactions, 
+      "public_address": publicAddress,
+      "transactions": transactions,
       "fee_mode": feeMode
-      });
+    });
     return await _channel.invokeMethod('batchSendTransactions', json);
   }
 

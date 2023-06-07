@@ -1003,7 +1003,7 @@ extension ParticleConnectPlugin {
         guard let adapter = map2ConnectAdapter(from: walletType) else {
             print("adapter for \(walletTypeString) is not init")
             let response = FlutterResponseError(code: nil, message: "adapter for \(walletTypeString) is not init", data: nil)
-            let statusModel = FlutterStatusModel(status: false, quickSendTransactions: response)
+            let statusModel = FlutterStatusModel(status: false, data: response)
             let data = try! JSONEncoder().encode(statusModel)
             guard let json = String(data: data, encoding: .utf8) else { return }
             flutterResult(json)

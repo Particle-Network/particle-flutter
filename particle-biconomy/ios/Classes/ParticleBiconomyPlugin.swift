@@ -91,9 +91,8 @@ public extension ParticleBiconomyPlugin {
         }
         
         let data = JSON(parseJSON: json)
-        let name = data["chain_name"].stringValue.lowercased()
         let chainId = data["chain_id"].intValue
-        guard let chainInfo = matchChain(name: name, chainId: chainId) else {
+        guard let chainInfo = ParticleNetwork.searchChainInfo(by: chainId) else {
             flutterResult(false)
             return
         }

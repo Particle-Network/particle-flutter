@@ -64,6 +64,7 @@ class BiconomyConnectLogic {
 
   static void signAndSendTransactionWithBiconomyAuto() async {
     if (publicAddress == null) {
+      print("not connect");
       return;
     }
     final transaction = await TransactionMock.mockEvmSendNative(publicAddress!);
@@ -77,6 +78,7 @@ class BiconomyConnectLogic {
 
   static void signAndSendTransactionWithBiconomyGasless() async {
     if (publicAddress == null) {
+      print("not connect");
       return;
     }
 
@@ -90,6 +92,7 @@ class BiconomyConnectLogic {
 
   static void signAndSendTransactionWithBiconomyCustom() async {
     if (publicAddress == null) {
+      print("not connect");
       return;
     }
 
@@ -116,6 +119,7 @@ class BiconomyConnectLogic {
 
   static void batchSendTransactions() async {
     if (publicAddress == null) {
+      print("not connect");
       return;
     }
 
