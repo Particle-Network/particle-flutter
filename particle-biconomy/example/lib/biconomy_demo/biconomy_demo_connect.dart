@@ -15,7 +15,7 @@ class BiconomyDemoConnectPageState extends State<BiconomyDemoConnectPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text("Biconomy Demo"),
+        title: const Text("Biconomy Demo Connect"),
       ),
       body: SingleChildScrollView(
         child: Column(

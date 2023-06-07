@@ -34,6 +34,15 @@ target 'Runner' do
   pod 'ParticleNetworkBase', '0.13.4'
   pod 'ParticleBiconomy', '0.13.4'
   
+  pod 'ParticleConnect', '0.1.53'
+  pod 'ConnectWalletConnectAdapter', '0.1.53'
+  pod 'ConnectSolanaAdapter', '0.1.53'
+  pod 'ConnectEVMAdapter', '0.1.53'
+  pod 'ConnectCommon', '0.1.53'
+  pod 'ConnectPhantomAdapter', '0.1.53'
+  
+  pod 'WalletConnectSwift', :git => 'https://github.com/SunZhiC/WalletConnectSwift', :branch => 'master'
+  
   flutter_install_all_ios_pods File.dirname(File.realpath(__FILE__))
 end
 

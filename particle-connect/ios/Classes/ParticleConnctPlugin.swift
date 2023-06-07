@@ -35,6 +35,9 @@ public class ParticleConnectPlugin: NSObject, FlutterPlugin {
     
     var eventSink: FlutterEventSink?
     
+    var latestPublicAddress: String?
+    var latestWalletType: WalletType?
+    
     public enum Method: String {
         case initialize
         case setChainInfo
@@ -58,6 +61,7 @@ public class ParticleConnectPlugin: NSObject, FlutterPlugin {
         case walletReadyState
         case reconnectIfNeeded
         case connectWalletConnect
+        case batchSendTransactions
     }
     
     public static func register(with registrar: FlutterPluginRegistrar) {
@@ -140,7 +144,8 @@ extension ParticleConnectPlugin {
         let data = JSON(parseJSON: json)
         let chainName = data["chain_name"].stringValue.lowercased()
         let chainId = data["chain_id"].intValue
-        guard let chainInfo = matchChain(name: chainName, chainId: chainId) else {
+        
+        guard let chainInfo = ParticleNetwork.searchChainInfo(by: chainId) else {
             return print("initialize error, can't find right chain for \(chainName), chainId \(chainId)")
         }
         let env = data["env"].stringValue.lowercased()
@@ -223,9 +228,9 @@ extension ParticleConnectPlugin {
         }
         
         let data = JSON(parseJSON: json)
-        let name = data["chain_name"].stringValue.lowercased()
+        
         let chainId = data["chain_id"].intValue
-        guard let chainInfo = matchChain(name: name, chainId: chainId) else {
+        guard let chainInfo = ParticleNetwork.searchChainInfo(by: chainId) else {
             flutterResult(false)
             return
         }
@@ -483,6 +488,18 @@ extension ParticleConnectPlugin {
             return
         }
         
+        let mode = data["fee_mode"]["option"].stringValue
+        var feeMode: Biconomy.FeeMode = .auto
+        if mode == "auto" {
+            feeMode = .auto
+        } else if mode == "gasless" {
+            feeMode = .gasless
+        } else if mode == "custom" {
+            let feeQuoteJson = JSON(data["fee_mode"]["fee_quote"].dictionaryValue)
+            let feeQuote = Biconomy.FeeQuote(json: feeQuoteJson)
+            feeMode = .custom(feeQuote)
+        }
+        
         guard let adapter = map2ConnectAdapter(from: walletType) else {
             print("adapter for \(walletTypeString) is not init")
             let response = FlutterResponseError(code: nil, message: "adapter for \(walletTypeString) is not init", data: nil)
@@ -493,7 +510,7 @@ extension ParticleConnectPlugin {
             return
         }
         
-        adapter.signAndSendTransaction(publicAddress: publicAddress, transaction: transaction).subscribe { [weak self] result in
+        adapter.signAndSendTransaction(publicAddress: publicAddress, transaction: transaction, feeMode: feeMode).subscribe { [weak self] result in
             guard let self = self else { return }
             switch result {
             case .failure(let error):
@@ -508,6 +525,77 @@ extension ParticleConnectPlugin {
                 guard let json = String(data: data, encoding: .utf8) else { return }
                 flutterResult(json)
             }
+        }.disposed(by: self.bag)
+    }
+    
+    func batchSendTransactions(_ json: String?, flutterResult: @escaping FlutterResult) {
+        guard let json = json else {
+            flutterResult(FlutterError(code: "", message: "json is nil", details: nil))
+            return
+        }
+        
+        let data = JSON(parseJSON: json)
+        let transactions = data["transactions"].arrayValue.map {
+            $0.stringValue
+        }
+        let walletTypeString = data["wallet_type"].stringValue
+        let publicAddress = data["public_address"].stringValue
+        
+        guard let walletType = map2WalletType(from: walletTypeString) else {
+            print("walletType \(walletTypeString) is not existed ")
+            let response = FlutterResponseError(code: nil, message: "walletType \(walletTypeString) is not existed", data: nil)
+            let statusModel = FlutterStatusModel(status: false, data: response)
+            let data = try! JSONEncoder().encode(statusModel)
+            guard let json = String(data: data, encoding: .utf8) else { return }
+            flutterResult(json)
+            return
+        }
+        
+        self.latestPublicAddress = publicAddress
+        self.latestWalletType = walletType
+        
+        let mode = data["fee_mode"]["option"].stringValue
+        var feeMode: Biconomy.FeeMode = .auto
+        if mode == "auto" {
+            feeMode = .auto
+        } else if mode == "gasless" {
+            feeMode = .gasless
+        } else if mode == "custom" {
+            let feeQuoteJson = JSON(data["fee_mode"]["fee_quote"].dictionaryValue)
+            let feeQuote = Biconomy.FeeQuote(json: feeQuoteJson)
+            feeMode = .custom(feeQuote)
+        }
+        guard let feeMode = feeMode else {
+            flutterResult(FlutterError(code: "", message: "json is wrong", details: nil))
+            return
+        }
+        
+        guard let biconomy = ParticleNetwork.getBiconomyService() else {
+            flutterResult(FlutterError(code: "", message: "biconomy is not init", details: nil))
+            return
+        }
+        
+        guard biconomy.isBiconomyModeEnable() else {
+            flutterResult(FlutterError(code: "", message: "biconomy is not enable", details: nil))
+            return
+        }
+        
+        biconomy.quickSendTransactions(transactions, feeMode: feeMode, messageSigner: self).subscribe {
+            [weak self] result in
+                guard let self = self else { return }
+                switch result {
+                case .failure(let error):
+                    let response = self.ResponseFromError(error)
+                    let statusModel = FlutterStatusModel(status: false, data: response)
+                    let data = try! JSONEncoder().encode(statusModel)
+                    guard let json = String(data: data, encoding: .utf8) else { return }
+                    flutterResult(json)
+                case .success(let signature):
+                    let statusModel = FlutterStatusModel(status: true, data: signature)
+                    let data = try! JSONEncoder().encode(statusModel)
+                    guard let json = String(data: data, encoding: .utf8) else { return }
+                    flutterResult(json)
+                }
         }.disposed(by: self.bag)
     }
     
@@ -1206,5 +1294,31 @@ extension ParticleConnectPlugin: FlutterStreamHandler {
     
     public func onCancel(withArguments arguments: Any?) -> FlutterError? {
         return nil
+    }
+}
+
+extension ParticleConnectPlugin: MessageSigner {
+    public func signTypedData(_ message: String) -> RxSwift.Single<String> {
+        guard let walletType = self.latestWalletType else {
+            return
+        }
+        guard let adapter = map2ConnectAdapter(from: walletType) else {
+            print("adapter for \(walletTypeString) is not init")
+            let response = FlutterResponseError(code: nil, message: "adapter for \(walletTypeString) is not init", data: nil)
+            let statusModel = FlutterStatusModel(status: false, data: response)
+            let data = try! JSONEncoder().encode(statusModel)
+            guard let json = String(data: data, encoding: .utf8) else { return }
+            flutterResult(json)
+            return
+        }
+        
+    }
+    
+    public func signMessage(_ message: String) -> RxSwift.Single<String> {
+        return ParticleAuthService.signMessage(message)
+    }
+    
+    public func getEoaAddress() -> String {
+        return self.latestPublicAddress ?? ""
     }
 }

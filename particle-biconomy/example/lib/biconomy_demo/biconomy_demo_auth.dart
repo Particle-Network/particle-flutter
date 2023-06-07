@@ -15,7 +15,7 @@ class BiconomyDemoAuthPageState extends State<BiconomyDemoAuthPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text("Biconomy Demo"),
+        title: const Text("Biconomy Demo Auth"),
       ),
       body: SingleChildScrollView(
         child: Column(
