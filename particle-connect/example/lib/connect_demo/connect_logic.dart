@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'package:particle_auth/model/chain_info.dart';
 import 'package:particle_auth/model/login_info.dart';
+import 'package:particle_auth/particle_auth.dart';
 import 'package:oktoast/oktoast.dart';
 import 'package:particle_connect/model/wallet_type.dart';
 import 'package:particle_connect/model/dapp_meta_data.dart';
@@ -13,6 +14,10 @@ class ConnectLogic {
   static late ChainInfo currChainInfo;
   static WalletType walletType = WalletType.metaMask;
 
+  static late String signature;
+
+  static late String message;
+  
   static void selectChain() {
     // currChainInfo = SolanaChain.devnet();
     currChainInfo = EthereumChain.goerli();
@@ -34,12 +39,12 @@ class ConnectLogic {
   }
 
   static void setChainInfo() async {
-    bool isSuccess = await ParticleConnect.setChainInfo(currChainInfo);
+    bool isSuccess = await ParticleAuth.setChainInfo(currChainInfo);
     print("setChainInfo: $isSuccess");
   }
 
 static void getChainInfo() async {
-    String result = await ParticleConnect.getChainInfo();
+    String result = await ParticleAuth.getChainInfo();
     print(result);
     String chainName = jsonDecode(result)["chain_name"];
     int chainId = jsonDecode(result)["chain_id"];
@@ -161,7 +166,6 @@ static void getChainInfo() async {
   }
 
   static void connect() async {
-    
     final config = ParticleConnectConfig(LoginType.google, "",
         [SupportAuthType.all], false, SocialLoginPrompt.select_account);
     final result = await ParticleConnect.connect(walletType, config: config);
@@ -207,10 +211,6 @@ static void getChainInfo() async {
     print("logout: $result");
     showToast("logout: $result");
   }
-
-  static late String signature;
-
-  static late String message;
 
   static void login() async {
     String loginResult = await ParticleConnect.login(walletType,

@@ -37,8 +37,8 @@ target 'Runner' do
   pod 'ConnectCommon', '0.1.53'
   pod 'ConnectPhantomAdapter', '0.1.53'
   
-  pod 'ParticleNetworkBase', '0.13.1'
-  pod 'ParticleAuthService', '0.13.1'
+  pod 'ParticleNetworkBase', '0.13.4'
+  pod 'ParticleAuthService', '0.13.4'
   
   pod 'WalletConnectSwift', :git => 'https://github.com/SunZhiC/WalletConnectSwift', :branch => 'master'
 

@@ -40,6 +40,9 @@ PODS:
   - CryptoSwift (1.6.0)
   - Flutter (1.0.0)
   - GenericJSON (2.0.2)
+  - particle_auth (0.0.1):
+    - Flutter
+    - ParticleAuthService
   - particle_connect (0.0.1):
     - ConnectCommon
     - ConnectEVMAdapter
@@ -48,7 +51,7 @@ PODS:
     - ConnectWalletConnectAdapter
     - Flutter
     - ParticleConnect
-  - ParticleAuthService (0.13.1):
+  - ParticleAuthService (0.13.4):
     - CryptoSwift
     - ParticleNetworkBase
     - RxAlamofire (~> 6.1.1)
@@ -59,7 +62,7 @@ PODS:
   - ParticleConnect (0.1.53):
     - ConnectCommon
     - ParticleAuthService
-  - ParticleNetworkBase (0.13.1):
+  - ParticleNetworkBase (0.13.4):
     - BigInt (~> 5.2.0)
     - CryptoSwift
     - RxAlamofire (~> 6.1.1)
@@ -96,10 +99,11 @@ DEPENDENCIES:
   - ConnectSolanaAdapter (= 0.1.53)
   - ConnectWalletConnectAdapter (= 0.1.53)
   - Flutter (from `Flutter`)
+  - particle_auth (from `.symlinks/plugins/particle_auth/ios`)
   - particle_connect (from `.symlinks/plugins/particle_connect/ios`)
-  - ParticleAuthService (= 0.13.1)
+  - ParticleAuthService (= 0.13.4)
   - ParticleConnect (= 0.1.53)
-  - ParticleNetworkBase (= 0.13.1)
+  - ParticleNetworkBase (= 0.13.4)
   - WalletConnectSwift (from `https://github.com/SunZhiC/WalletConnectSwift`, branch `master`)
 
 SPEC REPOS:
@@ -131,6 +135,8 @@ SPEC REPOS:
 EXTERNAL SOURCES:
   Flutter:
     :path: Flutter
+  particle_auth:
+    :path: ".symlinks/plugins/particle_auth/ios"
   particle_connect:
     :path: ".symlinks/plugins/particle_connect/ios"
   WalletConnectSwift:
@@ -153,10 +159,11 @@ SPEC CHECKSUMS:
   CryptoSwift: 562f8eceb40e80796fffc668b0cad9313284cfa6
   Flutter: f04841e97a9d0b0a8025694d0796dd46242b2854
   GenericJSON: 79a840eeb77030962e8cf02a62d36bd413b67626
+  particle_auth: 7df9934788402bd80156fa5f56422d941af0745c
   particle_connect: b26527054dcf5312694b8ddbb018300116fdd089
-  ParticleAuthService: 39f1788dedc292d12e08f4af59cf5df25bc53f31
+  ParticleAuthService: edd60d9b489b9d54990b2711007fb1187a7c41bd
   ParticleConnect: 9f0144cb2631dd407a930447161e7ee6548f44fa
-  ParticleNetworkBase: cbb46fcd493138b46bbaa6aff2f96aeb8ac8ee2d
+  ParticleNetworkBase: beff78b28c27983478b8c86a7eab449538da96f0
   RxAlamofire: beb75a1c452d0de225651db4903f5d29d034a620
   RxCocoa: 94f817b71c07517321eb4f9ad299112ca8af743b
   RxRelay: 1de1523e604c72b6c68feadedd1af3b1b4d0ecbd
@@ -169,6 +176,6 @@ SPEC CHECKSUMS:
   TweetNacl: 3abf4d1d2082b0114e7a67410e300892448951e6
   WalletConnectSwift: 6309bf3011b0b30e3e9d1e7449535302a9240f71
 
-PODFILE CHECKSUM: c29fa766b31b6247bd01fd1bd8c845bd1f972e28
+PODFILE CHECKSUM: 1dcee7bef25421cb1fdc5dbf0402a44a9cdc167e
 
 COCOAPODS: 1.12.0

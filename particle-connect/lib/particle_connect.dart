@@ -51,28 +51,7 @@ class ParticleConnect {
           }));
     }
   }
-
-  /// Set chain info, update chain info to SDK.
-  /// Call this method before login.
-  ///
-  /// [chainInfo] Chain info, for example EthereumChain, BscChain.
-  static Future<bool> setChainInfo(ChainInfo chainInfo) async {
-    return await _channel.invokeMethod(
-        'setChainInfo',
-        jsonEncode({
-          "chain_name": chainInfo.chainName,
-          "chain_id": chainInfo.chainId,
-          "chain_id_name": chainInfo.chainIdName,
-        }));
-  }
-
-  /// Get chain info
-  ///
-  /// Result chain info object.
-  static Future<String> getChainInfo() async {
-    return await _channel.invokeMethod('getChainInfo');
-  }
-
+  
   /// Connect a wallet.
   ///
   /// [walletType] is which wallet you want to connect.

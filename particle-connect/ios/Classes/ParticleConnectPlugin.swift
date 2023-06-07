@@ -40,8 +40,6 @@ public class ParticleConnectPlugin: NSObject, FlutterPlugin {
     
     public enum Method: String {
         case initialize
-        case setChainInfo
-        case getChainInfo
         case getAccounts
         case connect
         case disconnect
@@ -87,10 +85,6 @@ public class ParticleConnectPlugin: NSObject, FlutterPlugin {
         switch method {
         case .initialize:
             self.initialize(json as? String)
-        case .setChainInfo:
-            self.setChainInfo(json as? String, flutterResult: result)
-        case .getChainInfo:
-            self.getChainInfo(flutterResult: result)
         case .getAccounts:
             self.getAccounts(json as? String, flutterResult: result)
         case .connect:
@@ -221,31 +215,6 @@ extension ParticleConnectPlugin {
         ParticleConnect.initialize(env: devEnv, chainInfo: chainInfo, dAppData: dAppData) {
             adapters
         }
-    }
-    
-    func setChainInfo(_ json: String?, flutterResult: FlutterResult) {
-        guard let json = json else {
-            flutterResult(FlutterError(code: "", message: "json is nil", details: nil))
-            return
-        }
-        
-        let data = JSON(parseJSON: json)
-        
-        let chainId = data["chain_id"].intValue
-        guard let chainInfo = ParticleNetwork.searchChainInfo(by: chainId) else {
-            flutterResult(false)
-            return
-        }
-        ParticleNetwork.setChainInfo(chainInfo)
-        flutterResult(true)
-    }
-    
-    func getChainInfo(flutterResult: FlutterResult) {
-        let chainInfo = ParticleNetwork.getChainInfo()
-            
-        let jsonString = ["chain_name": chainInfo.name, "chain_id": chainInfo.chainId, "chain_id_name": chainInfo.network].jsonString() ?? ""
-            
-        flutterResult(jsonString)
     }
     
     func getAccounts(_ json: String?, flutterResult: FlutterResult) {
