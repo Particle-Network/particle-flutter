@@ -307,9 +307,9 @@ extension ParticleWalletPlugin {
     func supportChain(_ json: String?) {
         guard let json = json else { return }
         let chains = JSON(parseJSON: json).arrayValue.map {
-            $0["chain_name"].stringValue.lowercased()
+            $0["chain_id"].intValue
         }.compactMap {
-            self.matchChain(name: $0)
+            return ParticleNetwork.searchChainInfo(by: $0)?.chain
         }
         ParticleWalletGUI.supportChain(chains)
     }
