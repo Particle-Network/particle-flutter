@@ -293,6 +293,17 @@ object AuthBridge {
                     result.success(FlutterCallBack.success(output.signature).toGson())
                 }
             }, feeMode)
+        } else {
+            ParticleNetwork.signAndSendTransaction(transParams.transaction, object : WebServiceCallback<SignOutput> {
+
+                override fun failure(errMsg: WebServiceError) {
+                    result.success(FlutterCallBack.failed(errMsg).toGson())
+                }
+
+                override fun success(output: SignOutput) {
+                    result.success(FlutterCallBack.success(output.signature).toGson())
+                }
+            })
         }
     }
 

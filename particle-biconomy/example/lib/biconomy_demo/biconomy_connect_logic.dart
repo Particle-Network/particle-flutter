@@ -5,7 +5,6 @@ import 'package:particle_auth/model/biconmoy_fee_mode.dart';
 import 'package:particle_auth/model/biconomy_version.dart';
 import 'package:particle_auth/model/chain_info.dart';
 import 'package:particle_auth/model/particle_info.dart';
-import 'package:particle_auth/network/model/rpc_error.dart';
 import 'package:particle_biconomy/particle_biconomy.dart';
 import 'package:particle_auth/particle_auth.dart';
 import 'package:particle_biconomy_example/mock/transaction_mock.dart';
@@ -104,7 +103,7 @@ class BiconomyConnectLogic {
         await ParticleBiconomy.rpcGetFeeQuotes(publicAddress!, transactions);
 
     var feeQuote = result[0];
-
+    print(feeQuote);
     final signature = await ParticleConnect.signAndSendTransaction(
         WalletType.metaMask, publicAddress!, transaction,
         feeMode: BiconomyFeeMode.custom(feeQuote));

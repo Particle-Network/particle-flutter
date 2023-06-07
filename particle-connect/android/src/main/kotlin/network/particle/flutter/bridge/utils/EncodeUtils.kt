@@ -1,6 +1,5 @@
 package network.particle.flutter.bridge.utils
 
-import com.connect.common.utils.Base58Utils
 import com.particle.base.ParticleNetwork
 import network.particle.unity.utils.HexUtils
 

@@ -14,6 +14,14 @@ import com.particle.base.ChainInfo
 import com.particle.base.ChainName
 import com.particle.base.Env
 import com.particle.base.ParticleNetwork
+import com.particle.base.data.SignOutput
+import com.particle.base.data.WebServiceCallback
+import com.particle.base.data.WebServiceError
+import com.particle.base.ibiconomy.FeeMode
+import com.particle.base.ibiconomy.FeeModeAuto
+import com.particle.base.ibiconomy.FeeModeCustom
+import com.particle.base.ibiconomy.FeeModeGasless
+import com.particle.base.ibiconomy.MessageSigner
 import com.particle.connect.ParticleConnect
 import com.particle.connect.ParticleConnect.setChain
 import com.particle.connect.ParticleConnectAdapter
@@ -28,6 +36,8 @@ import com.wallet.connect.adapter.*
 import com.wallet.connect.adapter.model.MobileWCWallet
 import io.flutter.plugin.common.EventChannel
 import io.flutter.plugin.common.MethodChannel
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import network.particle.flutter.bridge.model.*
 import network.particle.flutter.bridge.utils.BridgeScope
@@ -190,7 +200,7 @@ object ConnectBridge {
         val adapterAccounts: List<AdapterAccount> = ParticleConnect.getAccounts()
         var accounts: List<Account> = ArrayList()
         for (adapterAccount in adapterAccounts) {
-            if (adapterAccount.connectAdapter.name.equals(walletType,true)) {
+            if (adapterAccount.connectAdapter.name.equals(walletType, true)) {
                 accounts = adapterAccount.accounts
                 break
             }
@@ -272,6 +282,7 @@ object ConnectBridge {
     }
 
     fun signAndSendTransaction(jsonParams: String, result: MethodChannel.Result) {
+        LogUtils.d("signAndSendTransaction", jsonParams)
         val signData = GsonUtils.fromJson(jsonParams, ConnectSignData::class.java)
         val transaction = signData.transaction
         val connectAdapter = getConnectAdapter(signData.publicAddress, signData.walletType)
@@ -285,14 +296,24 @@ object ConnectBridge {
             )
             return
         }
-        connectAdapter.signAndSendTransaction(signData.publicAddress, transaction, object : TransactionCallback {
-
+        var feeMode: FeeMode = FeeModeAuto()
+        if (signData.feeMode != null) {
+            val option = signData.feeMode.option
+            if (option == "custom") {
+                val feeQuote = signData.feeMode.feeQuote!!
+                feeMode = FeeModeCustom(feeQuote)
+            } else if (option == "gasless") {
+                feeMode = FeeModeGasless()
+            } else {
+                feeMode = FeeModeAuto()
+            }
+        }
+        connectAdapter.signAndSendTransaction(signData.publicAddress, transaction, feeMode, object : TransactionCallback {
             override fun onError(error: ConnectError) {
                 LogUtils.d("onError", error.toString())
                 result.success(
                     FlutterCallBack.failed(FlutterErrorMessage.parseConnectError(error)).toGson()
                 )
-
             }
 
             override fun onTransaction(transactionId: String?) {
@@ -300,6 +321,8 @@ object ConnectBridge {
                 result.success(FlutterCallBack.success(transactionId).toGson())
             }
         })
+
+
     }
 
     fun signTransaction(jsonParams: String, result: MethodChannel.Result) {
@@ -734,6 +757,83 @@ object ConnectBridge {
         } catch (e: java.lang.Exception) {
             e.printStackTrace()
             throw RuntimeException(e.message)
+        }
+    }
+
+    fun batchSendTransactions(transactions: String, result: MethodChannel.Result) {
+        LogUtils.d("batchSendTransactions", transactions)
+        val signData = GsonUtils.fromJson<ConnectSignData>(transactions, ConnectSignData::class.java)
+        val connectAdapter = getConnectAdapter(signData.publicAddress, signData.walletType)
+        if (connectAdapter == null) {
+            result.success(
+                FlutterCallBack.failed(
+                    FlutterErrorMessage.parseConnectError(
+                        ConnectError.Unauthorized()
+                    )
+                ).toGson()
+            )
+            return
+        }
+        var feeMode: FeeMode = FeeModeAuto()
+        if (signData.feeMode != null) {
+            val option = signData.feeMode!!.option
+            if (option == "custom") {
+                val feeQuote = signData.feeMode!!.feeQuote!!
+                feeMode = FeeModeCustom(feeQuote)
+            } else if (option == "gasless") {
+                feeMode = FeeModeGasless()
+            } else {
+                feeMode = FeeModeAuto()
+            }
+        }
+        CoroutineScope(Dispatchers.IO).launch {
+            try {
+                ParticleNetwork.getBiconomyService().quickSendTransaction(signData.transactions, feeMode, object : MessageSigner {
+                    override fun signTypedData(message: String, callback: WebServiceCallback<SignOutput>) {
+
+                        connectAdapter.signTypedData(signData.publicAddress, message, object : SignCallback {
+                            override fun onError(error: ConnectError) {
+                                callback.failure(WebServiceError(error.message, error.code))
+                            }
+
+                            override fun onSigned(signature: String) {
+                                callback.success(SignOutput(signature))
+                            }
+
+                        })
+                    }
+
+                    override fun signMessage(message: String, callback: WebServiceCallback<SignOutput>) {
+                        connectAdapter.signMessage(signData.publicAddress, message, object : SignCallback {
+                            override fun onError(error: ConnectError) {
+                                callback.failure(WebServiceError(error.message, error.code))
+                            }
+
+                            override fun onSigned(signature: String) {
+                                callback.success(SignOutput(signature))
+                            }
+
+                        })
+
+                    }
+
+                    override fun eoaAddress(): String {
+                        return connectAdapter.getAccounts()[0].publicAddress
+                    }
+
+                }, object : WebServiceCallback<SignOutput> {
+                    override fun success(output: SignOutput) {
+                        result.success(FlutterCallBack.success(output.signature!!).toGson())
+                    }
+
+                    override fun failure(errMsg: WebServiceError) {
+                        result.success(FlutterCallBack.failed(errMsg).toGson())
+                    }
+                })
+            } catch (e: Exception) {
+                e.printStackTrace()
+                result.success(network.particle.auth_flutter.bridge.model.FlutterCallBack.failed("failed").toGson())
+            }
         }
     }
 }

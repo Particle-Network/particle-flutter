@@ -1,8 +1,13 @@
 package network.particle.flutter.bridge.model;
 
+import androidx.annotation.Keep;
+
 import com.google.gson.annotations.SerializedName;
 
 import java.util.List;
+
+import network.particle.auth_flutter.bridge.model.BiconomyFeeMode;
+
 
 public class ConnectSignData {
 
@@ -40,4 +45,8 @@ public class ConnectSignData {
     @SerializedName("signature")
     public String signature;
 
+    @SerializedName("fee_mode")
+    public BiconomyFeeMode feeMode;
+
 }
+

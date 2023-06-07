@@ -11,6 +11,7 @@ import io.flutter.plugin.common.EventChannel.EventSink
 import io.flutter.plugin.common.MethodCall
 import io.flutter.plugin.common.MethodChannel
 import io.flutter.plugin.common.MethodChannel.MethodCallHandler
+import network.particle.auth_flutter.bridge.module.AuthBridge
 import network.particle.flutter.bridge.module.ConnectBridge
 
 /** ParticleConnectPlugin */
@@ -84,6 +85,9 @@ class ParticleConnectPlugin : FlutterPlugin, MethodCallHandler, ActivityAware, E
             }
             "signAndSendTransaction" -> {
                 ConnectBridge.signAndSendTransaction(call.arguments as String, result)
+            }
+            "batchSendTransactions" -> {
+                ConnectBridge.batchSendTransactions(call.arguments as String, result)
             }
             "signTypedData" -> {
                 ConnectBridge.signTypedData(call.arguments as String, result)

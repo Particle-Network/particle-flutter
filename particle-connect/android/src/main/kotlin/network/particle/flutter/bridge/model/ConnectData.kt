@@ -1,5 +1,6 @@
 package network.particle.flutter.bridge.model
 
+import androidx.annotation.Keep
 import com.google.gson.annotations.SerializedName
 
 data class ConnectData(
@@ -14,3 +15,4 @@ data class ParticleConnectConfig(
     @SerializedName("support_auth_type_values") var supportAuthTypeValues: List<String> = arrayListOf(),
     @SerializedName("social_login_prompt") var prompt: String? = null
 )
+
