@@ -1,9 +1,8 @@
 import 'dart:convert';
-
-import 'package:flutter/services.dart';
-import 'package:particle_connect/model/chain_info.dart';
 import 'dart:io' show Platform;
-
+import 'package:flutter/services.dart';
+import 'package:particle_auth/model/biconmoy_fee_mode.dart';
+import 'package:particle_auth/model/chain_info.dart';
 import 'package:particle_connect/model/dapp_meta_data.dart';
 import 'package:particle_connect/model/particle_connect_config.dart';
 import 'package:particle_connect/model/rpc_url_config.dart';
@@ -194,17 +193,39 @@ class ParticleConnect {
   ///
   /// Pass [walletType] and [publicAddress] to decide a wallet to sign and send the
   /// [transaction].
-  ///
+  /// 
+  /// [feeMode] is optional, works with biconomy service.
+  /// 
   /// Result signature or error.
   static Future<String> signAndSendTransaction(
-      WalletType walletType, String publicAddress, String transaction) async {
+      WalletType walletType, String publicAddress, String transaction, {BiconomyFeeMode? feeMode}) async {
     return await _channel.invokeMethod(
         'signAndSendTransaction',
         jsonEncode({
           "wallet_type": walletType.name,
           "public_address": publicAddress,
           "transaction": transaction,
+          "fee_mode": feeMode,
         }));
+  }
+
+  /// Batch send transactions
+  /// 
+  /// Pass [walletType] and [publicAddress] to decide a wallet to sign and send
+  /// 
+  /// [transactions] transactions you want to sign and send.
+  /// 
+  /// [feeMode] is optional, works with biconomy service.
+  /// 
+  /// Result signature or error.
+  static Future<String> batchSendTransactions(WalletType walletType, String publicAddress, List<String> transactions, {BiconomyFeeMode? feeMode}) async {
+     final json = jsonEncode({
+      "wallet_type": walletType.name,
+          "public_address": publicAddress,
+      "transactions": transactions, 
+      "fee_mode": feeMode
+      });
+    return await _channel.invokeMethod('batchSendTransactions', json);
   }
 
   /// Sign typed data, only support evm chain.

@@ -1,4 +1,6 @@
-import 'package:particle_connect/model/login_info.dart';
+
+
+import 'package:particle_auth/model/login_info.dart';
 
 class ParticleConnectConfig {
   LoginType loginType;

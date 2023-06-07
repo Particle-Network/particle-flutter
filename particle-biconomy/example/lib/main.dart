@@ -1,7 +1,8 @@
 
 import 'package:flutter/material.dart';
 import 'package:oktoast/oktoast.dart';
-import 'package:particle_biconomy_example/biconomy_demo/biconomy_demo.dart';
+import 'package:particle_biconomy_example/biconomy_demo/biconomy_demo_auth.dart';
+import 'package:particle_biconomy_example/biconomy_demo/biconomy_demo_connect.dart';
 
 void main() {
   runApp(const MyApp());
@@ -63,12 +64,32 @@ class _MyHomePageState extends State<MyHomePage> {
                       Navigator.push(
                         context,
                         MaterialPageRoute(
-                          builder: (context) => const BiconomyDemoPage(),
+                          builder: (context) => const BiconomyDemoAuthPage(),
                         ),
                       )
                     },
                     child: const Text(
-                      "Biconomy Demo",
+                      "Biconomy Demo with Auth",
+                      style: TextStyle(fontSize: 20),
+                    ),
+                  )),
+            ),
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: SizedBox(
+                  width: 200,
+                  height: 50,
+                  child: ElevatedButton(
+                    onPressed: () => {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => const BiconomyDemoConnectPage(),
+                        ),
+                      )
+                    },
+                    child: const Text(
+                      "Biconomy Demo with Connect",
                       style: TextStyle(fontSize: 20),
                     ),
                   )),

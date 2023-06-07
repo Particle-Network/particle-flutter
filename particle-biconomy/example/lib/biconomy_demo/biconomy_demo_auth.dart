@@ -1,16 +1,16 @@
 import 'package:flutter/material.dart';
-import 'package:particle_biconomy_example/biconomy_demo/biconomy_logic.dart';
+import 'package:particle_biconomy_example/biconomy_demo/biconomy_auth_logic.dart';
 
-class BiconomyDemoPage extends StatefulWidget {
-  const BiconomyDemoPage({Key? key}) : super(key: key);
+class BiconomyDemoAuthPage extends StatefulWidget {
+  const BiconomyDemoAuthPage({Key? key}) : super(key: key);
 
   @override
   State<StatefulWidget> createState() {
-    return BiconomyDemoPageState();
+    return BiconomyDemoAuthPageState();
   }
 }
 
-class BiconomyDemoPageState extends State<BiconomyDemoPage> {
+class BiconomyDemoAuthPageState extends State<BiconomyDemoAuthPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -26,7 +26,7 @@ class BiconomyDemoPageState extends State<BiconomyDemoPage> {
                 width: double.infinity,
                 height: 50,
                 child: ElevatedButton(
-                    onPressed: () => {BiconomyLogic.init()},
+                    onPressed: () => {BiconomyAuthLogic.init()},
                     child: const Text(
                       "Init",
                       style: TextStyle(fontSize: 18),
@@ -39,7 +39,7 @@ class BiconomyDemoPageState extends State<BiconomyDemoPage> {
                 width: double.infinity,
                 height: 50,
                 child: ElevatedButton(
-                    onPressed: () => {BiconomyLogic.loginParticle()},
+                    onPressed: () => {BiconomyAuthLogic.loginParticle()},
                     child: const Text(
                       "Login particle",
                       style: TextStyle(fontSize: 18),
@@ -52,7 +52,7 @@ class BiconomyDemoPageState extends State<BiconomyDemoPage> {
                 width: double.infinity,
                 height: 50,
                 child: ElevatedButton(
-                    onPressed: () => {BiconomyLogic.setChainInfo()},
+                    onPressed: () => {BiconomyAuthLogic.setChainInfo()},
                     child: const Text(
                       "Set Chain Info",
                       style: TextStyle(fontSize: 18),
@@ -65,7 +65,7 @@ class BiconomyDemoPageState extends State<BiconomyDemoPage> {
                 width: double.infinity,
                 height: 50,
                 child: ElevatedButton(
-                    onPressed: () => {BiconomyLogic.isBiconomyModeEnable()},
+                    onPressed: () => {BiconomyAuthLogic.isBiconomyModeEnable()},
                     child: const Text(
                       "Is enable",
                       style: TextStyle(fontSize: 18),
@@ -78,7 +78,7 @@ class BiconomyDemoPageState extends State<BiconomyDemoPage> {
                 width: double.infinity,
                 height: 50,
                 child: ElevatedButton(
-                    onPressed: () => {BiconomyLogic.enableBiconomyMode()},
+                    onPressed: () => {BiconomyAuthLogic.enableBiconomyMode()},
                     child: const Text(
                       "Enable",
                       style: TextStyle(fontSize: 18),
@@ -91,7 +91,7 @@ class BiconomyDemoPageState extends State<BiconomyDemoPage> {
                 width: double.infinity,
                 height: 50,
                 child: ElevatedButton(
-                    onPressed: () => {BiconomyLogic.disableBiconomyMode()},
+                    onPressed: () => {BiconomyAuthLogic.disableBiconomyMode()},
                     child: const Text(
                       "Disable",
                       style: TextStyle(fontSize: 18),
@@ -104,7 +104,7 @@ class BiconomyDemoPageState extends State<BiconomyDemoPage> {
                 width: double.infinity,
                 height: 50,
                 child: ElevatedButton(
-                    onPressed: () => {BiconomyLogic.isDeploy()},
+                    onPressed: () => {BiconomyAuthLogic.isDeploy()},
                     child: const Text(
                       "Is deploy",
                       style: TextStyle(fontSize: 18),
@@ -117,7 +117,7 @@ class BiconomyDemoPageState extends State<BiconomyDemoPage> {
                 width: double.infinity,
                 height: 50,
                 child: ElevatedButton(
-                    onPressed: () => {BiconomyLogic.rpcGetFeeQuotes()},
+                    onPressed: () => {BiconomyAuthLogic.rpcGetFeeQuotes()},
                     child: const Text(
                       "Rpc get fee quotes",
                       style: TextStyle(fontSize: 18),
@@ -130,7 +130,7 @@ class BiconomyDemoPageState extends State<BiconomyDemoPage> {
                 width: double.infinity,
                 height: 50,
                 child: ElevatedButton(
-                    onPressed: () => {BiconomyLogic.isSupportChainInfo()},
+                    onPressed: () => {BiconomyAuthLogic.isSupportChainInfo()},
                     child: const Text(
                       "Is support chain info",
                       style: TextStyle(fontSize: 18),
@@ -143,7 +143,7 @@ class BiconomyDemoPageState extends State<BiconomyDemoPage> {
                 width: double.infinity,
                 height: 50,
                 child: ElevatedButton(
-                    onPressed: () => {BiconomyLogic.signAndSendTransactionWithBiconomyAuto()},
+                    onPressed: () => {BiconomyAuthLogic.signAndSendTransactionWithBiconomyAuto()},
                     child: const Text(
                       "send with biconomy auto",
                       style: TextStyle(fontSize: 18),
@@ -156,7 +156,7 @@ class BiconomyDemoPageState extends State<BiconomyDemoPage> {
                 width: double.infinity,
                 height: 50,
                 child: ElevatedButton(
-                    onPressed: () => {BiconomyLogic.signAndSendTransactionWithBiconomyGasless()},
+                    onPressed: () => {BiconomyAuthLogic.signAndSendTransactionWithBiconomyGasless()},
                     child: const Text(
                       "send with biconomy gasless",
                       style: TextStyle(fontSize: 18),
@@ -169,7 +169,7 @@ class BiconomyDemoPageState extends State<BiconomyDemoPage> {
                 width: double.infinity,
                 height: 50,
                 child: ElevatedButton(
-                    onPressed: () => {BiconomyLogic.signAndSendTransactionWithBiconomyCustom()},
+                    onPressed: () => {BiconomyAuthLogic.signAndSendTransactionWithBiconomyCustom()},
                     child: const Text(
                       "send with biconomy custom",
                       style: TextStyle(fontSize: 18),
@@ -182,7 +182,7 @@ class BiconomyDemoPageState extends State<BiconomyDemoPage> {
                 width: double.infinity,
                 height: 50,
                 child: ElevatedButton(
-                    onPressed: () => {BiconomyLogic.batchSendTransactions()},
+                    onPressed: () => {BiconomyAuthLogic.batchSendTransactions()},
                     child: const Text(
                       "batch send transactions",
                       style: TextStyle(fontSize: 18),

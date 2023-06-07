@@ -10,8 +10,10 @@ import 'package:particle_auth/network/model/rpc_error.dart';
 import 'package:particle_biconomy/particle_biconomy.dart';
 import 'package:particle_auth/particle_auth.dart';
 import 'package:particle_biconomy_example/mock/transaction_mock.dart';
+import 'package:particle_connect/model/wallet_type.dart';
+import 'package:particle_connect/particle_connect.dart';
 
-class BiconomyLogic {
+class BiconomyAuthLogic {
   static void init() {
     // should call ParticleAuth init first.
     ParticleAuth.init(PolygonChain.mumbai(), Env.dev);
@@ -123,6 +125,11 @@ class BiconomyLogic {
   static void loginParticle() async {
     final result =
         await ParticleAuth.login(LoginType.email, "", [SupportAuthType.all]);
+    print(result);
+  }
+
+   static void loginMetamask() async {
+    final result = await ParticleConnect.connect(WalletType.metaMask);
     print(result);
   }
 

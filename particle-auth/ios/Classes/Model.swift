@@ -6,12 +6,16 @@
 //
 
 import Foundation
+import ParticleAuthService
 import ParticleNetworkBase
+
 
 extension NSObject {
     func matchChain(name: String, chainId: Int) -> ParticleNetwork.ChainInfo? {
         var chainInfo: ParticleNetwork.ChainInfo?
-
+        
+        
+        
         if name == "solana" {
             if chainId == 101 {
                 chainInfo = .solana(.mainnet)

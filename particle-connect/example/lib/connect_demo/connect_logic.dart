@@ -1,12 +1,10 @@
 import 'dart:convert';
-
+import 'package:particle_auth/model/chain_info.dart';
+import 'package:particle_auth/model/login_info.dart';
 import 'package:oktoast/oktoast.dart';
-import 'package:particle_connect/model/chain_info.dart';
 import 'package:particle_connect/model/wallet_type.dart';
 import 'package:particle_connect/model/dapp_meta_data.dart';
-import 'package:particle_connect/model/login_info.dart';
 import 'package:particle_connect/model/particle_connect_config.dart';
-import 'package:particle_connect/model/wallet_ready_state.dart';
 import 'package:particle_connect/particle_connect.dart';
 import 'package:particle_connect_example/mock/test_account.dart';
 import 'package:particle_connect_example/mock/transaction_mock.dart';
@@ -163,6 +161,7 @@ static void getChainInfo() async {
   }
 
   static void connect() async {
+    
     final config = ParticleConnectConfig(LoginType.google, "",
         [SupportAuthType.all], false, SocialLoginPrompt.select_account);
     final result = await ParticleConnect.connect(walletType, config: config);
