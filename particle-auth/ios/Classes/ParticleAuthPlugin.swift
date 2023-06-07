@@ -129,7 +129,7 @@ public extension ParticleAuthPlugin {
         let data = JSON(parseJSON: json)
         let name = data["chain_name"].stringValue.lowercased()
         let chainId = data["chain_id"].intValue
-        guard let chainName = matchChain(name: name, chainId: chainId) else {
+        guard let chainInfo = ParticleNetwork.searchChainInfo(by: chainId) else {
             return print("initialize error, can't find right chain for \(name), chainId \(chainId)")
         }
         let env = data["env"].stringValue.lowercased()
@@ -143,7 +143,7 @@ public extension ParticleAuthPlugin {
             devEnv = .production
         }
         
-        let config = ParticleNetworkConfiguration(chainInfo: chainName, devEnv: devEnv)
+        let config = ParticleNetworkConfiguration(chainInfo: chainInfo, devEnv: devEnv)
         ParticleNetwork.initialize(config: config)
     }
     
@@ -153,9 +153,9 @@ public extension ParticleAuthPlugin {
         }
         
         let data = JSON(parseJSON: json)
-        let name = data["chain_name"].stringValue.lowercased()
+        
         let chainId = data["chain_id"].intValue
-        guard let chainInfo = matchChain(name: name, chainId: chainId) else {
+        guard let chainInfo = ParticleNetwork.searchChainInfo(by: chainId) else {
             flutterResult(false)
             return
         }
@@ -169,26 +169,25 @@ public extension ParticleAuthPlugin {
             return
         }
         let data = JSON(parseJSON: json)
-        let name = data["chain_name"].stringValue.lowercased()
+        
         let chainId = data["chain_id"].intValue
-        guard let chainInfo = matchChain(name: name, chainId: chainId) else {
+        guard let chainInfo = ParticleNetwork.searchChainInfo(by: chainId) else {
             flutterResult(FlutterError(code: "", message: "did not find chain info for \(chainId)", details: nil))
             return
         }
-        ParticleAuthService.setChainInfo(chainInfo).subscribe { [weak self] result in
-            guard let self = self else { return }
-
+        ParticleAuthService.setChainInfo(chainInfo).subscribe { result in
+            
             switch result {
-            case .failure(let error):
-                let response = self.ResponseFromError(error)
-                let statusModel = FlutterStatusModel(status: false, data: response)
-                let data = try! JSONEncoder().encode(statusModel)
-                guard let json = String(data: data, encoding: .utf8) else { return }
+            case .failure:
+//                let response = self.ResponseFromError(error)
+//                let statusModel = FlutterStatusModel(status: false, data: response)
+//                let data = try! JSONEncoder().encode(statusModel)
+//                guard let json = String(data: data, encoding: .utf8) else { return }
                 flutterResult(false)
             case .success:
-                let statusModel = FlutterStatusModel(status: true, data: true)
-                let data = try! JSONEncoder().encode(statusModel)
-                guard let json = String(data: data, encoding: .utf8) else { return }
+//                let statusModel = FlutterStatusModel(status: true, data: true)
+//                let data = try! JSONEncoder().encode(statusModel)
+//                guard let json = String(data: data, encoding: .utf8) else { return }
                 flutterResult(true)
             }
         }.disposed(by: self.bag)
@@ -283,10 +282,10 @@ public extension ParticleAuthPlugin {
             flutterResult(FlutterError(code: "", message: "json is nil", details: nil))
             return
         }
-        ParticleAuthService.setUserInfo(json: json).subscribe { [weak self] result in
-            guard let self = self else { return }
+        ParticleAuthService.setUserInfo(json: json).subscribe { result in
+            
             switch result {
-            case .failure(let error):
+            case .failure:
 //                let response = self.ResponseFromError(error)
 //                let statusModel = FlutterStatusModel(status: false, data: response)
 //                let data = try! JSONEncoder().encode(statusModel)
@@ -486,7 +485,7 @@ public extension ParticleAuthPlugin {
         let data = JSON(parseJSON: json)
         let transaction = data["transaction"].stringValue
         let mode = data["fee_mode"]["option"].stringValue
-        var feeMode: Biconomy.FeeMode?
+        var feeMode: Biconomy.FeeMode = .auto
         if mode == "auto" {
             feeMode = .auto
         } else if mode == "gasless" {
@@ -495,10 +494,6 @@ public extension ParticleAuthPlugin {
             let feeQuoteJson = JSON(data["fee_mode"]["fee_quote"].dictionaryValue)
             let feeQuote = Biconomy.FeeQuote(json: feeQuoteJson)
             feeMode = .custom(feeQuote)
-        }
-        guard let feeMode = feeMode else {
-            flutterResult(FlutterError(code: "", message: "json is wrong", details: nil))
-            return
         }
         
         ParticleAuthService.signAndSendTransaction(transaction, feeMode: feeMode).subscribe { [weak self] result in
@@ -530,7 +525,7 @@ public extension ParticleAuthPlugin {
             $0.stringValue
         }
         let mode = data["fee_mode"]["option"].stringValue
-        var feeMode: Biconomy.FeeMode?
+        var feeMode: Biconomy.FeeMode = .auto
         if mode == "auto" {
             feeMode = .auto
         } else if mode == "gasless" {
@@ -539,10 +534,6 @@ public extension ParticleAuthPlugin {
             let feeQuoteJson = JSON(data["fee_mode"]["fee_quote"].dictionaryValue)
             let feeQuote = Biconomy.FeeQuote(json: feeQuoteJson)
             feeMode = .custom(feeQuote)
-        }
-        guard let feeMode = feeMode else {
-            flutterResult(FlutterError(code: "", message: "json is wrong", details: nil))
-            return
         }
         
         guard let biconomy = ParticleNetwork.getBiconomyService() else {
