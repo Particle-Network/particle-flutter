@@ -69,7 +69,7 @@ class _MyHomePageState extends State<MyHomePage> {
                       )
                     },
                     child: const Text(
-                      "Biconomy Demo with Auth",
+                      "Biconomy Auth",
                       style: TextStyle(fontSize: 20),
                     ),
                   )),
@@ -89,7 +89,7 @@ class _MyHomePageState extends State<MyHomePage> {
                       )
                     },
                     child: const Text(
-                      "Biconomy Demo with Connect",
+                      "Biconomy Connect",
                       style: TextStyle(fontSize: 20),
                     ),
                   )),

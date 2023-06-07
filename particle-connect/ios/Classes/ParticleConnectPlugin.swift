@@ -129,6 +129,8 @@ public class ParticleConnectPlugin: NSObject, FlutterPlugin {
             self.reconnectIfNeeded(json as? String)
         case .connectWalletConnect:
             self.connectWalletConnect(flutterResult: result)
+        case .batchSendTransactions:
+            self.batchSendTransactions(json as? String, flutterResult: result)
         }
     }
 }
@@ -564,10 +566,6 @@ extension ParticleConnectPlugin {
             let feeQuoteJson = JSON(data["fee_mode"]["fee_quote"].dictionaryValue)
             let feeQuote = Biconomy.FeeQuote(json: feeQuoteJson)
             feeMode = .custom(feeQuote)
-        }
-        guard let feeMode = feeMode else {
-            flutterResult(FlutterError(code: "", message: "json is wrong", details: nil))
-            return
         }
         
         guard let biconomy = ParticleNetwork.getBiconomyService() else {
@@ -1005,7 +1003,7 @@ extension ParticleConnectPlugin {
         guard let adapter = map2ConnectAdapter(from: walletType) else {
             print("adapter for \(walletTypeString) is not init")
             let response = FlutterResponseError(code: nil, message: "adapter for \(walletTypeString) is not init", data: nil)
-            let statusModel = FlutterStatusModel(status: false, data: response)
+            let statusModel = FlutterStatusModel(status: false, quickSendTransactions: response)
             let data = try! JSONEncoder().encode(statusModel)
             guard let json = String(data: data, encoding: .utf8) else { return }
             flutterResult(json)
@@ -1300,22 +1298,28 @@ extension ParticleConnectPlugin: FlutterStreamHandler {
 extension ParticleConnectPlugin: MessageSigner {
     public func signTypedData(_ message: String) -> RxSwift.Single<String> {
         guard let walletType = self.latestWalletType else {
-            return
-        }
-        guard let adapter = map2ConnectAdapter(from: walletType) else {
-            print("adapter for \(walletTypeString) is not init")
-            let response = FlutterResponseError(code: nil, message: "adapter for \(walletTypeString) is not init", data: nil)
-            let statusModel = FlutterStatusModel(status: false, data: response)
-            let data = try! JSONEncoder().encode(statusModel)
-            guard let json = String(data: data, encoding: .utf8) else { return }
-            flutterResult(json)
-            return
+            print("walletType is nil")
+            return .error(ParticleNetwork.ResponseError.init(code: nil, message: "walletType is nil"))
         }
         
+        guard let adapter = map2ConnectAdapter(from: walletType) else {
+            print("adapter for \(walletType) is not init")
+            return .error(ParticleNetwork.ResponseError.init(code: nil, message: "adapter for \(walletType) is not init"))
+        }
+        return adapter.signTypedData(publicAddress: getEoaAddress(), data: message)
     }
     
     public func signMessage(_ message: String) -> RxSwift.Single<String> {
-        return ParticleAuthService.signMessage(message)
+        guard let walletType = self.latestWalletType else {
+            print("walletType is nil")
+            return .error(ParticleNetwork.ResponseError.init(code: nil, message: "walletType is nil"))
+        }
+        
+        guard let adapter = map2ConnectAdapter(from: walletType) else {
+            print("adapter for \(walletType) is not init")
+            return .error(ParticleNetwork.ResponseError.init(code: nil, message: "adapter for \(walletType) is not init"))
+        }
+        return adapter.signMessage(publicAddress: getEoaAddress(), message: message)
     }
     
     public func getEoaAddress() -> String {
