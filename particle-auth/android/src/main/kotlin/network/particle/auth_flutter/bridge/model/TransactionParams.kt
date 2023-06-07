@@ -2,9 +2,10 @@ package network.particle.auth_flutter.bridge.model
 
 import androidx.annotation.Keep
 import com.google.gson.annotations.SerializedName
+import com.particle.base.model.Erc4337FeeQuote
 
 @Keep
-data class BiconomyFeeMode(val option: String, val feeQuote: String?)
+data class BiconomyFeeMode(val option: String, val feeQuote: Erc4337FeeQuote)
 
 @Keep
 data class TransactionParams(
