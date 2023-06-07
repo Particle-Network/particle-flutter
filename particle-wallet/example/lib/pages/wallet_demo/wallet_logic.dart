@@ -7,7 +7,7 @@ import 'package:particle_wallet/model/language.dart';
 import 'package:particle_wallet/model/open_buy_network.dart';
 import 'package:particle_wallet/model/wallet_display.dart';
 import 'package:particle_wallet/particle_wallet.dart';
-import 'package:particle_connect/model/chain_info.dart';
+import 'package:particle_auth/model/chain_info.dart';
 
 class WalletLogic {
   static void init() {

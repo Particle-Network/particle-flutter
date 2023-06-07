@@ -2,20 +2,18 @@ import 'dart:convert';
 import 'dart:math';
 
 import 'package:particle_wallet_example/mock/test_account.dart';
-import 'package:particle_wallet_example/model/serialize_sol_transreqentity.dart';
-import 'package:particle_wallet_example/model/serialize_trans_result_entity.dart';
-import 'package:particle_wallet_example/net/particle_rpc.dart';
-
+import 'package:particle_auth/network/net/particle_rpc.dart';
+import 'package:particle_auth/network/model/serialize_sol_transreqentity.dart';
 class TransactionMock {
-  static Future<String> mockSolanaTransaction(String sendPubKey) async {
+  static Future<String> mockSolanaTransaction(String publicAddress) async {
     final req = SerializeSOLTransReqEntity();
     req.lamports = TestAccount.solana.amount;
     req.receiver = TestAccount.solana.publicAddress;
-    req.sender = sendPubKey;
+    req.sender = publicAddress;
 
-    SerializeTransResultEntity resultEntity =
+    final response =
         await SolanaService.enhancedSerializeTransaction(req);
-    return resultEntity.result.transaction.serialized;
+       return jsonDecode(response)["result"]["transaction"]["serialized"];
   }
 
   static Future<String> mockEvmTransaction(String sendPubKey) async {
