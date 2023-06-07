@@ -1,6 +1,6 @@
 name: particle_biconomy
 description: A flutter plugin project for particle biconomy
-version: 0.13.4
+version: 0.13.5
 homepage: https://particle.network
 
 environment:
@@ -12,9 +12,9 @@ dependencies:
     sdk: flutter
   plugin_platform_interface: ^2.0.2
 
-  particle_connect:
-    path: ../particle-connect/
-  particle_auth: ^0.13.4 
+  particle_connect: ^0.13.5
+#    path: ../particle-connect/
+  particle_auth: ^0.13.5
 dev_dependencies:
   flutter_test:
     sdk: flutter
