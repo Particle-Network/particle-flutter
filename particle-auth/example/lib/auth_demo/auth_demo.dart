@@ -43,7 +43,7 @@ class AuthDemoPageState extends State<AuthDemoPage> {
                 width: double.infinity,
                 height: 50,
                 child: ElevatedButton(
-                    onPressed: () => {AuthLogic.init(Env.production)},
+                    onPressed: () => {AuthLogic.init(Env.dev)},
                     child: const Text(
                       "Init",
                       style: TextStyle(fontSize: 18),

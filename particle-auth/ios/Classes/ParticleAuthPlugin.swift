@@ -269,7 +269,9 @@ public extension ParticleAuthPlugin {
                 flutterResult(json)
             case .success(let userInfo):
                 guard let userInfo = userInfo else { return }
-                let statusModel = FlutterStatusModel(status: true, data: userInfo)
+                let userInfoJsonString = userInfo.jsonStringFullSnake()
+                let newUserInfo = JSON(parseJSON: userInfoJsonString)
+                let statusModel = FlutterStatusModel(status: true, data: newUserInfo)
                 let data = try! JSONEncoder().encode(statusModel)
                 guard let json = String(data: data, encoding: .utf8) else { return }
                 flutterResult(json)
@@ -374,7 +376,7 @@ public extension ParticleAuthPlugin {
         case .solana:
             serializedMessage = Base58.encode(message.data(using: .utf8)!)
         default:
-            serializedMessage = "0x" + message.data(using: .utf8)!.map { String(format: "%02x", $0) }.joined()
+            serializedMessage = message
         }
         
         ParticleAuthService.signMessage(serializedMessage).subscribe { [weak self] result in
@@ -406,7 +408,7 @@ public extension ParticleAuthPlugin {
         case .solana:
             serializedMessage = Base58.encode(message.data(using: .utf8)!)
         default:
-            serializedMessage = "0x" + message.data(using: .utf8)!.map { String(format: "%02x", $0) }.joined()
+            serializedMessage = message
         }
         
         ParticleAuthService.signMessageUnique(serializedMessage).subscribe { [weak self] result in
