@@ -26,8 +26,8 @@ class AuthLogic {
     
 
     // Get your project id and client from dashboard, https://dashboard.particle.network
-    const projectId = "772f7499-1d2e-40f4-8e2c-7b6dd47db9de";
-    const clientKey = "ctWeIc2UBA6sYTKJknT9cu9LBikF00fbk1vmQjsV";
+    const projectId = "";
+    const clientKey = "";
     if (projectId.isEmpty || clientKey.isEmpty ) {
       throw const FormatException('You need set project info, get your project id and client key from dashboard, https://dashboard.particle.network');
     }
