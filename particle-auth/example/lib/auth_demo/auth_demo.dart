@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:particle_auth/model/chain_info.dart';
+import 'package:particle_auth/particle_auth.dart';
 import 'package:particle_auth_example/auth_demo/auth_logic.dart';
 
 class AuthDemoPage extends StatefulWidget {
@@ -385,6 +385,45 @@ class AuthDemoPageState extends State<AuthDemoPage> {
                     onPressed: () => {AuthLogic.setUserInfo()},
                     child: const Text(
                       "Set user info",
+                      style: TextStyle(fontSize: 18),
+                    )),
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: SizedBox(
+                width: double.infinity,
+                height: 50,
+                child: ElevatedButton(
+                    onPressed: () => {AuthLogic.readContract()},
+                    child: const Text(
+                      "Read contract",
+                      style: TextStyle(fontSize: 18),
+                    )),
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: SizedBox(
+                width: double.infinity,
+                height: 50,
+                child: ElevatedButton(
+                    onPressed: () => {AuthLogic.writeContract()},
+                    child: const Text(
+                      "Write contract",
+                      style: TextStyle(fontSize: 18),
+                    )),
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: SizedBox(
+                width: double.infinity,
+                height: 50,
+                child: ElevatedButton(
+                    onPressed: () => {AuthLogic.writeContractSendTransaction()},
+                    child: const Text(
+                      "Write contract then send ",
                       style: TextStyle(fontSize: 18),
                     )),
               ),

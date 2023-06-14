@@ -1,8 +1,6 @@
 import 'dart:convert';
 import 'dart:math';
-import 'package:particle_auth/network/model/serialize_sol_transreqentity.dart';
-import 'package:particle_auth/network/net/particle_rpc.dart';
-import 'package:particle_auth/network/net/request_body_entity.dart';
+import 'package:particle_auth/particle_auth.dart';
 import 'package:particle_auth_example/mock/test_account.dart';
 
 class TransactionMock {

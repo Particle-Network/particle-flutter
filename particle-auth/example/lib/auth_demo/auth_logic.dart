@@ -2,16 +2,6 @@ import 'dart:convert';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/widgets.dart';
 import 'package:oktoast/oktoast.dart';
-import 'package:particle_auth/model/biconomy_version.dart';
-import 'package:particle_auth/model/chain_info.dart';
-import 'package:particle_auth/model/ios_modal_present_style.dart';
-import 'package:particle_auth/model/language.dart';
-import 'package:particle_auth/model/login_info.dart';
-import 'package:particle_auth/model/particle_info.dart';
-import 'package:particle_auth/model/security_account_config.dart';
-import 'package:particle_auth/model/typeddata_version.dart';
-import 'package:particle_auth/network/model/rpc_error.dart';
-import 'package:particle_auth/network/net/particle_rpc.dart';
 import 'package:particle_auth/particle_auth.dart';
 import 'package:particle_auth_example/mock/transaction_mock.dart';
 
@@ -24,10 +14,9 @@ class AuthLogic {
 
   static void init(Env env) {
     
-
     // Get your project id and client from dashboard, https://dashboard.particle.network
-    const projectId = "";
-    const clientKey = "";
+    const projectId = "";//772f7499-1d2e-40f4-8e2c-7b6dd47db9de
+    const clientKey = "";//ctWeIc2UBA6sYTKJknT9cu9LBikF00fbk1vmQjsV
     if (projectId.isEmpty || clientKey.isEmpty ) {
       throw const FormatException('You need set project info, get your project id and client key from dashboard, https://dashboard.particle.network');
     }
@@ -220,7 +209,7 @@ class AuthLogic {
   }
 
   static void setChainInfo() async {
-    bool isSuccess = await ParticleAuth.setChainInfo(EthereumChain.goerli());
+    bool isSuccess = await ParticleAuth.setChainInfo(PolygonChain.mumbai());
     print("setChainInfo: $isSuccess");
   }
 
@@ -418,5 +407,45 @@ class AuthLogic {
       print("setUserInfo failed");
     }
   }
+
+  static void readContract() async {
+    String address = await ParticleAuth.getAddress();
+    String contractAddress = "0x326C977E6efc84E512bB9C30f76E30c160eD06FB";
+    String methodName = "balanceOf";
+    List<Object> parameters =  <Object>[address];
+    String abiJsonString = "";
+    final result = await EvmService.readContract(address, contractAddress, methodName, parameters, abiJsonString);
+    print("result: $result");
+    showToast("result: $result");
+  }
+
+  static void writeContract() async {
+    String address = await ParticleAuth.getAddress();
+    String contractAddress = "0x326C977E6efc84E512bB9C30f76E30c160eD06FB";
+    String methodName = "transfer";
+    List<Object> parameters =  <Object>["0xa0869E99886e1b6737A4364F2cf9Bb454FD637E4", "100000000"];
+    String abiJsonString = "";
+    bool isSupportEIP1559 = true;
+    final result = await EvmService.writeContract(address, contractAddress, methodName, parameters, abiJsonString, isSupportEIP1559, gasFeeLevel: GasFeeLevel.low);
+    print("transaction: $result");
+    showToast("transaction: $result");
+  }
+
+  static void writeContractSendTransaction() async {
+    String address = await ParticleAuth.getAddress();
+    String contractAddress = "0x326C977E6efc84E512bB9C30f76E30c160eD06FB";
+    String methodName = "transfer";
+    List<Object> parameters =  <Object>["0xa0869E99886e1b6737A4364F2cf9Bb454FD637E4", "100000000"];
+    String abiJsonString = "";
+    bool isSupportEIP1559 = true;
+    final result = await EvmService.writeContract(address, contractAddress, methodName, parameters, abiJsonString, isSupportEIP1559, gasFeeLevel: GasFeeLevel.low);
+    print("transaction: $result");
+    showToast("transaction: $result");
+    final tx = await ParticleAuth.signAndSendTransaction(result);
+    print("tx: $tx");
+    showToast("tx: $tx");
+  }
+
+
 }
 

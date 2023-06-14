@@ -1,12 +1,6 @@
 import 'dart:convert';
 
 import 'package:oktoast/oktoast.dart';
-import 'package:particle_auth/model/biconmoy_fee_mode.dart';
-import 'package:particle_auth/model/biconomy_version.dart';
-import 'package:particle_auth/model/chain_info.dart';
-import 'package:particle_auth/model/login_info.dart';
-import 'package:particle_auth/model/particle_info.dart';
-import 'package:particle_auth/network/model/rpc_error.dart';
 import 'package:particle_biconomy/particle_biconomy.dart';
 import 'package:particle_auth/particle_auth.dart';
 import 'package:particle_biconomy_example/mock/transaction_mock.dart';
@@ -36,13 +30,12 @@ class BiconomyAuthLogic {
     }
 
     ParticleInfo.set(projectId, clientKey);
-
     ParticleBiconomy.init(version, dappKeys);
   }
 
   static void isSupportChainInfo() async {
     var result =
-        await ParticleBiconomy.isSupportChainInfo(EthereumChain.mainnet());
+        await ParticleBiconomy.isSupportChainInfo(ArbitrumChain.one());
     print(result);
     showToast("isSupportChainInfo: $result");
   }
@@ -134,7 +127,7 @@ class BiconomyAuthLogic {
   }
 
   static void setChainInfo() async {
-    final result = await ParticleAuth.setChainInfo(PolygonChain.mumbai());
+    final result = await ParticleAuth.setChainInfo(PolygonChain.mainnet());
     print(result);
   }
 

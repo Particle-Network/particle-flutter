@@ -1,8 +1,5 @@
 import 'dart:convert';
-
-import 'package:particle_auth/model/biconomy_version.dart';
-import 'package:particle_auth/network/model/serialize_sol_transreqentity.dart';
-import 'package:particle_auth/network/net/request_body_entity.dart';
+import 'dart:math';
 import 'package:particle_auth/network/net/rest_client.dart';
 import 'package:particle_auth/particle_auth.dart';
 import 'package:uuid/uuid.dart';
@@ -228,22 +225,148 @@ class EvmService {
   /// [currencies] is currency array, like ["usd", "cny"]
   static Future<String> getPrice(
       List<String> tokenAddresses, List<String> currencies) async {
-    const method = "particle_getTransactionsByAddress";
+    const method = "particle_getPrice";
     final params = [tokenAddresses, currencies];
     return await EvmService.rpc(method, params);
   }
 
   /// Get smart account
-  /// 
+  ///
   /// [eoaAddresses] Eoa address list
-  /// 
+  ///
   /// [version] biconomy version
-  /// 
+  ///
   /// return json object
-  static Future<String> getSmartAccount(List<String> eoaAddresses, BiconomyVersion version) async {
+  static Future<String> getSmartAccount(
+      List<String> eoaAddresses, BiconomyVersion version) async {
     const method = "particle_biconomy_getSmartAccount";
     final params = [version.name, eoaAddresses];
     return await EvmService.rpc(method, params);
+  }
+
+  /// Read contract
+  /// 
+  /// [address] is public address
+  ///
+  /// [contractAddress] is contract address
+  ///
+  /// [methodName] is a contract method name, such as 'mint', 'balanceOf'
+  ///
+  /// [parameters] is parameters required by the method
+  ///
+  /// [abiJsonString] is abi json string, such as "[{\"inputs\":[{\"internalType\":\"uint256\",\"name\":\"quantity\",\"type\":\"uint256\"},{\"internalType\":\"uint256\",\"name\":\"amount\",\"type\":\"uint256\"}],\"name\":\"mint\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"}]"
+  static Future<String> readContract(String address, String contractAddress,
+      String methodName, List<Object> parameters, String abiJsonString) async {
+    final customMethodCall = await EvmService.customMethod(
+        contractAddress, methodName, parameters, abiJsonString);
+
+    final data = jsonDecode(customMethodCall)["result"];
+    final req = RequestBodyEntity();
+    req.chainId = await ParticleAuth.getChainId();
+    const method = "eth_call";
+    final params = [
+      {"to": contractAddress, "data": data, "from": address},
+      "latest"
+    ];
+
+    final result = await EvmService.rpc(method, params);
+    return result;
+  }
+
+  /// Write contract, get transaction
+  /// 
+  /// [address] is public address
+  ///
+  /// [contractAddress] is contract address
+  ///
+  /// [methodName] is a contract method name, such as 'mint', 'balanceOf'
+  ///
+  /// [parameters] is parameters required by the method
+  ///
+  /// [abiJsonString] is abi json string, such as "[{\"inputs\":[{\"internalType\":\"uint256\",\"name\":\"quantity\",\"type\":\"uint256\"},{\"internalType\":\"uint256\",\"name\":\"amount\",\"type\":\"uint256\"}],\"name\":\"mint\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"}]"
+  ///
+  /// [isSupportEIP1559] is your current chain support EIP1559, pass true to get a EIP 1559 transaction, pass false to get a legacy transaction.
+  ///
+  /// [gasFeeLevel] is gas fee level, default is high.
+  static Future<String> writeContract(
+      String address,
+      String contractAddress,
+      String methodName,
+      List<Object> parameters,
+      String abiJsonString,
+      bool isSupportEIP1559,
+      {GasFeeLevel gasFeeLevel = GasFeeLevel.high}) async {
+    final customMethodCall = await EvmService.customMethod(
+        contractAddress, methodName, parameters, abiJsonString);
+    final data = jsonDecode(customMethodCall)["result"];
+
+    final gasLimitResult =
+        await EvmService.ethEstimateGas(address, contractAddress, "0x0", data);
+    final jsonObj = jsonDecode(gasLimitResult);
+    final gasLimit = jsonObj["result"];
+
+    final gasFeesResult = await EvmService.suggestedGasFees();
+    String level;
+
+    switch (gasFeeLevel) {
+      case GasFeeLevel.high:
+        level = "high";
+        break;
+
+      case GasFeeLevel.medium:
+        level = "medium";
+        break;
+
+      case GasFeeLevel.low:
+        level = "low";
+        break;
+    }
+
+    final maxFeePerGas = double.parse(
+        jsonDecode(gasFeesResult)["result"][level]["maxFeePerGas"]);
+    final maxFeePerGasHex =
+        "0x${BigInt.from(maxFeePerGas * pow(10, 9)).toRadixString(16)}";
+
+    final maxPriorityFeePerGas = double.parse(
+        jsonDecode(gasFeesResult)["result"][level]["maxPriorityFeePerGas"]);
+    final maxPriorityFeePerGasHex =
+        "0x${BigInt.from(maxPriorityFeePerGas * pow(10, 9)).toRadixString(16)}";
+
+    final chainId = await ParticleAuth.getChainId();
+
+    Map<String, dynamic> req;
+    // evm transaction
+    if (isSupportEIP1559) {
+      req = {
+        "from": address,
+        "to": contractAddress,
+        "gasLimit": gasLimit,
+        "value": "0x0",
+        "maxFeePerGas": maxFeePerGasHex,
+        "maxPriorityFeePerGas": maxPriorityFeePerGasHex,
+        "data": data,
+        "type": "0x2",
+        "nonce": "0x0",
+        "chainId": "0x${chainId.toRadixString(16)}",
+      };
+    } else {
+      req = {
+        "from": address,
+        "to": contractAddress,
+        "gasLimit": gasLimit,
+        "value": "0x0",
+        "gasPrice": maxFeePerGasHex,
+        "data": data,
+        "type": "0x0",
+        "nonce": "0x0",
+        "chainId": "0x${chainId.toRadixString(16)}",
+      };
+    }
+
+    final reqStr = jsonEncode(req);
+    final reqHex = utf8.encode(reqStr).map((e) => e.toRadixString(16)).join();
+
+    return "0x$reqHex";
   }
 }
 
@@ -258,7 +381,8 @@ class SolanaService {
     return await SolanaRpcApi.getClient().rpc(req);
   }
 
-  static Future<String> enhancedGetTokensAndNFTs(List<dynamic> parameters) async {
+  static Future<String> enhancedGetTokensAndNFTs(
+      List<dynamic> parameters) async {
     const method = "enhancedGetTokensAndNFTs";
     final params = parameters;
     return await SolanaService.rpc(method, params);
@@ -266,11 +390,8 @@ class SolanaService {
 
   static Future<String> enhancedSerializeTransaction(
       SerializeSOLTransReqEntity reqEntity) async {
-    
     const method = "enhancedSerializeTransaction";
     final params = ["transfer-sol", reqEntity];
     return await SolanaService.rpc(method, params);
   }
-
-  
 }

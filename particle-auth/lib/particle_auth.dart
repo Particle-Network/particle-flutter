@@ -2,15 +2,32 @@ import 'dart:convert';
 import 'dart:io' show Platform;
 
 import 'package:flutter/services.dart';
-import 'package:particle_auth/model/biconmoy_fee_mode.dart';
-import 'package:particle_auth/model/chain_info.dart';
-import 'package:particle_auth/model/ios_modal_present_style.dart';
-import 'package:particle_auth/model/language.dart';
-import 'package:particle_auth/model/security_account_config.dart';
-import 'package:particle_auth/model/typeddata_version.dart';
-import 'package:particle_auth/model/user_interface_style.dart';
 
+import '../model/biconomy_fee_mode.dart';
+import '../model/chain_info.dart';
+import '../model/ios_modal_present_style.dart';
+import '../model/language.dart';
+import '../model/security_account_config.dart';
+import '../model/typeddata_version.dart';
+import '../model/user_interface_style.dart';
 import '../model/login_info.dart';
+
+export '../model/biconomy_version.dart';
+export '../model/biconomy_fee_mode.dart';
+export '../model/chain_info.dart';
+export '../model/ios_modal_present_style.dart';
+export '../model/language.dart';
+export '../model/security_account_config.dart';
+export '../model/typeddata_version.dart';
+export '../model/user_interface_style.dart';
+export '../model/login_info.dart';
+export '../model/particle_info.dart';
+export '../network/model/rpc_error.dart';
+export '../network/net/particle_rpc.dart';
+export '../network/model/serialize_sol_transreqentity.dart';
+export '../network/net/particle_rpc.dart';
+export '../network/net/request_body_entity.dart';
+export '../model/gas_fee_level.dart';
 
 class ParticleAuth {
   ParticleAuth._();
@@ -277,7 +294,7 @@ class ParticleAuth {
     _channel.invokeListMethod("setLanguage", language.name);
   }
 
-  
-
-
 }
+
+
+
