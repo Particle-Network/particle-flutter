@@ -8,6 +8,8 @@ Particle Connect is the best way to onboard any user for your dApp.
 
 Particle Wallet is not an independent wallet—it is a wallet infrastructure plugged into apps or wallets.
 
+Particle Biconomy support Account Abstraction
+
 ## Getting Started 
 
 [Auth Doc](https://docs.particle.network/developers/auth-service/sdks/flutter)
@@ -47,6 +49,14 @@ flutter pub add particle_wallet
 ```
 ```
 import 'package:particle_wallet/particle_wallet.dart';
+```
+
+[Biconomy Doc]([https://docs.particle.network/developers/wallet-service/sdks/flutter](https://docs.particle.network/developers/account-abstraction/flutter))
+```
+flutter pub add particle_biconomy
+```
+```
+import 'package:particle_biconomy/particle_biconomy.dart';
 ```
 
 ### Structure Transaction
