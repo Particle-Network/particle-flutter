@@ -620,7 +620,11 @@ public extension ParticleAuthPlugin {
             flutterResult(FlutterError(code: "", message: "user is not login", details: nil))
             return
         }
-        let data = try! JSONEncoder().encode(userInfo)
+        
+        let userInfoJsonString = userInfo.jsonStringFullSnake()
+        let newUserInfo = JSON(parseJSON: userInfoJsonString)
+        
+        let data = try! JSONEncoder().encode(newUserInfo)
         let json = String(data: data, encoding: .utf8)
         flutterResult(json ?? "")
     }
