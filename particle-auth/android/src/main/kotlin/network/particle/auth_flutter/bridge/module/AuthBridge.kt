@@ -274,7 +274,6 @@ object AuthBridge {
         val transParams = GsonUtils.fromJson<TransactionParams>(transactionParams, TransactionParams::class.java)
         var feeMode: FeeMode = FeeModeAuto()
         if (transParams.feeMode != null) {
-
             val option = transParams.feeMode.option
             if (option == "custom") {
                 val feeQuote = transParams.feeMode.feeQuote!!
@@ -285,16 +284,19 @@ object AuthBridge {
                 feeMode = FeeModeAuto()
             }
         }
-        ParticleNetwork.signAndSendTransaction(transParams.transaction, object : WebServiceCallback<SignOutput> {
+        try {
+            ParticleNetwork.signAndSendTransaction(transParams.transaction, object : WebServiceCallback<SignOutput> {
+                override fun failure(errMsg: WebServiceError) {
+                    result.success(FlutterCallBack.failed(errMsg).toGson())
+                }
 
-            override fun failure(errMsg: WebServiceError) {
-                result.success(FlutterCallBack.failed(errMsg).toGson())
-            }
-
-            override fun success(output: SignOutput) {
-                result.success(FlutterCallBack.success(output.signature).toGson())
-            }
-        }, feeMode)
+                override fun success(output: SignOutput) {
+                    result.success(FlutterCallBack.success(output.signature).toGson())
+                }
+            }, feeMode)
+        } catch (e: Exception) {
+            result.success(FlutterCallBack.failed(e.message).toGson())
+        }
     }
 
     fun signTypedData(json: String, result: MethodChannel.Result) {
