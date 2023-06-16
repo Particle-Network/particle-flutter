@@ -15,8 +15,8 @@ class AuthLogic {
   static void init(Env env) {
     
     // Get your project id and client from dashboard, https://dashboard.particle.network
-    const projectId = "";//772f7499-1d2e-40f4-8e2c-7b6dd47db9de
-    const clientKey = "";//ctWeIc2UBA6sYTKJknT9cu9LBikF00fbk1vmQjsV
+    const projectId = "772f7499-1d2e-40f4-8e2c-7b6dd47db9de";//772f7499-1d2e-40f4-8e2c-7b6dd47db9de
+    const clientKey = "ctWeIc2UBA6sYTKJknT9cu9LBikF00fbk1vmQjsV";//ctWeIc2UBA6sYTKJknT9cu9LBikF00fbk1vmQjsV
     if (projectId.isEmpty || clientKey.isEmpty ) {
       throw const FormatException('You need set project info, get your project id and client key from dashboard, https://dashboard.particle.network');
     }
@@ -426,9 +426,9 @@ class AuthLogic {
     List<Object> parameters =  <Object>["0xa0869E99886e1b6737A4364F2cf9Bb454FD637E4", "100000000"];
     String abiJsonString = "";
     bool isSupportEIP1559 = true;
-    final result = await EvmService.writeContract(address, contractAddress, methodName, parameters, abiJsonString, isSupportEIP1559, gasFeeLevel: GasFeeLevel.low);
-    print("transaction: $result");
-    showToast("transaction: $result");
+    final transaction = await EvmService.writeContract(address, contractAddress, methodName, parameters, abiJsonString, isSupportEIP1559, gasFeeLevel: GasFeeLevel.low);
+    print("transaction: $transaction");
+    showToast("transaction: $transaction");
   }
 
   static void writeContractSendTransaction() async {
@@ -438,14 +438,45 @@ class AuthLogic {
     List<Object> parameters =  <Object>["0xa0869E99886e1b6737A4364F2cf9Bb454FD637E4", "100000000"];
     String abiJsonString = "";
     bool isSupportEIP1559 = true;
-    final result = await EvmService.writeContract(address, contractAddress, methodName, parameters, abiJsonString, isSupportEIP1559, gasFeeLevel: GasFeeLevel.low);
-    print("transaction: $result");
-    showToast("transaction: $result");
-    final tx = await ParticleAuth.signAndSendTransaction(result);
+    final transaction = await EvmService.writeContract(address, contractAddress, methodName, parameters, abiJsonString, isSupportEIP1559, gasFeeLevel: GasFeeLevel.low);
+    print("transaction: $transaction");
+    showToast("transaction: $transaction");
+    final tx = await ParticleAuth.signAndSendTransaction(transaction);
     print("tx: $tx");
     showToast("tx: $tx");
   }
 
+  static void sendEvmNative() async {
+    String address = await ParticleAuth.getAddress();
+    final transaction = await TransactionMock.mockEvmSendNative(address);
+    final tx = await ParticleAuth.signAndSendTransaction(transaction);
+    print("tx: $tx");
+    showToast("tx: $tx");
+  }
+
+  static void sendEvmToken() async {
+    String address = await ParticleAuth.getAddress();
+    final transaction = await TransactionMock.mockEvmSendToken(address);
+    final tx = await ParticleAuth.signAndSendTransaction(transaction);
+    print("tx: $tx");
+    showToast("tx: $tx");
+  }
+
+  static void sendEvmNFT721() async {
+    String address = await ParticleAuth.getAddress();
+    final transaction = await TransactionMock.mockEvmErc721NFT(address);
+    final tx = await ParticleAuth.signAndSendTransaction(transaction);
+    print("tx: $tx");
+    showToast("tx: $tx");
+  }
+
+  static void sendEvmNFT1155() async {
+    String address = await ParticleAuth.getAddress();
+    final transaction = await TransactionMock.mockEvmErc1155NFT(address);
+    final tx = await ParticleAuth.signAndSendTransaction(transaction);
+    print("tx: $tx");
+    showToast("tx: $tx");
+  }
 
 }
 

@@ -428,6 +428,58 @@ class AuthDemoPageState extends State<AuthDemoPage> {
                     )),
               ),
             ),
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: SizedBox(
+                width: double.infinity,
+                height: 50,
+                child: ElevatedButton(
+                    onPressed: () => {AuthLogic.sendEvmNative()},
+                    child: const Text(
+                      "Send evm native",
+                      style: TextStyle(fontSize: 18),
+                    )),
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: SizedBox(
+                width: double.infinity,
+                height: 50,
+                child: ElevatedButton(
+                    onPressed: () => {AuthLogic.sendEvmToken()},
+                    child: const Text(
+                      "Send evm token",
+                      style: TextStyle(fontSize: 18),
+                    )),
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: SizedBox(
+                width: double.infinity,
+                height: 50,
+                child: ElevatedButton(
+                    onPressed: () => {AuthLogic.sendEvmNFT721()},
+                    child: const Text(
+                      "Send evm nft 721",
+                      style: TextStyle(fontSize: 18),
+                    )),
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: SizedBox(
+                width: double.infinity,
+                height: 50,
+                child: ElevatedButton(
+                    onPressed: () => {AuthLogic.sendEvmNFT1155()},
+                    child: const Text(
+                      "Send evm nft 1155",
+                      style: TextStyle(fontSize: 18),
+                    )),
+              ),
+            ),
           ],
         ),
       ),

@@ -245,7 +245,7 @@ class EvmService {
   }
 
   /// Read contract
-  /// 
+  ///
   /// [address] is public address
   ///
   /// [contractAddress] is contract address
@@ -274,7 +274,7 @@ class EvmService {
   }
 
   /// Write contract, get transaction
-  /// 
+  ///
   /// [address] is public address
   ///
   /// [contractAddress] is contract address
@@ -300,8 +300,31 @@ class EvmService {
         contractAddress, methodName, parameters, abiJsonString);
     final data = jsonDecode(customMethodCall)["result"];
 
+    return createTransaction(
+        address, data, BigInt.from(0), contractAddress, isSupportEIP1559,
+        gasFeeLevel: gasFeeLevel);
+  }
+
+  /// Create transaction
+  /// 
+  /// [from] is public address
+  ///
+  /// [data] is contract transaction parameter
+  ///
+  /// [value] is navtie amount
+  ///
+  /// [to] if it is a contract transaction, to is contract address, if it is a native transaciton, to is receiver address.
+  ///
+  ///
+  /// [isSupportEIP1559] is your current chain support EIP1559, pass true to get a EIP 1559 transaction, pass false to get a legacy transaction.
+  ///
+  /// [gasFeeLevel] is gas fee level, default is high.
+  static Future<String> createTransaction(
+      String from, String data, BigInt value, String to, bool isSupportEIP1559,
+      {GasFeeLevel gasFeeLevel = GasFeeLevel.high}) async {
+    final valueHex = "0x${value.toRadixString(16)}";
     final gasLimitResult =
-        await EvmService.ethEstimateGas(address, contractAddress, "0x0", data);
+        await EvmService.ethEstimateGas(from, to, valueHex, data);
     final jsonObj = jsonDecode(gasLimitResult);
     final gasLimit = jsonObj["result"];
 
@@ -338,10 +361,10 @@ class EvmService {
     // evm transaction
     if (isSupportEIP1559) {
       req = {
-        "from": address,
-        "to": contractAddress,
+        "from": from,
+        "to": to,
         "gasLimit": gasLimit,
-        "value": "0x0",
+        "value": valueHex,
         "maxFeePerGas": maxFeePerGasHex,
         "maxPriorityFeePerGas": maxPriorityFeePerGasHex,
         "data": data,
@@ -351,10 +374,10 @@ class EvmService {
       };
     } else {
       req = {
-        "from": address,
-        "to": contractAddress,
+        "from": from,
+        "to": to,
         "gasLimit": gasLimit,
-        "value": "0x0",
+        "value": valueHex,
         "gasPrice": maxFeePerGasHex,
         "data": data,
         "type": "0x0",
