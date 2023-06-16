@@ -16,7 +16,6 @@ buildscript {
 
 allprojects {
     repositories {
-
         google()
         mavenCentral()
         maven { setUrl("https://jitpack.io") }
@@ -44,13 +43,14 @@ android {
 
     defaultConfig {
         minSdkVersion 23
+        consumerProguardFiles("consumer-rules.pro")
     }
 }
 
 dependencies {
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
 
-    def connectVersion = "0.13.4"
+    def connectVersion = "0.13.6"
     implementation("network.particle:base-service:$connectVersion")
     implementation("network.particle:auth-service:$connectVersion")
 

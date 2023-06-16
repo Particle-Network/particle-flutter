@@ -52,7 +52,7 @@ class BiconomyConnectLogic {
 
     List<String> transactions = <String>[transaction];
     var result =
-        await ParticleBiconomy.rpcGetFeeQuotes(publicAddress, transactions);
+    await ParticleBiconomy.rpcGetFeeQuotes(publicAddress, transactions);
     print(result[0]["address"]);
     showToast("rpcGetFeeQuotes: $result");
   }
@@ -96,7 +96,7 @@ class BiconomyConnectLogic {
     List<String> transactions = <String>[transaction];
 
     var result =
-        await ParticleBiconomy.rpcGetFeeQuotes(publicAddress!, transactions);
+    await ParticleBiconomy.rpcGetFeeQuotes(publicAddress!, transactions);
 
     var feeQuote = result[0];
     print(feeQuote);

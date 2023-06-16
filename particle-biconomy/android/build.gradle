@@ -44,12 +44,13 @@ android {
 
     defaultConfig {
         minSdkVersion 23
+        consumerProguardFiles("consumer-rules.pro")
     }
 }
 
 dependencies {
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
-    def sdkVersion = "0.13.2"
+    def sdkVersion = "0.13.6"
     implementation("network.particle:biconomy-service:$sdkVersion")
     implementation("com.blankj:utilcodex:1.31.0")
     implementation("commons-codec:commons-codec:1.15")
