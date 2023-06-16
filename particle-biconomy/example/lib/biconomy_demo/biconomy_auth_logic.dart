@@ -22,20 +22,21 @@ class BiconomyAuthLogic {
     ParticleAuth.init(PolygonChain.mainnet(), Env.production);
 
     // Get your project id and client from dashboard, https://dashboard.particle.network
-    const projectId = "";
-    const clientKey = "";
-    if (projectId.isEmpty || clientKey.isEmpty) {
+    const projectId =
+        "772f7499-1d2e-40f4-8e2c-7b6dd47db9de"; //772f7499-1d2e-40f4-8e2c-7b6dd47db9de
+    const clientK =
+        "ctWeIc2UBA6sYTKJknT9cu9LBikF00fbk1vmQjsV"; //ctWeIc2UBA6sYTKJknT9cu9LBikF00fbk1vmQjsV
+    if (projectId.isEmpty || clientK.isEmpty) {
       throw const FormatException(
           'You need set project info, get your project id and client key from dashboard, https://dashboard.particle.network');
     }
 
-    ParticleInfo.set(projectId, clientKey);
+    ParticleInfo.set(projectId, clientK);
     ParticleBiconomy.init(version, dappKeys);
   }
 
   static void isSupportChainInfo() async {
-    var result =
-        await ParticleBiconomy.isSupportChainInfo(ArbitrumChain.one());
+    var result = await ParticleBiconomy.isSupportChainInfo(ArbitrumChain.one());
     print(result);
     showToast("isSupportChainInfo: $result");
   }
@@ -87,6 +88,7 @@ class BiconomyAuthLogic {
 
     final signature = await ParticleAuth.signAndSendTransaction(transaction,
         feeMode: BiconomyFeeMode.auto());
+    print("signature $signature");
     showToast("signature $signature");
   }
 
@@ -96,6 +98,7 @@ class BiconomyAuthLogic {
 
     final signature = await ParticleAuth.signAndSendTransaction(transaction,
         feeMode: BiconomyFeeMode.gasless());
+    print("signature $signature");
     showToast("signature $signature");
   }
 
@@ -112,6 +115,7 @@ class BiconomyAuthLogic {
 
     final signature = await ParticleAuth.signAndSendTransaction(transaction,
         feeMode: BiconomyFeeMode.custom(feeQuote));
+    print("signature $signature");
     showToast("signature $signature");
   }
 
@@ -121,22 +125,23 @@ class BiconomyAuthLogic {
     print(result);
   }
 
-   static void loginMetamask() async {
+  static void loginMetamask() async {
     final result = await ParticleConnect.connect(WalletType.metaMask);
     print(result);
   }
 
   static void setChainInfo() async {
-    final result = await ParticleAuth.setChainInfo(PolygonChain.mainnet());
+    final result = await ParticleAuth.setChainInfo(ArbitrumChain.one());
     print(result);
   }
 
   static void batchSendTransactions() async {
-     final publicAddress = await ParticleAuth.getAddress();
+    final publicAddress = await ParticleAuth.getAddress();
     final transaction = await TransactionMock.mockEvmSendNative(publicAddress);
 
     List<String> transactions = <String>[transaction, transaction];
-    final signature = await ParticleAuth.batchSendTransactions(transactions, feeMode: BiconomyFeeMode.auto());
+    final signature = await ParticleAuth.batchSendTransactions(transactions,
+        feeMode: BiconomyFeeMode.auto());
     showToast("signature $signature");
   }
 }

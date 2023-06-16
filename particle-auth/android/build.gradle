@@ -30,12 +30,12 @@ android {
     compileSdkVersion 31
 
     compileOptions {
-        sourceCompatibility JavaVersion.VERSION_11
-        targetCompatibility JavaVersion.VERSION_11
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
     }
 
     kotlinOptions {
-        jvmTarget = JavaVersion.VERSION_11.toString()
+        jvmTarget = '1.8'
     }
 
     sourceSets {
@@ -44,12 +44,13 @@ android {
 
     defaultConfig {
         minSdkVersion 23
+        consumerProguardFiles("consumer-rules.pro")
     }
 }
 
 dependencies {
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
-    def sdkVersion = "0.13.4"
+    def sdkVersion = "0.13.6"
     implementation("network.particle:auth-service:$sdkVersion")
     implementation("com.blankj:utilcodex:1.31.0")
     implementation("commons-codec:commons-codec:1.15")

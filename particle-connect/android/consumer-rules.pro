@@ -1,0 +1,2 @@
+-keep class network.particle.**{*;}
+-dontwarn com.network.particle.**
