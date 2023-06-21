@@ -13,14 +13,14 @@ class AuthLogic {
   }
 
   static void init(Env env) {
-    
     // Get your project id and client from dashboard, https://dashboard.particle.network
-    const projectId = "772f7499-1d2e-40f4-8e2c-7b6dd47db9de";//772f7499-1d2e-40f4-8e2c-7b6dd47db9de
-    const clientKey = "ctWeIc2UBA6sYTKJknT9cu9LBikF00fbk1vmQjsV";//ctWeIc2UBA6sYTKJknT9cu9LBikF00fbk1vmQjsV
-    if (projectId.isEmpty || clientKey.isEmpty ) {
-      throw const FormatException('You need set project info, get your project id and client key from dashboard, https://dashboard.particle.network');
+    const projectId = "772f7499-1d2e-40f4-8e2c-7b6dd47db9de"; //772f7499-1d2e-40f4-8e2c-7b6dd47db9de
+    const clientK = "ctWeIc2UBA6sYTKJknT9cu9LBikF00fbk1vmQjsV"; //ctWeIc2UBA6sYTKJknT9cu9LBikF00fbk1vmQjsV
+    if (projectId.isEmpty || clientK.isEmpty) {
+      throw const FormatException(
+          'You need set project info, get your project id and client key from dashboard, https://dashboard.particle.network');
     }
-    ParticleInfo.set(projectId, clientKey);
+    ParticleInfo.set(projectId, clientK);
 
     ParticleAuth.init(currChainInfo, env);
   }
@@ -77,7 +77,6 @@ class AuthLogic {
       showToast("isLoginAsync: $result");
     }
   }
-
 
   static void getSmartAccount() async {
     const eoaAddress = "";
@@ -412,9 +411,10 @@ class AuthLogic {
     String address = await ParticleAuth.getAddress();
     String contractAddress = "0x326C977E6efc84E512bB9C30f76E30c160eD06FB";
     String methodName = "balanceOf";
-    List<Object> parameters =  <Object>[address];
+    List<Object> parameters = <Object>[address];
     String abiJsonString = "";
-    final result = await EvmService.readContract(address, contractAddress, methodName, parameters, abiJsonString);
+    final result = await EvmService.readContract(
+        address, contractAddress, methodName, parameters, abiJsonString);
     print("result: $result");
     showToast("result: $result");
   }
@@ -423,9 +423,17 @@ class AuthLogic {
     String address = await ParticleAuth.getAddress();
     String contractAddress = "0x326C977E6efc84E512bB9C30f76E30c160eD06FB";
     String methodName = "transfer";
-    List<Object> parameters =  <Object>["0xa0869E99886e1b6737A4364F2cf9Bb454FD637E4", "100000000"];
+    List<Object> parameters = <Object>[
+      "0xa0869E99886e1b6737A4364F2cf9Bb454FD637E4",
+      "100000000"
+    ];
     String abiJsonString = "";
     bool isSupportEIP1559 = true;
+    final result = await EvmService.writeContract(address, contractAddress,
+        methodName, parameters, abiJsonString, isSupportEIP1559,
+        gasFeeLevel: GasFeeLevel.low);
+    print("transaction: $result");
+    showToast("transaction: $result");
     final transaction = await EvmService.writeContract(address, contractAddress, methodName, parameters, abiJsonString, isSupportEIP1559, gasFeeLevel: GasFeeLevel.low);
     print("transaction: $transaction");
     showToast("transaction: $transaction");

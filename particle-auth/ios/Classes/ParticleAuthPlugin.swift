@@ -42,6 +42,7 @@ public class ParticleAuthPlugin: NSObject, FlutterPlugin {
         case fastLogout
         case setUserInfo
         case batchSendTransactions
+        case setCustomStyle
     }
     
     public static func register(with registrar: FlutterPluginRegistrar) {
@@ -99,6 +100,8 @@ public class ParticleAuthPlugin: NSObject, FlutterPlugin {
             self.setDisplayWallet(json as? Bool ?? false)
         case .openWebWallet:
             self.openWebWallet()
+        case .setCustomStyle:
+            self.setCustomStyle(json as? String)
         case .setMediumScreen:
             self.setMediumScreen(json as? Bool ?? false)
         case .setSecurityAccountConfig:
@@ -111,9 +114,9 @@ public class ParticleAuthPlugin: NSObject, FlutterPlugin {
             self.fastLogout(flutterResult: result)
         case .setUserInfo:
             self.setUserInfo(json as? String, flutterResult: result)
-     
         case .batchSendTransactions:
             self.batchSendTransactions(json as? String, flutterResult: result)
+
         }
     }
 }
@@ -665,7 +668,11 @@ public extension ParticleAuthPlugin {
     func openWebWallet() {
         ParticleAuthService.openWebWallet()
     }
-    
+
+    func setCustomStyle(_ json: String?) {
+        ParticleAuthService.setCustomStyle(string:json!)
+    }
+
     func setMediumScreen(_ isMediumScreen: Bool) {
         if #available(iOS 15.0, *) {
             ParticleAuthService.setMediumScreen(isMediumScreen)

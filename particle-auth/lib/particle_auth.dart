@@ -169,22 +169,25 @@ class ParticleAuth {
   /// [transaction] transaction you want to sign and send.
   ///
   /// [feeMode] is optional, works with biconomy service.
-  /// 
+  ///
   /// Result signature or error.
-  static Future<String> signAndSendTransaction(String transaction, {BiconomyFeeMode? feeMode}) async {
+  static Future<String> signAndSendTransaction(String transaction,
+      {BiconomyFeeMode? feeMode}) async {
     final json = jsonEncode({"transaction": transaction, "fee_mode": feeMode});
     return await _channel.invokeMethod('signAndSendTransaction', json);
   }
 
   /// Batch send transactions
-  /// 
+  ///
   /// [transactions] transactions you want to sign and send.
-  /// 
+  ///
   /// [feeMode] is optional, works with biconomy service.
-  /// 
+  ///
   /// Result signature or error.
-  static Future<String> batchSendTransactions(List<String> transactions, {BiconomyFeeMode? feeMode}) async {
-     final json = jsonEncode({"transactions": transactions, "fee_mode": feeMode});
+  static Future<String> batchSendTransactions(List<String> transactions,
+      {BiconomyFeeMode? feeMode}) async {
+    final json =
+        jsonEncode({"transactions": transactions, "fee_mode": feeMode});
     return await _channel.invokeMethod('batchSendTransactions', json);
   }
 
@@ -243,8 +246,13 @@ class ParticleAuth {
   }
 
   /// Open web wallet
-  static openWebWallet() async {
-    _channel.invokeMethod('openWebWallet');
+  static openWebWallet(String jsonStringConfig) async {
+    if (Platform.isIOS) {
+      _channel.invokeMethod('setCustomStyle', jsonStringConfig);
+      _channel.invokeMethod('openWebWallet');
+    } else {
+      _channel.invokeMethod('openWebWallet', jsonStringConfig);
+    }
   }
 
   /// Set display wel wallet when sign and send transaction in web page.
@@ -293,8 +301,4 @@ class ParticleAuth {
   static setLanguage(Language language) {
     _channel.invokeListMethod("setLanguage", language.name);
   }
-
 }
-
-
-

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:particle_auth/particle_auth.dart';
 import 'package:particle_biconomy_example/biconomy_demo/biconomy_auth_logic.dart';
 
 class BiconomyDemoAuthPage extends StatefulWidget {
@@ -185,6 +186,19 @@ class BiconomyDemoAuthPageState extends State<BiconomyDemoAuthPage> {
                     onPressed: () => {BiconomyAuthLogic.batchSendTransactions()},
                     child: const Text(
                       "batch send transactions",
+                      style: TextStyle(fontSize: 18),
+                    )),
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: SizedBox(
+                width: double.infinity,
+                height: 50,
+                child: ElevatedButton(
+                    onPressed: () => {ParticleAuth.openWebWallet()},
+                    child: const Text(
+                      "open WebWallet",
                       style: TextStyle(fontSize: 18),
                     )),
               ),

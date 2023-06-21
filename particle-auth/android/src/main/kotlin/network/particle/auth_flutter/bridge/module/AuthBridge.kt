@@ -437,8 +437,8 @@ object AuthBridge {
         )
     }
 
-    fun openWebWallet(result: MethodChannel.Result) {
-        ParticleNetwork.openWebWallet()
+    fun openWebWallet(json: String, result: MethodChannel.Result) {
+        ParticleNetwork.openWebWallet(json)
     }
 
     fun isLoginAsync(result: MethodChannel.Result) {
