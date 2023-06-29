@@ -50,7 +50,7 @@ android {
 dependencies {
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
 
-    def connectVersion = "0.13.6"
+    def connectVersion = "0.13.7"
     implementation("network.particle:base-service:$connectVersion")
     implementation("network.particle:auth-service:$connectVersion")
 

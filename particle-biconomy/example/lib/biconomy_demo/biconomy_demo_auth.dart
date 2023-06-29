@@ -10,8 +10,25 @@ class BiconomyDemoAuthPage extends StatefulWidget {
     return BiconomyDemoAuthPageState();
   }
 }
+//https://docs.particle.network/developers/wallet-service/sdks/web
+String webConfig = '''
+         {
+            "supportAddToken": false,
+            "supportChains": [{
+                "id": 1,
+                "name": "Ethereum"
+              },
+              {
+                "id": 5,
+                "name": "Ethereum"
+              }
+            ]
+          }
+        ''';
+
 
 class BiconomyDemoAuthPageState extends State<BiconomyDemoAuthPage> {
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -144,7 +161,10 @@ class BiconomyDemoAuthPageState extends State<BiconomyDemoAuthPage> {
                 width: double.infinity,
                 height: 50,
                 child: ElevatedButton(
-                    onPressed: () => {BiconomyAuthLogic.signAndSendTransactionWithBiconomyAuto()},
+                    onPressed: () => {
+                          BiconomyAuthLogic
+                              .signAndSendTransactionWithBiconomyAuto()
+                        },
                     child: const Text(
                       "send with biconomy auto",
                       style: TextStyle(fontSize: 18),
@@ -157,7 +177,10 @@ class BiconomyDemoAuthPageState extends State<BiconomyDemoAuthPage> {
                 width: double.infinity,
                 height: 50,
                 child: ElevatedButton(
-                    onPressed: () => {BiconomyAuthLogic.signAndSendTransactionWithBiconomyGasless()},
+                    onPressed: () => {
+                          BiconomyAuthLogic
+                              .signAndSendTransactionWithBiconomyGasless()
+                        },
                     child: const Text(
                       "send with biconomy gasless",
                       style: TextStyle(fontSize: 18),
@@ -170,7 +193,10 @@ class BiconomyDemoAuthPageState extends State<BiconomyDemoAuthPage> {
                 width: double.infinity,
                 height: 50,
                 child: ElevatedButton(
-                    onPressed: () => {BiconomyAuthLogic.signAndSendTransactionWithBiconomyCustom()},
+                    onPressed: () => {
+                          BiconomyAuthLogic
+                              .signAndSendTransactionWithBiconomyCustom()
+                        },
                     child: const Text(
                       "send with biconomy custom",
                       style: TextStyle(fontSize: 18),
@@ -183,7 +209,8 @@ class BiconomyDemoAuthPageState extends State<BiconomyDemoAuthPage> {
                 width: double.infinity,
                 height: 50,
                 child: ElevatedButton(
-                    onPressed: () => {BiconomyAuthLogic.batchSendTransactions()},
+                    onPressed: () =>
+                        {BiconomyAuthLogic.batchSendTransactions()},
                     child: const Text(
                       "batch send transactions",
                       style: TextStyle(fontSize: 18),
@@ -196,7 +223,7 @@ class BiconomyDemoAuthPageState extends State<BiconomyDemoAuthPage> {
                 width: double.infinity,
                 height: 50,
                 child: ElevatedButton(
-                    onPressed: () => {ParticleAuth.openWebWallet()},
+                    onPressed: () => {ParticleAuth.openWebWallet(webConfig)},
                     child: const Text(
                       "open WebWallet",
                       style: TextStyle(fontSize: 18),

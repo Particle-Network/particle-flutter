@@ -27,7 +27,7 @@ class BiconomyConnectLogic {
     final dappInfo = DappMetaData(
         "Particle Connect",
         "https://connect.particle.network/icons/512.png",
-        "https://connect.particle.network");
+        "https://connect.particle.network","");
 
     ParticleConnect.init(PolygonChain.mumbai(), dappInfo, Env.dev);
 
