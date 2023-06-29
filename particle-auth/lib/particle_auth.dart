@@ -79,13 +79,14 @@ class ParticleAuth {
   static Future<String> login(LoginType loginType, String account,
       List<SupportAuthType> supportAuthTypes,
       {bool loginFormMode = false,
-      SocialLoginPrompt? socialLoginPrompt}) async {
+        SocialLoginPrompt? socialLoginPrompt, LoginAuthorization? authorization}) async {
     final params = jsonEncode({
       "login_type": loginType.name,
       "account": account,
       "support_auth_type_values": supportAuthTypes.map((e) => e.name).toList(),
       "login_form_mode": loginFormMode,
       "social_login_prompt": socialLoginPrompt?.name,
+      "authorization": authorization,
     });
 
     return await _channel.invokeMethod('login', params);
@@ -187,7 +188,7 @@ class ParticleAuth {
   static Future<String> batchSendTransactions(List<String> transactions,
       {BiconomyFeeMode? feeMode}) async {
     final json =
-        jsonEncode({"transactions": transactions, "fee_mode": feeMode});
+    jsonEncode({"transactions": transactions, "fee_mode": feeMode});
     return await _channel.invokeMethod('batchSendTransactions', json);
   }
 
@@ -196,8 +197,8 @@ class ParticleAuth {
   /// [typedData] typed data you want to sign.
   ///
   /// [version] support v1, v3, v4.
-  static Future<String> signTypedData(
-      String typedData, SignTypedDataVersion version) async {
+  static Future<String> signTypedData(String typedData,
+      SignTypedDataVersion version) async {
     return await _channel.invokeMethod('signTypedData',
         jsonEncode({"message": typedData, "version": version.name}));
   }
