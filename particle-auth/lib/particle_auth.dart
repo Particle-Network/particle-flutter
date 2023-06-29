@@ -301,4 +301,39 @@ class ParticleAuth {
   static setLanguage(Language language) {
     _channel.invokeListMethod("setLanguage", language.name);
   }
+
+  /// Has master password, get value from local user info.
+  static Future<bool> hasMasterPassword() async {
+    final result = await getUserInfo();
+    final userinfo = jsonDecode(result);
+    return userinfo["security_account"]["has_set_master_password"];
+  }
+
+  /// Has payment password, get value from local user info.
+  static Future<bool> hasPaymentPassword() async {
+    final result = await getUserInfo();
+    final userinfo = jsonDecode(result);
+    return userinfo["security_account"]["has_set_payment_password"];
+  }
+
+  /// Has set security account, get value from local user info.
+  static Future<bool> hasSecurityAccount() async {
+    final result = await getUserInfo();
+    final userinfo = jsonDecode(result);
+    final email = userinfo["security_account"]["email"];
+    final phone = userinfo["security_account"]["phone"];
+
+    return (email != null && !email.isEmpty) ||
+        (phone != null && !phone.isEmpty);
+  }
+
+  /// sync secuirty account from remote server
+  static Future<String?> getSecurityAccount() async {
+    if (Platform.isIOS) {
+      return await _channel.invokeMethod("getSecurityAccount");
+    } else {
+      // todo
+      return null;
+    }
+  }
 }

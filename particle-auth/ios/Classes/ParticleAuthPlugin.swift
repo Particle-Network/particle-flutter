@@ -43,6 +43,7 @@ public class ParticleAuthPlugin: NSObject, FlutterPlugin {
         case setUserInfo
         case batchSendTransactions
         case setCustomStyle
+        case getSecurityAccount
     }
     
     public static func register(with registrar: FlutterPluginRegistrar) {
@@ -116,7 +117,8 @@ public class ParticleAuthPlugin: NSObject, FlutterPlugin {
             self.setUserInfo(json as? String, flutterResult: result)
         case .batchSendTransactions:
             self.batchSendTransactions(json as? String, flutterResult: result)
-
+        case .getSecurityAccount:
+            self.getSecurityAccount(flutterResult: result)
         }
     }
 }
@@ -670,7 +672,7 @@ public extension ParticleAuthPlugin {
     }
 
     func setCustomStyle(_ json: String?) {
-        ParticleAuthService.setCustomStyle(string:json!)
+        ParticleAuthService.setCustomStyle(string: json!)
     }
 
     func setMediumScreen(_ isMediumScreen: Bool) {
@@ -733,6 +735,33 @@ public extension ParticleAuthPlugin {
         } else if json.lowercased() == "ko" {
             ParticleNetwork.setLanguage(.ko)
         }
+    }
+    
+    func getSecurityAccount(flutterResult: @escaping FlutterResult) {
+        ParticleAuthService.getSecurityAccount().subscribe { [weak self] result in
+            guard let self = self else { return }
+            switch result {
+            case .failure(let error):
+                let response = self.ResponseFromError(error)
+                let statusModel = FlutterStatusModel(status: false, data: response)
+                let data = try! JSONEncoder().encode(statusModel)
+                guard let json = String(data: data, encoding: .utf8) else { return }
+                flutterResult(json)
+            case .success(let securityAccountInfo):
+                
+                let dict = ["phone": securityAccountInfo.phone,
+                            "email": "securityAccountInfo.email",
+                            "has_set_master_password": securityAccountInfo.hasSetMasterPassword,
+                            "has_set_payment_password": securityAccountInfo.hasSetPaymentPassword] as [String: Any?]
+                
+                let json = JSON(dict)
+                
+                let statusModel = FlutterStatusModel(status: true, data: json)
+                let data = try! JSONEncoder().encode(statusModel)
+                guard let json = String(data: data, encoding: .utf8) else { return }
+                flutterResult(json)
+            }
+        }.disposed(by: self.bag)
     }
 }
 

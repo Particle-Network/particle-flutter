@@ -125,11 +125,6 @@ class BiconomyAuthLogic {
     print(result);
   }
 
-  static void loginMetamask() async {
-    final result = await ParticleConnect.connect(WalletType.metaMask);
-    print(result);
-  }
-
   static void setChainInfo() async {
     final result = await ParticleAuth.setChainInfo(ArbitrumChain.one());
     print(result);

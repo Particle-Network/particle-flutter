@@ -14,8 +14,10 @@ class AuthLogic {
 
   static void init(Env env) {
     // Get your project id and client from dashboard, https://dashboard.particle.network
-    const projectId = "772f7499-1d2e-40f4-8e2c-7b6dd47db9de"; //772f7499-1d2e-40f4-8e2c-7b6dd47db9de
-    const clientK = "ctWeIc2UBA6sYTKJknT9cu9LBikF00fbk1vmQjsV"; //ctWeIc2UBA6sYTKJknT9cu9LBikF00fbk1vmQjsV
+    const projectId =
+        "772f7499-1d2e-40f4-8e2c-7b6dd47db9de"; //772f7499-1d2e-40f4-8e2c-7b6dd47db9de
+    const clientK =
+        "ctWeIc2UBA6sYTKJknT9cu9LBikF00fbk1vmQjsV"; //ctWeIc2UBA6sYTKJknT9cu9LBikF00fbk1vmQjsV
     if (projectId.isEmpty || clientK.isEmpty) {
       throw const FormatException(
           'You need set project info, get your project id and client key from dashboard, https://dashboard.particle.network');
@@ -80,7 +82,8 @@ class AuthLogic {
 
   static void getSmartAccount() async {
     const eoaAddress = "";
-    String result = await EvmService.getSmartAccount([eoaAddress], BiconomyVersion.v1_0_0);
+    String result =
+        await EvmService.getSmartAccount([eoaAddress], BiconomyVersion.v1_0_0);
     print("getSmartAccount:" + result);
     if (jsonDecode(result)["status"] == true ||
         jsonDecode(result)["status"] == 1) {
@@ -201,8 +204,8 @@ class AuthLogic {
     String typedData = '''
 {        "types": {            "EIP712Domain": [                {                    "name": "name",                    "type": "string"                },                {                    "name": "version",                    "type": "string"                },                {                    "name": "chainId",                    "type": "uint256"                },                {                    "name": "verifyingContract",                    "type": "address"                }            ],            "Person": [                {                    "name": "name",                    "type": "string"                },                {                    "name": "wallet",                    "type": "address"                }            ],            "Mail": [                {                    "name": "from",                    "type": "Person"                },                {                    "name": "to",                    "type": "Person"                },                {                    "name": "contents",                    "type": "string"                }            ]        },        "primaryType": "Mail",        "domain": {            "name": "Ether Mail",            "version": "1",            "chainId": $chainId,            "verifyingContract": "0xCcCCccccCCCCcCCCCCCcCcCccCcCCCcCcccccccC"        },        "message": {            "from": {                "name": "Cow",                "wallet": "0xCD2a3d9F938E13CD947Ec05AbC7FE734Df8DD826"            },            "to": {                "name": "Bob",                "wallet": "0xbBbBBBBbbBBBbbbBbbBbbbbBBbBbbbbBbBbbBBbB"            },            "contents": "Hello, Bob!"        }}
     ''';
-    String result =
-        await ParticleAuth.signTypedData(typedData, SignTypedDataVersion.v4Unique);
+    String result = await ParticleAuth.signTypedData(
+        typedData, SignTypedDataVersion.v4Unique);
     debugPrint("signTypedData: $result");
     showToast("signTypedData: $result");
   }
@@ -261,8 +264,6 @@ class AuthLogic {
       chainInfo = PlatONChain.testnet();
     } else if (chainId == HecoChain.mainnet().chainId) {
       chainInfo = HecoChain.mainnet();
-    } else if (chainId == HecoChain.testnet().chainId) {
-      chainInfo = HecoChain.testnet();
     } else if (chainId == ArbitrumChain.one().chainId) {
       chainInfo = ArbitrumChain.one();
     } else if (chainId == ArbitrumChain.nova().chainId) {
@@ -334,27 +335,33 @@ class AuthLogic {
     } else if (chainId == MetisChain.testnet().chainId) {
       chainInfo = MetisChain.testnet();
     } else if (chainId == ConfluxESpaceChain.mainnet().chainId) {
-       chainInfo = ConfluxESpaceChain.mainnet();
+      chainInfo = ConfluxESpaceChain.mainnet();
     } else if (chainId == ConfluxESpaceChain.testnet().chainId) {
-       chainInfo = ConfluxESpaceChain.testnet();
+      chainInfo = ConfluxESpaceChain.testnet();
     } else if (chainId == MapoChain.mainnet().chainId) {
-       chainInfo = MapoChain.mainnet();
+      chainInfo = MapoChain.mainnet();
     } else if (chainId == MapoChain.testnet().chainId) {
-       chainInfo = MapoChain.testnet();
+      chainInfo = MapoChain.testnet();
     } else if (chainId == PolygonZkEVMChain.mainnet().chainId) {
-       chainInfo = PolygonZkEVMChain.mainnet();
+      chainInfo = PolygonZkEVMChain.mainnet();
     } else if (chainId == PolygonZkEVMChain.testnet().chainId) {
-       chainInfo = PolygonZkEVMChain.testnet();
+      chainInfo = PolygonZkEVMChain.testnet();
     } else if (chainId == BaseChain.testnet().chainId) {
-       chainInfo = BaseChain.testnet();
+      chainInfo = BaseChain.testnet();
     } else if (chainId == LineaChain.testnet().chainId) {
-       chainInfo = LineaChain.testnet();
+      chainInfo = LineaChain.testnet();
     } else if (chainId == ComboChain.testnet().chainId) {
-       chainInfo = ComboChain.testnet();
+      chainInfo = ComboChain.testnet();
     } else if (chainId == MantleChain.testnet().chainId) {
-       chainInfo = MantleChain.testnet();
+      chainInfo = MantleChain.testnet();
     } else if (chainId == ZkMetaChain.testnet().chainId) {
-       chainInfo = ZkMetaChain.testnet();
+      chainInfo = ZkMetaChain.testnet();
+    } else if (chainId == OpBNBChain.testnet().chainId) {
+      chainInfo = OpBNBChain.testnet();
+    } else if (chainId == OKBCChain.testnet().chainId) {
+      chainInfo = OKBCChain.testnet();
+    } else if (chainId == TaikoChain.testnet().chainId) {
+      chainInfo = TaikoChain.testnet();
     }
 
     debugPrint("getChainInfo: $chainInfo");
@@ -385,7 +392,22 @@ class AuthLogic {
   }
 
   static void openWebWallet() {
-    ParticleAuth.openWebWallet();
+    //https://docs.particle.network/developers/wallet-service/sdks/web
+    String webConfig = '''
+         {
+            "supportAddToken": false,
+            "supportChains": [{
+                "id": 1,
+                "name": "Ethereum"
+              },
+              {
+                "id": 5,
+                "name": "Ethereum"
+              }
+            ]
+          }
+        ''';
+    ParticleAuth.openWebWallet(webConfig);
   }
 
   static void setDisplayWallet() {
@@ -434,7 +456,9 @@ class AuthLogic {
         gasFeeLevel: GasFeeLevel.low);
     print("transaction: $result");
     showToast("transaction: $result");
-    final transaction = await EvmService.writeContract(address, contractAddress, methodName, parameters, abiJsonString, isSupportEIP1559, gasFeeLevel: GasFeeLevel.low);
+    final transaction = await EvmService.writeContract(address, contractAddress,
+        methodName, parameters, abiJsonString, isSupportEIP1559,
+        gasFeeLevel: GasFeeLevel.low);
     print("transaction: $transaction");
     showToast("transaction: $transaction");
   }
@@ -443,10 +467,15 @@ class AuthLogic {
     String address = await ParticleAuth.getAddress();
     String contractAddress = "0x326C977E6efc84E512bB9C30f76E30c160eD06FB";
     String methodName = "transfer";
-    List<Object> parameters =  <Object>["0xa0869E99886e1b6737A4364F2cf9Bb454FD637E4", "100000000"];
+    List<Object> parameters = <Object>[
+      "0xa0869E99886e1b6737A4364F2cf9Bb454FD637E4",
+      "100000000"
+    ];
     String abiJsonString = "";
     bool isSupportEIP1559 = true;
-    final transaction = await EvmService.writeContract(address, contractAddress, methodName, parameters, abiJsonString, isSupportEIP1559, gasFeeLevel: GasFeeLevel.low);
+    final transaction = await EvmService.writeContract(address, contractAddress,
+        methodName, parameters, abiJsonString, isSupportEIP1559,
+        gasFeeLevel: GasFeeLevel.low);
     print("transaction: $transaction");
     showToast("transaction: $transaction");
     final tx = await ParticleAuth.signAndSendTransaction(transaction);
@@ -486,5 +515,47 @@ class AuthLogic {
     showToast("tx: $tx");
   }
 
-}
+  static void hasMasterPassword() async {
+    final hasMasterPassword = await ParticleAuth.hasMasterPassword();
+    print("hasMasterPassword: $hasMasterPassword");
+    showToast("hasMasterPassword: $hasMasterPassword");
+  }
 
+  static void hasPaymentPassword() async {
+    final hasPaymentPassword = await ParticleAuth.hasPaymentPassword();
+    print("hasPaymentPassword: $hasPaymentPassword");
+    showToast("hasPaymentPassword: $hasPaymentPassword");
+  }
+
+  static void hasSecurityAccount() async {
+    final hasSecurityAccount = await ParticleAuth.hasSecurityAccount();
+    print("hasSecurityAccount: $hasSecurityAccount");
+    showToast("hasSecurityAccount: $hasSecurityAccount");
+  }
+
+  static void getSecurityAccount() async {
+    final result = await ParticleAuth.getSecurityAccount();
+    if (result == null) return;
+    
+    if (jsonDecode(result)["status"] == true ||
+        jsonDecode(result)["status"] == 1) {
+      final securityAccount = jsonDecode(result)["data"];
+      bool hasMasterPassword = securityAccount["has_set_master_password"];
+      bool hasPaymentPassword = securityAccount["has_set_payment_password"];
+      final email = securityAccount["email"];
+      final phone = securityAccount["phone"];
+
+      bool hasSecurityAccount = (email != null && !email.isEmpty) ||
+          (phone != null && !phone.isEmpty);
+
+      print(
+          "hasMasterPassword: $hasMasterPassword, hasPaymentPassword: $hasPaymentPassword, hasSecurityAccount: $hasSecurityAccount");
+      showToast(
+          "hasMasterPassword: $hasMasterPassword, hasPaymentPassword: $hasPaymentPassword, hasSecurityAccount: $hasSecurityAccount");
+    } else {
+      final error = RpcError.fromJson(jsonDecode(result)["data"]);
+      print(error);
+      showToast("getSecurityAccount: $error");
+    }
+  }
+}

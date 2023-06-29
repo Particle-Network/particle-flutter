@@ -192,10 +192,6 @@ class HecoChain implements ChainInfo {
   static HecoChain mainnet() {
     return HecoChain(128, "Mainnet");
   }
-
-  static HecoChain testnet() {
-    return HecoChain(256, "Testnet");
-  }
 }
 
 class FantomChain implements ChainInfo {
@@ -795,9 +791,79 @@ class ZkMetaChain implements ChainInfo {
   // }
 
   static ZkMetaChain testnet() {
-    return ZkMetaChain(23122, "Testnet");
+    return ZkMetaChain(12009, "Testnet");
   }
 }
+
+class OpBNBChain implements ChainInfo {
+  @override
+  int chainId;
+
+  @override
+  String chainIdName;
+
+  @override
+  String? chainName;
+
+  OpBNBChain(this.chainId, this.chainIdName) {
+    chainName = ChainName.Base.name;
+  }
+
+  // static PolygonZkEVMChain mainnet() {
+  //   return PolygonZkEVMChain(1101, "Mainnet");
+  // }
+
+  static OpBNBChain testnet() {
+    return OpBNBChain(5611, "Testnet");
+  }
+}
+
+class OKBCChain implements ChainInfo {
+  @override
+  int chainId;
+
+  @override
+  String chainIdName;
+
+  @override
+  String? chainName;
+
+  OKBCChain(this.chainId, this.chainIdName) {
+    chainName = ChainName.Base.name;
+  }
+
+  // static PolygonZkEVMChain mainnet() {
+  //   return PolygonZkEVMChain(1101, "Mainnet");
+  // }
+
+  static OKBCChain testnet() {
+    return OKBCChain(195, "Testnet");
+  }
+}
+
+class TaikoChain implements ChainInfo {
+  @override
+  int chainId;
+
+  @override
+  String chainIdName;
+
+  @override
+  String? chainName;
+
+  TaikoChain(this.chainId, this.chainIdName) {
+    chainName = ChainName.Base.name;
+  }
+
+  // static PolygonZkEVMChain mainnet() {
+  //   return PolygonZkEVMChain(1101, "Mainnet");
+  // }
+
+  static TaikoChain testnet() {
+    return TaikoChain(167005, "Testnet");
+  }
+}
+
 
 enum ChainName {
   Solana,
@@ -834,4 +900,7 @@ enum ChainName {
   Combo,
   Mantle,
   ZkMeta,
+  OpBNB,
+  OKBC,
+  Taiko
 }
