@@ -31,15 +31,15 @@ flutter_ios_podfile_setup
 target 'Runner' do
   use_frameworks! :linkage => :static
   
-  pod 'ParticleNetworkBase', '0.13.4'
-  pod 'ParticleBiconomy', '0.13.4'
+  pod 'ParticleNetworkBase', '0.14.3'
+  pod 'ParticleBiconomy', '0.14.3'
   
-  pod 'ParticleConnect', '0.1.53'
-  pod 'ConnectWalletConnectAdapter', '0.1.53'
-  pod 'ConnectSolanaAdapter', '0.1.53'
-  pod 'ConnectEVMAdapter', '0.1.53'
-  pod 'ConnectCommon', '0.1.53'
-  pod 'ConnectPhantomAdapter', '0.1.53'
+  pod 'ParticleConnect', '0.2.2'
+  pod 'ConnectWalletConnectAdapter', '0.2.2'
+  pod 'ConnectSolanaAdapter', '0.2.2'
+  pod 'ConnectEVMAdapter', '0.2.2'
+  pod 'ConnectCommon', '0.2.2'
+  pod 'ConnectPhantomAdapter', '0.2.2'
   
   pod 'WalletConnectSwift', :git => 'https://github.com/SunZhiC/WalletConnectSwift', :branch => 'master'
   
