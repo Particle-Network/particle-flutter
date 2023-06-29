@@ -1,17 +1,20 @@
 import 'package:flutter/foundation.dart';
 import 'package:oktoast/oktoast.dart';
-import 'package:particle_connect/model/wallet_type.dart';
-import 'package:particle_wallet/model/buy_crypto_config.dart';
-import 'package:particle_wallet/model/fiat_coin.dart';
-import 'package:particle_wallet/model/language.dart';
-import 'package:particle_wallet/model/open_buy_network.dart';
-import 'package:particle_wallet/model/wallet_display.dart';
+import 'package:particle_connect/particle_connect.dart';
 import 'package:particle_wallet/particle_wallet.dart';
-import 'package:particle_auth/model/chain_info.dart';
+import 'package:particle_auth/particle_auth.dart';
 
 class WalletLogic {
   static void init() {
-    ParticleWallet.init();
+    // Set wallet connect v2 project id to ParticleWalletService, used as a wallet
+    ParticleWallet.setWalletConnectV2ProjectId(
+        "75ac08814504606fc06126541ace9df6");
+
+    ParticleWallet.init(WalletMetaData(
+        "Particle Connect",
+        "https://connect.particle.network/icons/512.png",
+        "https://connect.particle.network",
+        "Particle Connect Flutter Demo"));
   }
 
   static void navigatorWallet() {
@@ -39,7 +42,8 @@ class WalletLogic {
   static void navigatorNFTSend() {
     String mintAddress = "0xD000F000Aa1F8accbd5815056Ea32A54777b2Fc4";
     String tokenId = "1412";
-    ParticleWallet.navigatorNFTSend(mintAddress, tokenId, amount: null, receiverAddress: "");
+    ParticleWallet.navigatorNFTSend(mintAddress, tokenId,
+        amount: null, receiverAddress: "");
   }
 
   static void navigatorNFTDetails() {

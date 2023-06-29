@@ -8,6 +8,7 @@
 import Flutter
 import Foundation
 import ParticleNetworkBase
+import ParticleWalletConnect
 import ParticleWalletGUI
 import RxSwift
 import SwiftyJSON
@@ -36,7 +37,6 @@ public class ParticleWalletPlugin: NSObject, FlutterPlugin {
         case getEnableSwap
         case switchWallet
         case setLanguage
-        case supportWalletConnect
         case supportDappBrowser
         case showLanguageSetting
         case showAppearanceSetting
@@ -47,6 +47,11 @@ public class ParticleWalletPlugin: NSObject, FlutterPlugin {
         case setPriorityNFTContractAddresses
         case setFiatCoin
         case loadCustomUIJsonString
+
+        // WalletConnectV2
+        case supportWalletConnect
+        case setWalletConnectV2ProjectId
+        case initializeWalletMetaData
     }
 
     public static func register(with registrar: FlutterPluginRegistrar) {
@@ -128,6 +133,10 @@ public class ParticleWalletPlugin: NSObject, FlutterPlugin {
             self.setFiatCoin(json as? String)
         case .loadCustomUIJsonString:
             self.loadCustomUIJsonString(json as? String)
+        case .setWalletConnectV2ProjectId:
+            self.setWalletConnectV2ProjectId(json as? String)
+        case .initializeWalletMetaData:
+            self.initializeWalletMetaData(json as? String)
         }
     }
 }
@@ -309,7 +318,7 @@ extension ParticleWalletPlugin {
         let chains = JSON(parseJSON: json).arrayValue.map {
             $0["chain_id"].intValue
         }.compactMap {
-            return ParticleNetwork.searchChainInfo(by: $0)?.chain
+            ParticleNetwork.searchChainInfo(by: $0)?.chain
         }
         ParticleWalletGUI.supportChain(chains)
     }
@@ -389,10 +398,6 @@ extension ParticleWalletPlugin {
             language = .ko
         }
         return language
-    }
-
-    func supportWalletConnect(_ enable: Bool) {
-        ParticleWalletGUI.supportWalletConnect(enable)
     }
 
     func supportDappBrowser(_ enable: Bool) {
@@ -491,5 +496,35 @@ extension ParticleWalletPlugin {
         } catch {
             print(error)
         }
+    }
+
+    func supportWalletConnect(_ enable: Bool) {
+        ParticleWalletGUI.supportWalletConnect(enable)
+    }
+
+    func initializeWalletMetaData(_ json: String?) {
+        guard let json = json else {
+            return
+        }
+
+        let data = JSON(parseJSON: json)
+
+        let walletName = data["metadata"]["name"].stringValue
+        let walletIconString = data["metadata"]["icon"].stringValue
+        let walletUrlString = data["metadata"]["url"].stringValue
+        let walletDescription = data["metadata"]["description"].stringValue
+
+        let walletIconUrl = URL(string: walletIconString) != nil ? URL(string: walletIconString)! : URL(string: "https://connect.particle.network/icons/512.png")!
+
+        let walletUrl = URL(string: walletUrlString) != nil ? URL(string: walletUrlString)! : URL(string: "https://connect.particle.network")!
+
+        ParticleWalletConnect.initialize(.init(name: walletName, icon: walletIconUrl, url: walletUrl, description: walletDescription))
+    }
+
+    func setWalletConnectV2ProjectId(_ json: String?) {
+        guard let json = json else {
+            return
+        }
+        ParticleWalletConnect.setWalletConnectV2ProjectId(json)
     }
 }

@@ -1,12 +1,12 @@
-class DappMetaData {
+class WalletMetaData {
   String name;
   String icon;
   String url;
   String description;
 
-  DappMetaData(this.name, this.icon, this.url, this.description);
+  WalletMetaData(this.name, this.icon, this.url, this.description);
 
-  DappMetaData.fromJson(Map<String, dynamic> json)
+  WalletMetaData.fromJson(Map<String, dynamic> json)
       : name = json['name'],
         icon = json['icon'],
         url = json['url'],

@@ -31,17 +31,19 @@ target 'Runner' do
   use_frameworks! :linkage => :static
   use_modular_headers!
 
-  pod 'ParticleConnect', '0.1.53'
-  pod 'ConnectWalletConnectAdapter', '0.1.53'
-  pod 'ConnectSolanaAdapter', '0.1.53'
-  pod 'ConnectEVMAdapter', '0.1.53'
-  pod 'ConnectCommon', '0.1.53'
-  pod 'ConnectPhantomAdapter', '0.1.53'
-  pod 'ParticleNetworkBase', '0.13.4'
-  pod 'ParticleAuthService', '0.13.4'
-  pod 'ParticleWalletGUI', '0.13.4'
-  pod 'ParticleWalletAPI', '0.13.4'
-  pod 'ParticleWalletConnect', '0.13.4'
+  pod 'ParticleConnect', '0.2.1'
+  pod 'ConnectWalletConnectAdapter', '0.2.1'
+  pod 'ConnectSolanaAdapter', '0.2.1'
+  pod 'ConnectEVMAdapter', '0.2.1'
+  pod 'ConnectCommon', '0.2.1'
+  pod 'ConnectPhantomAdapter', '0.2.1'
+  
+  pod 'ParticleNetworkBase', '0.14.1'
+  pod 'ParticleAuthService', '0.14.1'
+  pod 'ParticleWalletGUI', '0.14.1'
+  pod 'ParticleWalletAPI', '0.14.1'
+  pod 'ParticleWalletConnect', '0.14.1'
+  pod 'ParticleBiconomy', '0.14.1'
   
   pod 'SkeletonView', :git => 'https://github.com/SunZhiC/SkeletonView.git', :branch => 'main'
   pod 'WalletConnectSwift', :git => 'https://github.com/SunZhiC/WalletConnectSwift', :branch => 'master'

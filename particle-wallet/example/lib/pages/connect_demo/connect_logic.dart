@@ -2,16 +2,14 @@ import 'dart:convert';
 
 import 'package:flutter/foundation.dart';
 import 'package:oktoast/oktoast.dart';
-import 'package:particle_auth/model/chain_info.dart';
+
 import 'package:particle_auth/particle_auth.dart';
 import 'package:particle_connect/particle_connect.dart';
-import 'package:particle_connect/model/dapp_meta_data.dart';
+
 import 'package:particle_wallet/particle_wallet.dart';
 import 'package:particle_wallet_example/mock/test_account.dart';
 import 'package:particle_wallet_example/mock/transaction_mock.dart';
-import 'package:particle_connect/model/particle_connect_config.dart';
-import 'package:particle_auth/model/login_info.dart';
-import 'package:particle_connect/model/wallet_type.dart';
+
 class ConnectLogic {
   static late ChainInfo currChainInfo;
   static WalletType walletType = WalletType.particle;
@@ -31,8 +29,12 @@ class ConnectLogic {
     final dappInfo = DappMetaData(
         "Particle Connect",
         "https://connect.particle.network/icons/512.png",
-        "https://connect.particle.network");
+        "https://connect.particle.network",
+        "Particle Connect Flutter Demo");
     ParticleConnect.init(currChainInfo, dappInfo, Env.dev);
+    // Set wallet connect v2 project id to ParticleConnectService, used as a dapp
+    ParticleConnect.setWalletConnectV2ProjectId("75ac08814504606fc06126541ace9df6");
+    ParticleConnect.setWalletConnectV2SupportChainInfos(<ChainInfo>[EthereumChain.mainnet(), PolygonChain.mainnet()]);
   }
 
   static void setChainInfo() async {
@@ -42,7 +44,7 @@ class ConnectLogic {
 
   static void connect() async {
     final config = ParticleConnectConfig(
-        LoginType.google, "", [SupportAuthType.all], false,null);
+        LoginType.google, "", [SupportAuthType.all], false, null);
     final result = await ParticleConnect.connect(walletType, config: config);
     showToast('connect: $result');
     print("connect: $result");

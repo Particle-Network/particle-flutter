@@ -29,12 +29,27 @@
 			<string>Editor</string>
 			<key>CFBundleURLSchemes</key>
 			<array>
-				<string>pn1d90aba8-7317-4d0e-85a7-9913b8aaa530</string>
+				<string>pn6c11e6fe-3b68-418b-9176-70298b4a74cb</string>
 			</array>
 		</dict>
 	</array>
 	<key>CFBundleVersion</key>
 	<string>$(FLUTTER_BUILD_NUMBER)</string>
+	<key>LSApplicationQueriesSchemes</key>
+	<array>
+		<string>metamask</string>
+		<string>phantom</string>
+		<string>bitkeep</string>
+		<string>imtokenv2</string>
+		<string>rainbow</string>
+		<string>trust</string>
+		<string>zerion</string>
+		<string>mathwallet</string>
+		<string>argent</string>
+		<string>1inch</string>
+		<string>awallet</string>
+		<string>bitpie</string>
+	</array>
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
 	<key>NSCameraUsageDescription</key>
@@ -62,21 +77,5 @@
 	</array>
 	<key>UIViewControllerBasedStatusBarAppearance</key>
 	<false/>
-    <key>LSApplicationQueriesSchemes</key>
-    <array>
-        <string>metamask</string>
-        <string>phantom</string>
-        <string>bitkeep</string>
-        <string>imtokenv2</string>
-        <string>rainbow</string>
-        <string>trust</string>
-        <string>gnosissafe</string>
-        <string>zerion</string>
-        <string>mathwallet</string>
-        <string>argent</string>
-        <string>1inch</string>
-        <string>awallet</string>
-        <string>bitpie</string>
-    </array>
 </dict>
 </plist>

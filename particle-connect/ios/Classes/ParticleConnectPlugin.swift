@@ -60,6 +60,8 @@ public class ParticleConnectPlugin: NSObject, FlutterPlugin {
         case reconnectIfNeeded
         case connectWalletConnect
         case batchSendTransactions
+        case setWalletConnectV2ProjectId
+        case setWalletConnectV2SupportChainInfos
     }
     
     public static func register(with registrar: FlutterPluginRegistrar) {
@@ -125,6 +127,10 @@ public class ParticleConnectPlugin: NSObject, FlutterPlugin {
             self.connectWalletConnect(flutterResult: result)
         case .batchSendTransactions:
             self.batchSendTransactions(json as? String, flutterResult: result)
+        case .setWalletConnectV2ProjectId:
+            self.setWalletConnectV2ProjectId(json as? String)
+        case .setWalletConnectV2SupportChainInfos:
+            self.setWalletConnectV2SupportChainInfos(json as? String)
         }
     }
 }
@@ -158,12 +164,12 @@ extension ParticleConnectPlugin {
         let dAppName = data["metadata"]["name"].stringValue
         let dAppIconString = data["metadata"]["icon"].stringValue
         let dAppUrlString = data["metadata"]["url"].stringValue
-        
+        let dappDescription = data["metadata"]["description"].stringValue
         let dAppIconUrl = URL(string: dAppIconString) != nil ? URL(string: dAppIconString)! : URL(string: "https://connect.particle.network/icons/512.png")!
         
         let dAppUrl = URL(string: dAppUrlString) != nil ? URL(string: dAppUrlString)! : URL(string: "https://connect.particle.network")!
         
-        let dAppData = DAppMetaData(name: dAppName, icon: dAppIconUrl, url: dAppUrl)
+        let dAppData = DAppMetaData(name: dAppName, icon: dAppIconUrl, url: dAppUrl, description: dappDescription)
         
         var adapters: [ConnectAdapter] = [ParticleConnectAdapter()]
 #if canImport(ConnectEVMAdapter)
@@ -195,7 +201,6 @@ extension ParticleConnectPlugin {
         adapters.append(ImtokenConnectAdapter())
         adapters.append(TrustConnectAdapter())
         adapters.append(WalletConnectAdapter())
-        adapters.append(GnosisConnectAdapter())
         
         let moreAdapterClasses: [WalletConnectAdapter.Type] =
             [ZerionConnectAdapter.self,
@@ -211,10 +216,31 @@ extension ParticleConnectPlugin {
         })
         
 #endif
-        
         ParticleConnect.initialize(env: devEnv, chainInfo: chainInfo, dAppData: dAppData) {
             adapters
         }
+    }
+    
+    func setWalletConnectV2ProjectId(_ json: String?) {
+        guard let json = json else {
+            return
+        }
+        
+        ParticleConnect.setWalletConnectV2ProjectId(json)
+    }
+    
+    func setWalletConnectV2SupportChainInfos(_ json: String?) {
+        guard let json = json else {
+            return
+        }
+        
+        let chainInfos = JSON(parseJSON: json).arrayValue.map {
+            $0["chain_id"].intValue
+        }.compactMap {
+            ParticleNetwork.searchChainInfo(by: $0)
+        }
+        
+        ParticleConnect.setWalletConnectV2SupportChainInfos(chainInfos)
     }
     
     func getAccounts(_ json: String?, flutterResult: FlutterResult) {
@@ -1228,28 +1254,32 @@ extension ParticleConnectPlugin {
             print("adapter for walletConnect is not init")
             return
         }
+        Task {
+            let (uri, observable) = await (adapter as! WalletConnectAdapter).getConnectionUrl()
+            
+            observable.subscribe { [weak self] result in
+                guard let self = self else { return }
+                switch result {
+                case .failure(let error):
+                    let response = self.ResponseFromError(error)
+                    let statusModel = FlutterStatusModel(status: false, data: response)
+                    let data = try! JSONEncoder().encode(statusModel)
+                    guard let json = String(data: data, encoding: .utf8) else { return }
+                    flutterResult(json)
+                case .success(let account):
+                    guard let account = account else { return }
+                    let statusModel = FlutterStatusModel(status: true, data: account)
+                    let data = try! JSONEncoder().encode(statusModel)
+                    guard let json = String(data: data, encoding: .utf8) else { return }
+                    flutterResult(json)
+                }
+            }.disposed(by: self.bag)
+            
+            self.eventSink?(uri)
+        }
+       
         
-        let (uri, observable) = (adapter as! WalletConnectAdapter).getConnectionUrl()
-        
-        observable.subscribe { [weak self] result in
-            guard let self = self else { return }
-            switch result {
-            case .failure(let error):
-                let response = self.ResponseFromError(error)
-                let statusModel = FlutterStatusModel(status: false, data: response)
-                let data = try! JSONEncoder().encode(statusModel)
-                guard let json = String(data: data, encoding: .utf8) else { return }
-                flutterResult(json)
-            case .success(let account):
-                guard let account = account else { return }
-                let statusModel = FlutterStatusModel(status: true, data: account)
-                let data = try! JSONEncoder().encode(statusModel)
-                guard let json = String(data: data, encoding: .utf8) else { return }
-                flutterResult(json)
-            }
-        }.disposed(by: self.bag)
-        
-        self.eventSink?(uri)
+       
     }
 }
 
@@ -1268,27 +1298,27 @@ extension ParticleConnectPlugin: MessageSigner {
     public func signTypedData(_ message: String) -> RxSwift.Single<String> {
         guard let walletType = self.latestWalletType else {
             print("walletType is nil")
-            return .error(ParticleNetwork.ResponseError.init(code: nil, message: "walletType is nil"))
+            return .error(ParticleNetwork.ResponseError(code: nil, message: "walletType is nil"))
         }
         
         guard let adapter = map2ConnectAdapter(from: walletType) else {
             print("adapter for \(walletType) is not init")
-            return .error(ParticleNetwork.ResponseError.init(code: nil, message: "adapter for \(walletType) is not init"))
+            return .error(ParticleNetwork.ResponseError(code: nil, message: "adapter for \(walletType) is not init"))
         }
-        return adapter.signTypedData(publicAddress: getEoaAddress(), data: message)
+        return adapter.signTypedData(publicAddress: self.getEoaAddress(), data: message)
     }
     
     public func signMessage(_ message: String) -> RxSwift.Single<String> {
         guard let walletType = self.latestWalletType else {
             print("walletType is nil")
-            return .error(ParticleNetwork.ResponseError.init(code: nil, message: "walletType is nil"))
+            return .error(ParticleNetwork.ResponseError(code: nil, message: "walletType is nil"))
         }
         
         guard let adapter = map2ConnectAdapter(from: walletType) else {
             print("adapter for \(walletType) is not init")
-            return .error(ParticleNetwork.ResponseError.init(code: nil, message: "adapter for \(walletType) is not init"))
+            return .error(ParticleNetwork.ResponseError(code: nil, message: "adapter for \(walletType) is not init"))
         }
-        return adapter.signMessage(publicAddress: getEoaAddress(), message: message)
+        return adapter.signMessage(publicAddress: self.getEoaAddress(), message: message)
     }
     
     public func getEoaAddress() -> String {

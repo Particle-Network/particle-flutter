@@ -1,13 +1,19 @@
 import 'dart:convert';
 import 'dart:io' show Platform;
 import 'package:flutter/services.dart';
-import 'package:particle_auth/model/biconomy_fee_mode.dart';
-import 'package:particle_auth/model/chain_info.dart';
+
+import 'package:particle_auth/particle_auth.dart';
 import 'package:particle_connect/model/dapp_meta_data.dart';
 import 'package:particle_connect/model/particle_connect_config.dart';
 import 'package:particle_connect/model/rpc_url_config.dart';
 import 'package:particle_connect/model/wallet_ready_state.dart';
 import 'package:particle_connect/model/wallet_type.dart';
+
+export 'package:particle_connect/model/dapp_meta_data.dart';
+export 'package:particle_connect/model/particle_connect_config.dart';
+export 'package:particle_connect/model/rpc_url_config.dart';
+export 'package:particle_connect/model/wallet_ready_state.dart';
+export 'package:particle_connect/model/wallet_type.dart';
 
 class ParticleConnect {
   ParticleConnect._();
@@ -24,11 +30,10 @@ class ParticleConnect {
   /// [env] Development environment.
   ///
   /// [RpcUrlConfig] set custom solana and evm rpc url, default is null.
-  static Future<void> init(
-      ChainInfo chainInfo, DappMetaData dappMetaData, Env env,
-      {RpcUrlConfig? rpcUrlConfig}) async {
+  static init(ChainInfo chainInfo, DappMetaData dappMetaData, Env env,
+      {RpcUrlConfig? rpcUrlConfig}) {
     if (Platform.isIOS) {
-      await _channel.invokeMethod(
+      _channel.invokeMethod(
           'initialize',
           jsonEncode({
             "chain_name": chainInfo.chainName,
@@ -39,7 +44,7 @@ class ParticleConnect {
             "rpc_url": rpcUrlConfig
           }));
     } else {
-      await _channel.invokeMethod(
+      _channel.invokeMethod(
           'init',
           jsonEncode({
             "chain_name": chainInfo.chainName,
@@ -51,7 +56,36 @@ class ParticleConnect {
           }));
     }
   }
-  
+
+  /// Set wallet connect v2 project id, required by WalletConnectV2
+  static setWalletConnectV2ProjectId(String walletConnectV2ProjectId) {
+    if (Platform.isIOS) {
+      _channel.invokeMethod(
+          "setWalletConnectV2ProjectId", walletConnectV2ProjectId);
+    } else {
+      // to do
+    }
+  }
+
+  /// Set the required chains for wallet connect v2. If not set, the current chain connection will be used.
+  static setWalletConnectV2SupportChainInfos(List<ChainInfo> chainInfos) {
+    if (Platform.isIOS) {
+      List<Map<String, dynamic>> allInfos = [];
+      for (var i = 0; i < chainInfos.length; i++) {
+        ChainInfo chainInfo = chainInfos[i];
+        allInfos.add({
+          "chain_name": chainInfo.chainName,
+          "chain_id_name": chainInfo.chainIdName,
+          "chain_id": chainInfo.chainId,
+        });
+      }
+      _channel.invokeMethod(
+          'setWalletConnectV2SupportChainInfos', jsonEncode(allInfos));
+    } else {
+      // to do
+    }
+  }
+
   /// Connect a wallet.
   ///
   /// [walletType] is which wallet you want to connect.

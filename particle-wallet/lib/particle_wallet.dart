@@ -2,12 +2,19 @@ import 'dart:convert';
 import 'dart:io' show Platform;
 
 import 'package:flutter/services.dart';
-import 'package:particle_auth/model/chain_info.dart';
-import 'package:particle_connect/model/wallet_type.dart';
+import 'package:particle_auth/particle_auth.dart';
+import 'package:particle_connect/particle_connect.dart';
 import 'package:particle_wallet/model/buy_crypto_config.dart';
 import 'package:particle_wallet/model/fiat_coin.dart';
-import 'package:particle_wallet/model/language.dart';
 import 'package:particle_wallet/model/wallet_display.dart';
+import 'package:particle_wallet/model/wallet_meta_data.dart';
+
+export 'package:particle_wallet/model/buy_crypto_config.dart';
+export 'package:particle_wallet/model/fiat_coin.dart';
+export 'package:particle_wallet/model/wallet_display.dart';
+export 'package:particle_wallet/model/open_buy_network.dart';
+export 'package:particle_wallet/model/theme.dart';
+export 'package:particle_wallet/model/wallet_meta_data.dart';
 
 class ParticleWallet {
   ParticleWallet._();
@@ -15,9 +22,12 @@ class ParticleWallet {
   static const MethodChannel _channel = MethodChannel('wallet_bridge');
 
   /// Init particle wallet SDK.
-  static init() {
+  static init(WalletMetaData metaData) {
     if (Platform.isAndroid) {
       _channel.invokeMethod('init');
+    }
+    if (Platform.isIOS) {
+      _channel.invokeMethod("initializeWalletMetaData", jsonEncode(metaData));
     }
   }
 
@@ -68,7 +78,7 @@ class ParticleWallet {
   /// [mint] is NFT mint address or contract address.
   ///
   /// [tokenId] is NFT tokenId, in solana chain, should pass "".
-  /// 
+  ///
   /// [amount] optional, for solana nft or erc721 nft, it is a useless parameter, for erc1155 nft, you can pass amount, such as "1", "100", "10000", default value is null
   ///
   /// [receiveAddress] is a receiver address, default value if empty string.
@@ -226,11 +236,6 @@ class ParticleWallet {
         }));
   }
 
-  /// Set support wallet connect as a wallet, default is true
-  static supportWalletConnect(bool enable) {
-    _channel.invokeMethod("supportWalletConnect", enable);
-  }
-
   /// Set support dapp broswer in wallet page, default is true
   static supportDappBrowser(bool enable) {
     _channel.invokeMethod("supportDappBrowser", enable);
@@ -286,5 +291,20 @@ class ParticleWallet {
   /// load custom ui config json
   static loadCustomUIJsonString(String json) {
     _channel.invokeMethod("loadCustomUIJsonString", json);
+  }
+
+  /// Set support wallet connect as a wallet, default is true
+  static supportWalletConnect(bool enable) {
+    _channel.invokeMethod("supportWalletConnect", enable);
+  }
+
+  /// Set Wallet conenct v2 project id, used when scan qrcode connect as a wallet.
+  static setWalletConnectV2ProjectId(String walletConnectV2ProjectId) {
+    if (Platform.isIOS) {
+      _channel.invokeListMethod(
+          "setWalletConnectV2ProjectId", walletConnectV2ProjectId);
+    } else {
+      // todo
+    }
   }
 }

@@ -60,7 +60,7 @@ extension NSObject {
             walletType = .inch1
         } else {
             walletType = nil
-        } 
+        }
 
         return walletType
     }

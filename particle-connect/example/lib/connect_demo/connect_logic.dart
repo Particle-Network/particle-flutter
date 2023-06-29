@@ -1,18 +1,13 @@
 import 'dart:convert';
-import 'package:particle_auth/model/chain_info.dart';
-import 'package:particle_auth/model/login_info.dart';
-import 'package:particle_auth/particle_auth.dart';
 import 'package:oktoast/oktoast.dart';
-import 'package:particle_connect/model/wallet_type.dart';
-import 'package:particle_connect/model/dapp_meta_data.dart';
-import 'package:particle_connect/model/particle_connect_config.dart';
+import 'package:particle_auth/particle_auth.dart';
 import 'package:particle_connect/particle_connect.dart';
 import 'package:particle_connect_example/mock/test_account.dart';
 import 'package:particle_connect_example/mock/transaction_mock.dart';
 
 class ConnectLogic {
   static late ChainInfo currChainInfo;
-  static WalletType walletType = WalletType.metaMask;
+  static WalletType walletType = WalletType.imToken;
 
   static late String signature;
 
@@ -20,7 +15,7 @@ class ConnectLogic {
   
   static void selectChain() {
     // currChainInfo = SolanaChain.devnet();
-    currChainInfo = EthereumChain.goerli();
+    currChainInfo = PolygonChain.mainnet();
   }
 
   static String? pubAddress;
@@ -33,9 +28,13 @@ class ConnectLogic {
     final dappInfo = DappMetaData(
         "Particle Connect",
         "https://connect.particle.network/icons/512.png",
-        "https://connect.particle.network");
+        "https://connect.particle.network",
+        "Particle Connect Flutter Demo");
 
     ParticleConnect.init(currChainInfo, dappInfo, Env.dev);
+    ParticleConnect.setWalletConnectV2ProjectId("75ac08814504606fc06126541ace9df6");
+    List<ChainInfo> chainInfos = <ChainInfo>[EthereumChain.mainnet(), PolygonChain.mainnet()];
+    ParticleConnect.setWalletConnectV2SupportChainInfos(chainInfos);
   }
 
   static void setChainInfo() async {
@@ -87,8 +86,6 @@ static void getChainInfo() async {
       chainInfo = PlatONChain.testnet();
     } else if (chainId == HecoChain.mainnet().chainId) {
       chainInfo = HecoChain.mainnet();
-    } else if (chainId == HecoChain.testnet().chainId) {
-      chainInfo = HecoChain.testnet();
     } else if (chainId == ArbitrumChain.one().chainId) {
       chainInfo = ArbitrumChain.one();
     } else if (chainId == ArbitrumChain.nova().chainId) {
