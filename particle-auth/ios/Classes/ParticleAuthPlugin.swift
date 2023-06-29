@@ -221,6 +221,15 @@ public extension ParticleAuthPlugin {
         let socialLoginPromptString = data["social_login_prompt"].stringValue.lowercased()
         let socialLoginPrompt: SocialLoginPrompt? = SocialLoginPrompt(rawValue: socialLoginPromptString)
         
+        let message: String? = data["authorization"]["message"].string
+        let isUnique: Bool = data["authorization"]["uniq"].bool ?? false
+        
+        var loginAuthorization: LoginAuthorization? = nil
+        
+        if message != nil {
+            loginAuthorization = .init(message: message!, isUnique: isUnique)
+        }
+        
         let loginType = LoginType(rawValue: type) ?? .email
         var supportAuthTypeArray: [SupportAuthType] = []
         
@@ -263,7 +272,7 @@ public extension ParticleAuthPlugin {
             acc = nil
         }
         
-        ParticleAuthService.login(type: loginType, account: acc, supportAuthType: supportAuthTypeArray, loginFormMode: loginFormMode, socialLoginPrompt: socialLoginPrompt).subscribe { [weak self] result in
+        ParticleAuthService.login(type: loginType, account: acc, supportAuthType: supportAuthTypeArray, loginFormMode: loginFormMode, socialLoginPrompt: socialLoginPrompt, authorization: loginAuthorization).subscribe { [weak self] result in
             guard let self = self else { return }
             switch result {
             case .failure(let error):
