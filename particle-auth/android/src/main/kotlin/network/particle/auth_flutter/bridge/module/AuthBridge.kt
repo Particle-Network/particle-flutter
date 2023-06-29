@@ -119,7 +119,8 @@ object AuthBridge {
                 override fun failure(errMsg: WebServiceError) {
                     result.success(FlutterCallBack.failed(errMsg).toGson())
                 }
-            })
+            }, loginData.authorization
+        )
     }
 
     fun logout(result: MethodChannel.Result) {
