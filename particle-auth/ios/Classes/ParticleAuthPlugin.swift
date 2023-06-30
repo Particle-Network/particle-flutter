@@ -224,7 +224,7 @@ public extension ParticleAuthPlugin {
         let message: String? = data["authorization"]["message"].string
         let isUnique: Bool = data["authorization"]["uniq"].bool ?? false
         
-        var loginAuthorization: LoginAuthorization? = nil
+        var loginAuthorization: LoginAuthorization?
         
         if message != nil {
             loginAuthorization = .init(message: message!, isUnique: isUnique)
@@ -759,7 +759,7 @@ public extension ParticleAuthPlugin {
             case .success(let securityAccountInfo):
                 
                 let dict = ["phone": securityAccountInfo.phone,
-                            "email": "securityAccountInfo.email",
+                            "email": securityAccountInfo.email,
                             "has_set_master_password": securityAccountInfo.hasSetMasterPassword,
                             "has_set_payment_password": securityAccountInfo.hasSetPaymentPassword] as [String: Any?]
                 

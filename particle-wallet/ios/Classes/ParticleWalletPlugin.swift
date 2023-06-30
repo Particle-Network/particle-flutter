@@ -509,10 +509,10 @@ extension ParticleWalletPlugin {
 
         let data = JSON(parseJSON: json)
 
-        let walletName = data["metadata"]["name"].stringValue
-        let walletIconString = data["metadata"]["icon"].stringValue
-        let walletUrlString = data["metadata"]["url"].stringValue
-        let walletDescription = data["metadata"]["description"].stringValue
+        let walletName = data["name"].stringValue
+        let walletIconString = data["icon"].stringValue
+        let walletUrlString = data["url"].stringValue
+        let walletDescription = data["description"].stringValue
 
         let walletIconUrl = URL(string: walletIconString) != nil ? URL(string: walletIconString)! : URL(string: "https://connect.particle.network/icons/512.png")!
 
