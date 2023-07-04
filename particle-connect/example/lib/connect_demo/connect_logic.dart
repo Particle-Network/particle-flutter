@@ -6,17 +6,13 @@ import 'package:particle_connect_example/mock/test_account.dart';
 import 'package:particle_connect_example/mock/transaction_mock.dart';
 
 class ConnectLogic {
-  static late ChainInfo currChainInfo;
+  static ChainInfo currChainInfo = EthereumChain.mainnet();
+
   static WalletType walletType = WalletType.imToken;
 
   static late String signature;
 
   static late String message;
-  
-  static void selectChain() {
-    // currChainInfo = SolanaChain.devnet();
-    currChainInfo = PolygonChain.mainnet();
-  }
 
   static String? pubAddress;
 
@@ -32,8 +28,12 @@ class ConnectLogic {
         "Particle Connect Flutter Demo");
 
     ParticleConnect.init(currChainInfo, dappInfo, Env.dev);
-    ParticleConnect.setWalletConnectV2ProjectId("75ac08814504606fc06126541ace9df6");
-    List<ChainInfo> chainInfos = <ChainInfo>[EthereumChain.mainnet(), PolygonChain.mainnet()];
+    ParticleConnect.setWalletConnectV2ProjectId(
+        "75ac08814504606fc06126541ace9df6");
+    List<ChainInfo> chainInfos = <ChainInfo>[
+      EthereumChain.mainnet(),
+      PolygonChain.mainnet()
+    ];
     ParticleConnect.setWalletConnectV2SupportChainInfos(chainInfos);
   }
 
@@ -42,7 +42,8 @@ class ConnectLogic {
     print("setChainInfo: $isSuccess");
   }
 
-static void getChainInfo() async {
+
+  static void getChainInfo() async {
     String result = await ParticleAuth.getChainInfo();
     print(result);
     String chainName = jsonDecode(result)["chain_name"];
@@ -197,8 +198,9 @@ static void getChainInfo() async {
         await ParticleConnect.isConnected(walletType, getPublicAddress());
     showToast("isConnected: $result");
   }
+
   static void getAccounts() async {
-    String result =  await ParticleConnect.getAccounts(walletType);
+    String result = await ParticleConnect.getAccounts(walletType);
     showToast("getAccounts: $result");
   }
 

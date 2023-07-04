@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:particle_connect_example/connect_demo/connect_logic.dart';
+import 'package:particle_connect_example/connect_demo/select_chain_page.dart';
+import 'package:particle_connect_example/connect_demo/select_wallet_type.dart';
 import 'package:qr_flutter/qr_flutter.dart';
 
 class ConnectDemoPage extends StatefulWidget {
@@ -40,20 +42,6 @@ class _ConnectDemoPageState extends State<ConnectDemoPage> {
         child: Column(
           children: <Widget>[
             Padding(
-              padding: const EdgeInsets.only(
-                  left: 8.0, top: 16.0, right: 8.0, bottom: 8.0),
-              child: SizedBox(
-                width: double.infinity,
-                height: 50,
-                child: ElevatedButton(
-                    onPressed: () => {ConnectLogic.selectChain()},
-                    child: const Text(
-                      "Select Chain",
-                      style: TextStyle(fontSize: 18),
-                    )),
-              ),
-            ),
-            Padding(
               padding: const EdgeInsets.all(8.0),
               child: SizedBox(
                 width: double.infinity,
@@ -62,6 +50,46 @@ class _ConnectDemoPageState extends State<ConnectDemoPage> {
                     onPressed: () => {ConnectLogic.init()},
                     child: const Text(
                       "Init",
+                      style: TextStyle(fontSize: 18),
+                    )),
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.only(
+                  left: 8.0, top: 16.0, right: 8.0, bottom: 8.0),
+              child: SizedBox(
+                width: double.infinity,
+                height: 50,
+                child: ElevatedButton(
+                    onPressed: () => {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => const SelectChainPage()),
+                          )
+                        },
+                    child: const Text(
+                      "SelectChain",
+                      style: TextStyle(fontSize: 18),
+                    )),
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.only(
+                  left: 8.0, top: 16.0, right: 8.0, bottom: 8.0),
+              child: SizedBox(
+                width: double.infinity,
+                height: 50,
+                child: ElevatedButton(
+                    onPressed: () => {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => const SelectWalletPage()),
+                          )
+                        },
+                    child: const Text(
+                      "SelectWallet",
                       style: TextStyle(fontSize: 18),
                     )),
               ),
@@ -119,7 +147,7 @@ class _ConnectDemoPageState extends State<ConnectDemoPage> {
               ),
             ),
             Offstage(
-                offstage: walletConnectUri.isEmpty ?true : false,
+                offstage: walletConnectUri.isEmpty ? true : false,
                 child: QrImage(data: walletConnectUri, size: 200)),
             Padding(
               padding: const EdgeInsets.all(8.0),

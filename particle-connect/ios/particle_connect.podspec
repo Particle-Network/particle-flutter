@@ -15,10 +15,10 @@ A flutter plugin project for particle connect
   s.source           = { :path => '.' }
   s.source_files = 'Classes/**/*'
   s.dependency 'Flutter'
-  s.platform = :ios, '13.0'
+  s.platform = :ios, '14.0'
 
   # Flutter.framework does not contain a i386 slice.
-  s.swift_version = '5.0'
+  s.swift_version = '5.7'
 
   s.dependency 'ParticleConnect'
   s.dependency 'ConnectWalletConnectAdapter'
