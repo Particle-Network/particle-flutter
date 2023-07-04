@@ -9,7 +9,7 @@ class AuthLogic {
   static late ChainInfo currChainInfo;
 
   static void setChain() {
-    currChainInfo = EthereumChain.goerli();
+    currChainInfo = PolygonChain.mainnet();
   }
 
   static void init(Env env) {

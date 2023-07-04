@@ -10,6 +10,7 @@ import com.connect.common.eip4361.Eip4361Message
 import com.connect.common.model.*
 import com.connect.common.utils.AppUtils
 import com.evm.adapter.EVMConnectAdapter
+import com.google.gson.reflect.TypeToken
 import com.particle.base.ChainInfo
 import com.particle.base.ChainName
 import com.particle.base.Env
@@ -57,15 +58,12 @@ object ConnectBridge {
         LogUtils.d("init", initParams)
         val initData: InitData = GsonUtils.fromJson(initParams, InitData::class.java)
         val chainInfo: ChainInfo = getChainInfo(initData.chainName, initData.chainIdName)
-        val (name, icon, url) = initData.metadata
         val rpcUrl: RpcUrl? = initData.rpcUrl
-        val dAppMetadata = DAppMetadata(
-            name, icon, url
-        )
+        val dAppMetadata = initData.metadata
         val adapter: MutableList<IConnectAdapter> = ArrayList()
         initAdapter(adapter, rpcUrl)
         ParticleConnect.init(
-            activity, Env.valueOf(initData.env.uppercase()), chainInfo, dAppMetadata
+            activity.application, Env.valueOf(initData.env.uppercase()), chainInfo, dAppMetadata
         ) { adapter }
     }
 
@@ -296,31 +294,53 @@ object ConnectBridge {
             )
             return
         }
-        var feeMode: FeeMode = FeeModeAuto()
-        if (signData.feeMode != null) {
-            val option = signData.feeMode.option
-            if (option == "custom") {
-                val feeQuote = signData.feeMode.feeQuote!!
-                feeMode = FeeModeCustom(feeQuote)
-            } else if (option == "gasless") {
-                feeMode = FeeModeGasless()
-            } else {
-                feeMode = FeeModeAuto()
-            }
-        }
-        connectAdapter.signAndSendTransaction(signData.publicAddress, transaction, feeMode, object : TransactionCallback {
-            override fun onError(error: ConnectError) {
-                LogUtils.d("onError", error.toString())
-                result.success(
-                    FlutterCallBack.failed(FlutterErrorMessage.parseConnectError(error)).toGson()
-                )
-            }
 
-            override fun onTransaction(transactionId: String?) {
-                LogUtils.d("onTransaction", transactionId)
-                result.success(FlutterCallBack.success(transactionId).toGson())
+        if (ParticleNetwork.isBiconomyModeEnable()) {
+            var feeMode: FeeMode = FeeModeAuto()
+            if(signData.feeMode != null){
+                val option = signData.feeMode.option
+                feeMode = when (option) {
+                    "custom" -> {
+                        val feeQuote = signData.feeMode.feeQuote!!
+                        FeeModeCustom(feeQuote)
+                    }
+                    "gasless" -> {
+                        FeeModeGasless()
+                    }
+                    else -> {
+                        FeeModeAuto()
+                    }
+                }
             }
-        })
+            connectAdapter.signAndSendTransaction(signData.publicAddress, transaction, feeMode, object : TransactionCallback {
+                override fun onError(error: ConnectError) {
+                    LogUtils.d("onError", error.toString())
+                    result.success(
+                        FlutterCallBack.failed(FlutterErrorMessage.parseConnectError(error)).toGson()
+                    )
+                }
+
+                override fun onTransaction(transactionId: String?) {
+                    LogUtils.d("onTransaction", transactionId)
+                    result.success(FlutterCallBack.success(transactionId).toGson())
+                }
+            })
+        }else{
+            connectAdapter.signAndSendTransaction(signData.publicAddress, transaction, object : TransactionCallback {
+                override fun onError(error: ConnectError) {
+                    LogUtils.d("onError", error.toString())
+                    result.success(
+                        FlutterCallBack.failed(FlutterErrorMessage.parseConnectError(error)).toGson()
+                    )
+                }
+
+                override fun onTransaction(transactionId: String?) {
+                    LogUtils.d("onTransaction", transactionId)
+                    result.success(FlutterCallBack.success(transactionId).toGson())
+                }
+            })
+        }
+
 
 
     }
@@ -743,6 +763,17 @@ object ConnectBridge {
         map["chain_id_name"] = chainInfo.chainId.toString()
         map["chain_id"] = chainInfo.chainId.value()
         result.success(Gson().toJson(map))
+    }
+
+    fun setWalletConnectV2SupportChainInfos(chainsString: String?, result: MethodChannel.Result) {
+        LogUtils.d("setWalletConnectV2SupportChainInfos", chainsString)
+        val initData: List<InitData> = GsonUtils.fromJson(chainsString, object : TypeToken<List<InitData>>() {}.type)
+//        val initData: InitData = GsonUtils.fromJson(initParams, InitData::class.java)
+        val chainInfos = mutableListOf<ChainInfo>()
+        initData.forEach {
+            chainInfos.add(getChainInfo(it.chainName, it.chainIdName))
+        }
+        ParticleConnect.setWalletConnectV2SupportChainInfos(chainInfos)
     }
 
     private fun getChainInfo(chainName: String, chainIdName: String?): ChainInfo {

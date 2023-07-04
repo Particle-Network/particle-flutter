@@ -49,27 +49,35 @@ class ParticleConnectPlugin : FlutterPlugin, MethodCallHandler, ActivityAware, E
             "init" -> {
                 ConnectBridge.init(activity!!, call.arguments as String)
             }
+
             "setChainInfo" -> {
                 ConnectBridge.setChainInfo(call.arguments as String, result)
             }
+
             "getChainInfo" -> {
                 ConnectBridge.getChainInfo(result)
             }
+
             "connect" -> {
                 ConnectBridge.connect(call.arguments as String, result, events)
             }
+
             "connectWalletConnect" -> {
                 ConnectBridge.connectWalletConnect(result, events)
             }
+
             "qrCodeUri" -> {
                 ConnectBridge.qrCodeUri(result)
             }
+
             "disconnect" -> {
                 ConnectBridge.disconnect(call.arguments as String, result)
             }
+
             "isConnected" -> {
                 ConnectBridge.isConnect(call.arguments as String, result)
             }
+
             "getAccounts" -> {
                 ConnectBridge.getAccounts(call.arguments as String, result)
             }
@@ -77,44 +85,61 @@ class ParticleConnectPlugin : FlutterPlugin, MethodCallHandler, ActivityAware, E
             "signMessage" -> {
                 ConnectBridge.signMessage(call.arguments as String, result)
             }
+
             "signTransaction" -> {
                 ConnectBridge.signTransaction(call.arguments as String, result)
             }
+
             "signAllTransactions" -> {
                 ConnectBridge.signAllTransactions(call.arguments as String, result)
             }
+
             "signAndSendTransaction" -> {
                 ConnectBridge.signAndSendTransaction(call.arguments as String, result)
             }
+
             "batchSendTransactions" -> {
                 ConnectBridge.batchSendTransactions(call.arguments as String, result)
             }
+
             "signTypedData" -> {
                 ConnectBridge.signTypedData(call.arguments as String, result)
             }
+
             "importPrivateKey" -> {
                 ConnectBridge.importPrivateKey(call.arguments as String, result)
             }
+
             "importMnemonic" -> {
                 ConnectBridge.importMnemonic(call.arguments as String, result)
             }
+
             "exportPrivateKey" -> {
                 ConnectBridge.exportPrivateKey(call.arguments as String, result)
             }
+
             "login" -> {
                 ConnectBridge.login(call.arguments as String, result)
             }
+
             "verify" -> {
                 ConnectBridge.verify(call.arguments as String, result)
             }
+
             "addEthereumChain" -> {
                 ConnectBridge.addEthereumChain(call.arguments as String, result)
             }
+
             "switchEthereumChain" -> {
                 ConnectBridge.switchEthereumChain(call.arguments as String, result)
             }
+
             "walletReadyState" -> {
                 ConnectBridge.walletReadyState(call.arguments as String, result)
+            }
+
+            "setWalletConnectV2SupportChainInfos" -> {
+                ConnectBridge.setWalletConnectV2SupportChainInfos(call.arguments as String, result)
             }
 
             else -> result.notImplemented()

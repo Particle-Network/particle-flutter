@@ -57,33 +57,30 @@ class ParticleConnect {
     }
   }
 
+
   /// Set wallet connect v2 project id, required by WalletConnectV2
   static setWalletConnectV2ProjectId(String walletConnectV2ProjectId) {
     if (Platform.isIOS) {
       _channel.invokeMethod(
           "setWalletConnectV2ProjectId", walletConnectV2ProjectId);
     } else {
-      // to do
+      // Android use init dappMetaData
     }
   }
 
   /// Set the required chains for wallet connect v2. If not set, the current chain connection will be used.
   static setWalletConnectV2SupportChainInfos(List<ChainInfo> chainInfos) {
-    if (Platform.isIOS) {
-      List<Map<String, dynamic>> allInfos = [];
-      for (var i = 0; i < chainInfos.length; i++) {
-        ChainInfo chainInfo = chainInfos[i];
-        allInfos.add({
-          "chain_name": chainInfo.chainName,
-          "chain_id_name": chainInfo.chainIdName,
-          "chain_id": chainInfo.chainId,
-        });
-      }
-      _channel.invokeMethod(
-          'setWalletConnectV2SupportChainInfos', jsonEncode(allInfos));
-    } else {
-      // to do
+    List<Map<String, dynamic>> allInfos = [];
+    for (var i = 0; i < chainInfos.length; i++) {
+      ChainInfo chainInfo = chainInfos[i];
+      allInfos.add({
+        "chain_name": chainInfo.chainName,
+        "chain_id_name": chainInfo.chainIdName,
+        "chain_id": chainInfo.chainId,
+      });
     }
+    _channel.invokeMethod(
+        'setWalletConnectV2SupportChainInfos', jsonEncode(allInfos));
   }
 
   /// Connect a wallet.

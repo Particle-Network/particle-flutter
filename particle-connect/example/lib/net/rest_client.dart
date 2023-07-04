@@ -11,8 +11,8 @@ import '../generated/json/base/json_field.dart';
 
 part 'rest_client.g.dart';
 
-String projectId = ""; //your project id
-String clientKey = ""; //your project client key
+String projectId = "b0991b94-8219-4499-bf8e-d92ce6087f72"; //your project id   https://dashboard.particle.network/
+String clientK = "cEpW3oDxg8JoFK2WR4OT04d0mMffdBRPiQIbu0xF"; //your project client key
 const baseUrl = "https://rpc.particle.network/";
 
 @RestApi()
@@ -34,12 +34,12 @@ abstract class SolanaRpcApi {
 
   static SolanaRpcApi getClient() {
     if (_instace != null) return _instace!;
-    if (projectId.isEmpty || clientKey.isEmpty) {
+    if (projectId.isEmpty || clientK.isEmpty) {
       throw Exception("projectId or clientKey must be not empty!!! Click here to get : https://dashboard.particle.network/");
     }
     final dio = Dio();
     dio.options.headers["Content-Type"] = "application/json";
-    dio.options.headers["Authorization"] = authenticate(projectId, clientKey);
+    dio.options.headers["Authorization"] = authenticate(projectId, clientK);
     _instace = SolanaRpcApi(dio, baseUrl: baseUrl);
     return _instace!;
   }
@@ -55,12 +55,12 @@ abstract class EvmRpcApi {
 
   static EvmRpcApi getClient() {
     if (_instace != null) return _instace!;
-    if (projectId.isEmpty || clientKey.isEmpty) {
+    if (projectId.isEmpty || clientK.isEmpty) {
       throw Exception("projectId or clientKey must be not empty!!! Click here to get : https://dashboard.particle.network/");
     }
     final dio = Dio();
     dio.options.headers["Content-Type"] = "application/json";
-    dio.options.headers["Authorization"] = authenticate(projectId, clientKey);
+    dio.options.headers["Authorization"] = authenticate(projectId, clientK);
     _instace = EvmRpcApi(dio, baseUrl: baseUrl);
     return _instace!;
   }

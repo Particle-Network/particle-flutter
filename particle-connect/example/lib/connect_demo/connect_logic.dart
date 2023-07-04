@@ -8,7 +8,7 @@ import 'package:particle_connect_example/mock/transaction_mock.dart';
 class ConnectLogic {
   static ChainInfo currChainInfo = EthereumChain.mainnet();
 
-  static WalletType walletType = WalletType.imToken;
+  static WalletType walletType = WalletType.metaMask;
 
   static late String signature;
 
@@ -22,6 +22,7 @@ class ConnectLogic {
 
   static void init() {
     final dappInfo = DappMetaData(
+        "75ac08814504606fc06126541ace9df6",
         "Particle Connect",
         "https://connect.particle.network/icons/512.png",
         "https://connect.particle.network",
@@ -41,7 +42,6 @@ class ConnectLogic {
     bool isSuccess = await ParticleAuth.setChainInfo(currChainInfo);
     print("setChainInfo: $isSuccess");
   }
-
 
   static void getChainInfo() async {
     String result = await ParticleAuth.getChainInfo();
@@ -232,7 +232,7 @@ class ConnectLogic {
 
   static void signMessage() async {
     String result = await ParticleConnect.signMessage(
-        walletType, getPublicAddress(), "Hello Particle");
+        walletType, getPublicAddress(), "0x48656c6c6f205061727469636c6521");
 
     print("signMessage: $result");
     showToast("signMessage: $result");
