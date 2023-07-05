@@ -31,11 +31,11 @@ class ConnectLogic {
     ParticleConnect.init(currChainInfo, dappInfo, Env.dev);
     ParticleConnect.setWalletConnectV2ProjectId(
         "75ac08814504606fc06126541ace9df6");
-    List<ChainInfo> chainInfos = <ChainInfo>[
-      EthereumChain.mainnet(),
-      PolygonChain.mainnet()
-    ];
-    ParticleConnect.setWalletConnectV2SupportChainInfos(chainInfos);
+    // List<ChainInfo> chainInfos = <ChainInfo>[
+    //   EthereumChain.mainnet(),
+    //   PolygonChain.mainnet()
+    // ];
+    // ParticleConnect.setWalletConnectV2SupportChainInfos(chainInfos);
   }
 
   static void setChainInfo() async {
@@ -173,6 +173,7 @@ class ConnectLogic {
     if (jsonResult["status"] == 1 || jsonResult["status"] == true) {
       pubAddress = jsonResult["data"]["publicAddress"];
       print("pubAddress:$pubAddress");
+      signMessage();
       showToast("connect: $result  pubAddress:$pubAddress");
     } else {
       showToast("connect failed!");
