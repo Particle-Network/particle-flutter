@@ -173,7 +173,6 @@ class ConnectLogic {
     if (jsonResult["status"] == 1 || jsonResult["status"] == true) {
       pubAddress = jsonResult["data"]["publicAddress"];
       print("pubAddress:$pubAddress");
-      signMessage();
       showToast("connect: $result  pubAddress:$pubAddress");
     } else {
       showToast("connect failed!");
