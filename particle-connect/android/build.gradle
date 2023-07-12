@@ -50,16 +50,16 @@ android {
 dependencies {
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
 
-    def connectVersion = "0.14.2"
-    api("network.particle:base-service:$connectVersion")
-    api("network.particle:auth-service:$connectVersion")
+    def sdkVersion = "0.14.4"
+    api("network.particle:base-service:$sdkVersion")
+    api("network.particle:auth-service:$sdkVersion")
 
-    api("network.particle:connect-common:$connectVersion")
-    api("network.particle:connect:$connectVersion")
-    api("network.particle:connect-evm-adapter:$connectVersion")
-    api("network.particle:connect-solana-adapter:$connectVersion")
-    api("network.particle:connect-phantom-adapter:$connectVersion")
-    api("network.particle:connect-wallet-connect-adapter:$connectVersion")
+    api("network.particle:connect-common:$sdkVersion")
+    api("network.particle:connect:$sdkVersion")
+    api("network.particle:connect-evm-adapter:$sdkVersion")
+    api("network.particle:connect-solana-adapter:$sdkVersion")
+    api("network.particle:connect-phantom-adapter:$sdkVersion")
+    api("network.particle:connect-wallet-connect-adapter:$sdkVersion")
 
     implementation("com.blankj:utilcodex:1.31.0")
     implementation("commons-codec:commons-codec:1.15")

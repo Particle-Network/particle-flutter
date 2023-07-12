@@ -2,7 +2,6 @@
     package="network.particle.connect_plugin.particle_connect_example">
    <application
         android:label="particle_connect_example"
-       android:name=".App"
        android:supportsRtl="true"
        android:usesCleartextTraffic="true"
         android:icon="@mipmap/ic_launcher">
