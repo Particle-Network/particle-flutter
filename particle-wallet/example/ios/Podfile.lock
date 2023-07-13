@@ -1,43 +1,43 @@
 PODS:
   - Alamofire (5.7.1)
   - BigInt (5.2.0)
-  - ConnectCommon (0.2.2):
+  - ConnectCommon (0.2.4):
     - BigInt (~> 5.2.0)
     - ParticleNetworkBase
     - RxAlamofire (~> 6.1.1)
     - secp256k1.swift (~> 0.1)
     - SwiftyJSON (~> 5.0)
     - TweetNacl
-  - ConnectEVMAdapter (0.2.2):
+  - ConnectEVMAdapter (0.2.4):
     - BigInt (~> 5.2.0)
     - ConnectCommon
     - CryptoSwift
     - GenericJSON (~> 2.0)
     - RxAlamofire (~> 6.1.1)
     - SwiftyUserDefaults (~> 5.3.0)
-  - ConnectPhantomAdapter (0.2.2):
+  - ConnectPhantomAdapter (0.2.4):
     - ConnectCommon
     - RxAlamofire (~> 6.1.1)
     - SwiftyJSON (~> 5.0)
     - SwiftyUserDefaults (~> 5.3.0)
     - TweetNacl
-  - ConnectSolanaAdapter (0.2.2):
+  - ConnectSolanaAdapter (0.2.4):
     - ConnectCommon
     - RxAlamofire (~> 6.1.1)
     - secp256k1.swift (~> 0.1)
     - SwiftyUserDefaults (~> 5.3.0)
     - TweetNacl
-  - ConnectWalletConnectAdapter (0.2.2):
+  - ConnectWalletConnectAdapter (0.2.4):
     - ConnectCommon
+    - metamask-ios-sdk (= 0.2.0)
     - RxAlamofire (~> 6.1.1)
     - RxCocoa (= 6.5.0)
     - RxSwift (= 6.5.0)
     - SnapKit
-    - Starscream (= 3.1.1)
+    - Starscream (= 4.0.4)
     - SwiftMessages
     - SwiftyJSON (~> 5.0)
     - SwiftyUserDefaults (~> 5.3.0)
-    - WalletConnectSwift
     - WalletConnectSwiftV2
   - CryptoSwift (1.6.0)
   - Flutter (1.0.0)
@@ -57,6 +57,8 @@ PODS:
   - libwebp/mux (1.2.4):
     - libwebp/demux
   - libwebp/webp (1.2.4)
+  - metamask-ios-sdk (0.2.0):
+    - Socket.IO-Client-Swift (~> 16.0.1)
   - MJRefresh (3.7.5)
   - particle_auth (0.0.1):
     - Flutter
@@ -72,7 +74,7 @@ PODS:
   - particle_wallet (0.0.1):
     - Flutter
     - ParticleWalletGUI
-  - ParticleAuthService (0.14.3):
+  - ParticleAuthService (0.14.5):
     - CryptoSwift
     - ParticleNetworkBase
     - RxAlamofire (~> 6.1.1)
@@ -80,12 +82,12 @@ PODS:
     - RxSwift (= 6.5.0)
     - SwiftyJSON (~> 5.0)
     - SwiftyUserDefaults (~> 5.3.0)
-  - ParticleBiconomy (0.14.3):
+  - ParticleBiconomy (0.14.5):
     - ParticleNetworkBase
-  - ParticleConnect (0.2.2):
+  - ParticleConnect (0.2.4):
     - ConnectCommon
     - ParticleAuthService
-  - ParticleNetworkBase (0.14.3):
+  - ParticleNetworkBase (0.14.5):
     - BigInt (~> 5.2.0)
     - CryptoSwift
     - RxAlamofire (~> 6.1.1)
@@ -93,7 +95,7 @@ PODS:
     - RxSwift (= 6.5.0)
     - SwiftyJSON (~> 5.0)
     - SwiftyUserDefaults (~> 5.3.0)
-  - ParticleWalletAPI (0.14.3):
+  - ParticleWalletAPI (0.14.5):
     - CryptoSwift
     - GRDB.swift (= 5.26.1)
     - ParticleNetworkBase
@@ -102,16 +104,16 @@ PODS:
     - RxSwift (= 6.5.0)
     - SwiftyJSON (~> 5.0)
     - SwiftyUserDefaults (~> 5.3.0)
-  - ParticleWalletConnect (0.14.3):
+  - ParticleWalletConnect (0.14.5):
     - ParticleNetworkBase
     - RxAlamofire (~> 6.1.1)
     - RxCocoa (= 6.5.0)
     - RxSwift (= 6.5.0)
-    - Starscream (= 3.1.1)
+    - Starscream (= 4.0.4)
     - SwiftyUserDefaults (~> 5.3.0)
     - WalletConnectSwift
     - WalletConnectSwiftV2
-  - ParticleWalletGUI (0.14.3):
+  - ParticleWalletGUI (0.14.5):
     - ConnectEVMAdapter
     - ConnectPhantomAdapter
     - ConnectSolanaAdapter
@@ -149,7 +151,9 @@ PODS:
   - secp256k1.swift (0.1.4)
   - SkeletonView (1.30.4)
   - SnapKit (5.6.0)
-  - Starscream (3.1.1)
+  - Socket.IO-Client-Swift (16.0.1):
+    - Starscream (~> 4.0)
+  - Starscream (4.0.4)
   - SwiftMessages (9.0.6):
     - SwiftMessages/App (= 9.0.6)
   - SwiftMessages/App (9.0.6)
@@ -186,25 +190,26 @@ PODS:
     - WalletConnectSwiftV2/WalletConnectUtils
 
 DEPENDENCIES:
-  - ConnectCommon (= 0.2.2)
-  - ConnectEVMAdapter (= 0.2.2)
-  - ConnectPhantomAdapter (= 0.2.2)
-  - ConnectSolanaAdapter (= 0.2.2)
-  - ConnectWalletConnectAdapter (= 0.2.2)
+  - ConnectCommon (= 0.2.4)
+  - ConnectEVMAdapter (= 0.2.4)
+  - ConnectPhantomAdapter (= 0.2.4)
+  - ConnectSolanaAdapter (= 0.2.4)
+  - ConnectWalletConnectAdapter (= 0.2.4)
   - Flutter (from `Flutter`)
   - particle_auth (from `.symlinks/plugins/particle_auth/ios`)
   - particle_connect (from `.symlinks/plugins/particle_connect/ios`)
   - particle_wallet (from `.symlinks/plugins/particle_wallet/ios`)
-  - ParticleAuthService (= 0.14.3)
-  - ParticleBiconomy (= 0.14.3)
-  - ParticleConnect (= 0.2.2)
-  - ParticleNetworkBase (= 0.14.3)
-  - ParticleWalletAPI (= 0.14.3)
-  - ParticleWalletConnect (= 0.14.3)
-  - ParticleWalletGUI (= 0.14.3)
+  - ParticleAuthService (= 0.14.5)
+  - ParticleBiconomy (= 0.14.5)
+  - ParticleConnect (= 0.2.4)
+  - ParticleNetworkBase (= 0.14.5)
+  - ParticleWalletAPI (= 0.14.5)
+  - ParticleWalletConnect (= 0.14.5)
+  - ParticleWalletGUI (= 0.14.5)
   - SkeletonView (from `https://github.com/SunZhiC/SkeletonView.git`, branch `main`)
   - SwiftMessages (from `https://github.com/SunZhiC/SwiftMessages`, branch `master`)
   - WalletConnectSwift (from `https://github.com/SunZhiC/WalletConnectSwift`, branch `master`)
+  - WalletConnectSwiftV2 (= 1.6.10)
 
 SPEC REPOS:
   https://github.com/CocoaPods/Specs.git:
@@ -221,6 +226,7 @@ SPEC REPOS:
     - JXPagingView
     - JXSegmentedView
     - libwebp
+    - metamask-ios-sdk
     - MJRefresh
     - ParticleAuthService
     - ParticleBiconomy
@@ -237,6 +243,7 @@ SPEC REPOS:
     - SDWebImageWebPCoder
     - secp256k1.swift
     - SnapKit
+    - Socket.IO-Client-Swift
     - Starscream
     - SwiftyJSON
     - SwiftyUserDefaults
@@ -279,11 +286,11 @@ CHECKOUT OPTIONS:
 SPEC CHECKSUMS:
   Alamofire: 0123a34370cb170936ae79a8df46cc62b2edeb88
   BigInt: f668a80089607f521586bbe29513d708491ef2f7
-  ConnectCommon: c13e0af6e6c7f4a8f88a2da58cafc8a19e0a9b7f
-  ConnectEVMAdapter: ce0e4198afa292267c2eaec14f941aec290584a2
-  ConnectPhantomAdapter: 6488e6f0917475ba4edbbcd64ac49e4ff8a29f4a
-  ConnectSolanaAdapter: 64d738b115379ab9c19f95e723aebe8b4a974868
-  ConnectWalletConnectAdapter: 074ab3e174abf99cfe6b31ff2d18c7b69b1b41db
+  ConnectCommon: e7cadbd7fff5d2599f6eb4c65e116a66c2c73da0
+  ConnectEVMAdapter: 190855ee72fabd1034546c8b1f6da27ca1408637
+  ConnectPhantomAdapter: e4e9fdb79ac5f0507531f9d64212200a472f5a8d
+  ConnectSolanaAdapter: 516277ff833d8a70fe2a52fc865eaddae9f23548
+  ConnectWalletConnectAdapter: 2d1e6bb1fe17e3d78f6d1c38b7a003a2ca465d0b
   CryptoSwift: 562f8eceb40e80796fffc668b0cad9313284cfa6
   Flutter: f04841e97a9d0b0a8025694d0796dd46242b2854
   GenericJSON: 79a840eeb77030962e8cf02a62d36bd413b67626
@@ -292,17 +299,18 @@ SPEC CHECKSUMS:
   JXPagingView: 90924b364a2ff7e94db534fad1fa50925ff69ee4
   JXSegmentedView: fec0d335355b6e019c494fe2e030bde8a36d2df6
   libwebp: f62cb61d0a484ba548448a4bd52aabf150ff6eef
+  metamask-ios-sdk: 3c7b575d49b947cdf03ca1c766a9dec9f2c50b90
   MJRefresh: fdf5e979eb406a0341468932d1dfc8b7f9fce961
   particle_auth: 7df9934788402bd80156fa5f56422d941af0745c
   particle_connect: b26527054dcf5312694b8ddbb018300116fdd089
   particle_wallet: 19474f7dedbf8ea3fe07459ff85c37defa83c24e
-  ParticleAuthService: 3c462c6fa38223b9506ab7f95a05a3d7c6bf5873
-  ParticleBiconomy: 8a6e9061e35b5c8bb5cf7b4744ccced6fe089064
-  ParticleConnect: 72e86ce882f534a034a7e4605e5799e2f7df5c05
-  ParticleNetworkBase: 652a148026225c37e37a63d0951597b983f75838
-  ParticleWalletAPI: cc803086b6ad59193e0811b096cb88a5d6339619
-  ParticleWalletConnect: 16179e6e87047af866c208eaa3b32fb441a7c1f7
-  ParticleWalletGUI: e2c3a7572d4d254c94e77cb1a316813d91ada7d6
+  ParticleAuthService: 76ec631dec6a5d49afee99009aac1b77c966403e
+  ParticleBiconomy: ce571ef856d3b31cc613d5999ec420e49f4cac0e
+  ParticleConnect: ac06a0d65e242ea340c4a464edf3a4b2212baca2
+  ParticleNetworkBase: 20b2deb9b7639055e066d7cc9abb81a408eea744
+  ParticleWalletAPI: d7cb1b6b090931cc675521ec9db3baf0b791b06a
+  ParticleWalletConnect: 5a178d95d738be703beb645ef79b6a3fdda454f6
+  ParticleWalletGUI: ebbf3de96fcf3423df795184f25e4ac58c10c844
   RxAlamofire: beb75a1c452d0de225651db4903f5d29d034a620
   RxCocoa: 94f817b71c07517321eb4f9ad299112ca8af743b
   RxRelay: 1de1523e604c72b6c68feadedd1af3b1b4d0ecbd
@@ -312,7 +320,8 @@ SPEC CHECKSUMS:
   secp256k1.swift: a7e7a214f6db6ce5db32cc6b2b45e5c4dd633634
   SkeletonView: 5a050f6411e697abd4cda0a8d767013399dccd69
   SnapKit: e01d52ebb8ddbc333eefe2132acf85c8227d9c25
-  Starscream: 4bb2f9942274833f7b4d296a55504dcfc7edb7b0
+  Socket.IO-Client-Swift: c116d6dc9fd6be9c259bacfe143f8725bce7d79e
+  Starscream: 5178aed56b316f13fa3bc55694e583d35dd414d9
   SwiftMessages: f0c7ef4705a570ad6c5e208b611f4333e660ed92
   SwiftyJSON: 2f33a42c6fbc52764d96f13368585094bfd8aa5e
   SwiftyUserDefaults: 63f80248cf5bfb3458825d9a78f2eb7e1293a040
@@ -321,6 +330,6 @@ SPEC CHECKSUMS:
   WalletConnectSwift: 6309bf3011b0b30e3e9d1e7449535302a9240f71
   WalletConnectSwiftV2: 2dbca2dd7bdc3c95b4029d0b63576e40d2787589
 
-PODFILE CHECKSUM: aa033e12f6340ff5ca52a2ee776b8714ad05c3e0
+PODFILE CHECKSUM: 98273b8fad399d638a4af9df9aaf8be7e80fdf53
 
 COCOAPODS: 1.12.0

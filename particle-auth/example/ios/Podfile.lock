@@ -6,7 +6,7 @@ PODS:
   - particle_auth (0.0.1):
     - Flutter
     - ParticleAuthService
-  - ParticleAuthService (0.14.3):
+  - ParticleAuthService (0.14.5):
     - CryptoSwift
     - ParticleNetworkBase
     - RxAlamofire (~> 6.1.1)
@@ -14,7 +14,7 @@ PODS:
     - RxSwift (= 6.5.0)
     - SwiftyJSON (~> 5.0)
     - SwiftyUserDefaults (~> 5.3.0)
-  - ParticleNetworkBase (0.14.3):
+  - ParticleNetworkBase (0.14.5):
     - BigInt (~> 5.2.0)
     - CryptoSwift
     - RxAlamofire (~> 6.1.1)
@@ -39,8 +39,8 @@ PODS:
 DEPENDENCIES:
   - Flutter (from `Flutter`)
   - particle_auth (from `.symlinks/plugins/particle_auth/ios`)
-  - ParticleAuthService (= 0.14.3)
-  - ParticleNetworkBase (= 0.14.3)
+  - ParticleAuthService (= 0.14.5)
+  - ParticleNetworkBase (= 0.14.5)
 
 SPEC REPOS:
   https://github.com/CocoaPods/Specs.git:
@@ -68,8 +68,8 @@ SPEC CHECKSUMS:
   CryptoSwift: d3d18dc357932f7e6d580689e065cf1f176007c1
   Flutter: f04841e97a9d0b0a8025694d0796dd46242b2854
   particle_auth: 7df9934788402bd80156fa5f56422d941af0745c
-  ParticleAuthService: 3c462c6fa38223b9506ab7f95a05a3d7c6bf5873
-  ParticleNetworkBase: 652a148026225c37e37a63d0951597b983f75838
+  ParticleAuthService: 76ec631dec6a5d49afee99009aac1b77c966403e
+  ParticleNetworkBase: 20b2deb9b7639055e066d7cc9abb81a408eea744
   RxAlamofire: beb75a1c452d0de225651db4903f5d29d034a620
   RxCocoa: 94f817b71c07517321eb4f9ad299112ca8af743b
   RxRelay: 1de1523e604c72b6c68feadedd1af3b1b4d0ecbd
@@ -77,6 +77,6 @@ SPEC CHECKSUMS:
   SwiftyJSON: 2f33a42c6fbc52764d96f13368585094bfd8aa5e
   SwiftyUserDefaults: 63f80248cf5bfb3458825d9a78f2eb7e1293a040
 
-PODFILE CHECKSUM: 4d9fc2bf614456115e021b1a4af579278fbac50b
+PODFILE CHECKSUM: d70fae404baee7b9ce70b62d88f090cc0dcd040a
 
 COCOAPODS: 1.12.0
