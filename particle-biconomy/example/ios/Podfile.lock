@@ -58,7 +58,7 @@ PODS:
     - ConnectWalletConnectAdapter
     - Flutter
     - ParticleConnect
-  - ParticleAuthService (0.13.4):
+  - ParticleAuthService (0.14.5):
     - CryptoSwift
     - ParticleNetworkBase
     - RxAlamofire (~> 6.1.1)
@@ -137,6 +137,7 @@ DEPENDENCIES:
   - particle_auth (from `.symlinks/plugins/particle_auth/ios`)
   - particle_biconomy (from `.symlinks/plugins/particle_biconomy/ios`)
   - particle_connect (from `.symlinks/plugins/particle_connect/ios`)
+  - ParticleAuthService (= 0.14.5)
   - ParticleBiconomy (= 0.14.5)
   - ParticleConnect (= 0.2.4)
   - ParticleNetworkBase (= 0.14.5)
@@ -197,7 +198,7 @@ SPEC CHECKSUMS:
   particle_auth: 7df9934788402bd80156fa5f56422d941af0745c
   particle_biconomy: 732e548a456869d9da5a8a3a1910c4c0813a188a
   particle_connect: cdc538adcd1376911b0a4627701e35f2b76efd57
-  ParticleAuthService: edd60d9b489b9d54990b2711007fb1187a7c41bd
+  ParticleAuthService: 76ec631dec6a5d49afee99009aac1b77c966403e
   ParticleBiconomy: ce571ef856d3b31cc613d5999ec420e49f4cac0e
   ParticleConnect: ac06a0d65e242ea340c4a464edf3a4b2212baca2
   ParticleNetworkBase: 20b2deb9b7639055e066d7cc9abb81a408eea744
@@ -215,6 +216,6 @@ SPEC CHECKSUMS:
   TweetNacl: 3abf4d1d2082b0114e7a67410e300892448951e6
   WalletConnectSwiftV2: 2dbca2dd7bdc3c95b4029d0b63576e40d2787589
 
-PODFILE CHECKSUM: 3c76463c67b3db3457fa01ce954ee65d4bed51e7
+PODFILE CHECKSUM: f8db663ed09b107d3333085fec853ae0e1d7b88c
 
 COCOAPODS: 1.12.0

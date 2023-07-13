@@ -96,8 +96,6 @@ PODS:
   - SwiftyJSON (5.0.1)
   - SwiftyUserDefaults (5.3.0)
   - TweetNacl (1.0.2)
-  - WalletConnectSwift (1.7.0):
-    - CryptoSwift (~> 1.5)
   - WalletConnectSwiftV2 (1.6.10):
     - WalletConnectSwiftV2/WalletConnect (= 1.6.10)
   - WalletConnectSwiftV2/Commons (1.6.10)
@@ -136,7 +134,6 @@ DEPENDENCIES:
   - ParticleAuthService (= 0.14.5)
   - ParticleConnect (= 0.2.4)
   - ParticleNetworkBase (= 0.14.5)
-  - WalletConnectSwift (from `https://github.com/SunZhiC/WalletConnectSwift`, branch `master`)
   - WalletConnectSwiftV2 (= 1.6.10)
 
 SPEC REPOS:
@@ -175,14 +172,6 @@ EXTERNAL SOURCES:
     :path: ".symlinks/plugins/particle_auth/ios"
   particle_connect:
     :path: ".symlinks/plugins/particle_connect/ios"
-  WalletConnectSwift:
-    :branch: master
-    :git: https://github.com/SunZhiC/WalletConnectSwift
-
-CHECKOUT OPTIONS:
-  WalletConnectSwift:
-    :commit: fa43b956320911e2ee7c5268e100c452382d7f4b
-    :git: https://github.com/SunZhiC/WalletConnectSwift
 
 SPEC CHECKSUMS:
   Alamofire: 0123a34370cb170936ae79a8df46cc62b2edeb88
@@ -213,9 +202,8 @@ SPEC CHECKSUMS:
   SwiftyJSON: 2f33a42c6fbc52764d96f13368585094bfd8aa5e
   SwiftyUserDefaults: 63f80248cf5bfb3458825d9a78f2eb7e1293a040
   TweetNacl: 3abf4d1d2082b0114e7a67410e300892448951e6
-  WalletConnectSwift: 6309bf3011b0b30e3e9d1e7449535302a9240f71
   WalletConnectSwiftV2: 2dbca2dd7bdc3c95b4029d0b63576e40d2787589
 
-PODFILE CHECKSUM: e8a8a41f272d9a87d2204428d102d84d647b1ae3
+PODFILE CHECKSUM: 89aed1fdeb96d40d36256e3d9b61fff98c594225
 
 COCOAPODS: 1.12.0

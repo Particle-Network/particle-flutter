@@ -58,16 +58,6 @@ class ParticleConnect {
   }
 
 
-  /// Set wallet connect v2 project id, required by WalletConnectV2
-  static setWalletConnectV2ProjectId(String walletConnectV2ProjectId) {
-    if (Platform.isIOS) {
-      _channel.invokeMethod(
-          "setWalletConnectV2ProjectId", walletConnectV2ProjectId);
-    } else {
-      // Android use init dappMetaData
-    }
-  }
-
   /// Set the required chains for wallet connect v2. If not set, the current chain connection will be used.
   static setWalletConnectV2SupportChainInfos(List<ChainInfo> chainInfos) {
     List<Map<String, dynamic>> allInfos = [];

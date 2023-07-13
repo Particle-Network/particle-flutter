@@ -21,6 +21,13 @@ class ConnectLogic {
   }
 
   static void init() {
+    // Get your project id and client key from dashboard, https://dashboard.particle.network
+    const projectId =
+        "772f7499-1d2e-40f4-8e2c-7b6dd47db9de"; //772f7499-1d2e-40f4-8e2c-7b6dd47db9de
+    const clientK =
+        "ctWeIc2UBA6sYTKJknT9cu9LBikF00fbk1vmQjsV"; //ctWeIc2UBA6sYTKJknT9cu9LBikF00fbk1vmQjsV
+    ParticleInfo.set(projectId, clientK);
+
     final dappInfo = DappMetaData(
         "75ac08814504606fc06126541ace9df6",
         "Particle Connect",
@@ -29,8 +36,7 @@ class ConnectLogic {
         "Particle Connect Flutter Demo");
 
     ParticleConnect.init(currChainInfo, dappInfo, Env.dev);
-    ParticleConnect.setWalletConnectV2ProjectId(
-        "75ac08814504606fc06126541ace9df6");
+
     // List<ChainInfo> chainInfos = <ChainInfo>[
     //   EthereumChain.mainnet(),
     //   PolygonChain.mainnet()
@@ -280,7 +286,7 @@ class ConnectLogic {
       showToast("signAndSendTransaction: $result");
     } else {
       final trans =
-          await TransactionMock.mockEvmTransaction(getPublicAddress());
+          await TransactionMock.mockEvmSendNative(getPublicAddress());
       String result = await ParticleConnect.signAndSendTransaction(
           walletType, getPublicAddress(), trans);
       print("signAndSendTransaction: $result");

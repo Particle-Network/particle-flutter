@@ -1,3 +1,6 @@
+
+## 0.14.6
+Uniform flutter version number
 ## 0.14.4
 ## 0.14.3
 ## 0.14.2

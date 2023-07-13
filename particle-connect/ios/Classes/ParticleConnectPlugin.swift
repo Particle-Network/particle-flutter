@@ -60,7 +60,6 @@ public class ParticleConnectPlugin: NSObject, FlutterPlugin {
         case reconnectIfNeeded
         case connectWalletConnect
         case batchSendTransactions
-        case setWalletConnectV2ProjectId
         case setWalletConnectV2SupportChainInfos
     }
     
@@ -127,8 +126,6 @@ public class ParticleConnectPlugin: NSObject, FlutterPlugin {
             self.connectWalletConnect(flutterResult: result)
         case .batchSendTransactions:
             self.batchSendTransactions(json as? String, flutterResult: result)
-        case .setWalletConnectV2ProjectId:
-            self.setWalletConnectV2ProjectId(json as? String)
         case .setWalletConnectV2SupportChainInfos:
             self.setWalletConnectV2SupportChainInfos(json as? String)
         }
@@ -165,6 +162,9 @@ extension ParticleConnectPlugin {
         let dAppIconString = data["metadata"]["icon"].stringValue
         let dAppUrlString = data["metadata"]["url"].stringValue
         let dappDescription = data["metadata"]["description"].stringValue
+        
+        let walletConnectProjectId = data["metadata"]["walletConnectProjectId"].stringValue
+        
         let dAppIconUrl = URL(string: dAppIconString) != nil ? URL(string: dAppIconString)! : URL(string: "https://connect.particle.network/icons/512.png")!
         
         let dAppUrl = URL(string: dAppUrlString) != nil ? URL(string: dAppUrlString)! : URL(string: "https://connect.particle.network")!
@@ -219,16 +219,10 @@ extension ParticleConnectPlugin {
         ParticleConnect.initialize(env: devEnv, chainInfo: chainInfo, dAppData: dAppData) {
             adapters
         }
-    }
-    
-    func setWalletConnectV2ProjectId(_ json: String?) {
-        guard let json = json else {
-            return
-        }
         
-        ParticleConnect.setWalletConnectV2ProjectId(json)
+        ParticleConnect.setWalletConnectV2ProjectId(walletConnectProjectId)
     }
-    
+
     func setWalletConnectV2SupportChainInfos(_ json: String?) {
         guard let json = json else {
             return
@@ -1277,9 +1271,6 @@ extension ParticleConnectPlugin {
             
             self.eventSink?(uri)
         }
-       
-        
-       
     }
 }
 

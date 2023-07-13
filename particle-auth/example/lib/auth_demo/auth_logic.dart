@@ -13,7 +13,7 @@ class AuthLogic {
   }
 
   static void init(Env env) {
-    // Get your project id and client from dashboard, https://dashboard.particle.network
+    // Get your project id and client key from dashboard, https://dashboard.particle.network
     const projectId =
         "772f7499-1d2e-40f4-8e2c-7b6dd47db9de"; //772f7499-1d2e-40f4-8e2c-7b6dd47db9de
     const clientK =

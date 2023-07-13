@@ -1,3 +1,7 @@
+
+## 0.14.6
+Update init method for iOS
+Uniform flutter version number
 ## 0.14.5
 ## 0.14.4
 ## 0.14.3
