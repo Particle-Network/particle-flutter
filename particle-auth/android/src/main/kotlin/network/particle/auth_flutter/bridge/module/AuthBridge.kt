@@ -105,7 +105,8 @@ object AuthBridge {
         } catch (e: Exception) {
             e.printStackTrace()
         }
-        ParticleNetwork.login(LoginType.valueOf(loginData.loginType!!.uppercase()),
+        ParticleNetwork.login(
+            LoginType.valueOf(loginData.loginType!!.uppercase()),
             account!!,
             supportAuthType,
             loginData.loginFormMode ?: false,
@@ -151,29 +152,33 @@ object AuthBridge {
     }
 
     fun signMessage(message: String, result: MethodChannel.Result) {
-        ParticleNetwork.signMessage(EncodeUtils.encode(message), object : WebServiceCallback<SignOutput> {
+        ParticleNetwork.signMessage(
+            EncodeUtils.encode(message),
+            object : WebServiceCallback<SignOutput> {
 
-            override fun failure(errMsg: WebServiceError) {
-                result.success(FlutterCallBack.failed(errMsg).toGson())
-            }
+                override fun failure(errMsg: WebServiceError) {
+                    result.success(FlutterCallBack.failed(errMsg).toGson())
+                }
 
-            override fun success(output: SignOutput) {
-                result.success(FlutterCallBack.success(output.signature).toGson())
-            }
-        })
+                override fun success(output: SignOutput) {
+                    result.success(FlutterCallBack.success(output.signature).toGson())
+                }
+            })
     }
 
     fun signMessageUnique(message: String, result: MethodChannel.Result) {
-        ParticleNetwork.signMessageUnique(EncodeUtils.encode(message), object : WebServiceCallback<SignOutput> {
+        ParticleNetwork.signMessageUnique(
+            EncodeUtils.encode(message),
+            object : WebServiceCallback<SignOutput> {
 
-            override fun failure(errMsg: WebServiceError) {
-                result.success(FlutterCallBack.failed(errMsg).toGson())
-            }
+                override fun failure(errMsg: WebServiceError) {
+                    result.success(FlutterCallBack.failed(errMsg).toGson())
+                }
 
-            override fun success(output: SignOutput) {
-                result.success(FlutterCallBack.success(output.signature).toGson())
-            }
-        })
+                override fun success(output: SignOutput) {
+                    result.success(FlutterCallBack.success(output.signature).toGson())
+                }
+            })
     }
 
     fun signTransaction(transaction: String, result: MethodChannel.Result) {
@@ -208,7 +213,8 @@ object AuthBridge {
 
     fun batchSendTransactions(transactions: String, result: MethodChannel.Result) {
         LogUtils.d("batchSendTransactions", transactions)
-        val transParams = GsonUtils.fromJson<TransactionsParams>(transactions, TransactionsParams::class.java)
+        val transParams =
+            GsonUtils.fromJson<TransactionsParams>(transactions, TransactionsParams::class.java)
 
         var feeMode: FeeMode = FeeModeAuto()
         if (transParams.feeMode != null) {
@@ -224,45 +230,60 @@ object AuthBridge {
         }
         CoroutineScope(Dispatchers.IO).launch {
             try {
-                ParticleNetwork.getBiconomyService().quickSendTransaction(transParams.transactions, feeMode, object : MessageSigner {
-                    override fun signTypedData(message: String, callback: WebServiceCallback<SignOutput>) {
+                ParticleNetwork.getBiconomyService().quickSendTransaction(
+                    transParams.transactions,
+                    feeMode,
+                    object : MessageSigner {
+                        override fun signTypedData(
+                            message: String,
+                            callback: WebServiceCallback<SignOutput>
+                        ) {
 
-                        ParticleNetwork.signTypedData(message, SignTypedDataVersion.V4, object : WebServiceCallback<SignOutput> {
-                            override fun success(output: SignOutput) {
-                                callback.success(output)
-                            }
+                            ParticleNetwork.signTypedData(
+                                message,
+                                SignTypedDataVersion.V4,
+                                object : WebServiceCallback<SignOutput> {
+                                    override fun success(output: SignOutput) {
+                                        callback.success(output)
+                                    }
 
-                            override fun failure(errMsg: WebServiceError) {
-                                callback.failure(errMsg)
-                            }
-                        })
-                    }
+                                    override fun failure(errMsg: WebServiceError) {
+                                        callback.failure(errMsg)
+                                    }
+                                })
+                        }
 
-                    override fun signMessage(message: String, callback: WebServiceCallback<SignOutput>) {
-                        ParticleNetwork.signMessage(message, object : WebServiceCallback<SignOutput> {
-                            override fun success(output: SignOutput) {
-                                callback.success(output)
-                            }
+                        override fun signMessage(
+                            message: String,
+                            callback: WebServiceCallback<SignOutput>
+                        ) {
+                            ParticleNetwork.signMessage(
+                                message,
+                                object : WebServiceCallback<SignOutput> {
+                                    override fun success(output: SignOutput) {
+                                        callback.success(output)
+                                    }
 
-                            override fun failure(errMsg: WebServiceError) {
-                                callback.failure(errMsg)
-                            }
-                        })
-                    }
+                                    override fun failure(errMsg: WebServiceError) {
+                                        callback.failure(errMsg)
+                                    }
+                                })
+                        }
 
-                    override fun eoaAddress(): String {
-                        return ParticleNetwork.getAddress()
-                    }
+                        override fun eoaAddress(): String {
+                            return ParticleNetwork.getAddress()
+                        }
 
-                }, object : WebServiceCallback<SignOutput> {
-                    override fun success(output: SignOutput) {
-                        result.success(FlutterCallBack.success(output.signature!!).toGson())
-                    }
+                    },
+                    object : WebServiceCallback<SignOutput> {
+                        override fun success(output: SignOutput) {
+                            result.success(FlutterCallBack.success(output.signature!!).toGson())
+                        }
 
-                    override fun failure(errMsg: WebServiceError) {
-                        result.success(FlutterCallBack.failed(errMsg).toGson())
-                    }
-                })
+                        override fun failure(errMsg: WebServiceError) {
+                            result.success(FlutterCallBack.failed(errMsg).toGson())
+                        }
+                    })
             } catch (e: Exception) {
                 e.printStackTrace()
                 result.success(FlutterCallBack.failed("failed").toGson())
@@ -272,7 +293,8 @@ object AuthBridge {
 
     fun signAndSendTransaction(transactionParams: String, result: MethodChannel.Result) {
         LogUtils.d("signAndSendTransaction", transactionParams)
-        val transParams = GsonUtils.fromJson<TransactionParams>(transactionParams, TransactionParams::class.java)
+        val transParams =
+            GsonUtils.fromJson<TransactionParams>(transactionParams, TransactionParams::class.java)
         var feeMode: FeeMode = FeeModeAuto()
         if (transParams.feeMode != null) {
             val option = transParams.feeMode.option
@@ -286,15 +308,19 @@ object AuthBridge {
             }
         }
         try {
-            ParticleNetwork.signAndSendTransaction(transParams.transaction, object : WebServiceCallback<SignOutput> {
-                override fun failure(errMsg: WebServiceError) {
-                    result.success(FlutterCallBack.failed(errMsg).toGson())
-                }
+            ParticleNetwork.signAndSendTransaction(
+                transParams.transaction,
+                object : WebServiceCallback<SignOutput> {
+                    override fun failure(errMsg: WebServiceError) {
+                        result.success(FlutterCallBack.failed(errMsg).toGson())
+                    }
 
-                override fun success(output: SignOutput) {
-                    result.success(FlutterCallBack.success(output.signature).toGson())
-                }
-            }, feeMode)
+                    override fun success(output: SignOutput) {
+                        result.success(FlutterCallBack.success(output.signature).toGson())
+                    }
+                },
+                feeMode
+            )
         } catch (e: Exception) {
             result.success(FlutterCallBack.failed(e.message).toGson())
         }
@@ -305,17 +331,21 @@ object AuthBridge {
         val signTypedData = GsonUtils.fromJson(
             json, SignTypedData::class.java
         )
-        val typedDataVersion = if (signTypedData.version.equals("v4Unique")) SignTypedDataVersion.V4Unique
-        else SignTypedDataVersion.valueOf(signTypedData.version!!.uppercase())
-        ParticleNetwork.signTypedData(EncodeUtils.encode(signTypedData.message!!), typedDataVersion, object : WebServiceCallback<SignOutput> {
-            override fun failure(errMsg: WebServiceError) {
-                result.success(FlutterCallBack.failed(errMsg).toGson())
-            }
+        val typedDataVersion =
+            if (signTypedData.version.equals("v4Unique")) SignTypedDataVersion.V4Unique
+            else SignTypedDataVersion.valueOf(signTypedData.version!!.uppercase())
+        ParticleNetwork.signTypedData(
+            EncodeUtils.encode(signTypedData.message!!),
+            typedDataVersion,
+            object : WebServiceCallback<SignOutput> {
+                override fun failure(errMsg: WebServiceError) {
+                    result.success(FlutterCallBack.failed(errMsg).toGson())
+                }
 
-            override fun success(output: SignOutput) {
-                result.success(FlutterCallBack.success(output.signature).toGson())
-            }
-        })
+                override fun success(output: SignOutput) {
+                    result.success(FlutterCallBack.success(output.signature).toGson())
+                }
+            })
     }
 
 
@@ -393,7 +423,8 @@ object AuthBridge {
         try {
             val jobj = JSONObject(configJson)
             val promptSettingWhenSign = jobj.getInt("prompt_setting_when_sign")
-            val promptMasterPasswordSettingWhenLogin = jobj.getInt("prompt_master_password_setting_when_login")
+            val promptMasterPasswordSettingWhenLogin =
+                jobj.getInt("prompt_master_password_setting_when_login")
             val config = SecurityAccountConfig(
                 promptSettingWhenSign, promptMasterPasswordSettingWhenLogin
             )
@@ -438,8 +469,8 @@ object AuthBridge {
         )
     }
 
-    fun openWebWallet(json: String, result: MethodChannel.Result) {
-        ParticleNetwork.openWebWallet(json)
+    fun openWebWallet(activity: Activity, json: String, result: MethodChannel.Result) {
+        ParticleNetwork.openWebWallet(activity, json)
     }
 
     fun isLoginAsync(result: MethodChannel.Result) {

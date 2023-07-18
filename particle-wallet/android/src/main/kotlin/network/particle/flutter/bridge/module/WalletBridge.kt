@@ -194,7 +194,7 @@ object WalletBridge {
         ParticleNetwork.enablePay(enable)
     }
 
-    fun navigatorBuyCrypto(json: String) {
+    fun navigatorBuyCrypto(activity: Activity, json: String) {
         LogUtils.d("navigatorBuyCrypto", json)
         if (!isUIModuleInit()) return;
         val jsonObject = JSONObject(json)
@@ -211,6 +211,7 @@ object WalletBridge {
 //        ParticleNetwork.openBuy(walletAddress, fiatAmt, fiatCoin, cryptoCoin, fixFiatCoin, fixFiatAmt, fixCryptoCoin, theme, language, chainName
 //        )
         ParticleNetwork.openBuy(
+            activity,
             walletAddress = walletAddress,
             amount = fiatAmt,
             fiatCoin = fiatCoin,
@@ -240,7 +241,13 @@ object WalletBridge {
             val toTokenAddress = jsonObject.opt("to_token_address") as? String;
             val amount = jsonObject.opt("amount") as? String;
             if (fromTokenAddress != null) {
-                PNRouter.navigatorSwap(SwapConfig(fromTokenAddress, toTokenAddress ?: "", amount ?: "0"))
+                PNRouter.navigatorSwap(
+                    SwapConfig(
+                        fromTokenAddress,
+                        toTokenAddress ?: "",
+                        amount ?: "0"
+                    )
+                )
             } else {
                 PNRouter.navigatorSwap(null);
             };

@@ -124,7 +124,7 @@ class ParticleAuthPlugin : FlutterPlugin, MethodCallHandler, ActivityAware {
                 AuthBridge.isLoginAsync(result)
             }
             "openWebWallet" -> {
-                AuthBridge.openWebWallet(call.arguments as String,result)
+                AuthBridge.openWebWallet(activity!!,call.arguments as String,result)
             }
 
 
