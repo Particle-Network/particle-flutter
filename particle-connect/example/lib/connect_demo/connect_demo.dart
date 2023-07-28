@@ -139,6 +139,19 @@ class _ConnectDemoPageState extends State<ConnectDemoPage> {
                 width: double.infinity,
                 height: 50,
                 child: ElevatedButton(
+                    onPressed: () => {ConnectLogic.connectParticle()},
+                    child: const Text(
+                      "Connect Particle",
+                      style: TextStyle(fontSize: 18),
+                    )),
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: SizedBox(
+                width: double.infinity,
+                height: 50,
+                child: ElevatedButton(
                     onPressed: () => {ConnectLogic.connectWalletConnect()},
                     child: const Text(
                       "ConnectWalletConnect",

@@ -269,14 +269,14 @@ packages:
       name: particle_auth
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "0.14.6"
+    version: "1.0.0"
   particle_connect:
     dependency: "direct main"
     description:
       path: ".."
       relative: true
     source: path
-    version: "0.14.6"
+    version: "1.0.0"
   path:
     dependency: transitive
     description:

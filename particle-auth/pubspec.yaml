@@ -1,6 +1,6 @@
 name: particle_auth
 description: A flutter plugin project for particle auth
-version: 0.15.1
+version: 1.0.0
 homepage: https://particle.network
 
 environment:

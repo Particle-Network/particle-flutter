@@ -30,17 +30,16 @@ flutter_ios_podfile_setup
 target 'Runner' do
   use_frameworks! :linkage => :static
   use_modular_headers!
-  pod 'ParticleConnect', '0.2.4'
-  pod 'ConnectWalletConnectAdapter', '0.2.4'
-  pod 'ConnectSolanaAdapter', '0.2.4'
-  pod 'ConnectEVMAdapter', '0.2.4'
-  pod 'ConnectCommon', '0.2.4'
-  pod 'ConnectPhantomAdapter', '0.2.4'
+  pod 'ParticleConnect', '0.2.6'
+  pod 'ConnectWalletConnectAdapter', '0.2.6'
+  pod 'ConnectSolanaAdapter', '0.2.6'
+  pod 'ConnectEVMAdapter', '0.2.6'
+  pod 'ConnectCommon', '0.2.6'
+  pod 'ConnectPhantomAdapter', '0.2.6'
+  pod 'ParticleAuthAdapter', '0.2.6'
   
-  pod 'ParticleNetworkBase', '0.14.5'
-  pod 'ParticleAuthService', '0.14.5'
-  
-  pod 'WalletConnectSwiftV2', '1.6.10'
+  pod 'ParticleNetworkBase', '1.0.0'
+  pod 'ParticleAuthService', '1.0.0'
 
   flutter_install_all_ios_pods File.dirname(File.realpath(__FILE__))
 end

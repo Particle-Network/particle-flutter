@@ -52,7 +52,7 @@ class ConnectLogic {
 
   static void connect() async {
     final config = ParticleConnectConfig(
-        LoginType.google, "", [SupportAuthType.all], false, null);
+        LoginType.google, "", [SupportAuthType.all], null);
     final result = await ParticleConnect.connect(walletType, config: config);
     showToast('connect: $result');
     print("connect: $result");

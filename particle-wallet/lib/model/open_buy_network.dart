@@ -6,4 +6,7 @@ enum OpenBuyNetwork {
   polygon,
   tron,
   arbitrumOne,
+  avalanche,
+  celo,
+  zkSync
 }

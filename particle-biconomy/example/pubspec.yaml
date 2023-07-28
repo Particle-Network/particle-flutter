@@ -28,9 +28,9 @@ dependencies:
     path: ../
 
 
-  particle_connect: ^0.14.6
+  particle_connect: ^1.0.0
 #     path: ../../particle-connect/
-  particle_auth: ^0.14.6
+  particle_auth: ^1.0.0
 #    path: ../../particle-auth/
   
   #^0.13.7

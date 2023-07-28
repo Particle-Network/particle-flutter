@@ -52,24 +52,24 @@ class WalletLogic {
     ParticleWallet.navigatorNFTDetails(mint, tokenId);
   }
 
-  static void enablePay() {
-    bool enable = true;
-    ParticleWallet.enablePay(enable);
+  static void setPayDisabled() {
+    bool disabled = true;
+    ParticleWallet.setPayDisabled(disabled);
   }
 
-  static void getEnablePay() async {
-    bool isEnable = await ParticleWallet.getEnablePay();
-    showToast("isEnable:$isEnable");
+  static void getPayDisabled() async {
+    bool disabled = await ParticleWallet.getPayDisabled();
+    showToast("pay is disabled:$disabled");
   }
 
-  static void enableSwap() {
-    bool enable = true;
-    ParticleWallet.enableSwap(enable);
+  static void setSwapDisabled() {
+    bool disabled = true;
+    ParticleWallet.setSwapDisabled(disabled);
   }
 
-  static void getEnableSwap() async {
-    bool isEnable = await ParticleWallet.getEnableSwap();
-    showToast("isEnable:$isEnable");
+  static void getSwapDisabled() async {
+    bool disabled = await ParticleWallet.getSwapDisabled();
+    showToast("swap is disabled:$disabled");
   }
 
   static void navigatorBuyCrypto() {
@@ -97,12 +97,12 @@ class WalletLogic {
     showToast("result: $result");
   }
 
-  static void supportChain() {
+  static void setSupportChain() {
     List<ChainInfo> chainInfos = <ChainInfo>[];
     chainInfos.add(EthereumChain.mainnet());
     chainInfos.add(PolygonChain.mainnet());
     chainInfos.add(BSCChain.mainnet());
-    ParticleWallet.supportChain(chainInfos);
+    ParticleWallet.setSupportChain(chainInfos);
   }
 
   static void switchWallet() async {
@@ -114,29 +114,24 @@ class WalletLogic {
     showToast("result: $result");
   }
 
-  static void showTestNetwork() {
+  static void setShowTestNetwork() {
     bool enable = false;
-    ParticleWallet.showTestNetwork(enable);
+    ParticleWallet.setShowTestNetwork(enable);
   }
 
-  static void showManageWallet() {
+  static void setShowManageWallet() {
     bool enable = true;
-    ParticleWallet.showManageWallet(enable);
+    ParticleWallet.setShowManageWallet(enable);
   }
 
-  static void setLanguage() {
-    Language language = Language.ja;
-    ParticleWallet.setLanguage(language);
-  }
-
-  static void showLanguageSetting() {
+  static void setShowLanguageSetting() {
     const isShow = false;
-    ParticleWallet.showLanguageSetting(isShow);
+    ParticleWallet.setShowLanguageSetting(isShow);
   }
 
-  static void showAppearanceSetting() {
+  static void setShowAppearanceSetting() {
     const isShow = false;
-    ParticleWallet.showAppearanceSetting(isShow);
+    ParticleWallet.setShowAppearanceSetting(isShow);
   }
 
   static void setSupportAddToken() {
@@ -172,11 +167,6 @@ class WalletLogic {
       "0xD18e451c11A6852Fb92291Dc59bE35a59d143836"
     ];
     ParticleWallet.setPriorityNFTContractAddresses(nftContractAddresses);
-  }
-
-  static void setFiatCoin() {
-    const fiatCoin = FiatCoin.HKD;
-    ParticleWallet.setFiatCoin(fiatCoin);
   }
 
   static void loadCustomUIJsonString() {

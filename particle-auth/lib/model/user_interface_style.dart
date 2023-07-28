@@ -1,4 +1,4 @@
-enum UserInterfaceStyle {
+enum Appearance {
     /// follow system
     system,
     /// light mode

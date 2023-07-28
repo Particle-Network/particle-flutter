@@ -28,28 +28,26 @@ public class ParticleWalletPlugin: NSObject, FlutterPlugin {
         case navigatorLoginList
         case navigatorSwap
         case navigatorDappBrowser
-        case showTestNetwork
-        case showManageWallet
-        case supportChain
-        case enablePay
-        case getEnablePay
-        case enableSwap
-        case getEnableSwap
+        case setShowTestNetwork
+        case setShowManageWallet
+        case setSupportChain
+        case setPayDisabled
+        case getPayDisabled
+        case setSwapDisabled
+        case getSwapDisabled
         case switchWallet
-        case setLanguage
-        case supportDappBrowser
-        case showLanguageSetting
-        case showAppearanceSetting
+        case setSupportDappBrowser
+        case setShowLanguageSetting
+        case setShowAppearanceSetting
         case setSupportAddToken
         case setDisplayTokenAddresses
         case setDisplayNFTContractAddresses
         case setPriorityTokenAddresses
         case setPriorityNFTContractAddresses
-        case setFiatCoin
         case loadCustomUIJsonString
 
         // WalletConnectV2
-        case supportWalletConnect
+        case setSupportWalletConnect
         case setWalletConnectV2ProjectId
         case initializeWalletMetaData
     }
@@ -93,32 +91,31 @@ public class ParticleWalletPlugin: NSObject, FlutterPlugin {
             self.navigatorSwap(json as? String)
         case .navigatorDappBrowser:
             self.navigatorDappBrowser(json as? String)
-        case .showTestNetwork:
-            self.showTestNetwork((json as? Bool) ?? false)
-        case .showManageWallet:
-            self.showManageWallet((json as? Bool) ?? true)
-        case .supportChain:
-            self.supportChain(json as? String)
-        case .enablePay:
-            self.enablePay((json as? Bool) ?? true)
-        case .getEnablePay:
-            self.getEnablePay(flutterResult: result)
-        case .enableSwap:
-            self.enableSwap((json as? Bool) ?? true)
-        case .getEnableSwap:
-            self.getEnableSwap(flutterResult: result)
+        case .setShowTestNetwork:
+            self.setShowTestNetwork((json as? Bool) ?? false)
+        case .setShowManageWallet:
+            self.setShowManageWallet((json as? Bool) ?? true)
+        case .setSupportChain:
+            self.setSupportChain(json as? String)
+        case .setPayDisabled:
+            self.setPayDisabled((json as? Bool) ?? true)
+        case .getPayDisabled:
+            self.getPayDisabled(flutterResult: result)
+        case .setSwapDisabled:
+            self.setSwapDisabled((json as? Bool) ?? true)
+        case .getSwapDisabled:
+            self.getSwapDisabled(flutterResult: result)
         case .switchWallet:
             self.switchWallet(json as? String, flutterResult: result)
-        case .setLanguage:
-            self.setLanguage(json as? String)
-        case .supportWalletConnect:
-            self.supportWalletConnect((json as? Bool) ?? true)
-        case .supportDappBrowser:
-            self.supportDappBrowser((json as? Bool) ?? true)
-        case .showLanguageSetting:
-            self.showLanguageSetting((json as? Bool) ?? true)
-        case .showAppearanceSetting:
-            self.showAppearanceSetting((json as? Bool) ?? true)
+
+        case .setSupportWalletConnect:
+            self.setSupportWalletConnect((json as? Bool) ?? true)
+        case .setSupportDappBrowser:
+            self.setSupportDappBrowser((json as? Bool) ?? true)
+        case .setShowLanguageSetting:
+            self.setShowLanguageSetting((json as? Bool) ?? true)
+        case .setShowAppearanceSetting:
+            self.setShowAppearanceSetting((json as? Bool) ?? true)
         case .setSupportAddToken:
             self.setSupportAddToken((json as? Bool) ?? true)
         case .setDisplayTokenAddresses:
@@ -129,8 +126,6 @@ public class ParticleWalletPlugin: NSObject, FlutterPlugin {
             self.setPriorityTokenAddresses(json as? String)
         case .setPriorityNFTContractAddresses:
             self.setPriorityNFTContractAddresses(json as? String)
-        case .setFiatCoin:
-            self.setFiatCoin(json as? String)
         case .loadCustomUIJsonString:
             self.loadCustomUIJsonString(json as? String)
         case .setWalletConnectV2ProjectId:
@@ -224,8 +219,14 @@ extension ParticleWalletPlugin {
             network = .polygon
         } else if networkString == "tron" {
             network = .tron
-        } else if networkString == "arbitrumOne" {
+        } else if networkString == "arbitrumone" {
             network = .arbitrumOne
+        } else if networkString == "avalanche" {
+            network = .avalanche
+        } else if networkString == "celo" {
+            network = .celo
+        } else if networkString == "zksync" {
+            network = .zkSync
         } else {
             network = nil
         }
@@ -305,38 +306,38 @@ extension ParticleWalletPlugin {
         }
     }
 
-    func showTestNetwork(_ isShow: Bool) {
-        ParticleWalletGUI.showTestNetwork(isShow)
+    func setShowTestNetwork(_ isShow: Bool) {
+        ParticleWalletGUI.setShowTestNetwork(isShow)
     }
 
-    func showManageWallet(_ isShow: Bool) {
-        ParticleWalletGUI.showManageWallet(isShow)
+    func setShowManageWallet(_ isShow: Bool) {
+        ParticleWalletGUI.setShowManageWallet(isShow)
     }
 
-    func supportChain(_ json: String?) {
+    func setSupportChain(_ json: String?) {
         guard let json = json else { return }
         let chains = JSON(parseJSON: json).arrayValue.map {
             $0["chain_id"].intValue
         }.compactMap {
             ParticleNetwork.searchChainInfo(by: $0)?.chain
         }
-        ParticleWalletGUI.supportChain(chains)
+        ParticleWalletGUI.setSupportChain(chains)
     }
 
-    func enablePay(_ enable: Bool) {
-        ParticleWalletGUI.enablePay(enable)
+    func setPayDisabled(_ disabled: Bool) {
+        ParticleWalletGUI.setPayDisabled(disabled)
     }
 
-    func getEnablePay(flutterResult: @escaping FlutterResult) {
-        flutterResult(ParticleWalletGUI.getEnablePay())
+    func getPayDisabled(flutterResult: @escaping FlutterResult) {
+        flutterResult(ParticleWalletGUI.getPayDisabled())
     }
 
-    func enableSwap(_ enable: Bool) {
-        ParticleWalletGUI.enableSwap(enable)
+    func setSwapDisabled(_ disabled: Bool) {
+        ParticleWalletGUI.setSwapDisabled(disabled)
     }
 
-    func getEnableSwap(flutterResult: @escaping FlutterResult) {
-        flutterResult(ParticleWalletGUI.getEnableSwap())
+    func getSwapDisabled(flutterResult: @escaping FlutterResult) {
+        flutterResult(ParticleWalletGUI.getSwapDisabled())
     }
 
     func switchWallet(_ json: String?, flutterResult: @escaping FlutterResult) {
@@ -369,14 +370,6 @@ extension ParticleWalletPlugin {
         }
     }
 
-    func setLanguage(_ json: String?) {
-        guard let json = json else {
-            return
-        }
-        let language = self.getLanguage(from: json)
-        ParticleWalletGUI.setLanguage(language)
-    }
-
     private func getLanguage(from json: String) -> Language {
         /*
          en,
@@ -400,16 +393,16 @@ extension ParticleWalletPlugin {
         return language
     }
 
-    func supportDappBrowser(_ enable: Bool) {
-        ParticleWalletGUI.supportDappBrowser(enable)
+    func setSupportDappBrowser(_ enable: Bool) {
+        ParticleWalletGUI.setSupportDappBrowser(enable)
     }
 
-    func showLanguageSetting(_ isShow: Bool) {
-        ParticleWalletGUI.showLanguageSetting(isShow)
+    func setShowLanguageSetting(_ isShow: Bool) {
+        ParticleWalletGUI.setShowLanguageSetting(isShow)
     }
 
-    func showAppearanceSetting(_ isShow: Bool) {
-        ParticleWalletGUI.showAppearanceSetting(isShow)
+    func setShowAppearanceSetting(_ isShow: Bool) {
+        ParticleWalletGUI.setShowAppearanceSetting(isShow)
     }
 
     func setSupportAddToken(_ isShow: Bool) {
@@ -498,8 +491,8 @@ extension ParticleWalletPlugin {
         }
     }
 
-    func supportWalletConnect(_ enable: Bool) {
-        ParticleWalletGUI.supportWalletConnect(enable)
+    func setSupportWalletConnect(_ enable: Bool) {
+        ParticleWalletGUI.setSupportWalletConnect(enable)
     }
 
     func initializeWalletMetaData(_ json: String?) {

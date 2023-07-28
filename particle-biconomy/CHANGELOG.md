@@ -1,4 +1,5 @@
-
+## 1.0.0
+Sync Native SDK 1.0.0, support more chains.
 ## 0.14.6
 Uniform flutter version number
 ## 0.14.5

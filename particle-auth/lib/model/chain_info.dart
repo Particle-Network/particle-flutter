@@ -695,9 +695,9 @@ class BaseChain implements ChainInfo {
     chainName = ChainName.Base.name;
   }
 
-  // static PolygonZkEVMChain mainnet() {
-  //   return PolygonZkEVMChain(1101, "Mainnet");
-  // }
+  static BaseChain mainnet() {
+    return BaseChain(8453, "Mainnet");
+  }
 
   static BaseChain testnet() {
     return BaseChain(84531, "Testnet");
@@ -715,12 +715,12 @@ class LineaChain implements ChainInfo {
   String? chainName;
 
   LineaChain(this.chainId, this.chainIdName) {
-    chainName = ChainName.Base.name;
+    chainName = ChainName.Linea.name;
   }
 
-  // static PolygonZkEVMChain mainnet() {
-  //   return PolygonZkEVMChain(1101, "Mainnet");
-  // }
+  static LineaChain mainnet() {
+    return LineaChain(59144, "Mainnet");
+  }
 
   static LineaChain testnet() {
     return LineaChain(59140, "Goerli");
@@ -738,17 +738,14 @@ class ComboChain implements ChainInfo {
   String? chainName;
 
   ComboChain(this.chainId, this.chainIdName) {
-    chainName = ChainName.Base.name;
+    chainName = ChainName.Combo.name;
   }
-
-  // static PolygonZkEVMChain mainnet() {
-  //   return PolygonZkEVMChain(1101, "Mainnet");
-  // }
 
   static ComboChain testnet() {
     return ComboChain(91715, "Testnet");
   }
 }
+
 class MantleChain implements ChainInfo {
   @override
   int chainId;
@@ -760,12 +757,12 @@ class MantleChain implements ChainInfo {
   String? chainName;
 
   MantleChain(this.chainId, this.chainIdName) {
-    chainName = ChainName.Base.name;
+    chainName = ChainName.Mantle.name;
   }
 
-  // static PolygonZkEVMChain mainnet() {
-  //   return PolygonZkEVMChain(1101, "Mainnet");
-  // }
+  static MantleChain mainnet() {
+    return MantleChain(5000, "Mainnet");
+  }
 
   static MantleChain testnet() {
     return MantleChain(5001, "Testnet");
@@ -783,12 +780,8 @@ class ZkMetaChain implements ChainInfo {
   String? chainName;
 
   ZkMetaChain(this.chainId, this.chainIdName) {
-    chainName = ChainName.Base.name;
+    chainName = ChainName.ZkMeta.name;
   }
-
-  // static PolygonZkEVMChain mainnet() {
-  //   return PolygonZkEVMChain(1101, "Mainnet");
-  // }
 
   static ZkMetaChain testnet() {
     return ZkMetaChain(12009, "Testnet");
@@ -806,12 +799,8 @@ class OpBNBChain implements ChainInfo {
   String? chainName;
 
   OpBNBChain(this.chainId, this.chainIdName) {
-    chainName = ChainName.Base.name;
+    chainName = ChainName.OpBNB.name;
   }
-
-  // static PolygonZkEVMChain mainnet() {
-  //   return PolygonZkEVMChain(1101, "Mainnet");
-  // }
 
   static OpBNBChain testnet() {
     return OpBNBChain(5611, "Testnet");
@@ -829,12 +818,8 @@ class OKBCChain implements ChainInfo {
   String? chainName;
 
   OKBCChain(this.chainId, this.chainIdName) {
-    chainName = ChainName.Base.name;
+    chainName = ChainName.OKBC.name;
   }
-
-  // static PolygonZkEVMChain mainnet() {
-  //   return PolygonZkEVMChain(1101, "Mainnet");
-  // }
 
   static OKBCChain testnet() {
     return OKBCChain(195, "Testnet");
@@ -852,18 +837,116 @@ class TaikoChain implements ChainInfo {
   String? chainName;
 
   TaikoChain(this.chainId, this.chainIdName) {
-    chainName = ChainName.Base.name;
+    chainName = ChainName.Taiko.name;
   }
-
-  // static PolygonZkEVMChain mainnet() {
-  //   return PolygonZkEVMChain(1101, "Mainnet");
-  // }
 
   static TaikoChain testnet() {
     return TaikoChain(167005, "Testnet");
   }
 }
 
+class ReadOnChain implements ChainInfo {
+  @override
+  int chainId;
+
+  @override
+  String chainIdName;
+
+  @override
+  String? chainName;
+
+  ReadOnChain(this.chainId, this.chainIdName) {
+    chainName = ChainName.ReadOn.name;
+  }
+
+  static ReadOnChain testnet() {
+    return ReadOnChain(12015, "Testnet");
+  }
+}
+
+class ZoraChain implements ChainInfo {
+  @override
+  int chainId;
+
+  @override
+  String chainIdName;
+
+  @override
+  String? chainName;
+
+  ZoraChain(this.chainId, this.chainIdName) {
+    chainName = ChainName.Zora.name;
+  }
+
+  static ZoraChain mainnet() {
+    return ZoraChain(7777777, "Mainnet");
+  }
+
+  static ZoraChain testnet() {
+    return ZoraChain(999, "Testnet");
+  }
+}
+
+class PGNChain implements ChainInfo {
+  @override
+  int chainId;
+
+  @override
+  String chainIdName;
+
+  @override
+  String? chainName;
+
+  PGNChain(this.chainId, this.chainIdName) {
+    chainName = ChainName.PGN.name;
+  }
+
+  static PGNChain mainnet() {
+    return PGNChain(424, "Mainnet");
+  }
+
+  static PGNChain testnet() {
+    return PGNChain(58008, "Testnet");
+  }
+}
+
+class MantaChain implements ChainInfo {
+  @override
+  int chainId;
+
+  @override
+  String chainIdName;
+
+  @override
+  String? chainName;
+
+  MantaChain(this.chainId, this.chainIdName) {
+    chainName = ChainName.Manta.name;
+  }
+
+  static MantaChain testnet() {
+    return MantaChain(3441005, "Testnet");
+  }
+}
+
+class NebuleChain implements ChainInfo {
+  @override
+  int chainId;
+
+  @override
+  String chainIdName;
+
+  @override
+  String? chainName;
+
+  NebuleChain(this.chainId, this.chainIdName) {
+    chainName = ChainName.Nebule.name;
+  }
+
+  static NebuleChain mainnet() {
+    return NebuleChain(1482601649, "Mainnet");
+  }
+}
 
 enum ChainName {
   Solana,
@@ -902,5 +985,10 @@ enum ChainName {
   ZkMeta,
   OpBNB,
   OKBC,
-  Taiko
+  Taiko,
+  ReadOn,
+  Zora,
+  PGN,
+  Manta,
+  Nebule
 }

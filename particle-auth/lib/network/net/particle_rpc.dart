@@ -387,7 +387,7 @@ class EvmService {
     }
 
     final reqStr = jsonEncode(req);
-    final reqHex = utf8.encode(reqStr).map((e) => e.toRadixString(16)).join();
+    final reqHex = StringUtils.toHexString(reqStr);
 
     return "0x$reqHex";
   }

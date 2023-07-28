@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:particle_auth/particle_auth.dart';
 import 'package:particle_auth_example/auth_demo/auth_logic.dart';
+import 'package:particle_auth_example/auth_demo/select_chain_page.dart';
 
 class AuthDemoPage extends StatefulWidget {
   const AuthDemoPage({Key? key}) : super(key: key);
@@ -22,22 +23,6 @@ class AuthDemoPageState extends State<AuthDemoPage> {
         child: Column(
           children: <Widget>[
             Padding(
-              padding: const EdgeInsets.only(
-                  left: 8.0, top: 16.0, right: 8.0, bottom: 8.0),
-              child: SizedBox(
-                width: double.infinity,
-                height: 50,
-                child: ElevatedButton(
-                    onPressed: () => {
-                          AuthLogic.setChain(),
-                        },
-                    child: const Text(
-                      "Select Chain",
-                      style: TextStyle(fontSize: 18),
-                    )),
-              ),
-            ),
-            Padding(
               padding: const EdgeInsets.all(8.0),
               child: SizedBox(
                 width: double.infinity,
@@ -51,6 +36,26 @@ class AuthDemoPageState extends State<AuthDemoPage> {
               ),
             ),
             Padding(
+              padding: const EdgeInsets.only(
+                  left: 8.0, top: 16.0, right: 8.0, bottom: 8.0),
+              child: SizedBox(
+                width: double.infinity,
+                height: 50,
+                child: ElevatedButton(
+                    onPressed: () => {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => const SelectChainPage()),
+                          )
+                        },
+                    child: const Text(
+                      "SelectChain",
+                      style: TextStyle(fontSize: 18),
+                    )),
+              ),
+            ),
+            Padding(
               padding: const EdgeInsets.all(8.0),
               child: SizedBox(
                 width: double.infinity,
@@ -59,6 +64,19 @@ class AuthDemoPageState extends State<AuthDemoPage> {
                     onPressed: () => {AuthLogic.login()},
                     child: const Text(
                       "Login",
+                      style: TextStyle(fontSize: 18),
+                    )),
+              ),
+            ),
+             Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: SizedBox(
+                width: double.infinity,
+                height: 50,
+                child: ElevatedButton(
+                    onPressed: () => {AuthLogic.loginWithSignMessage()},
+                    child: const Text(
+                      "Login with sign message",
                       style: TextStyle(fontSize: 18),
                     )),
               ),
@@ -89,7 +107,6 @@ class AuthDemoPageState extends State<AuthDemoPage> {
                     )),
               ),
             ),
-            
             Padding(
               padding: const EdgeInsets.all(8.0),
               child: SizedBox(
@@ -356,35 +373,9 @@ class AuthDemoPageState extends State<AuthDemoPage> {
                 width: double.infinity,
                 height: 50,
                 child: ElevatedButton(
-                    onPressed: () => {AuthLogic.setDisplayWallet()},
-                    child: const Text(
-                      "Set display wallet",
-                      style: TextStyle(fontSize: 18),
-                    )),
-              ),
-            ),
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: SizedBox(
-                width: double.infinity,
-                height: 50,
-                child: ElevatedButton(
                     onPressed: () => {AuthLogic.openWebWallet()},
                     child: const Text(
                       "Open web wallet",
-                      style: TextStyle(fontSize: 18),
-                    )),
-              ),
-            ),
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: SizedBox(
-                width: double.infinity,
-                height: 50,
-                child: ElevatedButton(
-                    onPressed: () => {AuthLogic.setUserInfo()},
-                    child: const Text(
-                      "Set user info",
                       style: TextStyle(fontSize: 18),
                     )),
               ),
@@ -528,6 +519,32 @@ class AuthDemoPageState extends State<AuthDemoPage> {
                     onPressed: () => {AuthLogic.getSecurityAccount()},
                     child: const Text(
                       "Get security account",
+                      style: TextStyle(fontSize: 18),
+                    )),
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: SizedBox(
+                width: double.infinity,
+                height: 50,
+                child: ElevatedButton(
+                    onPressed: () => {AuthLogic.setAppearance()},
+                    child: const Text(
+                      "Set appearance",
+                      style: TextStyle(fontSize: 18),
+                    )),
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: SizedBox(
+                width: double.infinity,
+                height: 50,
+                child: ElevatedButton(
+                    onPressed: () => {AuthLogic.setFiatCoin()},
+                    child: const Text(
+                      "Set FiatCoin",
                       style: TextStyle(fontSize: 18),
                     )),
               ),

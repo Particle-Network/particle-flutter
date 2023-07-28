@@ -5,12 +5,10 @@ import 'package:flutter/services.dart';
 import 'package:particle_auth/particle_auth.dart';
 import 'package:particle_connect/particle_connect.dart';
 import 'package:particle_wallet/model/buy_crypto_config.dart';
-import 'package:particle_wallet/model/fiat_coin.dart';
 import 'package:particle_wallet/model/wallet_display.dart';
 import 'package:particle_wallet/model/wallet_meta_data.dart';
 
 export 'package:particle_wallet/model/buy_crypto_config.dart';
-export 'package:particle_wallet/model/fiat_coin.dart';
 export 'package:particle_wallet/model/wallet_display.dart';
 export 'package:particle_wallet/model/open_buy_network.dart';
 export 'package:particle_wallet/model/theme.dart';
@@ -23,11 +21,10 @@ class ParticleWallet {
 
   /// Init particle wallet SDK.
   static init(WalletMetaData metaData) {
-    if (Platform.isAndroid) {
-      _channel.invokeMethod('init');
-    }
     if (Platform.isIOS) {
       _channel.invokeMethod("initializeWalletMetaData", jsonEncode(metaData));
+    } else {
+      _channel.invokeMethod('init');
     }
   }
 
@@ -104,24 +101,24 @@ class ParticleWallet {
         'navigatorNFTDetails', jsonEncode({"mint": mint, "token_id": tokenId}));
   }
 
-  /// Enable pay feature in SDK, pay feature in SDK is enable by default.
-  static enablePay(bool enable) {
-    _channel.invokeMethod('enablePay', enable);
+  /// Disable pay feature in SDK, pay feature in SDK is enable by default.
+  static setPayDisabled(bool disable) {
+    _channel.invokeMethod('setPayDisabled', disable);
   }
 
   /// Get pay feature state.
-  static Future<bool> getEnablePay() async {
-    return await _channel.invokeMethod('getEnablePay');
+  static Future<bool> getPayDisabled() async {
+    return await _channel.invokeMethod('getPayDisabled');
   }
 
-  /// Enable swap feature in SDK, swap feature in SDK is enable by default.
-  static enableSwap(bool enable) {
-    _channel.invokeMethod('enableSwap', enable);
+  /// Disable swap feature in SDK, swap feature in SDK is enable by default.
+  static setSwapDisabled(bool disable) {
+    _channel.invokeMethod('setSwapDisabled', disable);
   }
 
   /// Get swap feature state.
-  static Future<bool> getEnableSwap() async {
-    return await _channel.invokeMethod('getEnableSwap');
+  static Future<bool> getSwapDisabled() async {
+    return await _channel.invokeMethod('getSwapDisabled');
   }
 
   /// Navigator buy crypto page with parameters
@@ -166,17 +163,27 @@ class ParticleWallet {
   }
 
   /// Set show test network.
-  static showTestNetwork(bool enable) {
-    _channel.invokeMethod('showTestNetwork', enable);
+  static setShowTestNetwork(bool enable) {
+    if (Platform.isIOS) {
+      _channel.invokeMethod('setShowTestNetwork', enable);
+    } else {
+      // todo
+      _channel.invokeMethod('showTestNetwork', enable);
+    }
   }
 
   /// Set show manage wallet page.
-  static showManageWallet(bool enable) {
-    _channel.invokeMethod('showManageWallet', enable);
+  static setShowManageWallet(bool enable) {
+    if (Platform.isIOS) {
+      _channel.invokeMethod('setShowManageWallet', enable);
+    } else {
+      // todo
+      _channel.invokeMethod('showManageWallet', enable);
+    }
   }
 
   /// Set support chain list
-  static supportChain(List<ChainInfo> chainInfos) {
+  static setSupportChain(List<ChainInfo> chainInfos) {
     List<Map<String, dynamic>> allInfos = [];
     for (var i = 0; i < chainInfos.length; i++) {
       ChainInfo chainInfo = chainInfos[i];
@@ -186,7 +193,12 @@ class ParticleWallet {
         "chain_id": chainInfo.chainId,
       });
     }
-    _channel.invokeMethod('supportChain', jsonEncode(allInfos));
+    if (Platform.isIOS) {
+      _channel.invokeMethod('setSupportChain', jsonEncode(allInfos));
+    } else {
+      // todo
+      _channel.invokeMethod('supportChain', jsonEncode(allInfos));
+    }
   }
 
   /// Switch wallet
@@ -237,23 +249,32 @@ class ParticleWallet {
   }
 
   /// Set support dapp broswer in wallet page, default is true
-  static supportDappBrowser(bool enable) {
-    _channel.invokeMethod("supportDappBrowser", enable);
+  static setSupportDappBrowser(bool enable) {
+    if (Platform.isIOS) {
+      _channel.invokeMethod("setSupportDappBrowser", enable);
+    } else {
+      // todo
+      _channel.invokeMethod("supportDappBrowser", enable);
+    }
   }
 
   /// Set show language setting button in setting page.
-  static showLanguageSetting(bool isShow) {
-    _channel.invokeMethod("showLanguageSetting", isShow);
+  static setShowLanguageSetting(bool isShow) {
+    if (Platform.isIOS) {
+      _channel.invokeMethod("setShowLanguageSetting", isShow);
+    } else {
+      // todo
+      _channel.invokeMethod("showLanguageSetting", isShow);
+    }
   }
 
   /// Set show appearance setting button in setting page.
-  static showAppearanceSetting(bool isShow) {
-    _channel.invokeMethod("showAppearanceSetting", isShow);
-  }
-
-  /// Set language for GUI
-  static setLanguage(Language language) {
-    _channel.invokeMethod("setLanguage", language.name);
+  static setShowAppearanceSetting(bool isShow) {
+    if (Platform.isIOS) {
+      _channel.invokeMethod("setShowAppearanceSetting", isShow);
+    } else {
+      _channel.invokeMethod("showAppearanceSetting", isShow);
+    }
   }
 
   /// Set support add token, true will show add token button, false will hide add token button.
@@ -283,19 +304,18 @@ class ParticleWallet {
         "setPriorityNFTContractAddresses", nftContractAddresses);
   }
 
-  /// Set fait coin for GUI.
-  static setFiatCoin(FiatCoin fiatCoin) {
-    _channel.invokeMethod("setFiatCoin", fiatCoin.name);
-  }
-
   /// load custom ui config json
   static loadCustomUIJsonString(String json) {
     _channel.invokeMethod("loadCustomUIJsonString", json);
   }
 
   /// Set support wallet connect as a wallet, default is true
-  static supportWalletConnect(bool enable) {
-    _channel.invokeMethod("supportWalletConnect", enable);
+  static setSupportWalletConnect(bool enable) {
+    if (Platform.isIOS) {
+      _channel.invokeMethod("setSupportWalletConnect", enable);
+    } else {
+      _channel.invokeMethod("supportWalletConnect", enable);
+    }
   }
 
   /// Set Wallet conenct v2 project id, used when scan qrcode connect as a wallet.

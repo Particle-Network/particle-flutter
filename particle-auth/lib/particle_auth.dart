@@ -11,6 +11,7 @@ import '../model/security_account_config.dart';
 import '../model/typeddata_version.dart';
 import '../model/user_interface_style.dart';
 import '../model/login_info.dart';
+import '../model/fiat_coin.dart';
 
 export '../model/biconomy_version.dart';
 export '../model/biconomy_fee_mode.dart';
@@ -28,6 +29,21 @@ export '../network/model/serialize_sol_transreqentity.dart';
 export '../network/net/particle_rpc.dart';
 export '../network/net/request_body_entity.dart';
 export '../model/gas_fee_level.dart';
+export '../model/fiat_coin.dart';
+
+/// A utility class for string operations.
+class StringUtils {
+  
+  /// Converts a string to a hexadecimal string.
+  ///
+  /// The [input] string is first converted to UTF-8 bytes, 
+  /// and then each byte is converted to a two-digit hexadecimal number.
+  static String toHexString(String input) {
+    return utf8.encode(input)
+        .map((e) => e.toRadixString(16).padLeft(2, '0'))
+        .join();
+  }
+}
 
 class ParticleAuth {
   ParticleAuth._();
@@ -70,35 +86,24 @@ class ParticleAuth {
   ///
   /// [supportAuthTypes] set support auth types, they will show in the web page.
   ///
-  /// [loginFormMode] set false will show full login form, set true will show light
-  /// login form, default value is false.
   ///
-  /// [socialLoginPrompt] social login prompt, optional.
+  /// [socialLoginPrompt] optional, social login prompt.
   ///
+  /// [authorization] optional, login and sign a message
   /// Return userinfo or error
   static Future<String> login(LoginType loginType, String account,
       List<SupportAuthType> supportAuthTypes,
-      {bool loginFormMode = false,
-        SocialLoginPrompt? socialLoginPrompt, LoginAuthorization? authorization}) async {
+      {SocialLoginPrompt? socialLoginPrompt,
+      LoginAuthorization? authorization}) async {
     final params = jsonEncode({
       "login_type": loginType.name,
       "account": account,
       "support_auth_type_values": supportAuthTypes.map((e) => e.name).toList(),
-      "login_form_mode": loginFormMode,
       "social_login_prompt": socialLoginPrompt?.name,
       "authorization": authorization,
     });
 
     return await _channel.invokeMethod('login', params);
-  }
-
-  /// Set user info
-  ///
-  /// [json] user info json, it should be the same struct with our web auth service.
-  ///
-  /// Return result or error
-  static Future<bool> setUserInfo(String json) async {
-    return await _channel.invokeMethod('setUserInfo', json);
   }
 
   /// Is user login, check locally.
@@ -134,14 +139,14 @@ class ParticleAuth {
 
   /// Sign message
   ///
-  /// [message] message you want to sign
+  /// [message] message you want to sign, evm chain requires hexadecimal string, solana chain requires human readable message.
   static Future<String> signMessage(String message) async {
     return await _channel.invokeMethod('signMessage', message);
   }
 
-  /// Sign message unique
+  /// Sign message unique, only support evm chain.
   ///
-  /// [message] message you want to sign
+  /// [message] message you want to sign, requires hexadecimal string.
   static Future<String> signMessageUnique(String message) async {
     return await _channel.invokeMethod('signMessageUnique', message);
   }
@@ -188,17 +193,17 @@ class ParticleAuth {
   static Future<String> batchSendTransactions(List<String> transactions,
       {BiconomyFeeMode? feeMode}) async {
     final json =
-    jsonEncode({"transactions": transactions, "fee_mode": feeMode});
+        jsonEncode({"transactions": transactions, "fee_mode": feeMode});
     return await _channel.invokeMethod('batchSendTransactions', json);
   }
 
-  /// Sign typed data, only support evm chain.
+  /// Sign typed data, only support evm chain,
   ///
-  /// [typedData] typed data you want to sign.
+  /// [typedData] typed data you want to sign, requires hexadecimal string.
   ///
   /// [version] support v1, v3, v4.
-  static Future<String> signTypedData(String typedData,
-      SignTypedDataVersion version) async {
+  static Future<String> signTypedData(
+      String typedData, SignTypedDataVersion version) async {
     return await _channel.invokeMethod('signTypedData',
         jsonEncode({"message": typedData, "version": version.name}));
   }
@@ -256,16 +261,25 @@ class ParticleAuth {
     }
   }
 
-  /// Set display wel wallet when sign and send transaction in web page.
-  static setDisplayWallet(bool displayWallet) {
-    _channel.invokeMethod('setDisplayWallet', displayWallet);
+  /// Set web auth config
+  static setWebAuthConfig(bool displayWallet, Appearance appearance) {
+    if (Platform.isIOS) {
+      _channel.invokeMethod(
+          'setWebAuthConfig',
+          jsonEncode({
+            "display_wallet": displayWallet,
+            "appearance": appearance.name
+          }));
+    }
+    // todo
   }
 
   /// Set user inerface style
-  static setInterfaceStyle(UserInterfaceStyle interfaceStyle) {
+  static setAppearance(Appearance appearance) {
     if (Platform.isIOS) {
-      _channel.invokeMethod("setInterfaceStyle", interfaceStyle.name);
+      _channel.invokeMethod("setAppearance", appearance.name);
     }
+    // todo
   }
 
   /// Set security account config
@@ -336,5 +350,13 @@ class ParticleAuth {
       // todo
       return null;
     }
+  }
+
+  /// set fiat coin
+  static setFiatCoin(FiatCoin fiatCoin) {
+    if (Platform.isIOS) {
+    _channel.invokeMethod("setFiatCoin", fiatCoin.name);
+    } 
+    // todo
   }
 }

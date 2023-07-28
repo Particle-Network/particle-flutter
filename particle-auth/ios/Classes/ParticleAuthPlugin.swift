@@ -5,6 +5,7 @@
 //  Created by link on 2022/10/8.
 //
 
+import Base58_swift
 import Flutter
 import Foundation
 import ParticleAuthService
@@ -33,17 +34,18 @@ public class ParticleAuthPlugin: NSObject, FlutterPlugin {
         case getAddress
         case getUserInfo
         case setModalPresentStyle
-        case setDisplayWallet
+        case setWebAuthConfig
         case openWebWallet
         case setMediumScreen
         case openAccountAndSecurity
         case setSecurityAccountConfig
         case setLanguage
         case fastLogout
-        case setUserInfo
         case batchSendTransactions
         case setCustomStyle
         case getSecurityAccount
+        case setAppearance
+        case setFiatCoin
     }
     
     public static func register(with registrar: FlutterPluginRegistrar) {
@@ -97,8 +99,8 @@ public class ParticleAuthPlugin: NSObject, FlutterPlugin {
             self.getUserInfo(flutterResult: result)
         case .setModalPresentStyle:
             self.setModalPresentStyle(json as? String)
-        case .setDisplayWallet:
-            self.setDisplayWallet(json as? Bool ?? false)
+        case .setWebAuthConfig:
+            self.setWebAuthConfig(json as? String)
         case .openWebWallet:
             self.openWebWallet()
         case .setCustomStyle:
@@ -113,12 +115,14 @@ public class ParticleAuthPlugin: NSObject, FlutterPlugin {
             self.setLanguage(json as? String)
         case .fastLogout:
             self.fastLogout(flutterResult: result)
-        case .setUserInfo:
-            self.setUserInfo(json as? String, flutterResult: result)
         case .batchSendTransactions:
             self.batchSendTransactions(json as? String, flutterResult: result)
         case .getSecurityAccount:
             self.getSecurityAccount(flutterResult: result)
+        case .setAppearance:
+            self.setAppearance(json as? String)
+        case .setFiatCoin:
+            self.setFiatCoin(json as? String)
         }
     }
 }
@@ -180,7 +184,7 @@ public extension ParticleAuthPlugin {
             flutterResult(FlutterError(code: "", message: "did not find chain info for \(chainId)", details: nil))
             return
         }
-        ParticleAuthService.setChainInfo(chainInfo).subscribe { result in
+        ParticleAuthService.switchChain(chainInfo).subscribe { result in
             
             switch result {
             case .failure:
@@ -217,7 +221,7 @@ public extension ParticleAuthPlugin {
         let type = data["login_type"].stringValue.lowercased()
         let account = data["account"].string
         let supportAuthType = data["support_auth_type_values"].arrayValue
-        let loginFormMode = data["login_form_mode"].bool ?? false
+        
         let socialLoginPromptString = data["social_login_prompt"].stringValue.lowercased()
         let socialLoginPrompt: SocialLoginPrompt? = SocialLoginPrompt(rawValue: socialLoginPromptString)
         
@@ -272,7 +276,7 @@ public extension ParticleAuthPlugin {
             acc = nil
         }
         
-        ParticleAuthService.login(type: loginType, account: acc, supportAuthType: supportAuthTypeArray, loginFormMode: loginFormMode, socialLoginPrompt: socialLoginPrompt, authorization: loginAuthorization).subscribe { [weak self] result in
+        ParticleAuthService.login(type: loginType, account: acc, supportAuthType: supportAuthTypeArray, socialLoginPrompt: socialLoginPrompt, authorization: loginAuthorization).subscribe { [weak self] result in
             guard let self = self else { return }
             switch result {
             case .failure(let error):
@@ -290,31 +294,6 @@ public extension ParticleAuthPlugin {
                 guard let json = String(data: data, encoding: .utf8) else { return }
                 flutterResult(json)
             }
-        }.disposed(by: self.bag)
-    }
-    
-    func setUserInfo(_ json: String?, flutterResult: @escaping FlutterResult) {
-        guard let json = json else {
-            flutterResult(FlutterError(code: "", message: "json is nil", details: nil))
-            return
-        }
-        ParticleAuthService.setUserInfo(json: json).subscribe { result in
-            
-            switch result {
-            case .failure:
-//                let response = self.ResponseFromError(error)
-//                let statusModel = FlutterStatusModel(status: false, data: response)
-//                let data = try! JSONEncoder().encode(statusModel)
-//                guard let json = String(data: data, encoding: .utf8) else { return }
-                flutterResult(false)
-            case .success:
-//                guard let userInfo = userInfo else { return }
-//                let statusModel = FlutterStatusModel(status: true, data: userInfo)
-//                let data = try! JSONEncoder().encode(statusModel)
-//                guard let json = String(data: data, encoding: .utf8) else { return }
-                flutterResult(true)
-            }
-            
         }.disposed(by: self.bag)
     }
     
@@ -604,10 +583,8 @@ public extension ParticleAuthPlugin {
             flutterResult(FlutterError(code: "", message: "version is wrong", details: nil))
             return
         }
-        
-        let hexString = "0x" + message.data(using: .utf8)!.map { String(format: "%02x", $0) }.joined()
        
-        ParticleAuthService.signTypedData(hexString, version: signTypedDataVersion).subscribe { [weak self] result in
+        ParticleAuthService.signTypedData(message, version: signTypedDataVersion).subscribe { [weak self] result in
             guard let self = self else { return }
             switch result {
             case .failure(let error):
@@ -654,8 +631,8 @@ public extension ParticleAuthPlugin {
         }
     }
     
-    func setInterfaceStyle(_ json: String?) {
-        guard let json = json else {
+    func setAppearance(_ json: String?) {
+        guard let appearance = json?.lowercased() else {
             return
         }
         /**
@@ -663,17 +640,33 @@ public extension ParticleAuthPlugin {
          LIGHT,
          DARK,
          */
-        if json.lowercased() == "system" {
-            ParticleNetwork.setInterfaceStyle(UIUserInterfaceStyle.unspecified)
-        } else if json.lowercased() == "light" {
-            ParticleNetwork.setInterfaceStyle(UIUserInterfaceStyle.light)
-        } else if json.lowercased() == "dark" {
-            ParticleNetwork.setInterfaceStyle(UIUserInterfaceStyle.dark)
+        if appearance == "system" {
+            ParticleNetwork.setAppearence(UIUserInterfaceStyle.unspecified)
+        } else if appearance == "light" {
+            ParticleNetwork.setAppearence(UIUserInterfaceStyle.light)
+        } else if appearance == "dark" {
+            ParticleNetwork.setAppearence(UIUserInterfaceStyle.dark)
         }
     }
     
-    func setDisplayWallet(_ displayWallet: Bool) {
-        ParticleAuthService.setDisplayWallet(displayWallet)
+    func setWebAuthConfig(_ json: String?) {
+        guard let json = json else {
+            return
+        }
+        let data = JSON(parseJSON: json)
+        let isDisplayWallet = data["display_wallet"].boolValue
+        let appearance = data["appearance"].stringValue.lowercased()
+        
+        var style: UIUserInterfaceStyle = .unspecified
+        if appearance == "system" {
+            style = UIUserInterfaceStyle.unspecified
+        } else if appearance == "light" {
+            style = UIUserInterfaceStyle.light
+        } else if appearance == "dark" {
+            style = UIUserInterfaceStyle.dark
+        }
+        
+        ParticleAuthService.setWebAuthConfig(options: .init(isDisplayWallet: isDisplayWallet, appearance: style))
     }
     
     func openWebWallet() {
@@ -699,7 +692,8 @@ public extension ParticleAuthPlugin {
         let data = JSON(parseJSON: json)
         let promptSettingWhenSign = data["prompt_setting_when_sign"].intValue
         let promptMasterPasswordSettingWhenLogin = data["prompt_master_password_setting_when_login"].intValue
-        ParticleAuthService.setSecurityAccountConfig(config: .init(promptSettingWhenSign: promptSettingWhenSign, promptMasterPasswordSettingWhenLogin: promptMasterPasswordSettingWhenLogin))
+        
+        ParticleNetwork.setSecurityAccountConfig(config: .init(promptSettingWhenSign: promptSettingWhenSign, promptMasterPasswordSettingWhenLogin: promptMasterPasswordSettingWhenLogin))
     }
     
     func openAccountAndSecurity(flutterResult: @escaping FlutterResult) {
@@ -743,6 +737,33 @@ public extension ParticleAuthPlugin {
             ParticleNetwork.setLanguage(.ja)
         } else if json.lowercased() == "ko" {
             ParticleNetwork.setLanguage(.ko)
+        }
+    }
+    
+    func setFiatCoin(_ json: String?) {
+        guard let json = json else {
+            return
+        }
+        /*
+             USD,
+             CNY,
+             JPY,
+             HKD,
+             INR,
+             KRW,
+         */
+        if json.lowercased() == "usd" {
+            ParticleNetwork.setFiatCoin(.usd)
+        } else if json.lowercased() == "cny" {
+            ParticleNetwork.setFiatCoin(.cny)
+        } else if json.lowercased() == "jpy" {
+            ParticleNetwork.setFiatCoin(.jpy)
+        } else if json.lowercased() == "hkd" {
+            ParticleNetwork.setFiatCoin(.hkd)
+        } else if json.lowercased() == "inr" {
+            ParticleNetwork.setFiatCoin(.inr)
+        } else if json.lowercased() == "krw" {
+            ParticleNetwork.setFiatCoin(.krw)
         }
     }
     

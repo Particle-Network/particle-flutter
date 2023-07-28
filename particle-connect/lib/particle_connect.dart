@@ -140,8 +140,9 @@ class ParticleConnect {
 
   /// Sign message.
   ///
-  /// Pass [walletType] and [publicAddress] to decide a wallet to sign the
-  /// [message].
+  /// Pass [walletType] and [publicAddress] to decide a wallet.
+  /// 
+  /// [message] message you want to sign, evm chain requires a hexadecimal string, solana chain requires a human readable message.
   ///
   /// Return signature or error.
   static Future<String> signMessage(
@@ -236,7 +237,7 @@ class ParticleConnect {
   /// Pass [walletType] and [publicAddress] to decide a wallet to sign and send the
   /// [typedData].
   ///
-  /// [typedData] only support v4.
+  /// [typedData] only support v4, requires hexadecimal string.
   ///
   /// Result signatrue or error.
   static Future<String> signTypedData(
