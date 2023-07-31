@@ -1,7 +1,7 @@
 package network.particle.auth_flutter.bridge.model
 
 import com.google.gson.annotations.SerializedName
-import com.particle.network.service.model.LoginAuthorization
+import com.particle.base.model.LoginAuthorization
 
 class LoginData {
     @SerializedName("login_type")

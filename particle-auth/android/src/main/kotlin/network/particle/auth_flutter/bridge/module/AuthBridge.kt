@@ -5,24 +5,31 @@ import android.text.TextUtils
 import com.blankj.utilcode.util.GsonUtils
 import com.blankj.utilcode.util.LogUtils
 import com.google.gson.Gson
+import com.google.gson.JsonObject
 import com.google.gson.reflect.TypeToken
-import com.particle.base.ChainInfo
+import com.particle.base.CurrencyEnum
 import com.particle.base.Env
 import com.particle.base.LanguageEnum
 import com.particle.base.ParticleNetwork
+import com.particle.base.ParticleNetwork.setFiatCoin
+import com.particle.base.ThemeEnum
+import com.particle.base.data.ErrorInfo
 import com.particle.base.data.SignOutput
 import com.particle.base.data.WebOutput
 import com.particle.base.data.WebServiceCallback
-import com.particle.base.data.WebServiceError
 import com.particle.base.ibiconomy.FeeMode
 import com.particle.base.ibiconomy.FeeModeAuto
 import com.particle.base.ibiconomy.FeeModeCustom
 import com.particle.base.ibiconomy.FeeModeGasless
 import com.particle.base.ibiconomy.MessageSigner
-import com.particle.base.model.Erc4337FeeQuote
+import com.particle.base.model.LoginType
+import com.particle.base.model.ResultCallback
+import com.particle.base.model.SecurityAccountConfig
+import com.particle.base.model.SupportAuthType
+import com.particle.base.model.UserInfo
 import com.particle.network.ParticleNetworkAuth.fastLogout
 import com.particle.network.ParticleNetworkAuth.getAddress
-import com.particle.network.ParticleNetworkAuth.getSmartAccount
+import com.particle.network.ParticleNetworkAuth.getSecurityAccount
 import com.particle.network.ParticleNetworkAuth.getUserInfo
 import com.particle.network.ParticleNetworkAuth.isLogin
 import com.particle.network.ParticleNetworkAuth.isLoginAsync
@@ -30,9 +37,7 @@ import com.particle.network.ParticleNetworkAuth.login
 import com.particle.network.ParticleNetworkAuth.logout
 import com.particle.network.ParticleNetworkAuth.openAccountAndSecurity
 import com.particle.network.ParticleNetworkAuth.openWebWallet
-import com.particle.network.ParticleNetworkAuth.setChainInfo
-import com.particle.network.ParticleNetworkAuth.setSecurityAccountConfig
-import com.particle.network.ParticleNetworkAuth.setUserInfo
+import com.particle.network.ParticleNetworkAuth.setWebAuthConfig
 import com.particle.network.ParticleNetworkAuth.signAllTransactions
 import com.particle.network.ParticleNetworkAuth.signAndSendTransaction
 import com.particle.network.ParticleNetworkAuth.signMessage
@@ -41,7 +46,6 @@ import com.particle.network.ParticleNetworkAuth.signTransaction
 import com.particle.network.ParticleNetworkAuth.signTypedData
 import com.particle.network.SignTypedDataVersion
 import com.particle.network.service.*
-import com.particle.network.service.model.*
 import io.flutter.plugin.common.MethodChannel
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -49,6 +53,7 @@ import kotlinx.coroutines.launch
 import network.particle.auth_flutter.bridge.model.*
 import network.particle.auth_flutter.bridge.utils.ChainUtils
 import network.particle.auth_flutter.bridge.utils.EncodeUtils
+import network.particle.chains.ChainInfo
 import org.json.JSONObject
 
 
@@ -66,7 +71,7 @@ object AuthBridge {
     fun init(activity: Activity, initParams: String?) {
         LogUtils.d("init", initParams)
         val initData = GsonUtils.fromJson(initParams, InitData::class.java)
-        val chainInfo = ChainUtils.getChainInfo(initData.chainName!!, initData.chainIdName)
+        val chainInfo = ChainUtils.getChainInfo(initData.chainId)
         ParticleNetwork.init(activity, Env.valueOf(initData.env!!.uppercase()), chainInfo)
     }
 
@@ -109,17 +114,16 @@ object AuthBridge {
             LoginType.valueOf(loginData.loginType!!.uppercase()),
             account!!,
             supportAuthType,
-            loginData.loginFormMode ?: false,
             prompt,
-            object : WebServiceCallback<LoginOutput> {
-                override fun success(output: LoginOutput) {
-
+            object : WebServiceCallback<UserInfo> {
+                override fun success(output: UserInfo) {
                     result.success(FlutterCallBack.success(output).toGson())
                 }
 
-                override fun failure(errMsg: WebServiceError) {
+                override fun failure(errMsg: ErrorInfo) {
                     result.success(FlutterCallBack.failed(errMsg).toGson())
                 }
+
             }, loginData.authorization
         )
     }
@@ -127,19 +131,20 @@ object AuthBridge {
     fun logout(result: MethodChannel.Result) {
         LogUtils.d("logout")
         ParticleNetwork.logout(object : WebServiceCallback<WebOutput> {
-            override fun failure(errMsg: WebServiceError) {
-                result.success(FlutterCallBack.failed(errMsg).toGson())
-            }
 
             override fun success(output: WebOutput) {
                 result.success(FlutterCallBack.success(output).toGson())
+            }
+
+            override fun failure(errMsg: ErrorInfo) {
+                result.success(FlutterCallBack.failed(errMsg).toGson())
             }
         })
     }
 
     fun fastLogout(result: MethodChannel.Result) {
         LogUtils.d("fastLogout")
-        ParticleNetwork.fastLogout(object : FastLogoutCallBack {
+        ParticleNetwork.fastLogout(object : ResultCallback {
             override fun failure() {
                 result.success(FlutterCallBack.failed("failed").toGson())
             }
@@ -152,31 +157,29 @@ object AuthBridge {
     }
 
     fun signMessage(message: String, result: MethodChannel.Result) {
-        ParticleNetwork.signMessage(
-            EncodeUtils.encode(message),
+        ParticleNetwork.signMessage(message,
             object : WebServiceCallback<SignOutput> {
-
-                override fun failure(errMsg: WebServiceError) {
-                    result.success(FlutterCallBack.failed(errMsg).toGson())
-                }
 
                 override fun success(output: SignOutput) {
                     result.success(FlutterCallBack.success(output.signature).toGson())
+                }
+
+                override fun failure(errMsg: ErrorInfo) {
+                    result.success(FlutterCallBack.failed(errMsg).toGson())
                 }
             })
     }
 
     fun signMessageUnique(message: String, result: MethodChannel.Result) {
-        ParticleNetwork.signMessageUnique(
-            EncodeUtils.encode(message),
+        ParticleNetwork.signMessageUnique(message,
             object : WebServiceCallback<SignOutput> {
-
-                override fun failure(errMsg: WebServiceError) {
-                    result.success(FlutterCallBack.failed(errMsg).toGson())
-                }
 
                 override fun success(output: SignOutput) {
                     result.success(FlutterCallBack.success(output.signature).toGson())
+                }
+
+                override fun failure(errMsg: ErrorInfo) {
+                    result.success(FlutterCallBack.failed(errMsg).toGson())
                 }
             })
     }
@@ -185,12 +188,12 @@ object AuthBridge {
         LogUtils.d("signTransaction", transaction)
         ParticleNetwork.signTransaction(transaction, object : WebServiceCallback<SignOutput> {
 
-            override fun failure(errMsg: WebServiceError) {
-                result.success(FlutterCallBack.failed(errMsg).toGson())
-            }
-
             override fun success(output: SignOutput) {
                 result.success(FlutterCallBack.success(output.signature).toGson())
+            }
+
+            override fun failure(errMsg: ErrorInfo) {
+                result.success(FlutterCallBack.failed(errMsg).toGson())
             }
         })
     }
@@ -201,12 +204,13 @@ object AuthBridge {
             transactions, object : TypeToken<List<String>>() {}.type
         )
         ParticleNetwork.signAllTransactions(trans, object : WebServiceCallback<SignOutput> {
-            override fun failure(errMsg: WebServiceError) {
-                result.success(FlutterCallBack.failed(errMsg).toGson())
-            }
 
             override fun success(output: SignOutput) {
                 result.success(FlutterCallBack.success(output.signature).toGson())
+            }
+
+            override fun failure(errMsg: ErrorInfo) {
+                result.success(FlutterCallBack.failed(errMsg).toGson())
             }
         })
     }
@@ -247,7 +251,7 @@ object AuthBridge {
                                         callback.success(output)
                                     }
 
-                                    override fun failure(errMsg: WebServiceError) {
+                                    override fun failure(errMsg: ErrorInfo) {
                                         callback.failure(errMsg)
                                     }
                                 })
@@ -264,7 +268,7 @@ object AuthBridge {
                                         callback.success(output)
                                     }
 
-                                    override fun failure(errMsg: WebServiceError) {
+                                    override fun failure(errMsg: ErrorInfo) {
                                         callback.failure(errMsg)
                                     }
                                 })
@@ -280,9 +284,10 @@ object AuthBridge {
                             result.success(FlutterCallBack.success(output.signature!!).toGson())
                         }
 
-                        override fun failure(errMsg: WebServiceError) {
+                        override fun failure(errMsg: ErrorInfo) {
                             result.success(FlutterCallBack.failed(errMsg).toGson())
                         }
+
                     })
             } catch (e: Exception) {
                 e.printStackTrace()
@@ -311,13 +316,15 @@ object AuthBridge {
             ParticleNetwork.signAndSendTransaction(
                 transParams.transaction,
                 object : WebServiceCallback<SignOutput> {
-                    override fun failure(errMsg: WebServiceError) {
-                        result.success(FlutterCallBack.failed(errMsg).toGson())
-                    }
 
                     override fun success(output: SignOutput) {
                         result.success(FlutterCallBack.success(output.signature).toGson())
                     }
+
+                    override fun failure(errMsg: ErrorInfo) {
+                        result.success(FlutterCallBack.failed(errMsg).toGson())
+                    }
+
                 },
                 feeMode
             )
@@ -334,16 +341,16 @@ object AuthBridge {
         val typedDataVersion =
             if (signTypedData.version.equals("v4Unique")) SignTypedDataVersion.V4Unique
             else SignTypedDataVersion.valueOf(signTypedData.version!!.uppercase())
-        ParticleNetwork.signTypedData(
-            EncodeUtils.encode(signTypedData.message!!),
+        ParticleNetwork.signTypedData(signTypedData.message!!,
             typedDataVersion,
             object : WebServiceCallback<SignOutput> {
-                override fun failure(errMsg: WebServiceError) {
-                    result.success(FlutterCallBack.failed(errMsg).toGson())
-                }
 
                 override fun success(output: SignOutput) {
                     result.success(FlutterCallBack.success(output.signature).toGson())
+                }
+
+                override fun failure(errMsg: ErrorInfo) {
+                    result.success(FlutterCallBack.failed(errMsg).toGson())
                 }
             })
     }
@@ -355,27 +362,9 @@ object AuthBridge {
             chainParams, ChainData::class.java
         )
         try {
-            val chainInfo = ChainUtils.getChainInfo(chainData.chainName!!, chainData.chainIdName)
-            if (!ParticleNetwork.isLogin()) {
-                ParticleNetwork.setChainInfo(chainInfo)
-                result.success(true)
-            } else {
-                val wallet = if (chainInfo.chain == "evm") {
-                    ParticleNetwork.getUserInfo()?.getWallet(UserInfo.WalletChain.evm);
-                } else {
-                    ParticleNetwork.getUserInfo()?.getWallet(UserInfo.WalletChain.solana);
-                }
-                if (wallet == null) {
-                    result.success(false)
-                    return
-                }
-                if (TextUtils.isEmpty(wallet.publicAddress)) {
-                    result.success(false)
-                    return
-                }
-                ParticleNetwork.setChainInfo(chainInfo)
-                result.success(true)
-            }
+            val chainInfo = ChainUtils.getChainInfo(chainData.chainId)
+            ParticleNetwork.setChainInfo(chainInfo)
+            result.success(true)
         } catch (e: Exception) {
             LogUtils.e("setChainName", e.message)
             result.success(false)
@@ -387,16 +376,8 @@ object AuthBridge {
         val chainData = GsonUtils.fromJson(
             chainParams, ChainData::class.java
         )
-        val chainInfo = ChainUtils.getChainInfo(chainData.chainName!!, chainData.chainIdName)
-        ParticleNetwork.setChainInfo(chainInfo, object : ChainChangeCallBack {
-            override fun success() {
-                result.success(true)
-            }
-
-            override fun failure() {
-                result.success(false)
-            }
-        })
+        val chainInfo = ChainUtils.getChainInfo(chainData.chainId)
+        ParticleNetwork.setChainInfo(chainInfo)
     }
 
     fun getAddress(result: MethodChannel.Result) {
@@ -412,9 +393,8 @@ object AuthBridge {
     fun getChainInfo(result: MethodChannel.Result) {
         val chainInfo: ChainInfo = ParticleNetwork.chainInfo
         val map: MutableMap<String, Any> = HashMap()
-        map["chain_name"] = chainInfo.chainName.name
-        map["chain_id_name"] = chainInfo.chainId.toString()
-        map["chain_id"] = chainInfo.chainId.value()
+        map["chain_name"] = chainInfo.name
+        map["chain_id"] = chainInfo.id
         result.success(Gson().toJson(map))
     }
 
@@ -440,27 +420,27 @@ object AuthBridge {
             return
         }
         if (language.equals("zh_hans")) {
-            ParticleNetwork.setAppliedLanguage(LanguageEnum.ZH_CN)
+            ParticleNetwork.setLanguage(LanguageEnum.ZH_CN)
         } else if (language.equals("zh_hant")) {
-            ParticleNetwork.setAppliedLanguage(LanguageEnum.ZH_TW)
+            ParticleNetwork.setLanguage(LanguageEnum.ZH_TW)
         } else if (language.equals("ja")) {
-            ParticleNetwork.setAppliedLanguage(LanguageEnum.JA)
+            ParticleNetwork.setLanguage(LanguageEnum.JA)
         } else if (language.equals("ko")) {
-            ParticleNetwork.setAppliedLanguage(LanguageEnum.KO)
+            ParticleNetwork.setLanguage(LanguageEnum.KO)
         } else {
-            ParticleNetwork.setAppliedLanguage(LanguageEnum.EN)
+            ParticleNetwork.setLanguage(LanguageEnum.EN)
         }
     }
 
     fun openAccountAndSecurity() {
-        ParticleNetwork.openAccountAndSecurity()
-    }
+        ParticleNetwork.openAccountAndSecurity(object : WebServiceCallback<WebOutput> {
+            override fun failure(errMsg: ErrorInfo) {
+            }
 
-    fun setUserInfo(json: String, result: MethodChannel.Result) {
-        LogUtils.d("setUserInfo", json)
-        result.success(
-            ParticleNetwork.setUserInfo(json)
-        )
+            override fun success(output: WebOutput) {
+            }
+
+        })
     }
 
     fun isLogin(result: MethodChannel.Result) {
@@ -469,8 +449,29 @@ object AuthBridge {
         )
     }
 
+    fun getSecurityAccount(result: MethodChannel.Result) {
+        CoroutineScope(Dispatchers.IO).launch {
+            val securityAccount = ParticleNetwork.getSecurityAccount()
+            result.success(FlutterCallBack.success(securityAccount).toGson())
+        }
+    }
+
     fun openWebWallet(activity: Activity, json: String, result: MethodChannel.Result) {
         ParticleNetwork.openWebWallet(activity, json)
+    }
+
+    fun setWebAuthConfig(activity: Activity, json: String, result: MethodChannel.Result) {
+        val jobj = GsonUtils.fromJson(json, JsonObject::class.java)
+        val displayWallet = jobj.get("display_wallet").asBoolean
+        val appearance = jobj.get("appearance").asString
+        LogUtils.d("setWebAuthConfig", "displayWallet:$displayWallet,appearance:$appearance")
+        ParticleNetwork.setWebAuthConfig(displayWallet, ThemeEnum.valueOf(appearance.uppercase()))
+    }
+
+    fun setAppearance(appearance: String) {
+        ParticleNetwork.setAppearence(ThemeEnum.valueOf(appearance.uppercase()))
+    }  fun setFiatCoin(fiatCoin: String) {
+        ParticleNetwork.setFiatCoin(CurrencyEnum.valueOf(fiatCoin.uppercase()))
     }
 
     fun isLoginAsync(result: MethodChannel.Result) {
