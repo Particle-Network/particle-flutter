@@ -1,17 +1,15 @@
 package network.particle.flutter.bridge.model
 
-import androidx.annotation.Keep
 import com.google.gson.annotations.SerializedName
 
 data class ConnectData(
     @SerializedName("wallet_type") val walletType: String,
-    @SerializedName("particle_connect_config") val particleConnectConfig: ParticleConnectConfig?
+    @SerializedName("particle_connect_config") val particleConnectConfig: ParticleConnectConfigData?
 )
 
-data class ParticleConnectConfig(
+data class ParticleConnectConfigData(
     @SerializedName("login_type") var loginType: String,
     @SerializedName("account") var account: String = "",
-    @SerializedName("login_form_mode") var loginFormMode: Boolean = false,
     @SerializedName("support_auth_type_values") var supportAuthTypeValues: List<String> = arrayListOf(),
     @SerializedName("social_login_prompt") var prompt: String? = null
 )

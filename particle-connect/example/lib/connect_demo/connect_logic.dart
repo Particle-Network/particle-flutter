@@ -54,7 +54,6 @@ class ConnectLogic {
     print(result);
     String chainName = jsonDecode(result)["chain_name"];
     int chainId = jsonDecode(result)["chain_id"];
-    String chainIdName = jsonDecode(result)["chain_id_name"];
 
     ChainInfo? chainInfo;
     if (chainId == EthereumChain.mainnet().chainId) {
@@ -403,11 +402,9 @@ class ConnectLogic {
     print(await ParticleConnect.walletReadyState(WalletType.imToken));
     print(await ParticleConnect.walletReadyState(WalletType.bitKeep));
     print(await ParticleConnect.walletReadyState(WalletType.math));
-    print(await ParticleConnect.walletReadyState(WalletType.tokenPocket));
     print(await ParticleConnect.walletReadyState(WalletType.omni));
     print(await ParticleConnect.walletReadyState(WalletType.zerion));
     print(await ParticleConnect.walletReadyState(WalletType.alpha));
-    print(await ParticleConnect.walletReadyState(WalletType.ttWallet));
   }
 
   static void reconnectIfNeed() {

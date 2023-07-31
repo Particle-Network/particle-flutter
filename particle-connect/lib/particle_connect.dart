@@ -37,7 +37,6 @@ class ParticleConnect {
           'initialize',
           jsonEncode({
             "chain_name": chainInfo.chainName,
-            "chain_id_name": chainInfo.chainIdName,
             "chain_id": chainInfo.chainId,
             "env": env.name,
             "metadata": dappMetaData,
@@ -48,7 +47,6 @@ class ParticleConnect {
           'init',
           jsonEncode({
             "chain_name": chainInfo.chainName,
-            "chain_id_name": chainInfo.chainIdName,
             "chain_id": chainInfo.chainId,
             "env": env.name,
             "metadata": dappMetaData,
@@ -65,7 +63,6 @@ class ParticleConnect {
       ChainInfo chainInfo = chainInfos[i];
       allInfos.add({
         "chain_name": chainInfo.chainName,
-        "chain_id_name": chainInfo.chainIdName,
         "chain_id": chainInfo.chainId,
       });
     }
@@ -354,7 +351,6 @@ class ParticleConnect {
           "public_address": publicAddress,
           "chain_name": chainInfo.chainName,
           "chain_id": chainInfo.chainId,
-          "chain_id_name": chainInfo.chainIdName,
         }));
   }
 
@@ -370,7 +366,6 @@ class ParticleConnect {
           "public_address": publicAddress,
           "chain_name": chainInfo.chainName,
           "chain_id": chainInfo.chainId,
-          "chain_id_name": chainInfo.chainIdName,
         }));
   }
 

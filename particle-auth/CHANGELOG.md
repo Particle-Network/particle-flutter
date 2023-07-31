@@ -1,3 +1,4 @@
+## 1.0.1
 ## 1.0.0
 Sync Native SDK 1.0.0, support more chains.
 ## 0.15.1

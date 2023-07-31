@@ -11,40 +11,42 @@ import com.connect.common.model.*
 import com.connect.common.utils.AppUtils
 import com.evm.adapter.EVMConnectAdapter
 import com.google.gson.reflect.TypeToken
-import com.particle.base.ChainInfo
-import com.particle.base.ChainName
 import com.particle.base.Env
 import com.particle.base.ParticleNetwork
+import com.particle.base.data.ErrorInfo
 import com.particle.base.data.SignOutput
 import com.particle.base.data.WebServiceCallback
-import com.particle.base.data.WebServiceError
 import com.particle.base.ibiconomy.FeeMode
 import com.particle.base.ibiconomy.FeeModeAuto
 import com.particle.base.ibiconomy.FeeModeCustom
 import com.particle.base.ibiconomy.FeeModeGasless
 import com.particle.base.ibiconomy.MessageSigner
+import com.particle.base.model.ChainType
+import com.particle.base.model.LoginType
+import com.particle.base.model.MobileWCWallet
+import com.particle.base.model.SupportAuthType
 import com.particle.connect.ParticleConnect
 import com.particle.connect.ParticleConnect.setChain
-import com.particle.connect.ParticleConnectAdapter
-import com.particle.connect.ParticleConnectConfig
 import com.particle.connect.model.AdapterAccount
 import com.particle.network.service.LoginPrompt
-import com.particle.network.service.LoginType
-import com.particle.network.service.SupportAuthType
 import com.phantom.adapter.PhantomConnectAdapter
 import com.solana.adapter.SolanaConnectAdapter
 import com.wallet.connect.adapter.*
-import com.wallet.connect.adapter.model.MobileWCWallet
 import io.flutter.plugin.common.EventChannel
 import io.flutter.plugin.common.MethodChannel
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import network.particle.auth_flutter.bridge.utils.ChainUtils
+import network.particle.chains.ChainInfo
 import network.particle.flutter.bridge.model.*
 import network.particle.flutter.bridge.utils.BridgeScope
-import network.particle.flutter.bridge.utils.EncodeUtils
+import network.particle.flutter.bridge.utils.MessageProcess
 import org.json.JSONException
 import org.json.JSONObject
+import particle.auth.adapter.ParticleConnectAdapter
+import particle.auth.adapter.ParticleConnectConfig
+import java.lang.RuntimeException
 
 object ConnectBridge {
     /**
@@ -57,14 +59,16 @@ object ConnectBridge {
     fun init(activity: Activity, initParams: String?) {
         LogUtils.d("init", initParams)
         val initData: InitData = GsonUtils.fromJson(initParams, InitData::class.java)
-        val chainInfo: ChainInfo = getChainInfo(initData.chainName, initData.chainIdName)
+        val chainInfo: ChainInfo = ChainUtils.getChainInfo(initData.chainId)
         val rpcUrl: RpcUrl? = initData.rpcUrl
         val dAppMetadata = initData.metadata
-        val adapter: MutableList<IConnectAdapter> = ArrayList()
-        initAdapter(adapter, rpcUrl)
         ParticleConnect.init(
             activity.application, Env.valueOf(initData.env.uppercase()), chainInfo, dAppMetadata
-        ) { adapter }
+        ) {
+            initAdapter(rpcUrl)
+        }
+        val adapters = ParticleConnect.getAdapters()
+        LogUtils.d("adapters", adapters.size)
     }
 
     fun setChainInfo(chainParams: String, result: MethodChannel.Result) {
@@ -72,9 +76,7 @@ object ConnectBridge {
             chainParams, ChainData::class.java
         )
         try {
-            val chainInfo = getChainInfo(
-                chainData.chainName, chainData.chainIdName
-            )
+            val chainInfo = ChainUtils.getChainInfo(chainData.chainId)
             setChain(chainInfo)
             result.success(true)
         } catch (e: java.lang.Exception) {
@@ -92,7 +94,11 @@ object ConnectBridge {
         result.success(url ?: "")
     }
 
-    fun connect(connectJson: String, result: MethodChannel.Result, events: EventChannel.EventSink?) {
+    fun connect(
+        connectJson: String,
+        result: MethodChannel.Result,
+        events: EventChannel.EventSink?
+    ) {
         LogUtils.d("connectJson", connectJson)
         val connectData: ConnectData = GsonUtils.fromJson(
             connectJson, ConnectData::class.java
@@ -115,33 +121,30 @@ object ConnectBridge {
                     e.printStackTrace()
                 }
             }
-            var loginFormMode = false
-            try {
-                loginFormMode = pnConfig.loginFormMode
-            } catch (e: Exception) {
-                e.printStackTrace()
-            }
+
             var prompt: LoginPrompt? = null
             try {
-                if (pnConfig.prompt != null) if ("none".equals(pnConfig.prompt, ignoreCase = true)) prompt = LoginPrompt.None
-                else if ("consent".equals(pnConfig.prompt, ignoreCase = true)) prompt = LoginPrompt.ConSent
-                else if ("select_account".equals(pnConfig.prompt, ignoreCase = true)) prompt = LoginPrompt.SelectAccount
+                if (pnConfig.prompt != null) if ("none".equals(
+                        pnConfig.prompt,
+                        ignoreCase = true
+                    )
+                ) prompt = LoginPrompt.None
+                else if ("consent".equals(pnConfig.prompt, ignoreCase = true)) prompt =
+                    LoginPrompt.ConSent
+                else if ("select_account".equals(pnConfig.prompt, ignoreCase = true)) prompt =
+                    LoginPrompt.SelectAccount
             } catch (e: Exception) {
                 e.printStackTrace()
             }
             particleConnectConfig = ParticleConnectConfig(
-                LoginType.valueOf(pnConfig.loginType.uppercase()), supportAuthType, loginFormMode, account, prompt
+                LoginType.valueOf(pnConfig.loginType.uppercase()), supportAuthType, account, prompt
             )
         }
 
-        val adapters = ParticleConnect.getAdapters()
-        for (adapter in adapters) {
-            if (adapter.name.equals(connectData.walletType, ignoreCase = true)) {
-                connectAdapter = adapter
-                break
-            }
-        }
-        connectAdapter!!.connect<ConnectConfig>(particleConnectConfig, object : ConnectCallback {
+        val connectAdapter =
+            ParticleConnect.getAdapters().first { it.name.equals(connectData.walletType, true) }
+
+        connectAdapter.connect<ConnectConfig>(particleConnectConfig, object : ConnectCallback {
             override fun onConnected(account: Account) {
                 LogUtils.d("onConnected", account.toString())
                 result.success(FlutterCallBack.success(account).toGson())
@@ -158,7 +161,8 @@ object ConnectBridge {
     }
 
     fun connectWalletConnect(result: MethodChannel.Result, events: EventChannel.EventSink?) {
-        val connectAdapter = ParticleConnect.getAdapters().first { it is WalletConnectAdapter } as WalletConnectAdapter
+        val connectAdapter = ParticleConnect.getAdapters()
+            .first { it is WalletConnectAdapter } as WalletConnectAdapter
         connectAdapter.connect<ConnectConfig>(null, object : ConnectCallback {
             override fun onConnected(account: Account) {
                 LogUtils.d("onConnected", account.toString())
@@ -214,13 +218,7 @@ object ConnectBridge {
             val publicAddress = jsonObject.getString("public_address")
             val connectAdapter = getConnectAdapter(publicAddress, walletType)
             if (connectAdapter == null) {
-                result.success(
-                    FlutterCallBack.failed(
-                        FlutterErrorMessage.parseConnectError(
-                            ConnectError.Unauthorized()
-                        )
-                    ).toGson()
-                )
+                result.success(FlutterCallBack.success(publicAddress).toGson())
                 return
             }
             connectAdapter.disconnect(publicAddress, object : DisconnectCallback {
@@ -232,7 +230,8 @@ object ConnectBridge {
                 override fun onError(error: ConnectError) {
                     LogUtils.d("onError", error.toString())
                     result.success(
-                        FlutterCallBack.failed(FlutterErrorMessage.parseConnectError(error)).toGson()
+                        FlutterCallBack.failed(FlutterErrorMessage.parseConnectError(error))
+                            .toGson()
                     )
                 }
             })
@@ -259,11 +258,7 @@ object ConnectBridge {
             )
             return
         }
-        val message = if (connectAdapter is ParticleConnectAdapter) {
-            EncodeUtils.encode(signData.message)
-        } else {
-            signData.message
-        }
+        val message = MessageProcess.start(signData.message)
         connectAdapter.signMessage(signData.publicAddress, message, object : SignCallback {
             override fun onError(error: ConnectError) {
                 LogUtils.d("onError", error.toString())
@@ -297,50 +292,60 @@ object ConnectBridge {
 
         if (ParticleNetwork.isBiconomyModeEnable()) {
             var feeMode: FeeMode = FeeModeAuto()
-            if(signData.feeMode != null){
+            if (signData.feeMode != null) {
                 val option = signData.feeMode.option
                 feeMode = when (option) {
                     "custom" -> {
                         val feeQuote = signData.feeMode.feeQuote!!
                         FeeModeCustom(feeQuote)
                     }
+
                     "gasless" -> {
                         FeeModeGasless()
                     }
+
                     else -> {
                         FeeModeAuto()
                     }
                 }
             }
-            connectAdapter.signAndSendTransaction(signData.publicAddress, transaction, feeMode, object : TransactionCallback {
-                override fun onError(error: ConnectError) {
-                    LogUtils.d("onError", error.toString())
-                    result.success(
-                        FlutterCallBack.failed(FlutterErrorMessage.parseConnectError(error)).toGson()
-                    )
-                }
+            connectAdapter.signAndSendTransaction(
+                signData.publicAddress,
+                transaction,
+                feeMode,
+                object : TransactionCallback {
+                    override fun onError(error: ConnectError) {
+                        LogUtils.d("onError", error.toString())
+                        result.success(
+                            FlutterCallBack.failed(FlutterErrorMessage.parseConnectError(error))
+                                .toGson()
+                        )
+                    }
 
-                override fun onTransaction(transactionId: String?) {
-                    LogUtils.d("onTransaction", transactionId)
-                    result.success(FlutterCallBack.success(transactionId).toGson())
-                }
-            })
-        }else{
-            connectAdapter.signAndSendTransaction(signData.publicAddress, transaction, object : TransactionCallback {
-                override fun onError(error: ConnectError) {
-                    LogUtils.d("onError", error.toString())
-                    result.success(
-                        FlutterCallBack.failed(FlutterErrorMessage.parseConnectError(error)).toGson()
-                    )
-                }
+                    override fun onTransaction(transactionId: String?) {
+                        LogUtils.d("onTransaction", transactionId)
+                        result.success(FlutterCallBack.success(transactionId).toGson())
+                    }
+                })
+        } else {
+            connectAdapter.signAndSendTransaction(
+                signData.publicAddress,
+                transaction,
+                object : TransactionCallback {
+                    override fun onError(error: ConnectError) {
+                        LogUtils.d("onError", error.toString())
+                        result.success(
+                            FlutterCallBack.failed(FlutterErrorMessage.parseConnectError(error))
+                                .toGson()
+                        )
+                    }
 
-                override fun onTransaction(transactionId: String?) {
-                    LogUtils.d("onTransaction", transactionId)
-                    result.success(FlutterCallBack.success(transactionId).toGson())
-                }
-            })
+                    override fun onTransaction(transactionId: String?) {
+                        LogUtils.d("onTransaction", transactionId)
+                        result.success(FlutterCallBack.success(transactionId).toGson())
+                    }
+                })
         }
-
 
 
     }
@@ -390,20 +395,24 @@ object ConnectBridge {
             )
             return
         }
-        connectAdapter.signAllTransactions(signData.publicAddress, signData.transactions.toTypedArray(), object : SignAllCallback {
+        connectAdapter.signAllTransactions(
+            signData.publicAddress,
+            signData.transactions.toTypedArray(),
+            object : SignAllCallback {
 
-            override fun onError(error: ConnectError) {
-                LogUtils.d("onError", error.toString())
-                result.success(
-                    FlutterCallBack.failed(FlutterErrorMessage.parseConnectError(error)).toGson()
-                )
-            }
+                override fun onError(error: ConnectError) {
+                    LogUtils.d("onError", error.toString())
+                    result.success(
+                        FlutterCallBack.failed(FlutterErrorMessage.parseConnectError(error))
+                            .toGson()
+                    )
+                }
 
-            override fun onSigned(signatures: List<String>) {
-                LogUtils.d("onSigned", signatures.toString())
-                result.success(FlutterCallBack.success(signatures).toGson())
-            }
-        })
+                override fun onSigned(signatures: List<String>) {
+                    LogUtils.d("onSigned", signatures.toString())
+                    result.success(FlutterCallBack.success(signatures).toGson())
+                }
+            })
 
     }
 
@@ -420,7 +429,7 @@ object ConnectBridge {
             )
             return
         }
-        val typedData = EncodeUtils.encode(signData.message)
+        val typedData = MessageProcess.start(signData.message)
         connectAdapter.signTypedData(signData.publicAddress, typedData, object : SignCallback {
             override fun onError(error: ConnectError) {
                 LogUtils.d("onError", error.toString())
@@ -576,62 +585,11 @@ object ConnectBridge {
     }
 
     fun addEthereumChain(jsonParams: String, result: MethodChannel.Result) {
-        LogUtils.d("addEthereumChain", jsonParams)
-        val addSwitchChain = GsonUtils.fromJson(jsonParams, AddSwitchChain::class.java)
-        val connectAdapter = getConnectAdapter(addSwitchChain.publicAddress, addSwitchChain.walletType)
-        if (connectAdapter == null) {
-            result.success(
-                FlutterCallBack.failed(
-                    FlutterErrorMessage.parseConnectError(
-                        ConnectError.Unauthorized()
-                    )
-                ).toGson()
-            )
-            return
-        }
-        val chainInfo: ChainInfo = getChainInfo(addSwitchChain.chainName, addSwitchChain.chainIdName)
-
-        connectAdapter.addEthereumChain(addSwitchChain.publicAddress, chainInfo, object : AddETHChainCallback {
-            override fun onAdded() {
-                result.success(FlutterCallBack.success("success").toGson())
-            }
-
-            override fun onError(error: ConnectError) {
-                result.success(FlutterCallBack.failed(FlutterErrorMessage.parseConnectError(error)).toGson())
-            }
-
-        })
-
-
+        throw RuntimeException("not support")
     }
 
     fun switchEthereumChain(jsonParams: String, result: MethodChannel.Result) {
-        LogUtils.d("switchEthereumChain", jsonParams)
-        val addSwitchChain = GsonUtils.fromJson(jsonParams, AddSwitchChain::class.java)
-        val connectAdapter = getConnectAdapter(addSwitchChain.publicAddress, addSwitchChain.walletType)
-        if (connectAdapter == null) {
-            result.success(
-                FlutterCallBack.failed(
-                    FlutterErrorMessage.parseConnectError(
-                        ConnectError.Unauthorized()
-                    )
-                ).toGson()
-            )
-            return
-        }
-        val chainInfo: ChainInfo = getChainInfo(addSwitchChain.chainName, addSwitchChain.chainIdName)
-
-        connectAdapter.switchEthereumChain(addSwitchChain.publicAddress, chainInfo.chainId.value(), object : SwitchETHChainCallback {
-
-            override fun onError(error: ConnectError) {
-                result.success(FlutterCallBack.failed(FlutterErrorMessage.parseConnectError(error)).toGson())
-            }
-
-            override fun onSwitched() {
-                result.success(FlutterCallBack.success("success").toGson())
-            }
-
-        })
+        throw RuntimeException("not support")
     }
 
     val supportChains: List<ChainType> = listOf(ChainType.EVM)
@@ -657,7 +615,8 @@ object ConnectBridge {
             MobileWCWallet.TTWallet,
         )
         val firstWallet = allWallets.first {
-            it.name.lowercase() == walletType.lowercase() || it.name.lowercase().contains(walletType.lowercase()) || walletType.lowercase()
+            it.name.lowercase() == walletType.lowercase() || it.name.lowercase()
+                .contains(walletType.lowercase()) || walletType.lowercase()
                 .contains(it.name.lowercase())
         }
         if (firstWallet == null) {
@@ -678,7 +637,14 @@ object ConnectBridge {
 
     //get adapter
     fun getConnectAdapter(publicAddress: String, walletType: String): IConnectAdapter? {
-        val adapters = ParticleConnect.getAdapterByAddress(publicAddress)
+        val allAdapters = ParticleConnect.getAdapters().filter {
+            it.name.equals(walletType, true)
+        }
+        val adapters = allAdapters.filter {
+            val accounts = it.getAccounts()
+            accounts.any { account -> account.publicAddress.equals(publicAddress, true) }
+        }
+//            val adapters = ParticleConnect.getAdapterByAddress(publicAddress)
         var connectAdapter: IConnectAdapter? = null
         if (adapters.isNotEmpty()) {
             connectAdapter = adapters[0]
@@ -705,95 +671,59 @@ object ConnectBridge {
     }
 
 
-    private fun initAdapter(adapter: MutableList<IConnectAdapter>, rpcUrl: RpcUrl?) {
-        try {
-            adapter.add(ParticleConnectAdapter())
-        } catch (ignored: Exception) {
+    private fun initAdapter(rpcUrl: RpcUrl?): List<IConnectAdapter> {
+        val adapters = mutableListOf<IConnectAdapter>(
+            ParticleConnectAdapter(),
+            MetaMaskConnectAdapter(),
+            RainbowConnectAdapter(),
+            TrustConnectAdapter(),
+            ImTokenConnectAdapter(),
+            BitKeepConnectAdapter(),
+            WalletConnectAdapter(),
+            PhantomConnectAdapter(),
+        )
+        if (rpcUrl != null) {
+            adapters.add(EVMConnectAdapter(rpcUrl.evmUrl))
+        } else {
+            adapters.add(EVMConnectAdapter())
         }
-        try {
-            adapter.add(MetaMaskConnectAdapter())
-        } catch (ignored: Exception) {
+
+        if (rpcUrl != null) {
+            adapters.add(SolanaConnectAdapter(rpcUrl.solUrl))
+        } else {
+            adapters.add(SolanaConnectAdapter())
         }
-        try {
-            adapter.add(RainbowConnectAdapter())
-        } catch (ignored: Exception) {
-        }
-        try {
-            adapter.add(TrustConnectAdapter())
-        } catch (ignored: Exception) {
-        }
-        try {
-            adapter.add(PhantomConnectAdapter())
-        } catch (ignored: Exception) {
-        }
-        try {
-            adapter.add(WalletConnectAdapter())
-        } catch (ignored: Exception) {
-        }
-        try {
-            adapter.add(ImTokenConnectAdapter())
-        } catch (ignored: Exception) {
-        }
-        try {
-            adapter.add(BitKeepConnectAdapter())
-        } catch (ignored: Exception) {
-        }
-        try {
-            if (rpcUrl != null) {
-                adapter.add(EVMConnectAdapter(rpcUrl.evmUrl))
-            } else {
-                adapter.add(EVMConnectAdapter())
-            }
-        } catch (ignored: Exception) {
-        }
-        try {
-            if (rpcUrl != null) {
-                adapter.add(SolanaConnectAdapter(rpcUrl.solUrl))
-            } else {
-                adapter.add(SolanaConnectAdapter())
-            }
-        } catch (ignored: Exception) {
-        }
+        return adapters;
     }
 
     fun getChainInfo(result: MethodChannel.Result) {
         val chainInfo: ChainInfo = ParticleNetwork.chainInfo
         val map: MutableMap<String, Any> = HashMap()
-        map["chain_name"] = chainInfo.chainName.name
-        map["chain_id_name"] = chainInfo.chainId.toString()
-        map["chain_id"] = chainInfo.chainId.value()
+        map["chain_name"] = chainInfo.name
+        map["chain_id"] = chainInfo.id
         result.success(Gson().toJson(map))
     }
 
-    fun setWalletConnectV2SupportChainInfos(chainsString: String?, result: MethodChannel.Result) {
+    fun setWalletConnectV2SupportChainInfos(
+        chainsString: String?,
+        result: MethodChannel.Result
+    ) {
         LogUtils.d("setWalletConnectV2SupportChainInfos", chainsString)
-        val initData: List<InitData> = GsonUtils.fromJson(chainsString, object : TypeToken<List<InitData>>() {}.type)
+        val initData: List<InitData> =
+            GsonUtils.fromJson(chainsString, object : TypeToken<List<InitData>>() {}.type)
 //        val initData: InitData = GsonUtils.fromJson(initParams, InitData::class.java)
         val chainInfos = mutableListOf<ChainInfo>()
         initData.forEach {
-            chainInfos.add(getChainInfo(it.chainName, it.chainIdName))
+            chainInfos.add(ChainUtils.getChainInfo(it.chainId))
         }
         ParticleConnect.setWalletConnectV2SupportChainInfos(chainInfos)
     }
 
-    private fun getChainInfo(chainName: String, chainIdName: String?): ChainInfo {
-        var chainNameTmp = chainName
-        if (ChainName.BSC.toString() == chainName) {
-            chainNameTmp = "Bsc"
-        }
-        return try {
-            val clazz1 = Class.forName("com.particle.base." + chainNameTmp + "Chain")
-            val cons = clazz1.getConstructor(String::class.java)
-            cons.newInstance(chainIdName) as ChainInfo
-        } catch (e: java.lang.Exception) {
-            e.printStackTrace()
-            throw RuntimeException(e.message)
-        }
-    }
 
     fun batchSendTransactions(transactions: String, result: MethodChannel.Result) {
         LogUtils.d("batchSendTransactions", transactions)
-        val signData = GsonUtils.fromJson<ConnectSignData>(transactions, ConnectSignData::class.java)
+        val signData =
+            GsonUtils.fromJson<ConnectSignData>(transactions, ConnectSignData::class.java)
         val connectAdapter = getConnectAdapter(signData.publicAddress, signData.walletType)
         if (connectAdapter == null) {
             result.success(
@@ -819,52 +749,86 @@ object ConnectBridge {
         }
         CoroutineScope(Dispatchers.IO).launch {
             try {
-                ParticleNetwork.getBiconomyService().quickSendTransaction(signData.transactions, feeMode, object : MessageSigner {
-                    override fun signTypedData(message: String, callback: WebServiceCallback<SignOutput>) {
+                ParticleNetwork.getBiconomyService()
+                    .quickSendTransaction(
+                        signData.transactions,
+                        feeMode,
+                        object : MessageSigner {
+                            override fun signTypedData(
+                                message: String,
+                                callback: WebServiceCallback<SignOutput>
+                            ) {
 
-                        connectAdapter.signTypedData(signData.publicAddress, message, object : SignCallback {
-                            override fun onError(error: ConnectError) {
-                                callback.failure(WebServiceError(error.message, error.code))
+                                connectAdapter.signTypedData(
+                                    signData.publicAddress,
+                                    message,
+                                    object : SignCallback {
+                                        override fun onError(error: ConnectError) {
+                                            callback.failure(
+                                                ErrorInfo(
+                                                    error.message,
+                                                    error.code
+                                                )
+                                            )
+                                        }
+
+                                        override fun onSigned(signature: String) {
+                                            callback.success(SignOutput(signature))
+                                        }
+
+                                    })
                             }
 
-                            override fun onSigned(signature: String) {
-                                callback.success(SignOutput(signature))
+                            override fun signMessage(
+                                message: String,
+                                callback: WebServiceCallback<SignOutput>
+                            ) {
+                                connectAdapter.signMessage(
+                                    signData.publicAddress,
+                                    message,
+                                    object : SignCallback {
+                                        override fun onError(error: ConnectError) {
+                                            callback.failure(
+                                                ErrorInfo(
+                                                    error.message,
+                                                    error.code
+                                                )
+                                            )
+                                        }
+
+                                        override fun onSigned(signature: String) {
+                                            callback.success(SignOutput(signature))
+                                        }
+
+                                    })
+
                             }
 
+                            override fun eoaAddress(): String {
+                                return connectAdapter.getAccounts()[0].publicAddress
+                            }
+
+                        },
+                        object : WebServiceCallback<SignOutput> {
+                            override fun success(output: SignOutput) {
+                                result.success(
+                                    FlutterCallBack.success(output.signature!!).toGson()
+                                )
+                            }
+
+                            override fun failure(errMsg: ErrorInfo) {
+                                result.success(FlutterCallBack.failed(errMsg).toGson())
+                            }
                         })
-                    }
-
-                    override fun signMessage(message: String, callback: WebServiceCallback<SignOutput>) {
-                        connectAdapter.signMessage(signData.publicAddress, message, object : SignCallback {
-                            override fun onError(error: ConnectError) {
-                                callback.failure(WebServiceError(error.message, error.code))
-                            }
-
-                            override fun onSigned(signature: String) {
-                                callback.success(SignOutput(signature))
-                            }
-
-                        })
-
-                    }
-
-                    override fun eoaAddress(): String {
-                        return connectAdapter.getAccounts()[0].publicAddress
-                    }
-
-                }, object : WebServiceCallback<SignOutput> {
-                    override fun success(output: SignOutput) {
-                        result.success(FlutterCallBack.success(output.signature!!).toGson())
-                    }
-
-                    override fun failure(errMsg: WebServiceError) {
-                        result.success(FlutterCallBack.failed(errMsg).toGson())
-                    }
-                })
             } catch (e: Exception) {
                 e.printStackTrace()
-                result.success(network.particle.auth_flutter.bridge.model.FlutterCallBack.failed("failed").toGson())
+                result.success(
+                    network.particle.auth_flutter.bridge.model.FlutterCallBack.failed("failed")
+                        .toGson()
+                )
             }
         }
     }
+
+
 }
