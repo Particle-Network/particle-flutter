@@ -548,6 +548,18 @@ class AuthDemoPageState extends State<AuthDemoPage> {
                       style: TextStyle(fontSize: 18),
                     )),
               ),
+            ),Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: SizedBox(
+                width: double.infinity,
+                height: 50,
+                child: ElevatedButton(
+                    onPressed: () => {AuthLogic.setWebAuthConfig()},
+                    child: const Text(
+                      "setWebAuthConfig",
+                      style: TextStyle(fontSize: 18),
+                    )),
+              ),
             ),
           ],
         ),

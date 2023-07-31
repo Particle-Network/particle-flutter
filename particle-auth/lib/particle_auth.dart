@@ -61,7 +61,6 @@ class ParticleAuth {
           'initialize',
           jsonEncode({
             "chain_name": chainInfo.chainName,
-            "chain_id_name": chainInfo.chainIdName,
             "chain_id": chainInfo.chainId,
             "env": env.name
           }));
@@ -70,7 +69,6 @@ class ParticleAuth {
           'init',
           jsonEncode({
             "chain_name": chainInfo.chainName,
-            "chain_id_name": chainInfo.chainIdName,
             "chain_id": chainInfo.chainId,
             "env": env.name
           }));
@@ -217,7 +215,6 @@ class ParticleAuth {
         'setChainInfo',
         jsonEncode({
           "chain_name": chainInfo.chainName,
-          "chain_id_name": chainInfo.chainIdName,
           "chain_id": chainInfo.chainId,
         }));
   }
@@ -233,7 +230,6 @@ class ParticleAuth {
         'setChainInfoAsync',
         jsonEncode({
           "chain_name": chainInfo.chainName,
-          "chain_id_name": chainInfo.chainIdName,
           "chain_id": chainInfo.chainId,
         }));
   }
@@ -258,23 +254,15 @@ class ParticleAuth {
 
   /// Set web auth config
   static setWebAuthConfig(bool displayWallet, Appearance appearance) {
-    if (Platform.isIOS) {
-      _channel.invokeMethod(
-          'setWebAuthConfig',
-          jsonEncode({
-            "display_wallet": displayWallet,
-            "appearance": appearance.name
-          }));
-    }
-    // todo
+    _channel.invokeMethod(
+        'setWebAuthConfig',
+        jsonEncode(
+            {"display_wallet": displayWallet, "appearance": appearance.name}));
   }
 
   /// Set user inerface style
   static setAppearance(Appearance appearance) {
-    if (Platform.isIOS) {
-      _channel.invokeMethod("setAppearance", appearance.name);
-    }
-    // todo
+    _channel.invokeMethod("setAppearance", appearance.name);
   }
 
   /// Set security account config
@@ -339,19 +327,11 @@ class ParticleAuth {
 
   /// sync secuirty account from remote server
   static Future<String?> getSecurityAccount() async {
-    if (Platform.isIOS) {
-      return await _channel.invokeMethod("getSecurityAccount");
-    } else {
-      // todo
-      return null;
-    }
+    return await _channel.invokeMethod("getSecurityAccount");
   }
 
   /// set fiat coin
   static setFiatCoin(FiatCoin fiatCoin) {
-    if (Platform.isIOS) {
-      _channel.invokeMethod("setFiatCoin", fiatCoin.name);
-    }
-    // todo
+    _channel.invokeMethod("setFiatCoin", fiatCoin.name);
   }
 }

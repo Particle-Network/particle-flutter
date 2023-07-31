@@ -7,7 +7,7 @@ class InitData {
     var chainName: String? = null
 
     @SerializedName("chain_id")
-    var chainId = 0
+    var chainId: Long = 0
 
     @SerializedName("chain_id_name")
     var chainIdName: String? = null

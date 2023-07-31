@@ -273,7 +273,6 @@ class AuthLogic {
     print(result);
     String chainName = jsonDecode(result)["chain_name"];
     int chainId = jsonDecode(result)["chain_id"];
-    String chainIdName = jsonDecode(result)["chain_id_name"];
 
     ChainInfo? chainInfo;
     if (chainId == EthereumChain.mainnet().chainId) {
@@ -568,6 +567,7 @@ class AuthLogic {
 
   static void getSecurityAccount() async {
     final result = await ParticleAuth.getSecurityAccount();
+    print("getSecurityAccount: $result");
     if (result == null) return;
 
     if (jsonDecode(result)["status"] == true ||

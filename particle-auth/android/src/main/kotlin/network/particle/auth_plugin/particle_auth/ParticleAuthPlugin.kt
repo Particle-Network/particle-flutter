@@ -71,6 +71,7 @@ class ParticleAuthPlugin : FlutterPlugin, MethodCallHandler, ActivityAware {
             "signAllTransactions" -> {
                 AuthBridge.signAllTransactions(call.arguments as String, result)
             }
+
             "batchSendTransactions" -> {
                 AuthBridge.batchSendTransactions(call.arguments as String, result)
             }
@@ -107,24 +108,36 @@ class ParticleAuthPlugin : FlutterPlugin, MethodCallHandler, ActivityAware {
                 AuthBridge.setLanguage(call.arguments as String)
             }
 
-            "openAccountAndSecurity" -> {
-                AuthBridge.openAccountAndSecurity()
+            "setAppearance" -> {
+                AuthBridge.setAppearance(call.arguments as String)
             }
 
-            "setUserInfo" -> {
-                AuthBridge.setUserInfo(call.arguments as String, result)
+            "setFiatCoin" -> {
+                AuthBridge.setFiatCoin(call.arguments as String)
+            }
+
+            "openAccountAndSecurity" -> {
+                AuthBridge.openAccountAndSecurity()
             }
 
             "isLogin" -> {
                 AuthBridge.isLogin(result)
             }
 
+            "getSecurityAccount" -> {
+                AuthBridge.getSecurityAccount(result)
+            }
 
             "isLoginAsync" -> {
                 AuthBridge.isLoginAsync(result)
             }
+
             "openWebWallet" -> {
-                AuthBridge.openWebWallet(activity!!,call.arguments as String,result)
+                AuthBridge.openWebWallet(activity!!, call.arguments as String, result)
+            }
+
+            "setWebAuthConfig" -> {
+                AuthBridge.setWebAuthConfig(activity!!, call.arguments as String, result)
             }
 
 
