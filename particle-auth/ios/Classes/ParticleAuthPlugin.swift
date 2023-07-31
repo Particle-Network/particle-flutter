@@ -102,7 +102,7 @@ public class ParticleAuthPlugin: NSObject, FlutterPlugin {
         case .setWebAuthConfig:
             self.setWebAuthConfig(json as? String)
         case .openWebWallet:
-            self.openWebWallet()
+            self.openWebWallet(json as? String)
         case .setCustomStyle:
             self.setCustomStyle(json as? String)
         case .setMediumScreen:
@@ -669,8 +669,8 @@ public extension ParticleAuthPlugin {
         ParticleAuthService.setWebAuthConfig(options: .init(isDisplayWallet: isDisplayWallet, appearance: style))
     }
     
-    func openWebWallet() {
-        ParticleAuthService.openWebWallet()
+    func openWebWallet(_ json: String?) {
+        ParticleAuthService.openWebWallet(styleJsonString: json)
     }
 
     func setCustomStyle(_ json: String?) {

@@ -33,13 +33,13 @@ export '../model/fiat_coin.dart';
 
 /// A utility class for string operations.
 class StringUtils {
-  
   /// Converts a string to a hexadecimal string.
   ///
-  /// The [input] string is first converted to UTF-8 bytes, 
+  /// The [input] string is first converted to UTF-8 bytes,
   /// and then each byte is converted to a two-digit hexadecimal number.
   static String toHexString(String input) {
-    return utf8.encode(input)
+    return utf8
+        .encode(input)
         .map((e) => e.toRadixString(16).padLeft(2, '0'))
         .join();
   }
@@ -253,12 +253,7 @@ class ParticleAuth {
 
   /// Open web wallet
   static openWebWallet(String jsonStringConfig) async {
-    if (Platform.isIOS) {
-      _channel.invokeMethod('setCustomStyle', jsonStringConfig);
-      _channel.invokeMethod('openWebWallet');
-    } else {
-      _channel.invokeMethod('openWebWallet', jsonStringConfig);
-    }
+    _channel.invokeMethod('openWebWallet', jsonStringConfig);
   }
 
   /// Set web auth config
@@ -355,8 +350,8 @@ class ParticleAuth {
   /// set fiat coin
   static setFiatCoin(FiatCoin fiatCoin) {
     if (Platform.isIOS) {
-    _channel.invokeMethod("setFiatCoin", fiatCoin.name);
-    } 
+      _channel.invokeMethod("setFiatCoin", fiatCoin.name);
+    }
     // todo
   }
 }
