@@ -44,6 +44,7 @@ import com.particle.network.ParticleNetworkAuth.signMessage
 import com.particle.network.ParticleNetworkAuth.signMessageUnique
 import com.particle.network.ParticleNetworkAuth.signTransaction
 import com.particle.network.ParticleNetworkAuth.signTypedData
+import com.particle.network.ParticleNetworkAuth.switchChain
 import com.particle.network.SignTypedDataVersion
 import com.particle.network.service.*
 import io.flutter.plugin.common.MethodChannel
@@ -377,7 +378,17 @@ object AuthBridge {
             chainParams, ChainData::class.java
         )
         val chainInfo = ChainUtils.getChainInfo(chainData.chainId)
-        ParticleNetwork.setChainInfo(chainInfo)
+        ParticleNetwork.switchChain(chainInfo, object : ResultCallback {
+            override fun failure() {
+                result.success(false)
+            }
+
+            override fun success() {
+                result.success(true)
+            }
+
+        })
+
     }
 
     fun getAddress(result: MethodChannel.Result) {
@@ -470,7 +481,9 @@ object AuthBridge {
 
     fun setAppearance(appearance: String) {
         ParticleNetwork.setAppearence(ThemeEnum.valueOf(appearance.uppercase()))
-    }  fun setFiatCoin(fiatCoin: String) {
+    }
+
+    fun setFiatCoin(fiatCoin: String) {
         ParticleNetwork.setFiatCoin(CurrencyEnum.valueOf(fiatCoin.uppercase()))
     }
 
