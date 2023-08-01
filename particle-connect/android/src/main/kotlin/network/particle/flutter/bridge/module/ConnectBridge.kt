@@ -637,19 +637,23 @@ object ConnectBridge {
 
     //get adapter
     fun getConnectAdapter(publicAddress: String, walletType: String): IConnectAdapter? {
-        val allAdapters = ParticleConnect.getAdapters().filter {
-            it.name.equals(walletType, true)
+        try {
+            val allAdapters = ParticleConnect.getAdapters().filter {
+                it.name.equals(walletType, true)
+            }
+            val adapters = allAdapters.filter {
+                val accounts = it.getAccounts()
+                accounts.any { account -> account.publicAddress.equals(publicAddress, true) }
+            }
+            var connectAdapter: IConnectAdapter? = null
+            if (adapters.isNotEmpty()) {
+                connectAdapter = adapters[0]
+            }
+            return connectAdapter
+        } catch (e: Exception) {
+            return null
         }
-        val adapters = allAdapters.filter {
-            val accounts = it.getAccounts()
-            accounts.any { account -> account.publicAddress.equals(publicAddress, true) }
-        }
-//            val adapters = ParticleConnect.getAdapterByAddress(publicAddress)
-        var connectAdapter: IConnectAdapter? = null
-        if (adapters.isNotEmpty()) {
-            connectAdapter = adapters[0]
-        }
-        return connectAdapter
+
     }
 
     fun getPrivateKeyAdapter(): ILocalAdapter? {

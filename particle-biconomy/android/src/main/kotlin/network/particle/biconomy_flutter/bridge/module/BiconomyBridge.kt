@@ -1,15 +1,10 @@
 package network.particle.biconomy_flutter.bridge.module
 
 import android.app.Activity
-import android.text.TextUtils
 import androidx.annotation.Keep
 import com.blankj.utilcode.util.GsonUtils
 import com.blankj.utilcode.util.LogUtils
-import com.particle.base.Env
-import com.particle.base.LanguageEnum
 import com.particle.base.ParticleNetwork
-import com.particle.base.data.ServerError
-import com.particle.base.data.WebServiceError
 import com.particle.base.isSupportedERC4337
 import com.particle.base.model.BiconomyVersion
 import com.particle.erc4337.ParticleNetworkBiconomy.initBiconomyMode
@@ -21,8 +16,8 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import network.particle.auth_flutter.bridge.model.ChainData
 import network.particle.auth_flutter.bridge.model.FlutterCallBack
+import network.particle.auth_flutter.bridge.utils.ChainUtils
 import network.particle.biconomy_flutter.bridge.model.*
-import network.particle.biconomy_flutter.bridge.utils.ChainUtils
 
 @Keep
 object BiconomyBridge {
@@ -50,7 +45,7 @@ object BiconomyBridge {
             ChainData::class.java
         )
         try {
-            val chainInfo = ChainUtils.getChainInfo(chainData.chainName!!, chainData.chainIdName)
+            val chainInfo = ChainUtils.getChainInfo(chainData.chainId)
             val isSupportedERC4337 = chainInfo.isSupportedERC4337()
             result.success(isSupportedERC4337)
         } catch (e: Exception) {
@@ -65,7 +60,7 @@ object BiconomyBridge {
                 val isDeploy = ParticleNetwork.getBiconomyService().isDeploy(eoaAddress)
                 result.success(FlutterCallBack.success(isDeploy).toGson())
             } catch (e: Exception) {
-                result.success(FlutterCallBack.failed(WebServiceError(e.message ?: "failed", 10000)).toGson())
+                result.success(FlutterCallBack.failed(e.message ?: "failed").toGson())
             }
         }
     }
@@ -97,10 +92,10 @@ object BiconomyBridge {
                 if (resp.isSuccess()) {
                     result.success(FlutterCallBack.success(resp.result).toGson())
                 } else {
-                    result.success(FlutterCallBack.failed(WebServiceError(resp.error?.message ?: "failed", resp.error?.code ?: 10000)).toGson())
+                    result.success(FlutterCallBack.failed(resp.error?.message ?: "failed").toGson())
                 }
             } catch (e: Exception) {
-                result.success(FlutterCallBack.failed(WebServiceError(e.message ?: "failed", 10000)).toGson())
+                result.success(FlutterCallBack.failed(e.message ?: "failed").toGson())
             }
         }
     }

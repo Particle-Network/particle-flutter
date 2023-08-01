@@ -43,7 +43,6 @@ class ParticleBiconomy {
         'isSupportChainInfo',
         jsonEncode({
           "chain_name": chainInfo.chainName,
-          "chain_id_name": chainInfo.chainIdName,
           "chain_id": chainInfo.chainId,
         }));
   }

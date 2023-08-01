@@ -10,10 +10,9 @@ public class SupportChain {
     public String chainName;
 
     @SerializedName("chain_id")
-    public int chainId;
+    public long chainId;
 
-    @SerializedName("chain_id_name")
-    public String chainIdName;
+
 
     @SerializedName("env")
     public String env;

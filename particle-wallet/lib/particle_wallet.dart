@@ -164,22 +164,12 @@ class ParticleWallet {
 
   /// Set show test network.
   static setShowTestNetwork(bool enable) {
-    if (Platform.isIOS) {
-      _channel.invokeMethod('setShowTestNetwork', enable);
-    } else {
-      // todo
-      _channel.invokeMethod('showTestNetwork', enable);
-    }
+    _channel.invokeMethod('setShowTestNetwork', enable);
   }
 
   /// Set show manage wallet page.
   static setShowManageWallet(bool enable) {
-    if (Platform.isIOS) {
-      _channel.invokeMethod('setShowManageWallet', enable);
-    } else {
-      // todo
-      _channel.invokeMethod('showManageWallet', enable);
-    }
+    _channel.invokeMethod('setShowManageWallet', enable);
   }
 
   /// Set support chain list
@@ -189,16 +179,10 @@ class ParticleWallet {
       ChainInfo chainInfo = chainInfos[i];
       allInfos.add({
         "chain_name": chainInfo.chainName,
-        "chain_id_name": chainInfo.chainIdName,
         "chain_id": chainInfo.chainId,
       });
     }
-    if (Platform.isIOS) {
-      _channel.invokeMethod('setSupportChain', jsonEncode(allInfos));
-    } else {
-      // todo
-      _channel.invokeMethod('supportChain', jsonEncode(allInfos));
-    }
+    _channel.invokeMethod('setSupportChain', jsonEncode(allInfos));
   }
 
   /// Switch wallet
@@ -250,31 +234,17 @@ class ParticleWallet {
 
   /// Set support dapp broswer in wallet page, default is true
   static setSupportDappBrowser(bool enable) {
-    if (Platform.isIOS) {
-      _channel.invokeMethod("setSupportDappBrowser", enable);
-    } else {
-      // todo
-      _channel.invokeMethod("supportDappBrowser", enable);
-    }
+    _channel.invokeMethod("setSupportDappBrowser", enable);
   }
 
   /// Set show language setting button in setting page.
   static setShowLanguageSetting(bool isShow) {
-    if (Platform.isIOS) {
-      _channel.invokeMethod("setShowLanguageSetting", isShow);
-    } else {
-      // todo
-      _channel.invokeMethod("showLanguageSetting", isShow);
-    }
+    _channel.invokeMethod("setShowLanguageSetting", isShow);
   }
 
   /// Set show appearance setting button in setting page.
   static setShowAppearanceSetting(bool isShow) {
-    if (Platform.isIOS) {
-      _channel.invokeMethod("setShowAppearanceSetting", isShow);
-    } else {
-      _channel.invokeMethod("showAppearanceSetting", isShow);
-    }
+    _channel.invokeMethod("setShowAppearanceSetting", isShow);
   }
 
   /// Set support add token, true will show add token button, false will hide add token button.
@@ -323,8 +293,6 @@ class ParticleWallet {
     if (Platform.isIOS) {
       _channel.invokeListMethod(
           "setWalletConnectV2ProjectId", walletConnectV2ProjectId);
-    } else {
-      // todo
     }
   }
 }

@@ -7,22 +7,18 @@ import com.blankj.utilcode.util.GsonUtils
 import com.blankj.utilcode.util.LogUtils
 import com.connect.common.IConnectAdapter
 import com.google.gson.reflect.TypeToken
-import com.particle.api.infrastructure.db.table.WalletType
 import com.particle.api.service.DBService
-import com.particle.base.ChainInfo
-import com.particle.base.ChainName
 import com.particle.base.ParticleNetwork
+import com.particle.base.model.MobileWCWalletName
 import com.particle.base.utils.PrefUtils
+import com.particle.connect.ParticleConnect
 import com.particle.gui.ParticleWallet
 import com.particle.gui.ParticleWallet.displayNFTContractAddresses
 import com.particle.gui.ParticleWallet.displayTokenAddresses
-import com.particle.gui.ParticleWallet.enablePay
-import com.particle.gui.ParticleWallet.enableSwap
 import com.particle.gui.ParticleWallet.getEnablePay
 import com.particle.gui.ParticleWallet.getEnableSwap
-import com.particle.gui.ParticleWallet.navigatorBuy
-import com.particle.gui.ParticleWallet.openBuy
-import com.particle.gui.ParticleWallet.supportWalletConnect
+import com.particle.gui.ParticleWallet.setSupportWalletConnect
+import com.particle.gui.ParticleWallet.setSwapDisabled
 import com.particle.gui.router.PNRouter
 import com.particle.gui.router.RouterPath
 import com.particle.gui.ui.nft_detail.NftDetailParams
@@ -31,15 +27,14 @@ import com.particle.gui.ui.send.WalletSendParams
 import com.particle.gui.ui.swap.SwapConfig
 import com.particle.gui.ui.token_detail.TokenTransactionRecordsParams
 import com.particle.gui.utils.WalletUtils
-import com.particle.network.ParticleNetworkAuth
 import com.particle.network.ParticleNetworkAuth.getAddress
-import com.particle.network.ParticleNetworkAuth.openBuy
 import io.flutter.plugin.common.MethodChannel
 import kotlinx.coroutines.launch
+import network.particle.auth_flutter.bridge.utils.ChainUtils
+import network.particle.chains.ChainInfo
 import network.particle.flutter.bridge.ui.FlutterLoginOptActivity
 import network.particle.flutter.bridge.utils.BridgeScope
 import network.particle.flutter.bridge.utils.WalletScope
-import network.particle.flutter.bridge.utils.WalletTypeParser
 import org.json.JSONObject
 import java.math.BigInteger
 
@@ -61,7 +56,7 @@ object WalletBridge {
         if (!isUIModuleInit()) return;
         WalletScope.launch {
             val address = ParticleNetwork.getAddress()
-            val wallet = WalletUtils.createSelectedWallet(address, WalletType.PN_WALLET)
+            val wallet = WalletUtils.createSelectedWallet(address, MobileWCWalletName.Particle.name)
             WalletUtils.setWalletChain(wallet)
 
         }
@@ -78,9 +73,9 @@ object WalletBridge {
         val jsonObject = JSONObject(jsonParams);
         val walletType = jsonObject.getString("wallet_type");
         val publicKey = jsonObject.getString("public_address");
-        val type = WalletTypeParser.getWalletType(walletType);
+        val adapter = ParticleConnect.getAdapters().first{it.name.equals(walletType,true)}
         BridgeScope.launch {
-            val wallet = WalletUtils.createSelectedWallet(publicKey, type)
+            val wallet = WalletUtils.createSelectedWallet(publicKey, adapter)
             WalletUtils.setWalletChain(wallet)
         }
     }
@@ -173,7 +168,7 @@ object WalletBridge {
     fun logoutWallet(publicAddress: String) {
         if (!isUIModuleInit()) return;
         WalletScope.launch {
-            DBService.walletDao.deleteWallet(publicAddress)
+            DBService.walletInfoDao.deleteWallet(publicAddress)
         }
     }
 
@@ -191,7 +186,6 @@ object WalletBridge {
     }
 
     fun enablePay(enable: Boolean) {
-        ParticleNetwork.enablePay(enable)
     }
 
     fun navigatorBuyCrypto(activity: Activity, json: String) {
@@ -258,12 +252,12 @@ object WalletBridge {
 
     }
 
-    fun showTestNetwork(show: Boolean) {
-        ParticleWallet.showTestNetworks(show)
+    fun setShowTestNetwork(show: Boolean) {
+        ParticleWallet.setShowTestNetworkSetting(show)
     }
 
-    fun showManageWallet(show: Boolean) {
-        ParticleWallet.showManageWallet(show)
+    fun setShowManageWallet(show: Boolean) {
+        ParticleWallet.setShowManageWalletSetting(show)
     }
 
     var loginOptCallback: MethodChannel.Result? = null
@@ -286,7 +280,7 @@ object WalletBridge {
         )
         val supportChains: MutableList<ChainInfo> = java.util.ArrayList()
         for (chain in chains) {
-            val chainInfo: ChainInfo = getChainInfo(chain.chainName, chain.chainIdName)
+            val chainInfo: ChainInfo = ChainUtils.getChainInfo(chain.chainId)
             supportChains.add(chainInfo)
         }
         ParticleWallet.setSupportChain(supportChains)
@@ -297,10 +291,9 @@ object WalletBridge {
             val jsonObject = JSONObject(jsonParams);
             val walletType = jsonObject.getString("wallet_type");
             val publicKey = jsonObject.getString("public_address");
-            val type = WalletTypeParser.getWalletType(walletType);
-            val adapter = WalletUtils.getConnectAdapter(type)
+            val adapter = ParticleConnect.getAdapters().first{it.name.equals(walletType,true)}
             WalletScope.launch {
-                WalletUtils.createSelectedWallet(publicKey, adapter!!)
+                WalletUtils.createSelectedWallet(publicKey, adapter)
                 result.success(true)
             }
         } catch (e: Exception) {
@@ -310,41 +303,34 @@ object WalletBridge {
 
     fun enableSwap(enable: Boolean) {
         LogUtils.d("enableSwap", enable.toString());
-        ParticleNetwork.enableSwap(enable)
+        ParticleNetwork.setSwapDisabled(!enable)
     }
 
     fun getEnableSwap(result: MethodChannel.Result) {
         result.success(ParticleNetwork.getEnableSwap())
     }
+    fun getPayDisabled(result: MethodChannel.Result) {
+        result.success(ParticleNetwork.getEnablePay())
+    }
 
-    fun getChainInfo(chainName: String, chainIdName: String?): ChainInfo {
-        var chainNameTmp = chainName
-        if (ChainName.BSC.toString() == chainName) {
-            chainNameTmp = "Bsc"
-        }
-        return try {
-            val clazz1 =
-                Class.forName("com.particle.base." + chainNameTmp + "Chain")
-            val cons =
-                clazz1.getConstructor(String::class.java)
-            cons.newInstance(chainIdName) as ChainInfo
-        } catch (e: java.lang.Exception) {
-            e.printStackTrace()
-            throw RuntimeException(e.message)
-        }
+    fun getChainInfo(chainId: Long): ChainInfo {
+        return ChainUtils.getChainInfo(chainId)
     }
 
     fun supportWalletConnect(enable: Boolean) {
         LogUtils.d("supportWalletConnect", enable.toString());
-        ParticleNetwork.supportWalletConnect(enable);
+        ParticleNetwork.setSupportWalletConnect(enable);
     }
 
-    fun showLanguageSetting(isShow: Boolean) {
-        ParticleWallet.showSettingLanguage(isShow)
+    fun setShowLanguageSetting(isShow: Boolean) {
+        ParticleWallet.setShowLanguageSetting(isShow)
     }
 
-    fun showSettingAppearance(isShow: Boolean) {
-        ParticleWallet.showSettingAppearance(isShow)
+    fun setShowAppearanceSetting(isShow: Boolean) {
+        ParticleWallet.setShowAppearanceSetting(isShow)
+    }
+   fun setSupportDappBrowser(isShow: Boolean) {
+        ParticleWallet.setSupportDappBrowser(isShow)
     }
 
     fun setSupportAddToken(isShow: Boolean) {

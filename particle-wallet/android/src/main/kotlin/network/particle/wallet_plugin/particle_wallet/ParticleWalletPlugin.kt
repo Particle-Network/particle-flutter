@@ -68,13 +68,13 @@ class ParticleWalletPlugin : FlutterPlugin, MethodCallHandler, ActivityAware {
             "navigatorLoginList" -> {
                 WalletBridge.navigatorLoginList(activity!!, result)
             }
-            "showTestNetwork" -> {
-                WalletBridge.showTestNetwork(call.arguments as Boolean)
+            "setShowTestNetwork" -> {
+                WalletBridge.setShowTestNetwork(call.arguments as Boolean)
             }
-            "showManageWallet" -> {
-                WalletBridge.showManageWallet(call.arguments as Boolean)
+            "setShowManageWallet" -> {
+                WalletBridge.setShowManageWallet(call.arguments as Boolean)
             }
-            "supportChain" -> {
+            "setSupportChain" -> {
                 WalletBridge.setSupportChain(call.arguments as String)
             }
             "switchWallet" -> {
@@ -83,7 +83,7 @@ class ParticleWalletPlugin : FlutterPlugin, MethodCallHandler, ActivityAware {
             "enablePay" -> {
                 WalletBridge.enablePay(call.arguments as Boolean)
             }
-            "getEnablePay" -> {
+            "getPayDisabled" -> {
                 WalletBridge.getEnablePay(result);
             }
             "enableSwap" -> {
@@ -92,6 +92,7 @@ class ParticleWalletPlugin : FlutterPlugin, MethodCallHandler, ActivityAware {
             "getEnableSwap" -> {
                 WalletBridge.getEnableSwap(result)
             }
+
             "switchWallet" -> {
                 WalletBridge.switchWallet(call.arguments as String, result)
             }
@@ -103,11 +104,15 @@ class ParticleWalletPlugin : FlutterPlugin, MethodCallHandler, ActivityAware {
                 WalletBridge.supportWalletConnect(call.arguments as Boolean)
             }
 
-            "showLanguageSetting" -> {
-                WalletBridge.showLanguageSetting(call.arguments as Boolean)
+            "setShowLanguageSetting" -> {
+                WalletBridge.setShowLanguageSetting(call.arguments as Boolean)
             }
-            "showAppearanceSetting" -> {
-                WalletBridge.showSettingAppearance(call.arguments as Boolean)
+            "setShowAppearanceSetting" -> {
+                WalletBridge.setShowAppearanceSetting(call.arguments as Boolean)
+            }
+
+            "setSupportDappBrowser" -> {
+                WalletBridge.setSupportDappBrowser(call.arguments as Boolean)
             }
             "setSupportAddToken" -> {
                 WalletBridge.setSupportAddToken(call.arguments as Boolean)
