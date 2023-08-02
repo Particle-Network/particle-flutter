@@ -31,16 +31,16 @@ flutter_ios_podfile_setup
 target 'Runner' do
   use_frameworks! :linkage => :static
   
-  pod 'ParticleNetworkBase', '1.0.0'
-  pod 'ParticleAuthService', '1.0.0'
-  pod 'ParticleBiconomy', '1.0.0'
+  pod 'ParticleNetworkBase', '1.0.1'
+  pod 'ParticleAuthService', '1.0.1'
+  pod 'ParticleBiconomy', '1.0.1'
   
-  pod 'ParticleConnect', '0.2.6'
-  pod 'ConnectWalletConnectAdapter', '0.2.6'
-  pod 'ConnectSolanaAdapter', '0.2.6'
-  pod 'ConnectEVMAdapter', '0.2.6'
-  pod 'ConnectCommon', '0.2.6'
-  pod 'ConnectPhantomAdapter', '0.2.6'
+  pod 'ParticleConnect', '0.2.7'
+  pod 'ConnectWalletConnectAdapter', '0.2.7'
+  pod 'ConnectSolanaAdapter', '0.2.7'
+  pod 'ConnectEVMAdapter', '0.2.7'
+  pod 'ConnectCommon', '0.2.7'
+  pod 'ConnectPhantomAdapter', '0.2.7'
   
   flutter_install_all_ios_pods File.dirname(File.realpath(__FILE__))
 end

@@ -641,11 +641,11 @@ public extension ParticleAuthPlugin {
          DARK,
          */
         if appearance == "system" {
-            ParticleNetwork.setAppearence(UIUserInterfaceStyle.unspecified)
+            ParticleNetwork.setAppearance(UIUserInterfaceStyle.unspecified)
         } else if appearance == "light" {
-            ParticleNetwork.setAppearence(UIUserInterfaceStyle.light)
+            ParticleNetwork.setAppearance(UIUserInterfaceStyle.light)
         } else if appearance == "dark" {
-            ParticleNetwork.setAppearence(UIUserInterfaceStyle.dark)
+            ParticleNetwork.setAppearance(UIUserInterfaceStyle.dark)
         }
     }
     
