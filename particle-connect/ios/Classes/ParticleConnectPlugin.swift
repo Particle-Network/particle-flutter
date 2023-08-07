@@ -323,8 +323,8 @@ extension ParticleConnectPlugin {
             let socialLoginPromptString = configJson["social_login_prompt"].stringValue.lowercased()
             let socialLoginPrompt: SocialLoginPrompt? = SocialLoginPrompt(rawValue: socialLoginPromptString)
             
-            let message: String? = data["authorization"]["message"].string
-            let isUnique: Bool = data["authorization"]["uniq"].bool ?? false
+            let message: String? = configJson["authorization"]["message"].string
+            let isUnique: Bool = configJson["authorization"]["uniq"].bool ?? false
 
             var loginAuthorization: LoginAuthorization?
         
