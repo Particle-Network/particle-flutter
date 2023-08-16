@@ -19,7 +19,6 @@ class AuthLogic {
           'You need set project info, get your project id and client key from dashboard, https://dashboard.particle.network');
     }
     ParticleInfo.set(projectId, clientK);
-
     ParticleAuth.init(currChainInfo, env);
   }
 
@@ -118,7 +117,7 @@ class AuthLogic {
   static void getSmartAccount() async {
     const eoaAddress = "";
     String result =
-        await EvmService.getSmartAccount([eoaAddress], BiconomyVersion.v1_0_0);
+        await EvmService.getSmartAccount([eoaAddress]);
     print("getSmartAccount:" + result);
     if (jsonDecode(result)["status"] == true ||
         jsonDecode(result)["status"] == 1) {

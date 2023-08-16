@@ -185,18 +185,10 @@ public extension ParticleAuthPlugin {
             return
         }
         ParticleAuthService.switchChain(chainInfo).subscribe { result in
-            
             switch result {
             case .failure:
-//                let response = self.ResponseFromError(error)
-//                let statusModel = FlutterStatusModel(status: false, data: response)
-//                let data = try! JSONEncoder().encode(statusModel)
-//                guard let json = String(data: data, encoding: .utf8) else { return }
                 flutterResult(false)
             case .success:
-//                let statusModel = FlutterStatusModel(status: true, data: true)
-//                let data = try! JSONEncoder().encode(statusModel)
-//                guard let json = String(data: data, encoding: .utf8) else { return }
                 flutterResult(true)
             }
         }.disposed(by: self.bag)
@@ -275,64 +267,21 @@ public extension ParticleAuthPlugin {
         if acc != nil, acc!.isEmpty {
             acc = nil
         }
+        let observable = ParticleAuthService.login(type: loginType, account: acc, supportAuthType: supportAuthTypeArray, socialLoginPrompt: socialLoginPrompt, authorization: loginAuthorization).map { userInfo in
+            let userInfoJsonString = userInfo?.jsonStringFullSnake()
+            let newUserInfo = JSON(parseJSON: userInfoJsonString ?? "")
+            return newUserInfo
+        }
         
-        ParticleAuthService.login(type: loginType, account: acc, supportAuthType: supportAuthTypeArray, socialLoginPrompt: socialLoginPrompt, authorization: loginAuthorization).subscribe { [weak self] result in
-            guard let self = self else { return }
-            switch result {
-            case .failure(let error):
-                let response = self.ResponseFromError(error)
-                let statusModel = FlutterStatusModel(status: false, data: response)
-                let data = try! JSONEncoder().encode(statusModel)
-                guard let json = String(data: data, encoding: .utf8) else { return }
-                flutterResult(json)
-            case .success(let userInfo):
-                guard let userInfo = userInfo else { return }
-                let userInfoJsonString = userInfo.jsonStringFullSnake()
-                let newUserInfo = JSON(parseJSON: userInfoJsonString)
-                let statusModel = FlutterStatusModel(status: true, data: newUserInfo)
-                let data = try! JSONEncoder().encode(statusModel)
-                guard let json = String(data: data, encoding: .utf8) else { return }
-                flutterResult(json)
-            }
-        }.disposed(by: self.bag)
+        subscribeAndCallback(observable: observable, flutterResult: flutterResult)
     }
     
     func logout(flutterResult: @escaping FlutterResult) {
-        ParticleAuthService.logout().subscribe { [weak self] result in
-            guard let self = self else { return }
-            switch result {
-            case .failure(let error):
-                let response = self.ResponseFromError(error)
-                let statusModel = FlutterStatusModel(status: false, data: response)
-                let data = try! JSONEncoder().encode(statusModel)
-                guard let json = String(data: data, encoding: .utf8) else { return }
-                flutterResult(json)
-            case .success(let success):
-                let statusModel = FlutterStatusModel(status: true, data: success)
-                let data = try! JSONEncoder().encode(statusModel)
-                guard let json = String(data: data, encoding: .utf8) else { return }
-                flutterResult(json)
-            }
-        }.disposed(by: self.bag)
+        subscribeAndCallback(observable: ParticleAuthService.logout(), flutterResult: flutterResult)
     }
     
     func fastLogout(flutterResult: @escaping FlutterResult) {
-        ParticleAuthService.fastLogout().subscribe { [weak self] result in
-            guard let self = self else { return }
-            switch result {
-            case .failure(let error):
-                let response = self.ResponseFromError(error)
-                let statusModel = FlutterStatusModel(status: false, data: response)
-                let data = try! JSONEncoder().encode(statusModel)
-                guard let json = String(data: data, encoding: .utf8) else { return }
-                flutterResult(json)
-            case .success(let success):
-                let statusModel = FlutterStatusModel(status: true, data: success)
-                let data = try! JSONEncoder().encode(statusModel)
-                guard let json = String(data: data, encoding: .utf8) else { return }
-                flutterResult(json)
-            }
-        }.disposed(by: self.bag)
+        subscribeAndCallback(observable: ParticleAuthService.logout(), flutterResult: flutterResult)
     }
     
     func isLogin(flutterResult: @escaping FlutterResult) {
@@ -340,22 +289,13 @@ public extension ParticleAuthPlugin {
     }
 
     func isLoginAsync(flutterResult: @escaping FlutterResult) {
-        ParticleAuthService.isLoginAsync().subscribe { [weak self] result in
-            guard let self = self else { return }
-            switch result {
-            case .failure(let error):
-                let response = self.ResponseFromError(error)
-                let statusModel = FlutterStatusModel(status: false, data: response)
-                let data = try! JSONEncoder().encode(statusModel)
-                guard let json = String(data: data, encoding: .utf8) else { return }
-                flutterResult(json)
-            case .success(let userInfo):
-                let statusModel = FlutterStatusModel(status: true, data: userInfo)
-                let data = try! JSONEncoder().encode(statusModel)
-                guard let json = String(data: data, encoding: .utf8) else { return }
-                flutterResult(json)
-            }
-        }.disposed(by: self.bag)
+        let observable = ParticleAuthService.isLoginAsync().map { userInfo in
+            let userInfoJsonString = userInfo.jsonStringFullSnake()
+            let newUserInfo = JSON(parseJSON: userInfoJsonString)
+            return newUserInfo
+        }
+        
+        subscribeAndCallback(observable: observable, flutterResult: flutterResult)
     }
     
     func signMessage(_ json: String?, flutterResult: @escaping FlutterResult) {
@@ -372,22 +312,7 @@ public extension ParticleAuthPlugin {
             serializedMessage = message
         }
         
-        ParticleAuthService.signMessage(serializedMessage).subscribe { [weak self] result in
-            guard let self = self else { return }
-            switch result {
-            case .failure(let error):
-                let response = self.ResponseFromError(error)
-                let statusModel = FlutterStatusModel(status: false, data: response)
-                let data = try! JSONEncoder().encode(statusModel)
-                guard let json = String(data: data, encoding: .utf8) else { return }
-                flutterResult(json)
-            case .success(let signedMessage):
-                let statusModel = FlutterStatusModel(status: true, data: signedMessage)
-                let data = try! JSONEncoder().encode(statusModel)
-                guard let json = String(data: data, encoding: .utf8) else { return }
-                flutterResult(json)
-            }
-        }.disposed(by: self.bag)
+        subscribeAndCallback(observable: ParticleAuthService.signMessage(serializedMessage), flutterResult: flutterResult)
     }
     
     func signMessageUnique(_ json: String?, flutterResult: @escaping FlutterResult) {
@@ -403,23 +328,7 @@ public extension ParticleAuthPlugin {
         default:
             serializedMessage = message
         }
-        
-        ParticleAuthService.signMessageUnique(serializedMessage).subscribe { [weak self] result in
-            guard let self = self else { return }
-            switch result {
-            case .failure(let error):
-                let response = self.ResponseFromError(error)
-                let statusModel = FlutterStatusModel(status: false, data: response)
-                let data = try! JSONEncoder().encode(statusModel)
-                guard let json = String(data: data, encoding: .utf8) else { return }
-                flutterResult(json)
-            case .success(let signedMessage):
-                let statusModel = FlutterStatusModel(status: true, data: signedMessage)
-                let data = try! JSONEncoder().encode(statusModel)
-                guard let json = String(data: data, encoding: .utf8) else { return }
-                flutterResult(json)
-            }
-        }.disposed(by: self.bag)
+        subscribeAndCallback(observable: ParticleAuthService.signMessageUnique(serializedMessage), flutterResult: flutterResult)
     }
     
     func signTransaction(_ json: String?, flutterResult: @escaping FlutterResult) {
@@ -427,22 +336,7 @@ public extension ParticleAuthPlugin {
             flutterResult(FlutterError(code: "", message: "json is nil", details: nil))
             return
         }
-        ParticleAuthService.signTransaction(transaction).subscribe { [weak self] result in
-            guard let self = self else { return }
-            switch result {
-            case .failure(let error):
-                let response = self.ResponseFromError(error)
-                let statusModel = FlutterStatusModel(status: false, data: response)
-                let data = try! JSONEncoder().encode(statusModel)
-                guard let json = String(data: data, encoding: .utf8) else { return }
-                flutterResult(json)
-            case .success(let signed):
-                let statusModel = FlutterStatusModel(status: true, data: signed)
-                let data = try! JSONEncoder().encode(statusModel)
-                guard let json = String(data: data, encoding: .utf8) else { return }
-                flutterResult(json)
-            }
-        }.disposed(by: self.bag)
+        subscribeAndCallback(observable: ParticleAuthService.signTransaction(transaction), flutterResult: flutterResult)
     }
     
     func signAllTransactions(_ json: String?, flutterResult: @escaping FlutterResult) {
@@ -453,22 +347,7 @@ public extension ParticleAuthPlugin {
         
         let transactions = JSON(parseJSON: json).arrayValue.map { $0.stringValue }
         
-        ParticleAuthService.signAllTransactions(transactions).subscribe { [weak self] result in
-            guard let self = self else { return }
-            switch result {
-            case .failure(let error):
-                let response = self.ResponseFromError(error)
-                let statusModel = FlutterStatusModel(status: false, data: response)
-                let data = try! JSONEncoder().encode(statusModel)
-                guard let json = String(data: data, encoding: .utf8) else { return }
-                flutterResult(json)
-            case .success(let signedMessage):
-                let statusModel = FlutterStatusModel(status: true, data: signedMessage)
-                let data = try! JSONEncoder().encode(statusModel)
-                guard let json = String(data: data, encoding: .utf8) else { return }
-                flutterResult(json)
-            }
-        }.disposed(by: self.bag)
+        self.subscribeAndCallback(observable: ParticleAuthService.signAllTransactions(transactions), flutterResult: flutterResult)
     }
     
     func signAndSendTransaction(_ json: String?, flutterResult: @escaping FlutterResult) {
@@ -480,33 +359,30 @@ public extension ParticleAuthPlugin {
         let data = JSON(parseJSON: json)
         let transaction = data["transaction"].stringValue
         let mode = data["fee_mode"]["option"].stringValue
-        var feeMode: Biconomy.FeeMode = .auto
-        if mode == "auto" {
-            feeMode = .auto
+        var feeMode: Biconomy.FeeMode = .native
+        if mode == "native" {
+            feeMode = .native
         } else if mode == "gasless" {
             feeMode = .gasless
-        } else if mode == "custom" {
+        } else if mode == "token" {
             let feeQuoteJson = JSON(data["fee_mode"]["fee_quote"].dictionaryValue)
-            let feeQuote = Biconomy.FeeQuote(json: feeQuoteJson)
-            feeMode = .custom(feeQuote)
+            let tokenPaymasterAddress = data["fee_mode"]["token_paymaster_address"].stringValue
+            let feeQuote = Biconomy.FeeQuote(json: feeQuoteJson, tokenPaymasterAddress: tokenPaymasterAddress)
+            feeMode = .token(feeQuote)
         }
         
-        ParticleAuthService.signAndSendTransaction(transaction, feeMode: feeMode).subscribe { [weak self] result in
-            guard let self = self else { return }
-            switch result {
-            case .failure(let error):
-                let response = self.ResponseFromError(error)
-                let statusModel = FlutterStatusModel(status: false, data: response)
-                let data = try! JSONEncoder().encode(statusModel)
-                guard let json = String(data: data, encoding: .utf8) else { return }
-                flutterResult(json)
-            case .success(let signature):
-                let statusModel = FlutterStatusModel(status: true, data: signature)
-                let data = try! JSONEncoder().encode(statusModel)
-                guard let json = String(data: data, encoding: .utf8) else { return }
-                flutterResult(json)
-            }
-        }.disposed(by: self.bag)
+        let wholeFeeQuoteData = (try? data["whole_fee_quote"].rawData()) ?? Data()
+        let wholeFeeQuote = try? JSONDecoder().decode(Biconomy.WholeFeeQuote.self, from: wholeFeeQuoteData)
+        
+        let biconomy = ParticleNetwork.getBiconomyService()
+        var sendObservable: Single<String>
+        if biconomy != nil, biconomy!.isBiconomyModeEnable() {
+            sendObservable = biconomy!.quickSendTransactions([transaction], feeMode: feeMode, messageSigner: self, wholeFeeQuote: wholeFeeQuote)
+        } else {
+            sendObservable = ParticleAuthService.signAndSendTransaction(transaction, feeMode: feeMode)
+        }
+        
+        subscribeAndCallback(observable: sendObservable, flutterResult: flutterResult)
     }
     
     func batchSendTransactions(_ json: String?, flutterResult: @escaping FlutterResult) {
@@ -520,16 +396,21 @@ public extension ParticleAuthPlugin {
             $0.stringValue
         }
         let mode = data["fee_mode"]["option"].stringValue
-        var feeMode: Biconomy.FeeMode = .auto
-        if mode == "auto" {
-            feeMode = .auto
+        var feeMode: Biconomy.FeeMode = .native
+        if mode == "native" {
+            feeMode = .native
         } else if mode == "gasless" {
             feeMode = .gasless
-        } else if mode == "custom" {
+        } else if mode == "token" {
             let feeQuoteJson = JSON(data["fee_mode"]["fee_quote"].dictionaryValue)
-            let feeQuote = Biconomy.FeeQuote(json: feeQuoteJson)
-            feeMode = .custom(feeQuote)
+            let tokenPaymasterAddress = data["fee_mode"]["token_paymaster_address"].stringValue
+            let feeQuote = Biconomy.FeeQuote(json: feeQuoteJson, tokenPaymasterAddress: tokenPaymasterAddress)
+
+            feeMode = .token(feeQuote)
         }
+        
+        let wholeFeeQuoteData = (try? data["whole_fee_quote"].rawData()) ?? Data()
+        let wholeFeeQuote = try? JSONDecoder().decode(Biconomy.WholeFeeQuote.self, from: wholeFeeQuoteData)
         
         guard let biconomy = ParticleNetwork.getBiconomyService() else {
             flutterResult(FlutterError(code: "", message: "biconomy is not init", details: nil))
@@ -540,24 +421,9 @@ public extension ParticleAuthPlugin {
             flutterResult(FlutterError(code: "", message: "biconomy is not enable", details: nil))
             return
         }
+        let sendObservable: Single<String> = biconomy.quickSendTransactions(transactions, feeMode: feeMode, messageSigner: self, wholeFeeQuote: wholeFeeQuote)
         
-        biconomy.quickSendTransactions(transactions, feeMode: feeMode, messageSigner: self).subscribe {
-            [weak self] result in
-                guard let self = self else { return }
-                switch result {
-                case .failure(let error):
-                    let response = self.ResponseFromError(error)
-                    let statusModel = FlutterStatusModel(status: false, data: response)
-                    let data = try! JSONEncoder().encode(statusModel)
-                    guard let json = String(data: data, encoding: .utf8) else { return }
-                    flutterResult(json)
-                case .success(let signature):
-                    let statusModel = FlutterStatusModel(status: true, data: signature)
-                    let data = try! JSONEncoder().encode(statusModel)
-                    guard let json = String(data: data, encoding: .utf8) else { return }
-                    flutterResult(json)
-                }
-        }.disposed(by: self.bag)
+        subscribeAndCallback(observable: sendObservable, flutterResult: flutterResult)
     }
     
     func signTypedData(_ json: String?, flutterResult: @escaping FlutterResult) {
@@ -584,22 +450,7 @@ public extension ParticleAuthPlugin {
             return
         }
        
-        ParticleAuthService.signTypedData(message, version: signTypedDataVersion).subscribe { [weak self] result in
-            guard let self = self else { return }
-            switch result {
-            case .failure(let error):
-                let response = self.ResponseFromError(error)
-                let statusModel = FlutterStatusModel(status: false, data: response)
-                let data = try! JSONEncoder().encode(statusModel)
-                guard let json = String(data: data, encoding: .utf8) else { return }
-                flutterResult(json)
-            case .success(let signedMessage):
-                let statusModel = FlutterStatusModel(status: true, data: signedMessage)
-                let data = try! JSONEncoder().encode(statusModel)
-                guard let json = String(data: data, encoding: .utf8) else { return }
-                flutterResult(json)
-            }
-        }.disposed(by: self.bag)
+        subscribeAndCallback(observable: ParticleAuthService.signTypedData(message, version: signTypedDataVersion), flutterResult: flutterResult)
     }
     
     func getAddress(flutterResult: @escaping FlutterResult) {
@@ -697,22 +548,9 @@ public extension ParticleAuthPlugin {
     }
     
     func openAccountAndSecurity(flutterResult: @escaping FlutterResult) {
-        ParticleAuthService.openAccountAndSecurity().subscribe { [weak self] result in
-            guard let self = self else { return }
-            switch result {
-            case .failure(let error):
-                let response = self.ResponseFromError(error)
-                let statusModel = FlutterStatusModel(status: false, data: response)
-                let data = try! JSONEncoder().encode(statusModel)
-                guard let json = String(data: data, encoding: .utf8) else { return }
-                flutterResult(json)
-            case .success:
-                let statusModel = FlutterStatusModel(status: true, data: "")
-                let data = try! JSONEncoder().encode(statusModel)
-                guard let json = String(data: data, encoding: .utf8) else { return }
-                flutterResult(json)
-            }
-        }.disposed(by: self.bag)
+        subscribeAndCallback(observable: ParticleAuthService.openAccountAndSecurity().map {
+            ""
+        }, flutterResult: flutterResult)
     }
     
     func setLanguage(_ json: String?) {
@@ -768,7 +606,21 @@ public extension ParticleAuthPlugin {
     }
     
     func getSecurityAccount(flutterResult: @escaping FlutterResult) {
-        ParticleAuthService.getSecurityAccount().subscribe { [weak self] result in
+        subscribeAndCallback(observable: ParticleAuthService.getSecurityAccount().map { securityAccountInfo in
+            let dict = ["phone": securityAccountInfo.phone,
+                        "email": securityAccountInfo.email,
+                        "has_set_master_password": securityAccountInfo.hasSetMasterPassword,
+                        "has_set_payment_password": securityAccountInfo.hasSetPaymentPassword] as [String: Any?]
+            
+            let json = JSON(dict)
+            return json
+        }, flutterResult: flutterResult)
+    }
+}
+
+extension ParticleAuthPlugin {
+    private func subscribeAndCallback<T: Codable>(observable: Single<T>, flutterResult: @escaping FlutterResult) {
+        observable.subscribe { [weak self] result in
             guard let self = self else { return }
             switch result {
             case .failure(let error):
@@ -777,16 +629,8 @@ public extension ParticleAuthPlugin {
                 let data = try! JSONEncoder().encode(statusModel)
                 guard let json = String(data: data, encoding: .utf8) else { return }
                 flutterResult(json)
-            case .success(let securityAccountInfo):
-                
-                let dict = ["phone": securityAccountInfo.phone,
-                            "email": securityAccountInfo.email,
-                            "has_set_master_password": securityAccountInfo.hasSetMasterPassword,
-                            "has_set_payment_password": securityAccountInfo.hasSetPaymentPassword] as [String: Any?]
-                
-                let json = JSON(dict)
-                
-                let statusModel = FlutterStatusModel(status: true, data: json)
+            case .success(let signedMessage):
+                let statusModel = FlutterStatusModel(status: true, data: signedMessage)
                 let data = try! JSONEncoder().encode(statusModel)
                 guard let json = String(data: data, encoding: .utf8) else { return }
                 flutterResult(json)
@@ -796,10 +640,6 @@ public extension ParticleAuthPlugin {
 }
 
 extension ParticleAuthPlugin: MessageSigner {
-    public func signTypedData(_ message: String) -> RxSwift.Single<String> {
-        return ParticleAuthService.signTypedData(message, version: .v4)
-    }
-    
     public func signMessage(_ message: String) -> RxSwift.Single<String> {
         return ParticleAuthService.signMessage(message)
     }

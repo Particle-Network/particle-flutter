@@ -238,9 +238,9 @@ class EvmService {
   ///
   /// return json object
   static Future<String> getSmartAccount(
-      List<String> eoaAddresses, BiconomyVersion version) async {
-    const method = "particle_biconomy_getSmartAccount";
-    final params = [version.name, eoaAddresses];
+      List<String> eoaAddresses) async {
+    const method = "particle_aa_getSmartAccount";
+    final params = [eoaAddresses];
     return await EvmService.rpc(method, params);
   }
 

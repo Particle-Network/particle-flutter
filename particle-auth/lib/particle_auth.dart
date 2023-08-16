@@ -13,7 +13,6 @@ import '../model/user_interface_style.dart';
 import '../model/login_info.dart';
 import '../model/fiat_coin.dart';
 
-export '../model/biconomy_version.dart';
 export '../model/biconomy_fee_mode.dart';
 export '../model/chain_info.dart';
 export '../model/ios_modal_present_style.dart';
@@ -256,8 +255,7 @@ class ParticleAuth {
   static setWebAuthConfig(bool displayWallet, Appearance appearance) {
     _channel.invokeMethod(
         'setWebAuthConfig',
-        jsonEncode(
-            {"display_wallet": displayWallet, "appearance": appearance.name}));
+        jsonEncode({"display_wallet": displayWallet, "appearance": appearance.name}));
   }
 
   /// Set user inerface style
