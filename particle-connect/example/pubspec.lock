@@ -266,9 +266,9 @@ packages:
   particle_auth:
     dependency: transitive
     description:
-      name: particle_auth
-      url: "https://pub.dartlang.org"
-    source: hosted
+      path: "../../particle-auth"
+      relative: true
+    source: path
     version: "1.0.4"
   particle_connect:
     dependency: "direct main"

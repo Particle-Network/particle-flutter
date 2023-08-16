@@ -368,10 +368,11 @@ public extension ParticleAuthPlugin {
             let feeQuoteJson = JSON(data["fee_mode"]["fee_quote"].dictionaryValue)
             let tokenPaymasterAddress = data["fee_mode"]["token_paymaster_address"].stringValue
             let feeQuote = Biconomy.FeeQuote(json: feeQuoteJson, tokenPaymasterAddress: tokenPaymasterAddress)
+
             feeMode = .token(feeQuote)
         }
         
-        let wholeFeeQuoteData = (try? data["whole_fee_quote"].rawData()) ?? Data()
+        let wholeFeeQuoteData = (try? data["fee_mode"]["whole_fee_quote"].rawData()) ?? Data()
         let wholeFeeQuote = try? JSONDecoder().decode(Biconomy.WholeFeeQuote.self, from: wholeFeeQuoteData)
         
         let biconomy = ParticleNetwork.getBiconomyService()
@@ -409,7 +410,7 @@ public extension ParticleAuthPlugin {
             feeMode = .token(feeQuote)
         }
         
-        let wholeFeeQuoteData = (try? data["whole_fee_quote"].rawData()) ?? Data()
+        let wholeFeeQuoteData = (try? data["fee_mode"]["whole_fee_quote"].rawData()) ?? Data()
         let wholeFeeQuote = try? JSONDecoder().decode(Biconomy.WholeFeeQuote.self, from: wholeFeeQuoteData)
         
         guard let biconomy = ParticleNetwork.getBiconomyService() else {
