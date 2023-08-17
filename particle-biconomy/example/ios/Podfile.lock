@@ -62,7 +62,7 @@ PODS:
   - ParticleAuthAdapter (0.2.6):
     - ConnectCommon
     - ParticleAuthService
-  - ParticleAuthService (1.0.4):
+  - ParticleAuthService (1.0.5):
     - CryptoSwift
     - ParticleNetworkBase
     - RxAlamofire (~> 6.1.1)
@@ -70,11 +70,11 @@ PODS:
     - RxSwift (= 6.5.0)
     - SwiftyJSON (~> 5.0)
     - SwiftyUserDefaults (~> 5.3.0)
-  - ParticleBiconomy (1.0.4):
+  - ParticleBiconomy (1.0.5):
     - ParticleNetworkBase
   - ParticleConnect (0.2.9):
     - ConnectCommon
-  - ParticleNetworkBase (1.0.4):
+  - ParticleNetworkBase (1.0.5):
     - Base58.swift
     - BigInt (~> 5.2.0)
     - CryptoSwift
@@ -155,10 +155,10 @@ DEPENDENCIES:
   - particle_auth (from `.symlinks/plugins/particle_auth/ios`)
   - particle_biconomy (from `.symlinks/plugins/particle_biconomy/ios`)
   - particle_connect (from `.symlinks/plugins/particle_connect/ios`)
-  - ParticleAuthService (= 1.0.4)
-  - ParticleBiconomy (= 1.0.4)
+  - ParticleAuthService (= 1.0.5)
+  - ParticleBiconomy (= 1.0.5)
   - ParticleConnect (= 0.2.9)
-  - ParticleNetworkBase (= 1.0.4)
+  - ParticleNetworkBase (= 1.0.5)
 
 SPEC REPOS:
   https://github.com/CocoaPods/Specs.git:
@@ -217,10 +217,10 @@ SPEC CHECKSUMS:
   particle_biconomy: 732e548a456869d9da5a8a3a1910c4c0813a188a
   particle_connect: 0192191b9fcae5c955c4752920acc5f05deb762a
   ParticleAuthAdapter: 9bf48f9c557fabbd3f06f81778e5705d49cec030
-  ParticleAuthService: 82f60cd1e18538abde1d1f3712b05a50a970c585
-  ParticleBiconomy: 6fd4c395c41ccb0b3b8aca9ba87f022e511df855
+  ParticleAuthService: 7d5e5cb6b1f7a923f71da2cdd5236c882dfd171e
+  ParticleBiconomy: 3d406cdd68823d794e34c72e204bf6f3e8301052
   ParticleConnect: d7400c9895d6d553125205cd48d02f69ebe64b9f
-  ParticleNetworkBase: ff32ad2a61ca6014b900ce77a2c6c61c928ef26f
+  ParticleNetworkBase: 0dddee160c13365b09981d4e97eddfb1fa3563eb
   RxAlamofire: beb75a1c452d0de225651db4903f5d29d034a620
   RxCocoa: 94f817b71c07517321eb4f9ad299112ca8af743b
   RxRelay: 1de1523e604c72b6c68feadedd1af3b1b4d0ecbd
@@ -235,6 +235,6 @@ SPEC CHECKSUMS:
   TweetNacl: 3abf4d1d2082b0114e7a67410e300892448951e6
   WalletConnectSwiftV2: 66aef6e7bbe881c465e6bce164f61c5bbf61d796
 
-PODFILE CHECKSUM: d017c05a026647f3fddb544a1e483c27479c553f
+PODFILE CHECKSUM: 854d22893b8f7382d244a84fcde8056d862427b8
 
 COCOAPODS: 1.12.1
