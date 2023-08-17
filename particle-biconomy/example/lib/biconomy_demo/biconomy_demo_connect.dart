@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:particle_biconomy_example/biconomy_demo/biconomy_connect_logic.dart';
+import 'package:particle_biconomy_example/biconomy_demo/select_chain_page.dart';
 
 class BiconomyDemoConnectPage extends StatefulWidget {
   const BiconomyDemoConnectPage({Key? key}) : super(key: key);
@@ -29,6 +30,26 @@ class BiconomyDemoConnectPageState extends State<BiconomyDemoConnectPage> {
                     onPressed: () => {BiconomyConnectLogic.init()},
                     child: const Text(
                       "Init",
+                      style: TextStyle(fontSize: 18),
+                    )),
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.only(
+                  left: 8.0, top: 16.0, right: 8.0, bottom: 8.0),
+              child: SizedBox(
+                width: double.infinity,
+                height: 50,
+                child: ElevatedButton(
+                    onPressed: () => {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => const SelectChainPage()),
+                          )
+                        },
+                    child: const Text(
+                      "SelectChain",
                       style: TextStyle(fontSize: 18),
                     )),
               ),
@@ -81,10 +102,10 @@ class BiconomyDemoConnectPageState extends State<BiconomyDemoConnectPage> {
                 child: ElevatedButton(
                     onPressed: () => {
                           BiconomyConnectLogic
-                              .signAndSendTransactionWithBiconomyAuto()
+                              .signAndSendTransactionWithNative()
                         },
                     child: const Text(
-                      "send with biconomy auto",
+                      "send transaction paid with native",
                       style: TextStyle(fontSize: 18),
                     )),
               ),
@@ -97,10 +118,10 @@ class BiconomyDemoConnectPageState extends State<BiconomyDemoConnectPage> {
                 child: ElevatedButton(
                     onPressed: () => {
                           BiconomyConnectLogic
-                              .signAndSendTransactionWithBiconomyGasless()
+                              .signAndSendTransactionWithGasless()
                         },
                     child: const Text(
-                      "send with biconomy gasless",
+                      "send transaction gasless",
                       style: TextStyle(fontSize: 18),
                     )),
               ),
@@ -113,10 +134,10 @@ class BiconomyDemoConnectPageState extends State<BiconomyDemoConnectPage> {
                 child: ElevatedButton(
                     onPressed: () => {
                           BiconomyConnectLogic
-                              .signAndSendTransactionWithBiconomyCustom()
+                              .signAndSendTransactionWithToken()
                         },
                     child: const Text(
-                      "send with biconomy custom",
+                      "send transaction paid with token",
                       style: TextStyle(fontSize: 18),
                     )),
               ),

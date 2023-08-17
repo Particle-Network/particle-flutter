@@ -456,6 +456,8 @@ extension ParticleConnectPlugin {
             flutterResult(json)
             return
         }
+        self.latestPublicAddress = publicAddress
+        self.latestWalletType = walletType
         
         let mode = data["fee_mode"]["option"].stringValue
         var feeMode: Biconomy.FeeMode = .native
@@ -471,7 +473,7 @@ extension ParticleConnectPlugin {
             feeMode = .token(feeQuote)
         }
         
-        let wholeFeeQuoteData = (try? data["whole_fee_quote"].rawData()) ?? Data()
+        let wholeFeeQuoteData = (try? data["fee_mode"]["whole_fee_quote"].rawData()) ?? Data()
         let wholeFeeQuote = try? JSONDecoder().decode(Biconomy.WholeFeeQuote.self, from: wholeFeeQuoteData)
         
         guard let adapter = map2ConnectAdapter(from: walletType) else {
@@ -535,7 +537,7 @@ extension ParticleConnectPlugin {
             feeMode = .token(feeQuote)
         }
         
-        let wholeFeeQuoteData = (try? data["whole_fee_quote"].rawData()) ?? Data()
+        let wholeFeeQuoteData = (try? data["fee_mode"]["whole_fee_quote"].rawData()) ?? Data()
         let wholeFeeQuote = try? JSONDecoder().decode(Biconomy.WholeFeeQuote.self, from: wholeFeeQuoteData)
         guard let biconomy = ParticleNetwork.getBiconomyService() else {
             flutterResult(FlutterError(code: "", message: "biconomy is not init", details: nil))

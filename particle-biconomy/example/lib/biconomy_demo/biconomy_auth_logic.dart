@@ -12,7 +12,6 @@ class BiconomyAuthLogic {
     // should call ParticleAuth init first.
     ParticleAuth.init(PolygonChain.mumbai(), Env.dev);
 
-    const version = BiconomyVersion.v1_0_0;
     Map<int, String> dappKeys = {
       1: "your ethereum mainnet key",
       5: "your ethereum goerli key",
@@ -32,7 +31,7 @@ class BiconomyAuthLogic {
     }
 
     ParticleInfo.set(projectId, clientK);
-    ParticleBiconomy.init(version, dappKeys);
+    ParticleBiconomy.init(dappKeys);
   }
 
   static void isSupportChainInfo() async {
@@ -78,31 +77,54 @@ class BiconomyAuthLogic {
     List<String> transactions = <String>[transaction];
     var result =
         await ParticleBiconomy.rpcGetFeeQuotes(publicAddress, transactions);
-    print(result[0]["address"]);
     showToast("rpcGetFeeQuotes: $result");
   }
 
-  static void signAndSendTransactionWithBiconomyAuto() async {
+  static void signAndSendTransactionWithNative() async {
     final publicAddress = await ParticleAuth.getAddress();
     final transaction = await TransactionMock.mockEvmSendNative(publicAddress);
 
+    // check if enough native for gas fee
+    var result =
+        await ParticleBiconomy.rpcGetFeeQuotes(publicAddress, [transaction]);
+    var verifyingPaymasterNative = result["verifyingPaymasterNative"];
+    var feeQuote = verifyingPaymasterNative["feeQuote"];
+    var fee = BigInt.parse(feeQuote["fee"], radix: 10);
+    var balance = BigInt.parse(feeQuote["balance"], radix: 10);
+
+    if (balance < fee) {
+      print("native balance if not enought for gas fee");
+      return;
+    }
+
+    // pass result from rpcGetFeeQuotes to send pay with native
     final signature = await ParticleAuth.signAndSendTransaction(transaction,
-        feeMode: BiconomyFeeMode.auto());
+        feeMode: BiconomyFeeMode.native(result));
     print("signature $signature");
     showToast("signature $signature");
   }
 
-  static void signAndSendTransactionWithBiconomyGasless() async {
+  static void signAndSendTransactionWithGasless() async {
     final publicAddress = await ParticleAuth.getAddress();
     final transaction = await TransactionMock.mockEvmSendNative(publicAddress);
 
+    // check if gasless available
+    var result =
+        await ParticleBiconomy.rpcGetFeeQuotes(publicAddress, [transaction]);
+    var verifyingPaymasterGasless = result["verifyingPaymasterGasless"];
+    if (verifyingPaymasterGasless == null) {
+      print("gasless is not avaliable");
+      return;
+    }
+
+    // pass result from rpcGetFeeQuotes to send gasless
     final signature = await ParticleAuth.signAndSendTransaction(transaction,
-        feeMode: BiconomyFeeMode.gasless());
+        feeMode: BiconomyFeeMode.gasless(result));
     print("signature $signature");
     showToast("signature $signature");
   }
 
-  static void signAndSendTransactionWithBiconomyCustom() async {
+  static void signAndSendTransactionWithToken() async {
     final publicAddress = await ParticleAuth.getAddress();
     final transaction = await TransactionMock.mockEvmSendNative(publicAddress);
 
@@ -111,10 +133,28 @@ class BiconomyAuthLogic {
     var result =
         await ParticleBiconomy.rpcGetFeeQuotes(publicAddress, transactions);
 
-    var feeQuote = result[0];
+    List<dynamic> feeQuotes = result["tokenPaymaster"]["feeQuotes"];
+
+    var overFeeQuotes = feeQuotes.where((element) {
+      var fee = BigInt.parse(element["fee"], radix: 10);
+      var balance = BigInt.parse(element["balance"], radix: 10);
+      return balance >= fee;
+    }).toList();
+
+    if (overFeeQuotes.isEmpty) {
+      print("no valid token fro gas fee");
+      return;
+    }
+
+    var feeQuote = overFeeQuotes[0];
+    var tokenPaymasterAddress =
+        result["tokenPaymaster"]["tokenPaymasterAddress"];
+
+    print("feeQuote $feeQuote");
+    print("tokenPaymasterAddress $tokenPaymasterAddress");
 
     final signature = await ParticleAuth.signAndSendTransaction(transaction,
-        feeMode: BiconomyFeeMode.custom(feeQuote));
+        feeMode: BiconomyFeeMode.token(feeQuote, tokenPaymasterAddress));
     print("signature $signature");
     showToast("signature $signature");
   }
@@ -125,18 +165,27 @@ class BiconomyAuthLogic {
     print(result);
   }
 
-  static void setChainInfo() async {
-    final result = await ParticleAuth.setChainInfo(ArbitrumChain.one());
-    print(result);
-  }
-
   static void batchSendTransactions() async {
     final publicAddress = await ParticleAuth.getAddress();
     final transaction = await TransactionMock.mockEvmSendNative(publicAddress);
-
     List<String> transactions = <String>[transaction, transaction];
+
+    // check if enough native for gas fee
+    var result =
+        await ParticleBiconomy.rpcGetFeeQuotes(publicAddress, transactions);
+    var verifyingPaymasterNative = result["verifyingPaymasterNative"];
+    var feeQuote = verifyingPaymasterNative["feeQuote"];
+    var fee = BigInt.parse(feeQuote["fee"], radix: 10);
+    var balance = BigInt.parse(feeQuote["balance"], radix: 10);
+
+    if (balance < fee) {
+      print("native balance if not enought for gas fee");
+      return;
+    }
+
     final signature = await ParticleAuth.batchSendTransactions(transactions,
-        feeMode: BiconomyFeeMode.auto());
+        feeMode: BiconomyFeeMode.native(result));
+    print("signature $signature");
     showToast("signature $signature");
   }
 }

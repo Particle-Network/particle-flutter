@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:particle_auth/particle_auth.dart';
 import 'package:particle_biconomy_example/biconomy_demo/biconomy_auth_logic.dart';
+import 'package:particle_biconomy_example/biconomy_demo/select_chain_page.dart';
 
 class BiconomyDemoAuthPage extends StatefulWidget {
   const BiconomyDemoAuthPage({Key? key}) : super(key: key);
@@ -52,14 +53,21 @@ class BiconomyDemoAuthPageState extends State<BiconomyDemoAuthPage> {
               ),
             ),
             Padding(
-              padding: const EdgeInsets.all(8.0),
+              padding: const EdgeInsets.only(
+                  left: 8.0, top: 16.0, right: 8.0, bottom: 8.0),
               child: SizedBox(
                 width: double.infinity,
                 height: 50,
                 child: ElevatedButton(
-                    onPressed: () => {BiconomyAuthLogic.loginParticle()},
+                    onPressed: () => {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => const SelectChainPage()),
+                          )
+                        },
                     child: const Text(
-                      "Login particle",
+                      "SelectChain",
                       style: TextStyle(fontSize: 18),
                     )),
               ),
@@ -70,9 +78,9 @@ class BiconomyDemoAuthPageState extends State<BiconomyDemoAuthPage> {
                 width: double.infinity,
                 height: 50,
                 child: ElevatedButton(
-                    onPressed: () => {BiconomyAuthLogic.setChainInfo()},
+                    onPressed: () => {BiconomyAuthLogic.loginParticle()},
                     child: const Text(
-                      "Set Chain Info",
+                      "Login particle",
                       style: TextStyle(fontSize: 18),
                     )),
               ),
@@ -163,10 +171,10 @@ class BiconomyDemoAuthPageState extends State<BiconomyDemoAuthPage> {
                 child: ElevatedButton(
                     onPressed: () => {
                           BiconomyAuthLogic
-                              .signAndSendTransactionWithBiconomyAuto()
+                              .signAndSendTransactionWithNative()
                         },
                     child: const Text(
-                      "send with biconomy auto",
+                      "send transaction paid with native",
                       style: TextStyle(fontSize: 18),
                     )),
               ),
@@ -179,10 +187,10 @@ class BiconomyDemoAuthPageState extends State<BiconomyDemoAuthPage> {
                 child: ElevatedButton(
                     onPressed: () => {
                           BiconomyAuthLogic
-                              .signAndSendTransactionWithBiconomyGasless()
+                              .signAndSendTransactionWithGasless()
                         },
                     child: const Text(
-                      "send with biconomy gasless",
+                      "send transaction paid gasless",
                       style: TextStyle(fontSize: 18),
                     )),
               ),
@@ -195,10 +203,10 @@ class BiconomyDemoAuthPageState extends State<BiconomyDemoAuthPage> {
                 child: ElevatedButton(
                     onPressed: () => {
                           BiconomyAuthLogic
-                              .signAndSendTransactionWithBiconomyCustom()
+                              .signAndSendTransactionWithToken()
                         },
                     child: const Text(
-                      "send with biconomy custom",
+                      "send transaction paid with token",
                       style: TextStyle(fontSize: 18),
                     )),
               ),

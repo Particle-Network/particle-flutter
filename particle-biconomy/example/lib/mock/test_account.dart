@@ -26,7 +26,7 @@ class TestAccount {
       "eacd18277e3cfca6446801b7587c9d787d5ee5d93f6a38752f7d94eddadc469e",
       "hood result social fetch pet code check yard school jealous trick lazy",
       "0x326C977E6efc84E512bB9C30f76E30c160eD06FB",
-      BigInt.from(1000000000000000),
+      BigInt.from(100000000000),
       "0xD000F000Aa1F8accbd5815056Ea32A54777b2Fc4",
       "1412",
       "0xAC6d81182998EA5c196a4424EA6AB250C7eb175b",

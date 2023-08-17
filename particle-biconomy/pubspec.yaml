@@ -12,8 +12,9 @@ dependencies:
     sdk: flutter
   plugin_platform_interface: ^2.0.2
 
-  particle_auth: ^1.0.4
-#    path: ../particle-auth/
+  # particle_auth: #^1.0.4
+  particle_auth:
+    path: ../particle-auth/
 
     #^0.13.7
 dev_dependencies:

@@ -13,7 +13,7 @@ class ParticleBiconomy {
   /// [version] Biconomy version
   ///
   /// [dappKeys] Biconomy dapp keys
-  static init(BiconomyVersion version, Map<int, String> dappKeys) {
+  static init(Map<int, String> dappKeys) {
     // Convert integer keys to strings
     var stringKeyMap =
         dappKeys.map((key, value) => MapEntry(key.toString(), value));
@@ -22,14 +22,12 @@ class ParticleBiconomy {
       _channel.invokeMethod(
           'initialize',
           jsonEncode({
-            "version": version.name,
             "dapp_app_keys": stringKeyMap,
           }));
     } else {
       _channel.invokeMethod(
           'init',
           jsonEncode({
-            "version": version.name,
             "dapp_app_keys": stringKeyMap,
           }));
     }
@@ -78,7 +76,7 @@ class ParticleBiconomy {
   /// [transactions] transactions
   /// 
   /// return fee quote list
-  static Future<List<dynamic>> rpcGetFeeQuotes(
+  static Future<dynamic> rpcGetFeeQuotes(
       String eoaAddress, List<String> transactions) async {
     final result = await _channel.invokeMethod("rpcGetFeeQuotes",
         jsonEncode({"eoa_address": eoaAddress, "transactions": transactions}));

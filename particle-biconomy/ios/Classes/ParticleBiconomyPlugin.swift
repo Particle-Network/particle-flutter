@@ -71,7 +71,7 @@ public extension ParticleBiconomyPlugin {
         }
         
         let data = JSON(parseJSON: json)
-        let version = data["version"].stringValue.lowercased()
+        
         let dappAppKeysDict = data["dapp_app_keys"].dictionaryValue
         var dappAppKeys: [Int: String] = [:]
         
@@ -81,8 +81,8 @@ public extension ParticleBiconomyPlugin {
             }
         }
         
-        BiconomyService.initialize(version: .init(rawValue: version) ?? .v1_0_0, dappApiKeys: dappAppKeys)
-        ParticleNetwork.setBiconomyService(self.biconomy)
+        BiconomyService.initialize(dappApiKeys: dappAppKeys)
+        ParticleNetwork.setBiconomyService(biconomy)
     }
     
     func isSupportChainInfo(_ json: String?, flutterResult: @escaping FlutterResult) {
@@ -103,24 +103,7 @@ public extension ParticleBiconomyPlugin {
     func isDeploy(_ json: String?, flutterResult: @escaping FlutterResult) {
         guard let json = json else { return }
         let eoaAddress = json
-        
-        biconomy.isDeploy(eoaAddress: eoaAddress).subscribe {
-            [weak self] result in
-                guard let self = self else { return }
-                switch result {
-                case .success(let flag):
-                    let statusModel = FlutterStatusModel(status: true, data: flag)
-                    let data = try! JSONEncoder().encode(statusModel)
-                    guard let json = String(data: data, encoding: .utf8) else { return }
-                    flutterResult(json)
-                case .failure(let error):
-                    let response = self.ResponseFromError(error)
-                    let statusModel = FlutterStatusModel(status: false, data: response)
-                    let data = try! JSONEncoder().encode(statusModel)
-                    guard let json = String(data: data, encoding: .utf8) else { return }
-                    flutterResult(json)
-                }
-        }.disposed(by: bag)
+        subscribeAndCallback(observable: biconomy.isDeploy(eoaAddress: eoaAddress), flutterResult: flutterResult)
     }
     
     func isBiconomyModeEnable(flutterResult: FlutterResult) {
@@ -145,20 +128,23 @@ public extension ParticleBiconomyPlugin {
             $0.stringValue
         }
         
-        biconomy.rpcGetFeeQuotes(eoaAddress: eoaAddress, transactions: transactions).subscribe { [weak self] result in
+        subscribeAndCallback(observable: biconomy.rpcGetFeeQuotes(eoaAddress: eoaAddress, transactions: transactions), flutterResult: flutterResult)
+    }
+}
+
+extension ParticleBiconomyPlugin {
+    private func subscribeAndCallback<T: Codable>(observable: Single<T>, flutterResult: @escaping FlutterResult) {
+        observable.subscribe { [weak self] result in
             guard let self = self else { return }
             switch result {
-            case .success(let quotes):
-                let feeQuotes = quotes.map {
-                    $0.jsonObject
-                }
-                let statusModel = FlutterStatusModel(status: true, data: feeQuotes)
-                let data = try! JSONEncoder().encode(statusModel)
-                guard let json = String(data: data, encoding: .utf8) else { return }
-                flutterResult(json)
             case .failure(let error):
                 let response = self.ResponseFromError(error)
                 let statusModel = FlutterStatusModel(status: false, data: response)
+                let data = try! JSONEncoder().encode(statusModel)
+                guard let json = String(data: data, encoding: .utf8) else { return }
+                flutterResult(json)
+            case .success(let signedMessage):
+                let statusModel = FlutterStatusModel(status: true, data: signedMessage)
                 let data = try! JSONEncoder().encode(statusModel)
                 guard let json = String(data: data, encoding: .utf8) else { return }
                 flutterResult(json)
@@ -166,4 +152,3 @@ public extension ParticleBiconomyPlugin {
         }.disposed(by: bag)
     }
 }
-
