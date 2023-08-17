@@ -1,6 +1,4 @@
 import 'dart:convert';
-
-import 'package:flutter/foundation.dart';
 import 'package:oktoast/oktoast.dart';
 
 import 'package:particle_auth/particle_auth.dart';
@@ -11,13 +9,9 @@ import 'package:particle_wallet_example/mock/test_account.dart';
 import 'package:particle_wallet_example/mock/transaction_mock.dart';
 
 class ConnectLogic {
-  static late ChainInfo currChainInfo;
-  static WalletType walletType = WalletType.particle;
+  static ChainInfo currChainInfo = EthereumChain.mainnet();
 
-  static void selectChain() {
-    // currChainInfo = SolanaChain.devnet();
-    currChainInfo = EthereumChain.mainnet();
-  }
+  static WalletType walletType = WalletType.particle;
 
   static String? pubAddress;
 
@@ -45,14 +39,9 @@ class ConnectLogic {
     ParticleConnect.setWalletConnectV2SupportChainInfos(<ChainInfo>[EthereumChain.mainnet(), PolygonChain.mainnet()]);
   }
 
-  static void setChainInfo() async {
-    bool isSuccess = await ParticleAuth.setChainInfo(currChainInfo);
-    print("setChainInfo: $isSuccess");
-  }
-
   static void connect() async {
     final config = ParticleConnectConfig(
-        LoginType.google, "", [SupportAuthType.all], null);
+        LoginType.email, "", [SupportAuthType.all], null);
     final result = await ParticleConnect.connect(walletType, config: config);
     showToast('connect: $result');
     print("connect: $result");

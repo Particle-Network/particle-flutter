@@ -1,4 +1,3 @@
-import 'package:flutter/foundation.dart';
 import 'package:oktoast/oktoast.dart';
 import 'package:particle_connect/particle_connect.dart';
 import 'package:particle_wallet/particle_wallet.dart';
@@ -174,5 +173,18 @@ class WalletLogic {
     // example https://github.com/Particle-Network/particle-ios/blob/main/Demo/Demo/customUIConfig.json
     const json = "";
     ParticleWallet.loadCustomUIJsonString(json);
+  }
+
+  static void setCustomWalletName() {
+    ParticleWallet.setCustomWalletName(
+        "Playbux", "https://static.particle.network/wallet-icons/Rainbow.png");
+  }
+
+  static void setCustomLocalizable() {
+    Map<String, String> localizables = <String, String>{
+      "network fee": "Service Fee",
+      "particle auth wallet": "Playbux"
+    };
+    ParticleWallet.setCustomLocalizable(Language.en, localizables);
   }
 }

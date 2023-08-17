@@ -5,6 +5,7 @@
 //  Created by link on 2022/10/8.
 //
 
+import ConnectCommon
 import Flutter
 import Foundation
 import ParticleNetworkBase
@@ -50,6 +51,9 @@ public class ParticleWalletPlugin: NSObject, FlutterPlugin {
         case setSupportWalletConnect
         case setWalletConnectV2ProjectId
         case initializeWalletMetaData
+
+        case setCustomWalletName
+        case setCustomLocalizable
     }
 
     public static func register(with registrar: FlutterPluginRegistrar) {
@@ -132,6 +136,11 @@ public class ParticleWalletPlugin: NSObject, FlutterPlugin {
             self.setWalletConnectV2ProjectId(json as? String)
         case .initializeWalletMetaData:
             self.initializeWalletMetaData(json as? String)
+
+        case .setCustomWalletName:
+            self.setCustomWalletName(json as? String)
+        case .setCustomLocalizable:
+            self.setCustomLocalizable(json as? String)
         }
     }
 }
@@ -257,25 +266,10 @@ extension ParticleWalletPlugin {
     }
 
     func navigatorLoginList(flutterResult: @escaping FlutterResult) {
-        PNRouter.navigatorLoginList().subscribe { [weak self] result in
-            guard let self = self else { return }
-            switch result {
-            case .failure(let error):
-                let response = self.ResponseFromError(error)
-                let statusModel = FlutterStatusModel(status: false, data: response)
-                let data = try! JSONEncoder().encode(statusModel)
-                guard let json = String(data: data, encoding: .utf8) else { return }
-                flutterResult(json)
-            case .success(let (walletType, account)):
-                guard let account = account else { return }
-
-                let loginListModel = FlutterLoginListModel(walletType: walletType.stringValue, account: account)
-                let statusModel = FlutterStatusModel(status: true, data: loginListModel)
-                let data = try! JSONEncoder().encode(statusModel)
-                guard let json = String(data: data, encoding: .utf8) else { return }
-                flutterResult(json)
-            }
-        }.disposed(by: self.bag)
+        subscribeAndCallback(observable: PNRouter.navigatorLoginList().map { walletType, account in
+            let loginListModel = FlutterLoginListModel(walletType: walletType.stringValue, account: account)
+            return loginListModel
+        }, flutterResult: flutterResult)
     }
 
     func navigatorSwap(_ json: String?) {
@@ -519,5 +513,55 @@ extension ParticleWalletPlugin {
             return
         }
         ParticleWalletConnect.setWalletConnectV2ProjectId(json)
+    }
+
+    func setCustomWalletName(_ json: String?) {
+        guard let json = json else {
+            return
+        }
+
+        let data = JSON(parseJSON: json)
+
+        let name = data["name"].stringValue
+        let icon = data["icon"].stringValue
+
+        ConnectManager.setCustomWalletName(walletType: .particle, name: .init(name: name, icon: icon))
+    }
+
+    func setCustomLocalizable(_ json: String?) {
+        guard let json = json else {
+            return
+        }
+
+        let data = JSON(parseJSON: json)
+
+        let language = self.getLanguage(from: data["language"].stringValue.lowercased())
+
+        let localizables = data["localizables"].dictionaryValue.mapValues { json in
+            json.stringValue
+        }
+
+        ParticleWalletGUI.setCustomLocalizable([language: localizables])
+    }
+}
+
+extension ParticleWalletPlugin {
+    private func subscribeAndCallback<T: Codable>(observable: Single<T>, flutterResult: @escaping FlutterResult) {
+        observable.subscribe { [weak self] result in
+            guard let self = self else { return }
+            switch result {
+            case .failure(let error):
+                let response = self.ResponseFromError(error)
+                let statusModel = FlutterStatusModel(status: false, data: response)
+                let data = try! JSONEncoder().encode(statusModel)
+                guard let json = String(data: data, encoding: .utf8) else { return }
+                flutterResult(json)
+            case .success(let signedMessage):
+                let statusModel = FlutterStatusModel(status: true, data: signedMessage)
+                let data = try! JSONEncoder().encode(statusModel)
+                guard let json = String(data: data, encoding: .utf8) else { return }
+                flutterResult(json)
+            }
+        }.disposed(by: self.bag)
     }
 }

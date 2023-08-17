@@ -92,5 +92,5 @@ struct FlutterConnectLoginResult: Codable {
 
 struct FlutterLoginListModel: Codable {
     let walletType: String
-    let account: Account
+    let account: Account?
 }

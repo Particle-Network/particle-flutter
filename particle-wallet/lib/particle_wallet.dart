@@ -295,4 +295,25 @@ class ParticleWallet {
           "setWalletConnectV2ProjectId", walletConnectV2ProjectId);
     }
   }
+
+  /// Set custom wallet name and icon, should call before login/connect, only support particle wallet.
+  static setCustomWalletName(String name, String icon) {
+    if (Platform.isIOS) {
+      _channel.invokeListMethod(
+          "setCustomWalletName", jsonEncode({
+            "name": name,
+            "icon": icon,
+          }));
+    }
+  }
+  /// Set custom localizable strings, should call before open any wallet page.
+  static setCustomLocalizable(Language language, Map<String, String> localizables) {
+    if (Platform.isIOS) {
+      _channel.invokeListMethod(
+          "setCustomLocalizable", jsonEncode({
+            "language": language.name,
+            "localizables": localizables,
+          }));
+    }
+  }
 }

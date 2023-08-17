@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:particle_wallet_example/pages/connect_demo/connect_logic.dart';
+import 'package:particle_wallet_example/pages/connect_demo/select_chain_page.dart';
+import 'package:particle_wallet_example/pages/connect_demo/select_wallet_type.dart';
 
 class ConnectDemoPage extends StatefulWidget {
   const ConnectDemoPage({Key? key}) : super(key: key);
@@ -19,20 +21,6 @@ class _ConnectDemoPageState extends State<ConnectDemoPage> {
         child: Column(
           children: <Widget>[
             Padding(
-              padding: const EdgeInsets.only(
-                  left: 8.0, top: 16.0, right: 8.0, bottom: 8.0),
-              child: SizedBox(
-                width: double.infinity,
-                height: 50,
-                child: ElevatedButton(
-                    onPressed: () => {ConnectLogic.selectChain()},
-                    child: const Text(
-                      "Select Chain",
-                      style: TextStyle(fontSize: 18),
-                    )),
-              ),
-            ),
-            Padding(
               padding: const EdgeInsets.all(8.0),
               child: SizedBox(
                 width: double.infinity,
@@ -46,14 +34,41 @@ class _ConnectDemoPageState extends State<ConnectDemoPage> {
               ),
             ),
             Padding(
-              padding: const EdgeInsets.all(8.0),
+              padding: const EdgeInsets.only(
+                  left: 8.0, top: 16.0, right: 8.0, bottom: 8.0),
               child: SizedBox(
                 width: double.infinity,
                 height: 50,
                 child: ElevatedButton(
-                    onPressed: () => {ConnectLogic.setChainInfo()},
+                    onPressed: () => {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => const SelectChainPage()),
+                          )
+                        },
                     child: const Text(
-                      "SetChainInfo",
+                      "SelectChain",
+                      style: TextStyle(fontSize: 18),
+                    )),
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.only(
+                  left: 8.0, top: 16.0, right: 8.0, bottom: 8.0),
+              child: SizedBox(
+                width: double.infinity,
+                height: 50,
+                child: ElevatedButton(
+                    onPressed: () => {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => const SelectWalletPage()),
+                          )
+                        },
+                    child: const Text(
+                      "Select wallet type",
                       style: TextStyle(fontSize: 18),
                     )),
               ),

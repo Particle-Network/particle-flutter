@@ -372,6 +372,32 @@ class _WalletDemoPageState extends State<WalletDemoPage> {
                     )),
               ),
             ),
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: SizedBox(
+                width: double.infinity,
+                height: 50,
+                child: ElevatedButton(
+                    onPressed: () => {WalletLogic.setCustomWalletName()},
+                    child: const Text(
+                      "load custom wallet name",
+                      style: TextStyle(fontSize: 18),
+                    )),
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: SizedBox(
+                width: double.infinity,
+                height: 50,
+                child: ElevatedButton(
+                    onPressed: () => {WalletLogic.setCustomLocalizable()},
+                    child: const Text(
+                      "load custom localizable",
+                      style: TextStyle(fontSize: 18),
+                    )),
+              ),
+            ),
           ],
         ),
       ),
