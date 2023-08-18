@@ -10,12 +10,12 @@ import 'package:particle_connect/particle_connect.dart';
 class BiconomyAuthLogic {
   static void init() {
     // should call ParticleAuth init first.
-    ParticleAuth.init(PolygonChain.mumbai(), Env.dev);
+    // ParticleAuth.init(PolygonChain.mumbai(), Env.dev);
 
     Map<int, String> dappKeys = {
-      1: "your ethereum mainnet key",
-      5: "your ethereum goerli key",
-      137: "your polygon mainnet key",
+      1: "",//your ethereum mainnet key
+      5: "", //your ethereum goerli key
+      137: "", //your polygon mainnet key
       80001: "hYZIwIsf2.e18c790b-cafb-4c4e-a438-0289fc25dba1"
     };
     ParticleAuth.init(PolygonChain.mainnet(), Env.production);
@@ -132,7 +132,7 @@ class BiconomyAuthLogic {
 
     var result =
         await ParticleBiconomy.rpcGetFeeQuotes(publicAddress, transactions);
-
+    print("rpcGetFeeQuotes result $result");
     List<dynamic> feeQuotes = result["tokenPaymaster"]["feeQuotes"];
 
     var overFeeQuotes = feeQuotes.where((element) {

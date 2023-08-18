@@ -6,7 +6,6 @@ import com.blankj.utilcode.util.GsonUtils
 import com.blankj.utilcode.util.LogUtils
 import com.particle.base.ParticleNetwork
 import com.particle.base.isSupportedERC4337
-import com.particle.base.model.BiconomyVersion
 import com.particle.erc4337.ParticleNetworkBiconomy.initBiconomyMode
 import com.particle.erc4337.biconomy.BiconomyService
 
@@ -34,7 +33,7 @@ object BiconomyBridge {
     fun init(activity: Activity, initParams: String?) {
         LogUtils.d("init", initParams)
         val initData = GsonUtils.fromJson(initParams, BiconomyInitData::class.java)
-        ParticleNetwork.initBiconomyMode(initData.dAppKeys, BiconomyVersion.V100)
+        ParticleNetwork.initBiconomyMode(initData.dAppKeys)
         ParticleNetwork.setBiconomyService(BiconomyService)
     }
 

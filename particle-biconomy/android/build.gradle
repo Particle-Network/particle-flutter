@@ -50,7 +50,7 @@ android {
 
 dependencies {
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
-    def sdkVersion = "0.14.4"
+    def sdkVersion = "1.0.1"
     implementation("network.particle:biconomy-service:$sdkVersion")
     implementation("com.blankj:utilcodex:1.31.0")
     implementation("commons-codec:commons-codec:1.15")

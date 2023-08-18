@@ -5,8 +5,6 @@ import com.google.gson.annotations.SerializedName
 
 @Keep
 data class BiconomyInitData(
-    @SerializedName("version")
-    val version: String,
     @SerializedName("dapp_app_keys")
     val dAppKeys: Map<Long, String>
 )

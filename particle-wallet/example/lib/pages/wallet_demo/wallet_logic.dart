@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:oktoast/oktoast.dart';
 import 'package:particle_connect/particle_connect.dart';
 import 'package:particle_wallet/particle_wallet.dart';
@@ -181,10 +183,25 @@ class WalletLogic {
   }
 
   static void setCustomLocalizable() {
-    Map<String, String> localizables = <String, String>{
-      "network fee": "Service Fee",
-      "particle auth wallet": "Playbux"
-    };
-    ParticleWallet.setCustomLocalizable(Language.en, localizables);
+    if (Platform.isIOS) {
+      Map<String, String> localizables = <String, String>{
+        "network fee": "Service Fee",
+        "particle auth wallet": "Playbux"
+      };
+      ParticleWallet.setCustomLocalizable(Language.en, localizables);
+    }
+
+    //Android need add values
+    ///
+    /// YourProject/app/src/main/res/
+    //     values/strings.xml
+    //     values-ja-rJP/strings.xml
+    //     values-ko-rKR/strings.xml
+    //     values-zh-rCN/strings.xml
+    //     values-zh-rHK/strings.xml
+    //     values-zh-rTW/strings.xml
+    //        <string name="pn_network_fee">new NetworkFee</string>
+    //        <string name="pn_particle_auth_wallet">New Wallet</string>
+    ///
   }
 }

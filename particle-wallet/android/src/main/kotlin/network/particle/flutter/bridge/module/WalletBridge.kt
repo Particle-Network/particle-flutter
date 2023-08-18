@@ -2,11 +2,13 @@ package network.particle.flutter.bridge.module
 
 import android.app.Activity
 import android.content.Intent
+import android.text.TextUtils
 import android.util.Log
 import com.blankj.utilcode.util.GsonUtils
 import com.blankj.utilcode.util.LogUtils
 import com.connect.common.IConnectAdapter
 import com.google.gson.reflect.TypeToken
+import com.particle.api.infrastructure.db.table.WalletInfo
 import com.particle.api.service.DBService
 import com.particle.base.ParticleNetwork
 import com.particle.base.model.MobileWCWalletName
@@ -36,6 +38,7 @@ import network.particle.flutter.bridge.ui.FlutterLoginOptActivity
 import network.particle.flutter.bridge.utils.BridgeScope
 import network.particle.flutter.bridge.utils.WalletScope
 import org.json.JSONObject
+import particle.auth.adapter.ParticleConnectAdapter
 import java.math.BigInteger
 
 object WalletBridge {
@@ -73,10 +76,25 @@ object WalletBridge {
         val jsonObject = JSONObject(jsonParams);
         val walletType = jsonObject.getString("wallet_type");
         val publicKey = jsonObject.getString("public_address");
-        val adapter = ParticleConnect.getAdapters().first{it.name.equals(walletType,true)}
-        BridgeScope.launch {
-            val wallet = WalletUtils.createSelectedWallet(publicKey, adapter)
-            WalletUtils.setWalletChain(wallet)
+        val walletName = jsonObject.optString("wallet_name");
+        val adapter = ParticleConnect.getAdapters().first { it.name.equals(walletType, true) }
+        if (!TextUtils.isEmpty(walletName) && adapter is ParticleConnectAdapter) {
+            BridgeScope.launch {
+                val wallet = WalletInfo.createWallet(
+                    ParticleNetwork.getAddress(),
+                    ParticleNetwork.chainInfo.name,
+                    ParticleNetwork.chainInfo.id,
+                    1,
+                    walletName,
+                    MobileWCWalletName.Particle.name
+                )
+                ParticleWallet.setWallet(wallet)
+            }
+        } else {
+            BridgeScope.launch {
+                val wallet = WalletUtils.createSelectedWallet(publicKey, adapter)
+                WalletUtils.setWalletChain(wallet)
+            }
         }
     }
 
@@ -291,7 +309,7 @@ object WalletBridge {
             val jsonObject = JSONObject(jsonParams);
             val walletType = jsonObject.getString("wallet_type");
             val publicKey = jsonObject.getString("public_address");
-            val adapter = ParticleConnect.getAdapters().first{it.name.equals(walletType,true)}
+            val adapter = ParticleConnect.getAdapters().first { it.name.equals(walletType, true) }
             WalletScope.launch {
                 WalletUtils.createSelectedWallet(publicKey, adapter)
                 result.success(true)
@@ -309,6 +327,7 @@ object WalletBridge {
     fun getEnableSwap(result: MethodChannel.Result) {
         result.success(ParticleNetwork.getEnableSwap())
     }
+
     fun getPayDisabled(result: MethodChannel.Result) {
         result.success(ParticleNetwork.getEnablePay())
     }
@@ -329,7 +348,8 @@ object WalletBridge {
     fun setShowAppearanceSetting(isShow: Boolean) {
         ParticleWallet.setShowAppearanceSetting(isShow)
     }
-   fun setSupportDappBrowser(isShow: Boolean) {
+
+    fun setSupportDappBrowser(isShow: Boolean) {
         ParticleWallet.setSupportDappBrowser(isShow)
     }
 
@@ -349,5 +369,15 @@ object WalletBridge {
             nftContractAddresses, object : TypeToken<List<String>>() {}.type
         )
         ParticleNetwork.displayNFTContractAddresses(nftContractAddressList as MutableList<String>)
+    }
+
+    fun setCustomWalletName(jsonParams: String) {
+        try {
+            val jsonObject = JSONObject(jsonParams);
+            val icon = jsonObject.getString("icon")
+            ParticleWallet.setWalletIcon(icon)
+        } catch (e: Exception) {
+            e.printStackTrace()
+        }
     }
 }

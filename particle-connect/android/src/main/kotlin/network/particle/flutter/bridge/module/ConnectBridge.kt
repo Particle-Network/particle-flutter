@@ -17,9 +17,9 @@ import com.particle.base.data.ErrorInfo
 import com.particle.base.data.SignOutput
 import com.particle.base.data.WebServiceCallback
 import com.particle.base.ibiconomy.FeeMode
-import com.particle.base.ibiconomy.FeeModeAuto
-import com.particle.base.ibiconomy.FeeModeCustom
 import com.particle.base.ibiconomy.FeeModeGasless
+import com.particle.base.ibiconomy.FeeModeNative
+import com.particle.base.ibiconomy.FeeModeToken
 import com.particle.base.ibiconomy.MessageSigner
 import com.particle.base.model.ChainType
 import com.particle.base.model.LoginType
@@ -276,9 +276,9 @@ object ConnectBridge {
 
     fun signAndSendTransaction(jsonParams: String, result: MethodChannel.Result) {
         LogUtils.d("signAndSendTransaction", jsonParams)
-        val signData = GsonUtils.fromJson(jsonParams, ConnectSignData::class.java)
-        val transaction = signData.transaction
-        val connectAdapter = getConnectAdapter(signData.publicAddress, signData.walletType)
+        val transParams = GsonUtils.fromJson(jsonParams, ConnectSignData::class.java)
+        val transaction = transParams.transaction
+        val connectAdapter = getConnectAdapter(transParams.publicAddress, transParams.walletType)
         if (connectAdapter == null) {
             result.success(
                 FlutterCallBack.failed(
@@ -291,26 +291,25 @@ object ConnectBridge {
         }
 
         if (ParticleNetwork.isBiconomyModeEnable()) {
-            var feeMode: FeeMode = FeeModeAuto()
-            if (signData.feeMode != null) {
-                val option = signData.feeMode.option
-                feeMode = when (option) {
-                    "custom" -> {
-                        val feeQuote = signData.feeMode.feeQuote!!
-                        FeeModeCustom(feeQuote)
-                    }
-
-                    "gasless" -> {
-                        FeeModeGasless()
-                    }
-
-                    else -> {
-                        FeeModeAuto()
-                    }
+            var feeMode: FeeMode = FeeModeNative()
+            if (transParams.feeMode != null) {
+                val option = transParams.feeMode.option
+                if (option == "token") {
+                    val tokenPaymasterAddress = transParams.feeMode.tokenPaymasterAddress
+                    val feeQuote = transParams.feeMode.feeQuote!!
+                    feeMode = FeeModeToken(feeQuote, tokenPaymasterAddress!!)
+                } else if (option == "gasless") {
+                    val verifyingPaymasterGasless =
+                        transParams.feeMode.wholeFeeQuote.verifyingPaymasterGasless
+                    feeMode = FeeModeGasless(verifyingPaymasterGasless)
+                } else if (option == "native") {
+                    val verifyingPaymasterNative =
+                        transParams.feeMode.wholeFeeQuote.verifyingPaymasterNative
+                    feeMode = FeeModeNative(verifyingPaymasterNative)
                 }
             }
             connectAdapter.signAndSendTransaction(
-                signData.publicAddress,
+                transParams.publicAddress,
                 transaction,
                 feeMode,
                 object : TransactionCallback {
@@ -329,7 +328,7 @@ object ConnectBridge {
                 })
         } else {
             connectAdapter.signAndSendTransaction(
-                signData.publicAddress,
+                transParams.publicAddress,
                 transaction,
                 object : TransactionCallback {
                     override fun onError(error: ConnectError) {
@@ -726,9 +725,9 @@ object ConnectBridge {
 
     fun batchSendTransactions(transactions: String, result: MethodChannel.Result) {
         LogUtils.d("batchSendTransactions", transactions)
-        val signData =
+        val transParams =
             GsonUtils.fromJson<ConnectSignData>(transactions, ConnectSignData::class.java)
-        val connectAdapter = getConnectAdapter(signData.publicAddress, signData.walletType)
+        val connectAdapter = getConnectAdapter(transParams.publicAddress, transParams.walletType)
         if (connectAdapter == null) {
             result.success(
                 FlutterCallBack.failed(
@@ -739,56 +738,36 @@ object ConnectBridge {
             )
             return
         }
-        var feeMode: FeeMode = FeeModeAuto()
-        if (signData.feeMode != null) {
-            val option = signData.feeMode!!.option
-            if (option == "custom") {
-                val feeQuote = signData.feeMode!!.feeQuote!!
-                feeMode = FeeModeCustom(feeQuote)
+        var feeMode: FeeMode = FeeModeNative()
+        if (transParams.feeMode != null) {
+            val option = transParams.feeMode.option
+            if (option == "token") {
+                val tokenPaymasterAddress = transParams.feeMode.tokenPaymasterAddress
+                val feeQuote = transParams.feeMode.feeQuote!!
+                feeMode = FeeModeToken(feeQuote, tokenPaymasterAddress!!)
             } else if (option == "gasless") {
-                feeMode = FeeModeGasless()
-            } else {
-                feeMode = FeeModeAuto()
+                val verifyingPaymasterGasless =
+                    transParams.feeMode.wholeFeeQuote.verifyingPaymasterGasless
+                feeMode = FeeModeGasless(verifyingPaymasterGasless)
+            } else if (option == "native") {
+                val verifyingPaymasterNative =
+                    transParams.feeMode.wholeFeeQuote.verifyingPaymasterNative
+                feeMode = FeeModeNative(verifyingPaymasterNative)
             }
         }
         CoroutineScope(Dispatchers.IO).launch {
             try {
                 ParticleNetwork.getBiconomyService()
                     .quickSendTransaction(
-                        signData.transactions,
+                        transParams.transactions,
                         feeMode,
                         object : MessageSigner {
-                            override fun signTypedData(
-                                message: String,
-                                callback: WebServiceCallback<SignOutput>
-                            ) {
-
-                                connectAdapter.signTypedData(
-                                    signData.publicAddress,
-                                    message,
-                                    object : SignCallback {
-                                        override fun onError(error: ConnectError) {
-                                            callback.failure(
-                                                ErrorInfo(
-                                                    error.message,
-                                                    error.code
-                                                )
-                                            )
-                                        }
-
-                                        override fun onSigned(signature: String) {
-                                            callback.success(SignOutput(signature))
-                                        }
-
-                                    })
-                            }
-
                             override fun signMessage(
                                 message: String,
                                 callback: WebServiceCallback<SignOutput>
                             ) {
                                 connectAdapter.signMessage(
-                                    signData.publicAddress,
+                                    transParams.publicAddress,
                                     message,
                                     object : SignCallback {
                                         override fun onError(error: ConnectError) {

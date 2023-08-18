@@ -123,6 +123,9 @@ class ParticleWalletPlugin : FlutterPlugin, MethodCallHandler, ActivityAware {
             "setDisplayNFTContractAddresses" -> {
                 WalletBridge.setDisplayNFTContractAddresses(call.arguments as String)
             }
+            "setCustomWalletName" -> {
+                WalletBridge.setCustomWalletName(call.arguments as String)
+            }
 
             else -> result.notImplemented()
         }

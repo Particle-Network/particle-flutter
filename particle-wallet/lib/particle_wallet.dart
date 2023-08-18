@@ -212,10 +212,10 @@ class ParticleWallet {
   /// Set wallet
   ///
   /// Pass [walletType] and [publicAddress] to decide a wallet to set.
-  ///
+  /// [pnWalletName] is optional, only support particleConnectAdapter Android supported.
   /// Return true or false.
-  static Future<bool> setWallet(
-      WalletType walletType, String publicAddress) async {
+  static Future<bool> setWallet(WalletType walletType, String publicAddress,
+      [String? pnWalletName]) async {
     if (Platform.isIOS) {
       return await _channel.invokeMethod(
           'switchWallet',
@@ -229,6 +229,7 @@ class ParticleWallet {
         jsonEncode({
           "wallet_type": walletType.name,
           "public_address": publicAddress,
+          "wallet_name": pnWalletName,
         }));
   }
 
@@ -300,17 +301,28 @@ class ParticleWallet {
   static setCustomWalletName(String name, String icon) {
     if (Platform.isIOS) {
       _channel.invokeListMethod(
-          "setCustomWalletName", jsonEncode({
+          "setCustomWalletName",
+          jsonEncode({
             "name": name,
+            "icon": icon,
+          }));
+    } else {
+      // name pass setWallet("","","custom partice wallet name")
+      _channel.invokeListMethod(
+          "setCustomWalletName",
+          jsonEncode({
             "icon": icon,
           }));
     }
   }
+
   /// Set custom localizable strings, should call before open any wallet page.
-  static setCustomLocalizable(Language language, Map<String, String> localizables) {
+  static setCustomLocalizable(
+      Language language, Map<String, String> localizables) {
     if (Platform.isIOS) {
       _channel.invokeListMethod(
-          "setCustomLocalizable", jsonEncode({
+          "setCustomLocalizable",
+          jsonEncode({
             "language": language.name,
             "localizables": localizables,
           }));

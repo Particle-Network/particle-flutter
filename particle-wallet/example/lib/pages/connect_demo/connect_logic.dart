@@ -49,7 +49,7 @@ class ConnectLogic {
     if (jsonResult["status"] == 1 || jsonResult["status"] == true) {
       pubAddress = jsonResult["data"]["publicAddress"];
 
-      ParticleWallet.setWallet(walletType, pubAddress!);
+      ParticleWallet.setWallet(walletType, pubAddress!,"Custom WalletName");
 
       print("pubAddress:$pubAddress");
       showToast("connect: $result  pubAddress:$pubAddress");

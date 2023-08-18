@@ -96,10 +96,12 @@ android {
 
 dependencies {
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
-    def sdkVersion = "1.0.0"
+    def sdkVersion = "1.0.1"
     implementation("network.particle:auth-service:$sdkVersion")
     implementation("network.particle:api-service:$sdkVersion")
-    implementation("network.particle:wallet-service:$sdkVersion")
+    implementation("network.particle:wallet-service:$sdkVersion"){
+        exclude(group: 'network.particle', module: 'bcprov-jdk15to18')
+    }
     implementation("com.blankj:utilcodex:1.31.0")
     implementation("commons-codec:commons-codec:1.15")
     implementation("com.google.code.gson:gson:2.8.5")
