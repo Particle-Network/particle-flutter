@@ -10,6 +10,11 @@ Particle Wallet is not an independent wallet—it is a wallet infrastructure plu
 
 Particle Biconomy support Account Abstraction
 
+## iOS Cocoapods requires
+
+Specify all pod versions in your Podfile, get the lateset versions from iOS native  [particle-ios](https://github.com/Particle-Network/particle-ios) and [particle-connect](https://github.com/Particle-Network/particle-connect-ios)
+
+
 ## Getting Started 
 
 [Auth Doc](https://docs.particle.network/developers/auth-service/sdks/flutter)
