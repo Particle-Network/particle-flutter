@@ -59,10 +59,10 @@ PODS:
     - Flutter
     - ParticleAuthAdapter
     - ParticleConnect
-  - ParticleAuthAdapter (0.2.6):
+  - ParticleAuthAdapter (0.2.9):
     - ConnectCommon
     - ParticleAuthService
-  - ParticleAuthService (1.0.5):
+  - ParticleAuthService (1.0.6):
     - CryptoSwift
     - ParticleNetworkBase
     - RxAlamofire (~> 6.1.1)
@@ -70,11 +70,11 @@ PODS:
     - RxSwift (= 6.5.0)
     - SwiftyJSON (~> 5.0)
     - SwiftyUserDefaults (~> 5.3.0)
-  - ParticleBiconomy (1.0.5):
+  - ParticleBiconomy (1.0.6):
     - ParticleNetworkBase
   - ParticleConnect (0.2.9):
     - ConnectCommon
-  - ParticleNetworkBase (1.0.5):
+  - ParticleNetworkBase (1.0.6):
     - Base58.swift
     - BigInt (~> 5.2.0)
     - CryptoSwift
@@ -155,10 +155,10 @@ DEPENDENCIES:
   - particle_auth (from `.symlinks/plugins/particle_auth/ios`)
   - particle_biconomy (from `.symlinks/plugins/particle_biconomy/ios`)
   - particle_connect (from `.symlinks/plugins/particle_connect/ios`)
-  - ParticleAuthService (= 1.0.5)
-  - ParticleBiconomy (= 1.0.5)
+  - ParticleAuthService (= 1.0.6)
+  - ParticleBiconomy (= 1.0.6)
   - ParticleConnect (= 0.2.9)
-  - ParticleNetworkBase (= 1.0.5)
+  - ParticleNetworkBase (= 1.0.6)
 
 SPEC REPOS:
   https://github.com/CocoaPods/Specs.git:
@@ -216,11 +216,11 @@ SPEC CHECKSUMS:
   particle_auth: 7df9934788402bd80156fa5f56422d941af0745c
   particle_biconomy: 732e548a456869d9da5a8a3a1910c4c0813a188a
   particle_connect: 0192191b9fcae5c955c4752920acc5f05deb762a
-  ParticleAuthAdapter: 9bf48f9c557fabbd3f06f81778e5705d49cec030
-  ParticleAuthService: 7d5e5cb6b1f7a923f71da2cdd5236c882dfd171e
-  ParticleBiconomy: 3d406cdd68823d794e34c72e204bf6f3e8301052
+  ParticleAuthAdapter: f0fab6f809f39709ab7b294c7d68db39eab66463
+  ParticleAuthService: 632009f0b286e395ac6db50af852775547ba278c
+  ParticleBiconomy: 962bd6483918f53a3084fa0ac215f03cf5d83c4b
   ParticleConnect: d7400c9895d6d553125205cd48d02f69ebe64b9f
-  ParticleNetworkBase: 0dddee160c13365b09981d4e97eddfb1fa3563eb
+  ParticleNetworkBase: 4ce39f867a7fa05e237b2082e908caf78b340be0
   RxAlamofire: beb75a1c452d0de225651db4903f5d29d034a620
   RxCocoa: 94f817b71c07517321eb4f9ad299112ca8af743b
   RxRelay: 1de1523e604c72b6c68feadedd1af3b1b4d0ecbd
@@ -235,6 +235,6 @@ SPEC CHECKSUMS:
   TweetNacl: 3abf4d1d2082b0114e7a67410e300892448951e6
   WalletConnectSwiftV2: 66aef6e7bbe881c465e6bce164f61c5bbf61d796
 
-PODFILE CHECKSUM: 854d22893b8f7382d244a84fcde8056d862427b8
+PODFILE CHECKSUM: 00c91a2944ccde4b653d5a078f0511e19eb5bd0b
 
 COCOAPODS: 1.12.1

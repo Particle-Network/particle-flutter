@@ -52,7 +52,6 @@ class ConnectLogic {
   static void getChainInfo() async {
     String result = await ParticleAuth.getChainInfo();
     print(result);
-    String chainName = jsonDecode(result)["chain_name"];
     int chainId = jsonDecode(result)["chain_id"];
 
     ChainInfo? chainInfo;

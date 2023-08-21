@@ -57,7 +57,6 @@ class _SolanaRpcApi implements SolanaRpcApi {
   }
 }
 
-// ignore_for_file: unnecessary_brace_in_string_interps,no_leading_underscores_for_local_identifiers
 
 class _EvmRpcApi implements EvmRpcApi {
   _EvmRpcApi(
@@ -108,7 +107,6 @@ class _EvmRpcApi implements EvmRpcApi {
   }
 }
 
-// ignore_for_file: unnecessary_brace_in_string_interps,no_leading_underscores_for_local_identifiers
 
 class _ServiceApi implements ServiceApi {
   _ServiceApi(

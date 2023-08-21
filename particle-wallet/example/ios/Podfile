@@ -39,12 +39,12 @@ target 'Runner' do
   pod 'ConnectPhantomAdapter', '0.2.9'
   pod 'ParticleAuthAdapter', '0.2.9'
   
-  pod 'ParticleNetworkBase', '1.0.5'
-  pod 'ParticleAuthService', '1.0.5'
-  pod 'ParticleWalletGUI', '1.0.5'
-  pod 'ParticleWalletAPI', '1.0.5'
-  pod 'ParticleWalletConnect', '1.0.5'
-  pod 'ParticleBiconomy', '1.0.5'
+  pod 'ParticleNetworkBase', '1.0.6'
+  pod 'ParticleAuthService', '1.0.6'
+  pod 'ParticleWalletGUI', '1.0.6'
+  pod 'ParticleWalletAPI', '1.0.6'
+  pod 'ParticleWalletConnect', '1.0.6'
+  pod 'ParticleBiconomy', '1.0.6'
   
   pod 'SkeletonView', :git => 'https://github.com/SunZhiC/SkeletonView.git', :branch => 'main'
   pod 'SwiftMessages', :git => 'https://github.com/SunZhiC/SwiftMessages', :branch => 'master'

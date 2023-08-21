@@ -1,5 +1,4 @@
 import 'dart:convert';
-import 'dart:io';
 import 'package:particle_auth/model/particle_info.dart';
 import 'package:particle_auth/network/net/request_body_entity.dart';
 import 'package:retrofit/retrofit.dart';

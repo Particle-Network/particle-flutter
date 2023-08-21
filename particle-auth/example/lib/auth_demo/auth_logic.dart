@@ -168,9 +168,8 @@ class AuthLogic {
   }
 
   static void signTransaction() async {
-    String? pubAddress = await ParticleAuth.getAddress();
+    String pubAddress = await ParticleAuth.getAddress();
     if (currChainInfo is SolanaChain) {
-      if (pubAddress == null) return;
       final trans = await TransactionMock.mockSolanaTransaction(pubAddress);
       String result = await ParticleAuth.signTransaction(trans);
       debugPrint("signTransaction: $result");
@@ -181,9 +180,8 @@ class AuthLogic {
   }
 
   static void signAllTransactions() async {
-    String? pubAddress = await ParticleAuth.getAddress();
+    String pubAddress = await ParticleAuth.getAddress();
     if (currChainInfo is SolanaChain) {
-      if (pubAddress == null) return;
       final trans1 = await TransactionMock.mockSolanaTransaction(pubAddress);
       final trans2 = await TransactionMock.mockSolanaTransaction(pubAddress);
 
@@ -270,7 +268,6 @@ class AuthLogic {
   static void getChainInfo() async {
     String result = await ParticleAuth.getChainInfo();
     print(result);
-    String chainName = jsonDecode(result)["chain_name"];
     int chainId = jsonDecode(result)["chain_id"];
 
     ChainInfo? chainInfo;

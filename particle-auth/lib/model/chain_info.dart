@@ -3,6 +3,7 @@ enum Env { dev, staging, production }
 abstract class ChainInfo {
   late String? chainName;
   late int chainId;
+  late String chainIdName;
 }
 
 class SolanaChain implements ChainInfo {

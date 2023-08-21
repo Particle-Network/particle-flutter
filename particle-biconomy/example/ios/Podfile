@@ -31,9 +31,9 @@ flutter_ios_podfile_setup
 target 'Runner' do
   use_frameworks! :linkage => :static
   
-  pod 'ParticleNetworkBase', '1.0.5'
-  pod 'ParticleAuthService', '1.0.5'
-  pod 'ParticleBiconomy', '1.0.5'
+  pod 'ParticleNetworkBase', '1.0.6'
+  pod 'ParticleAuthService', '1.0.6'
+  pod 'ParticleBiconomy', '1.0.6'
   
   pod 'ParticleConnect', '0.2.9'
   pod 'ConnectWalletConnectAdapter', '0.2.9'

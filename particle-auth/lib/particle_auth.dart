@@ -25,7 +25,6 @@ export '../model/particle_info.dart';
 export '../network/model/rpc_error.dart';
 export '../network/net/particle_rpc.dart';
 export '../network/model/serialize_sol_transreqentity.dart';
-export '../network/net/particle_rpc.dart';
 export '../network/net/request_body_entity.dart';
 export '../model/gas_fee_level.dart';
 export '../model/fiat_coin.dart';
