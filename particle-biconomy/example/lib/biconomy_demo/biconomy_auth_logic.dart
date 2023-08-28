@@ -91,7 +91,7 @@ class BiconomyAuthLogic {
     var balance = BigInt.parse(feeQuote["balance"], radix: 10);
 
     if (balance < fee) {
-      print("native balance if not enought for gas fee");
+      print("native balance if not enough for gas fee");
       return;
     }
 
@@ -111,7 +111,7 @@ class BiconomyAuthLogic {
         await ParticleBiconomy.rpcGetFeeQuotes(publicAddress, [transaction]);
     var verifyingPaymasterGasless = result["verifyingPaymasterGasless"];
     if (verifyingPaymasterGasless == null) {
-      print("gasless is not avaliable");
+      print("gasless is not available");
       return;
     }
 
@@ -177,7 +177,7 @@ class BiconomyAuthLogic {
     var balance = BigInt.parse(feeQuote["balance"], radix: 10);
 
     if (balance < fee) {
-      print("native balance if not enought for gas fee");
+      print("native balance if not enough for gas fee");
       return;
     }
 
