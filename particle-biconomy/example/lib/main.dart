@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 import 'package:oktoast/oktoast.dart';
 import 'package:particle_biconomy_example/biconomy_demo/biconomy_demo_auth.dart';
@@ -26,7 +25,7 @@ class MyApp extends StatelessWidget {
         theme: ThemeData(
           primarySwatch: Colors.blue,
         ),
-        home: const MyHomePage(title: 'Particle Network Flutter Demo '),
+        home: const MyHomePage(title: 'Particle Network Flutter Demo'),
       ),
     );
   }
@@ -42,7 +41,6 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -94,7 +92,6 @@ class _MyHomePageState extends State<MyHomePage> {
                     ),
                   )),
             ),
-
           ],
         ),
       ),
