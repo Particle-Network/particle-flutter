@@ -317,15 +317,11 @@ class ParticleWallet {
   }
 
   /// Set custom localizable strings, should call before open any wallet page.
-  static setCustomLocalizable(
-      Language language, Map<String, String> localizables) {
+  static setCustomLocalizable(Map<Language, Map<String, String>> localizables) {
+    Map<String, Map<String, String>> converted =
+        localizables.map((key, value) => MapEntry(key.name, value));
     if (Platform.isIOS) {
-      _channel.invokeListMethod(
-          "setCustomLocalizable",
-          jsonEncode({
-            "language": language.name,
-            "localizables": localizables,
-          }));
+      _channel.invokeListMethod("setCustomLocalizable", jsonEncode(converted));
     }
   }
 }

@@ -260,7 +260,7 @@ extension ParticleWalletPlugin {
         buyConfig.fixFiatCoin = fixFiatCoin
         buyConfig.fixFiatAmt = fixFiatAmt
         buyConfig.theme = theme
-        buyConfig.language = language.webString
+        buyConfig.language = language?.webString ?? Language.en.webString
 
         PNRouter.navigatorBuy(buyCryptoConfig: buyConfig)
     }
@@ -364,7 +364,7 @@ extension ParticleWalletPlugin {
         }
     }
 
-    private func getLanguage(from json: String) -> Language {
+    private func getLanguage(from json: String) -> Language? {
         /*
          en,
          zh_hans,
@@ -372,7 +372,7 @@ extension ParticleWalletPlugin {
          ja,
          ko
          */
-        var language: Language = .en
+        var language: Language?
         if json.lowercased() == "en" {
             language = .en
         } else if json.lowercased() == "zh_hans" {
@@ -533,15 +533,23 @@ extension ParticleWalletPlugin {
             return
         }
 
-        let data = JSON(parseJSON: json)
+        let data = JSON(parseJSON: json).dictionaryValue
 
-        let language = self.getLanguage(from: data["language"].stringValue.lowercased())
+        var localizables: [Language: [String: String]] = [:]
 
-        let localizables = data["localizables"].dictionaryValue.mapValues { json in
-            json.stringValue
+        for (key, value) in data {
+            let language = self.getLanguage(from: key.lowercased())
+            if language == nil {
+                continue
+            }
+
+            let itemLocalizables = value.dictionaryValue.mapValues { json in
+                json.stringValue
+            }
+            localizables[language!] = itemLocalizables
         }
 
-        ParticleWalletGUI.setCustomLocalizable([language: localizables])
+        ParticleWalletGUI.setCustomLocalizable(localizables)
     }
 }
 
