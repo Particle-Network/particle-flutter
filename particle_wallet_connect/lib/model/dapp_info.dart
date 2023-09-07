@@ -12,10 +12,6 @@ class DappInfo {
         icon = json['icon'],
         url = json['url'];
 
-  Map<String, dynamic> toJson() => {
-        'topic': topic,
-        'name': name,
-        'icon': icon,
-        'url': url
-      };
+  Map<String, dynamic> toJson() =>
+      {'topic': topic, 'name': name, 'icon': icon, 'url': url};
 }

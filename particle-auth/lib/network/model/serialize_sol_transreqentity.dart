@@ -1,6 +1,7 @@
-
 import 'dart:convert';
+
 import 'package:json_annotation/json_annotation.dart';
+
 part 'serialize_sol_transreqentity.g.dart';
 
 @JsonSerializable()

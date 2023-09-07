@@ -9,9 +9,9 @@ import 'package:particle_wallet/model/wallet_display.dart';
 import 'package:particle_wallet/model/wallet_meta_data.dart';
 
 export 'package:particle_wallet/model/buy_crypto_config.dart';
-export 'package:particle_wallet/model/wallet_display.dart';
 export 'package:particle_wallet/model/open_buy_network.dart';
 export 'package:particle_wallet/model/theme.dart';
+export 'package:particle_wallet/model/wallet_display.dart';
 export 'package:particle_wallet/model/wallet_meta_data.dart';
 
 class ParticleWallet {

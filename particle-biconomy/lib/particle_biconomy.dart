@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'dart:io' show Platform;
+
 import 'package:flutter/services.dart';
 import 'package:particle_auth/particle_auth.dart';
 
@@ -34,7 +35,7 @@ class ParticleBiconomy {
   }
 
   /// Is support chain info
-  /// 
+  ///
   /// [chainInfo] Chain info
   static Future<bool> isSupportChainInfo(ChainInfo chainInfo) async {
     return await _channel.invokeMethod(
@@ -46,7 +47,7 @@ class ParticleBiconomy {
   }
 
   /// Has eoa address deployed contract in current chain.
-  /// 
+  ///
   /// [eoaAddress] Eoa address
   static Future<String> isDeploy(String eoaAddress) async {
     return await _channel.invokeMethod('isDeploy', eoaAddress);
@@ -68,13 +69,13 @@ class ParticleBiconomy {
   }
 
   /// Rpc get fee quotes
-  /// 
+  ///
   /// Pick one fee quote, then send with BiconomyFeeMode.custom
-  ///  
+  ///
   /// [eoaAddress] Eoa address
-  /// 
+  ///
   /// [transactions] transactions
-  /// 
+  ///
   /// return fee quote list
   static Future<dynamic> rpcGetFeeQuotes(
       String eoaAddress, List<String> transactions) async {

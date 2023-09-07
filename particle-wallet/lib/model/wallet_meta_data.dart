@@ -10,7 +10,7 @@ class WalletMetaData {
       : name = json['name'],
         icon = json['icon'],
         url = json['url'],
-        description = json ['description'];
+        description = json['description'];
 
   Map<String, dynamic> toJson() =>
       {'name': name, 'icon': icon, 'url': url, 'description': description};

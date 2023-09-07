@@ -1,4 +1,5 @@
 import 'dart:convert';
+
 import 'package:oktoast/oktoast.dart';
 import 'package:particle_auth/particle_auth.dart';
 import 'package:particle_connect/particle_connect.dart';
@@ -187,7 +188,8 @@ class ConnectLogic {
     final authorization = LoginAuthorization(messageHex, true);
 
     final config = ParticleConnectConfig(LoginType.email, "",
-        [SupportAuthType.all], SocialLoginPrompt.select_account, authorization: authorization);
+        [SupportAuthType.all], SocialLoginPrompt.select_account,
+        authorization: authorization);
     final result =
         await ParticleConnect.connect(WalletType.particle, config: config);
     showToast('connect: $result');
@@ -312,7 +314,6 @@ class ConnectLogic {
   }
 
   static void signTypedData() async {
-
     if (currChainInfo is SolanaChain) {
       showToast("only evm chain support!");
       return;

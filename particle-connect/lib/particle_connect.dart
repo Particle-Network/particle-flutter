@@ -1,7 +1,7 @@
 import 'dart:convert';
 import 'dart:io' show Platform;
-import 'package:flutter/services.dart';
 
+import 'package:flutter/services.dart';
 import 'package:particle_auth/particle_auth.dart';
 import 'package:particle_connect/model/dapp_meta_data.dart';
 import 'package:particle_connect/model/particle_connect_config.dart';
@@ -54,7 +54,6 @@ class ParticleConnect {
           }));
     }
   }
-
 
   /// Set the required chains for wallet connect v2. If not set, the current chain connection will be used.
   static setWalletConnectV2SupportChainInfos(List<ChainInfo> chainInfos) {
@@ -138,7 +137,7 @@ class ParticleConnect {
   /// Sign message.
   ///
   /// Pass [walletType] and [publicAddress] to decide a wallet.
-  /// 
+  ///
   /// [message] message you want to sign, evm chain requires a hexadecimal string, solana chain requires a human readable message.
   ///
   /// Return signature or error.

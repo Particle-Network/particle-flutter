@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'dart:math';
+
 import 'package:particle_auth/network/net/rest_client.dart';
 import 'package:particle_auth/particle_auth.dart';
 import 'package:uuid/uuid.dart';
@@ -237,8 +238,7 @@ class EvmService {
   /// [version] biconomy version
   ///
   /// return json object
-  static Future<String> getSmartAccount(
-      List<String> eoaAddresses) async {
+  static Future<String> getSmartAccount(List<String> eoaAddresses) async {
     const method = "particle_aa_getSmartAccount";
     final params = [eoaAddresses];
     return await EvmService.rpc(method, params);
@@ -306,7 +306,7 @@ class EvmService {
   }
 
   /// Create transaction
-  /// 
+  ///
   /// [from] is public address
   ///
   /// [data] is contract transaction parameter

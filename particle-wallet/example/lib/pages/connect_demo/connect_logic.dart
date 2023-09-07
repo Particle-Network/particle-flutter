@@ -1,9 +1,8 @@
 import 'dart:convert';
-import 'package:oktoast/oktoast.dart';
 
+import 'package:oktoast/oktoast.dart';
 import 'package:particle_auth/particle_auth.dart';
 import 'package:particle_connect/particle_connect.dart';
-
 import 'package:particle_wallet/particle_wallet.dart';
 import 'package:particle_wallet_example/mock/test_account.dart';
 import 'package:particle_wallet_example/mock/transaction_mock.dart';
@@ -20,7 +19,6 @@ class ConnectLogic {
   }
 
   static void init() {
-
     // Get your project id and client key from dashboard, https://dashboard.particle.network
     const projectId =
         "772f7499-1d2e-40f4-8e2c-7b6dd47db9de"; //772f7499-1d2e-40f4-8e2c-7b6dd47db9de
@@ -35,13 +33,14 @@ class ConnectLogic {
         "https://connect.particle.network",
         "Particle Connect Flutter Demo");
     ParticleConnect.init(currChainInfo, dappInfo, Env.dev);
-    
-    ParticleConnect.setWalletConnectV2SupportChainInfos(<ChainInfo>[EthereumChain.mainnet(), PolygonChain.mainnet()]);
+
+    ParticleConnect.setWalletConnectV2SupportChainInfos(
+        <ChainInfo>[EthereumChain.mainnet(), PolygonChain.mainnet()]);
   }
 
   static void connect() async {
-    final config = ParticleConnectConfig(
-        LoginType.email, "", [SupportAuthType.all], null);
+    final config =
+        ParticleConnectConfig(LoginType.email, "", [SupportAuthType.all], null);
     final result = await ParticleConnect.connect(walletType, config: config);
     showToast('connect: $result');
     print("connect: $result");
@@ -49,7 +48,7 @@ class ConnectLogic {
     if (jsonResult["status"] == 1 || jsonResult["status"] == true) {
       pubAddress = jsonResult["data"]["publicAddress"];
 
-      ParticleWallet.setWallet(walletType, pubAddress!,"Custom WalletName");
+      ParticleWallet.setWallet(walletType, pubAddress!, "Custom WalletName");
 
       print("pubAddress:$pubAddress");
       showToast("connect: $result  pubAddress:$pubAddress");
@@ -143,8 +142,7 @@ class ConnectLogic {
       print("signAndSendTransaction: $result");
       showToast("signAndSendTransaction: $result");
     } else {
-      final trans =
-          await TransactionMock.mockEvmSendNative(getPublicAddress());
+      final trans = await TransactionMock.mockEvmSendNative(getPublicAddress());
       String result = await ParticleConnect.signAndSendTransaction(
           walletType, getPublicAddress(), trans);
       print("signAndSendTransaction: $result");

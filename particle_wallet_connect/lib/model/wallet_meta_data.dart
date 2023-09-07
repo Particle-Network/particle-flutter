@@ -1,4 +1,3 @@
-
 class WalletMetaData {
   String name;
   String icon;

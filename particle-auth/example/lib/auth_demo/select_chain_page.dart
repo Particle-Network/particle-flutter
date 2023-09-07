@@ -3,7 +3,6 @@ import 'package:oktoast/oktoast.dart';
 import 'package:particle_auth/particle_auth.dart';
 import 'package:particle_auth_example/auth_demo/auth_logic.dart';
 
-
 class SelectChainPage extends StatefulWidget {
   const SelectChainPage({super.key});
 
@@ -39,7 +38,8 @@ class SelectChainPageState extends State<SelectChainPage> {
                 print('Clicked: ${chainList[index]}');
                 final chainInfo = chainList[index];
                 ParticleAuth.setChainInfo(chainInfo);
-                showToast("set chain info: ${chainList[index].chainName!} ${chainList[index].chainId}");
+                showToast(
+                    "set chain info: ${chainList[index].chainName!} ${chainList[index].chainId}");
                 AuthLogic.currChainInfo = chainInfo;
                 Navigator.pop(context);
               },

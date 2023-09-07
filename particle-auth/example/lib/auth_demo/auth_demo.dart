@@ -68,7 +68,7 @@ class AuthDemoPageState extends State<AuthDemoPage> {
                     )),
               ),
             ),
-             Padding(
+            Padding(
               padding: const EdgeInsets.all(8.0),
               child: SizedBox(
                 width: double.infinity,
@@ -548,7 +548,8 @@ class AuthDemoPageState extends State<AuthDemoPage> {
                       style: TextStyle(fontSize: 18),
                     )),
               ),
-            ),Padding(
+            ),
+            Padding(
               padding: const EdgeInsets.all(8.0),
               child: SizedBox(
                 width: double.infinity,

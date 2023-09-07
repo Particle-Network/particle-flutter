@@ -5,29 +5,29 @@ import 'package:flutter/services.dart';
 
 import '../model/biconomy_fee_mode.dart';
 import '../model/chain_info.dart';
+import '../model/fiat_coin.dart';
 import '../model/ios_modal_present_style.dart';
 import '../model/language.dart';
+import '../model/login_info.dart';
 import '../model/security_account_config.dart';
 import '../model/typeddata_version.dart';
 import '../model/user_interface_style.dart';
-import '../model/login_info.dart';
-import '../model/fiat_coin.dart';
 
 export '../model/biconomy_fee_mode.dart';
 export '../model/chain_info.dart';
+export '../model/fiat_coin.dart';
+export '../model/gas_fee_level.dart';
 export '../model/ios_modal_present_style.dart';
 export '../model/language.dart';
+export '../model/login_info.dart';
+export '../model/particle_info.dart';
 export '../model/security_account_config.dart';
 export '../model/typeddata_version.dart';
 export '../model/user_interface_style.dart';
-export '../model/login_info.dart';
-export '../model/particle_info.dart';
 export '../network/model/rpc_error.dart';
-export '../network/net/particle_rpc.dart';
 export '../network/model/serialize_sol_transreqentity.dart';
+export '../network/net/particle_rpc.dart';
 export '../network/net/request_body_entity.dart';
-export '../model/gas_fee_level.dart';
-export '../model/fiat_coin.dart';
 
 /// A utility class for string operations.
 class StringUtils {
@@ -254,7 +254,8 @@ class ParticleAuth {
   static setWebAuthConfig(bool displayWallet, Appearance appearance) {
     _channel.invokeMethod(
         'setWebAuthConfig',
-        jsonEncode({"display_wallet": displayWallet, "appearance": appearance.name}));
+        jsonEncode(
+            {"display_wallet": displayWallet, "appearance": appearance.name}));
   }
 
   /// Set user inerface style

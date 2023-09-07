@@ -57,7 +57,6 @@ class _SolanaRpcApi implements SolanaRpcApi {
   }
 }
 
-
 class _EvmRpcApi implements EvmRpcApi {
   _EvmRpcApi(
     this._dio, {
@@ -106,7 +105,6 @@ class _EvmRpcApi implements EvmRpcApi {
     return requestOptions;
   }
 }
-
 
 class _ServiceApi implements ServiceApi {
   _ServiceApi(

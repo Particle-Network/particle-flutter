@@ -1,4 +1,5 @@
 import 'dart:convert';
+
 import 'package:particle_auth/particle_auth.dart';
 import 'package:particle_auth_example/mock/test_account.dart';
 
@@ -133,7 +134,8 @@ class TransactionMock {
     const abiJsonString = null;
     const isSupportEIP1559 = true;
     final result = EvmService.writeContract(publicAddress, contractAddress,
-        methodName, params, abiJsonString, isSupportEIP1559, gasFeeLevel: GasFeeLevel.high);
+        methodName, params, abiJsonString, isSupportEIP1559,
+        gasFeeLevel: GasFeeLevel.high);
 
     return result;
   }

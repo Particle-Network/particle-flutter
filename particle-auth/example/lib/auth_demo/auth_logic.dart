@@ -1,4 +1,5 @@
 import 'dart:convert';
+
 import 'package:flutter/foundation.dart';
 import 'package:flutter/widgets.dart';
 import 'package:oktoast/oktoast.dart';
@@ -116,8 +117,7 @@ class AuthLogic {
 
   static void getSmartAccount() async {
     const eoaAddress = "";
-    String result =
-        await EvmService.getSmartAccount([eoaAddress]);
+    String result = await EvmService.getSmartAccount([eoaAddress]);
     print("getSmartAccount:" + result);
     if (jsonDecode(result)["status"] == true ||
         jsonDecode(result)["status"] == 1) {

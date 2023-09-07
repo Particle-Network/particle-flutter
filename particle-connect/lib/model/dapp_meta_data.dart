@@ -8,7 +8,8 @@ class DappMetaData {
   String? verifyUrl;
 
   DappMetaData(this.walletConnectProjectId, this.name, this.icon, this.url,
-      this.description, {this.redirect, this.verifyUrl});
+      this.description,
+      {this.redirect, this.verifyUrl});
 
   DappMetaData.fromJson(Map<String, dynamic> json)
       : walletConnectProjectId = json['walletConnectProjectId'],

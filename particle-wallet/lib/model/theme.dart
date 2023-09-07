@@ -1,4 +1,4 @@
 enum Theme {
-    light,
-    dark,
+  light,
+  dark,
 }

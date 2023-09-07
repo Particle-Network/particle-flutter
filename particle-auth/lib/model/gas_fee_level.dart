@@ -1,5 +1,5 @@
 enum GasFeeLevel {
-    high,
-    medium,
-    low,
+  high,
+  medium,
+  low,
 }

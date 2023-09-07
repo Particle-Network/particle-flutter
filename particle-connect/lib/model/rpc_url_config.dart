@@ -8,6 +8,5 @@ class RpcUrlConfig {
       : evmUrl = json['evm_url'],
         solUrl = json['sol_url'];
 
-  Map<String, dynamic> toJson() =>
-      {'evm_url': evmUrl, 'sol_url': solUrl};
+  Map<String, dynamic> toJson() => {'evm_url': evmUrl, 'sol_url': solUrl};
 }

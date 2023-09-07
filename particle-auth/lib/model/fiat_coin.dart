@@ -1,8 +1,8 @@
 enum FiatCoin {
-    USD,
-    CNY,
-    JPY,
-    HKD,
-    INR,
-    KRW,
+  USD,
+  CNY,
+  JPY,
+  HKD,
+  INR,
+  KRW,
 }
