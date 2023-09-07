@@ -380,7 +380,7 @@ class _WalletDemoPageState extends State<WalletDemoPage> {
                 child: ElevatedButton(
                     onPressed: () => {WalletLogic.setCustomWalletName()},
                     child: const Text(
-                      "load custom wallet name",
+                      "set custom wallet name",
                       style: TextStyle(fontSize: 18),
                     )),
               ),
@@ -393,7 +393,7 @@ class _WalletDemoPageState extends State<WalletDemoPage> {
                 child: ElevatedButton(
                     onPressed: () => {WalletLogic.setCustomLocalizable()},
                     child: const Text(
-                      "load custom localizable",
+                      "set custom localizable",
                       style: TextStyle(fontSize: 18),
                     )),
               ),

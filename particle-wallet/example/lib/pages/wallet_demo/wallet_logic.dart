@@ -184,11 +184,16 @@ class WalletLogic {
 
   static void setCustomLocalizable() {
     if (Platform.isIOS) {
-      Map<String, String> localizables = <String, String>{
+      Map<String, String> enLocalizables = <String, String>{
         "network fee": "Service Fee",
         "particle auth wallet": "Playbux"
       };
-      ParticleWallet.setCustomLocalizable(Language.en, localizables);
+
+      Map<Language, Map<String, String>> localizables = <Language, Map<String, String>> {
+        Language.en:  enLocalizables
+      };
+
+      ParticleWallet.setCustomLocalizable(localizables);
     }
 
     //Android need add values
