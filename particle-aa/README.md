@@ -1,6 +1,6 @@
-# particle_biconomy
+# particle_aa
 
-A flutter plugin project for particle biconomy
+A flutter plugin project for particle aa
 
 ## Getting Started
 

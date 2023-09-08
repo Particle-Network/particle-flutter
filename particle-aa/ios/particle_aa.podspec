@@ -1,13 +1,13 @@
 #
 # To learn more about a Podspec see http://guides.cocoapods.org/syntax/podspec.html.
-# Run `pod lib lint particle_biconomy.podspec` to validate before publishing.
+# Run `pod lib lint particle_aa.podspec` to validate before publishing.
 #
 Pod::Spec.new do |s|
-  s.name             = 'particle_biconomy'
+  s.name             = 'particle_aa'
   s.version          = '0.0.1'
-  s.summary          = 'A flutter plugin project for particle biconomy'
+  s.summary          = 'A flutter plugin project for particle AA'
   s.description      = <<-DESC
-A flutter plugin project for particle biconomy
+A flutter plugin project for particle AA
                        DESC
   s.homepage         = 'https://particle.network'
   s.license          = { :file => '../LICENSE' }

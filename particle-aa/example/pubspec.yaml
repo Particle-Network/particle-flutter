@@ -1,6 +1,6 @@
-name: particle_biconomy_example
+name: particle_aa_example
 version: 0.1.0
-description: Demonstrates how to use the particle_biconomy plugin.
+description: Demonstrates how to use the particle_aa plugin.
 
 # The following line prevents the package from being accidentally published to
 # pub.dev using `flutter pub publish`. This is preferred for private packages.
@@ -19,9 +19,9 @@ dependencies:
   flutter:
     sdk: flutter
 
-  particle_biconomy:
+  particle_aa:
     # When depending on this package from a real application you should use:
-    #   particle_biconomy: ^x.y.z
+    #   particle_aa: ^x.y.z
     # See https://dart.dev/tools/pub/dependencies#version-constraints
     # The example app is bundled with the plugin so we use a path dependency on
     # the parent directory to use the current plugin's version.

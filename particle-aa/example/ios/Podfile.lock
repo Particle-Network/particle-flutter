@@ -44,12 +44,12 @@ PODS:
   - Flutter (1.0.0)
   - metamask-ios-sdk (0.2.0):
     - Socket.IO-Client-Swift (~> 16.0.1)
+  - particle_aa (0.0.1):
+    - Flutter
+    - ParticleBiconomy
   - particle_auth (0.0.1):
     - Flutter
     - ParticleAuthService
-  - particle_biconomy (0.0.1):
-    - Flutter
-    - ParticleBiconomy
   - particle_connect (0.0.1):
     - ConnectCommon
     - ConnectEVMAdapter
@@ -152,8 +152,8 @@ DEPENDENCIES:
   - ConnectSolanaAdapter (= 0.2.9)
   - ConnectWalletConnectAdapter (= 0.2.9)
   - Flutter (from `Flutter`)
+  - particle_aa (from `.symlinks/plugins/particle_aa/ios`)
   - particle_auth (from `.symlinks/plugins/particle_auth/ios`)
-  - particle_biconomy (from `.symlinks/plugins/particle_biconomy/ios`)
   - particle_connect (from `.symlinks/plugins/particle_connect/ios`)
   - ParticleAuthService (= 1.0.6)
   - ParticleBiconomy (= 1.0.6)
@@ -194,10 +194,10 @@ SPEC REPOS:
 EXTERNAL SOURCES:
   Flutter:
     :path: Flutter
+  particle_aa:
+    :path: ".symlinks/plugins/particle_aa/ios"
   particle_auth:
     :path: ".symlinks/plugins/particle_auth/ios"
-  particle_biconomy:
-    :path: ".symlinks/plugins/particle_biconomy/ios"
   particle_connect:
     :path: ".symlinks/plugins/particle_connect/ios"
 
@@ -213,8 +213,8 @@ SPEC CHECKSUMS:
   CryptoSwift: d3d18dc357932f7e6d580689e065cf1f176007c1
   Flutter: f04841e97a9d0b0a8025694d0796dd46242b2854
   metamask-ios-sdk: 3c7b575d49b947cdf03ca1c766a9dec9f2c50b90
+  particle_aa: a5fd610bb598c96833b89093c89ff9e59bbd0367
   particle_auth: 7df9934788402bd80156fa5f56422d941af0745c
-  particle_biconomy: 732e548a456869d9da5a8a3a1910c4c0813a188a
   particle_connect: 0192191b9fcae5c955c4752920acc5f05deb762a
   ParticleAuthAdapter: f0fab6f809f39709ab7b294c7d68db39eab66463
   ParticleAuthService: 632009f0b286e395ac6db50af852775547ba278c

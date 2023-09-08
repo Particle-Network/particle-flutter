@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:oktoast/oktoast.dart';
-import 'package:particle_biconomy_example/biconomy_demo/biconomy_demo_auth.dart';
-import 'package:particle_biconomy_example/biconomy_demo/biconomy_demo_connect.dart';
+import 'package:particle_aa_example/aa_demo/aa_demo_auth.dart';
+import 'package:particle_aa_example/aa_demo/aa_demo_connect.dart';
 
 void main() {
   runApp(const MyApp());
@@ -25,7 +25,7 @@ class MyApp extends StatelessWidget {
         theme: ThemeData(
           primarySwatch: Colors.blue,
         ),
-        home: const MyHomePage(title: 'Particle Network Flutter Demo'),
+        home: const MyHomePage(title: 'Particle AA Demo'),
       ),
     );
   }
@@ -62,12 +62,12 @@ class _MyHomePageState extends State<MyHomePage> {
                       Navigator.push(
                         context,
                         MaterialPageRoute(
-                          builder: (context) => const BiconomyDemoAuthPage(),
+                          builder: (context) => const AADemoAuthPage(),
                         ),
                       )
                     },
                     child: const Text(
-                      "Biconomy Auth",
+                      "AA Auth",
                       style: TextStyle(fontSize: 20),
                     ),
                   )),
@@ -82,12 +82,12 @@ class _MyHomePageState extends State<MyHomePage> {
                       Navigator.push(
                         context,
                         MaterialPageRoute(
-                          builder: (context) => const BiconomyDemoConnectPage(),
+                          builder: (context) => const AADemoConnectPage(),
                         ),
                       )
                     },
                     child: const Text(
-                      "Biconomy Connect",
+                      "AA Connect",
                       style: TextStyle(fontSize: 20),
                     ),
                   )),

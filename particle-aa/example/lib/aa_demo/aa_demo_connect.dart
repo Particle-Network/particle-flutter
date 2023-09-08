@@ -1,17 +1,17 @@
 import 'package:flutter/material.dart';
-import 'package:particle_biconomy_example/biconomy_demo/biconomy_connect_logic.dart';
-import 'package:particle_biconomy_example/biconomy_demo/select_chain_page.dart';
+import 'package:particle_aa_example/aa_demo/aa_connect_logic.dart';
+import 'package:particle_aa_example/aa_demo/select_chain_page.dart';
 
-class BiconomyDemoConnectPage extends StatefulWidget {
-  const BiconomyDemoConnectPage({Key? key}) : super(key: key);
+class AADemoConnectPage extends StatefulWidget {
+  const AADemoConnectPage({Key? key}) : super(key: key);
 
   @override
   State<StatefulWidget> createState() {
-    return BiconomyDemoConnectPageState();
+    return AADemoConnectPageState();
   }
 }
 
-class BiconomyDemoConnectPageState extends State<BiconomyDemoConnectPage> {
+class AADemoConnectPageState extends State<AADemoConnectPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -27,7 +27,7 @@ class BiconomyDemoConnectPageState extends State<BiconomyDemoConnectPage> {
                 width: double.infinity,
                 height: 50,
                 child: ElevatedButton(
-                    onPressed: () => {BiconomyConnectLogic.init()},
+                    onPressed: () => {AAConnectLogic.init()},
                     child: const Text(
                       "Init",
                       style: TextStyle(fontSize: 18),
@@ -35,8 +35,7 @@ class BiconomyDemoConnectPageState extends State<BiconomyDemoConnectPage> {
               ),
             ),
             Padding(
-              padding: const EdgeInsets.only(
-                  left: 8.0, top: 16.0, right: 8.0, bottom: 8.0),
+              padding: const EdgeInsets.only(left: 8.0, top: 16.0, right: 8.0, bottom: 8.0),
               child: SizedBox(
                 width: double.infinity,
                 height: 50,
@@ -44,8 +43,7 @@ class BiconomyDemoConnectPageState extends State<BiconomyDemoConnectPage> {
                     onPressed: () => {
                           Navigator.push(
                             context,
-                            MaterialPageRoute(
-                                builder: (context) => const SelectChainPage()),
+                            MaterialPageRoute(builder: (context) => const SelectChainPage()),
                           )
                         },
                     child: const Text(
@@ -60,7 +58,7 @@ class BiconomyDemoConnectPageState extends State<BiconomyDemoConnectPage> {
                 width: double.infinity,
                 height: 50,
                 child: ElevatedButton(
-                    onPressed: () => {BiconomyConnectLogic.loginMetamask()},
+                    onPressed: () => {AAConnectLogic.loginMetamask()},
                     child: const Text(
                       "Login metamask",
                       style: TextStyle(fontSize: 18),
@@ -73,8 +71,7 @@ class BiconomyDemoConnectPageState extends State<BiconomyDemoConnectPage> {
                 width: double.infinity,
                 height: 50,
                 child: ElevatedButton(
-                    onPressed: () =>
-                        {BiconomyConnectLogic.enableBiconomyMode()},
+                    onPressed: () => {AAConnectLogic.enableBiconomyMode()},
                     child: const Text(
                       "Enable",
                       style: TextStyle(fontSize: 18),
@@ -87,7 +84,7 @@ class BiconomyDemoConnectPageState extends State<BiconomyDemoConnectPage> {
                 width: double.infinity,
                 height: 50,
                 child: ElevatedButton(
-                    onPressed: () => {BiconomyConnectLogic.rpcGetFeeQuotes()},
+                    onPressed: () => {AAConnectLogic.rpcGetFeeQuotes()},
                     child: const Text(
                       "Rpc get fee quotes",
                       style: TextStyle(fontSize: 18),
@@ -100,10 +97,7 @@ class BiconomyDemoConnectPageState extends State<BiconomyDemoConnectPage> {
                 width: double.infinity,
                 height: 50,
                 child: ElevatedButton(
-                    onPressed: () => {
-                          BiconomyConnectLogic
-                              .signAndSendTransactionWithNative()
-                        },
+                    onPressed: () => {AAConnectLogic.signAndSendTransactionWithNative()},
                     child: const Text(
                       "send transaction paid with native",
                       style: TextStyle(fontSize: 18),
@@ -116,10 +110,7 @@ class BiconomyDemoConnectPageState extends State<BiconomyDemoConnectPage> {
                 width: double.infinity,
                 height: 50,
                 child: ElevatedButton(
-                    onPressed: () => {
-                          BiconomyConnectLogic
-                              .signAndSendTransactionWithGasless()
-                        },
+                    onPressed: () => {AAConnectLogic.signAndSendTransactionWithGasless()},
                     child: const Text(
                       "send transaction gasless",
                       style: TextStyle(fontSize: 18),
@@ -132,10 +123,7 @@ class BiconomyDemoConnectPageState extends State<BiconomyDemoConnectPage> {
                 width: double.infinity,
                 height: 50,
                 child: ElevatedButton(
-                    onPressed: () => {
-                          BiconomyConnectLogic
-                              .signAndSendTransactionWithToken()
-                        },
+                    onPressed: () => {AAConnectLogic.signAndSendTransactionWithToken()},
                     child: const Text(
                       "send transaction paid with token",
                       style: TextStyle(fontSize: 18),
@@ -148,8 +136,7 @@ class BiconomyDemoConnectPageState extends State<BiconomyDemoConnectPage> {
                 width: double.infinity,
                 height: 50,
                 child: ElevatedButton(
-                    onPressed: () =>
-                        {BiconomyConnectLogic.batchSendTransactions()},
+                    onPressed: () => {AAConnectLogic.batchSendTransactions()},
                     child: const Text(
                       "batch send transactions",
                       style: TextStyle(fontSize: 18),

@@ -1,6 +1,6 @@
-# particle_biconomy_example
+# particle_aa_example
 
-Demonstrates how to use the particle_biconomy plugin.
+Demonstrates how to use the particle_aa plugin.
 
 ## Getting Started
 

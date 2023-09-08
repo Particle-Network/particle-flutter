@@ -1,7 +1,7 @@
-name: particle_biconomy
-description: A flutter plugin project for particle biconomy
-version: 1.0.6
-homepage: https://particle.network
+name: particle_aa
+description: A flutter plugin project for particle aa
+version: 0.1.0
+homepage: https://docs.particle.network/developers/account-abstraction/flutter
 
 environment:
   sdk: '>=3.1.0 <4.0.0'
@@ -38,7 +38,7 @@ flutter:
   plugin:
     platforms:
       android:
-        package: network.particle.biconomy_plugin.particle_biconomy
+        package: network.particle.aa_plugin.particle_aa
         pluginClass: ParticleBiconomyPlugin
       ios:
         pluginClass: ParticleBiconomyPlugin

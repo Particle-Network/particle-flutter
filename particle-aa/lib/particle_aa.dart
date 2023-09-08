@@ -4,8 +4,8 @@ import 'dart:io' show Platform;
 import 'package:flutter/services.dart';
 import 'package:particle_auth/particle_auth.dart';
 
-class ParticleBiconomy {
-  ParticleBiconomy._();
+class ParticleAA {
+  ParticleAA._();
 
   static const MethodChannel _channel = MethodChannel('biconomy_bridge');
 
@@ -16,8 +16,7 @@ class ParticleBiconomy {
   /// [dappKeys] Biconomy dapp keys
   static init(Map<int, String> dappKeys) {
     // Convert integer keys to strings
-    var stringKeyMap =
-        dappKeys.map((key, value) => MapEntry(key.toString(), value));
+    var stringKeyMap = dappKeys.map((key, value) => MapEntry(key.toString(), value));
 
     if (Platform.isIOS) {
       _channel.invokeMethod(
@@ -77,10 +76,8 @@ class ParticleBiconomy {
   /// [transactions] transactions
   ///
   /// return fee quote list
-  static Future<dynamic> rpcGetFeeQuotes(
-      String eoaAddress, List<String> transactions) async {
-    final result = await _channel.invokeMethod("rpcGetFeeQuotes",
-        jsonEncode({"eoa_address": eoaAddress, "transactions": transactions}));
+  static Future<dynamic> rpcGetFeeQuotes(String eoaAddress, List<String> transactions) async {
+    final result = await _channel.invokeMethod("rpcGetFeeQuotes", jsonEncode({"eoa_address": eoaAddress, "transactions": transactions}));
 
     final status = jsonDecode(result)["status"];
     final data = jsonDecode(result)["data"];

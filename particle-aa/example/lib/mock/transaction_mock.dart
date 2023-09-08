@@ -1,6 +1,7 @@
 import 'dart:convert';
+
+import 'package:particle_aa_example/mock/test_account.dart';
 import 'package:particle_auth/particle_auth.dart';
-import 'package:particle_biconomy_example/mock/test_account.dart';
 
 class TransactionMock {
   static Future<String> mockSolanaTransaction(String publicAddress) async {
@@ -23,15 +24,12 @@ class TransactionMock {
     String contractAddress = TestAccount.evm.tokenContractAddress;
     BigInt amount = TestAccount.evm.amount;
     String to = contractAddress;
-    final erc20Resp =
-        await EvmService.erc20Transfer(contractAddress, receiver, amount);
+    final erc20Resp = await EvmService.erc20Transfer(contractAddress, receiver, amount);
     final data = jsonDecode(erc20Resp)["result"];
 
     const isSupportEIP1559 = true;
 
-    final transaction = await EvmService.createTransaction(
-        from, data, BigInt.from(0), to, isSupportEIP1559,
-        gasFeeLevel: GasFeeLevel.high);
+    final transaction = await EvmService.createTransaction(from, data, BigInt.from(0), to, isSupportEIP1559, gasFeeLevel: GasFeeLevel.high);
     return transaction;
   }
 
@@ -45,9 +43,7 @@ class TransactionMock {
     String to = receiver;
     const data = "0x";
     const isSupportEIP1559 = true;
-    final transaction = await EvmService.createTransaction(
-        from, data, amount, to, isSupportEIP1559,
-        gasFeeLevel: GasFeeLevel.high);
+    final transaction = await EvmService.createTransaction(from, data, amount, to, isSupportEIP1559, gasFeeLevel: GasFeeLevel.high);
 
     return transaction;
   }
@@ -55,21 +51,17 @@ class TransactionMock {
   /// Mock a transaction that chain not support eip1559.
   /// The example show you how to config a type0/legacy transaction.
   /// You can replace parameters to test.
-  static Future<String> mockEvmSendTokenUnsupportEip1559(
-      String publicAddress) async {
+  static Future<String> mockEvmSendTokenUnsupportEip1559(String publicAddress) async {
     String from = publicAddress;
     String receiver = TestAccount.evm.receiverAddress;
     String contractAddress = TestAccount.evm.tokenContractAddress;
     BigInt amount = TestAccount.evm.amount;
     String to = contractAddress;
-    final erc20Resp =
-        await EvmService.erc20Transfer(contractAddress, receiver, amount);
+    final erc20Resp = await EvmService.erc20Transfer(contractAddress, receiver, amount);
     final data = jsonDecode(erc20Resp)["result"];
 
     const isSupportEIP1559 = false;
-    final transaction = await EvmService.createTransaction(
-        from, data, BigInt.from(0), to, isSupportEIP1559,
-        gasFeeLevel: GasFeeLevel.high);
+    final transaction = await EvmService.createTransaction(from, data, BigInt.from(0), to, isSupportEIP1559, gasFeeLevel: GasFeeLevel.high);
 
     return transaction;
   }
@@ -85,14 +77,11 @@ class TransactionMock {
     String tokenId = "5301";
     String to = contractAddress;
 
-    final erc20Resp = await EvmService.erc721SafeTransferFrom(
-        contractAddress, from, receiver, tokenId);
+    final erc20Resp = await EvmService.erc721SafeTransferFrom(contractAddress, from, receiver, tokenId);
     final data = jsonDecode(erc20Resp)["result"];
 
     const isSupportEIP1559 = true;
-    final transaction = await EvmService.createTransaction(
-        from, data, BigInt.from(0), to, isSupportEIP1559,
-        gasFeeLevel: GasFeeLevel.high);
+    final transaction = await EvmService.createTransaction(from, data, BigInt.from(0), to, isSupportEIP1559, gasFeeLevel: GasFeeLevel.high);
 
     return transaction;
   }
@@ -108,13 +97,10 @@ class TransactionMock {
     String tokenId = TestAccount.evm.nftTokenId;
     String to = contractAddress;
     String amount = "1";
-    final erc20Resp = await EvmService.erc1155SafeTransferFrom(
-        contractAddress, from, receiver, tokenId, amount, "0x");
+    final erc20Resp = await EvmService.erc1155SafeTransferFrom(contractAddress, from, receiver, tokenId, amount, "0x");
     final data = jsonDecode(erc20Resp)["result"];
     const isSupportEIP1559 = true;
-    final transaction = await EvmService.createTransaction(
-        from, data, BigInt.from(0), to, isSupportEIP1559,
-        gasFeeLevel: GasFeeLevel.high);
+    final transaction = await EvmService.createTransaction(from, data, BigInt.from(0), to, isSupportEIP1559, gasFeeLevel: GasFeeLevel.high);
 
     return transaction;
   }
@@ -123,8 +109,7 @@ class TransactionMock {
   /// write contract is same with send transaction.
   static Future<String> mockWriteContract(String publicAddress) async {
     String contractAddress = "your contract address";
-    String methodName =
-        "mint"; // this is your contract method name, like balanceOf, mint.
+    String methodName = "mint"; // this is your contract method name, like balanceOf, mint.
     List<Object> params = <Object>["1"]; // this is the method params.
 
     // abi json string, you can get it from your contract developer.
@@ -132,8 +117,7 @@ class TransactionMock {
     // [{\"inputs\":[{\"internalType\":\"uint256\",\"name\":\"quantity\",\"type\":\"uint256\"},{\"internalType\":\"uint256\",\"name\":\"amount\",\"type\":\"uint256\"}],\"name\":\"mint\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"}]
     const abiJsonString = null;
     const isSupportEIP1559 = true;
-    final result = EvmService.writeContract(publicAddress, contractAddress,
-        methodName, params, abiJsonString, isSupportEIP1559, gasFeeLevel: GasFeeLevel.high);
+    final result = EvmService.writeContract(publicAddress, contractAddress, methodName, params, abiJsonString, isSupportEIP1559, gasFeeLevel: GasFeeLevel.high);
 
     return result;
   }
@@ -142,8 +126,7 @@ class TransactionMock {
   /// read data from chain
   static Future<String> mockReadContract(String publicAddress) async {
     String contractAddress = "your contract address";
-    String methodName =
-        "mint"; // this is your contract method name, like balanceOf, mint.
+    String methodName = "mint"; // this is your contract method name, like balanceOf, mint.
     List<Object> parameters = <Object>["1"]; // this is the method params.
     // this is your contract ABI json string
 
@@ -152,8 +135,7 @@ class TransactionMock {
     // [{\"inputs\":[{\"internalType\":\"uint256\",\"name\":\"quantity\",\"type\":\"uint256\"},{\"internalType\":\"uint256\",\"name\":\"amount\",\"type\":\"uint256\"}],\"name\":\"mint\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"}]
     const abiJsonString = null;
 
-    final result = await EvmService.readContract(
-        publicAddress, contractAddress, methodName, parameters, abiJsonString);
+    final result = await EvmService.readContract(publicAddress, contractAddress, methodName, parameters, abiJsonString);
     return result;
   }
 }
