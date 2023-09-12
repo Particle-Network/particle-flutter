@@ -1229,6 +1229,7 @@ class ChainInfo {
     'https://nile.tronscan.org',
     [],
   );
+
   static Map<String, ChainInfo> ParticleChains = {
     'ethereum-1': ChainInfo.Ethereum,
     'ethereum-5': ChainInfo.EthereumGoerli,
@@ -1313,7 +1314,10 @@ class ChainInfo {
   };
   // template code end
 
-  static List<ChainInfo> getAllChainInfos() {
+  static List<ChainInfo> getAllChains(
+      [int Function(ChainInfo, ChainInfo)? comparator]) {
+    List<ChainInfo> list = ParticleChains.values.toList();
+
     List<String> sortKeys = [
       'Solana',
       'Ethereum',
@@ -1334,7 +1338,10 @@ class ChainInfo {
       'Tron',
     ];
 
-    final list = ChainInfo.ParticleChains.values.toList();
+    if (comparator != null) {
+      list.sort(comparator);
+      return list;
+    }
 
     list.sort((ChainInfo a, ChainInfo b) {
       if (sortKeys.contains(a.name) && sortKeys.contains(b.name)) {
@@ -1366,6 +1373,32 @@ class ChainInfo {
     });
 
     return list;
+  }
+
+  static ChainInfo? getChain(int chainId, String chainName) {
+    String key = [chainName.toLowerCase(), chainId].join('-');
+    if (!ParticleChains.containsKey(key)) {
+      return null;
+    }
+    return ParticleChains[key];
+  }
+
+  static ChainInfo? getEvmChain(int chainId) {
+    try {
+      return ParticleChains.values.firstWhere(
+          (element) => element.chainType == 'evm' && element.id == chainId);
+    } catch (e) {
+      return null;
+    }
+  }
+
+  static ChainInfo? getSolanaChain(int chainId) {
+    try {
+      return ParticleChains.values.firstWhere(
+          (element) => element.chainType == 'solana' && element.id == chainId);
+    } catch (e) {
+      return null;
+    }
   }
 
   static String getParticleNode(int id, String projectId, String projectKey) {
