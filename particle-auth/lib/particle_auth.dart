@@ -58,16 +58,16 @@ class ParticleAuth {
       await _channel.invokeMethod(
           'initialize',
           jsonEncode({
-            "chain_name": chainInfo.chainName,
-            "chain_id": chainInfo.chainId,
+            "chain_name": chainInfo.name,
+            "chain_id": chainInfo.id,
             "env": env.name
           }));
     } else {
       await _channel.invokeMethod(
           'init',
           jsonEncode({
-            "chain_name": chainInfo.chainName,
-            "chain_id": chainInfo.chainId,
+            "chain_name": chainInfo.name,
+            "chain_id": chainInfo.id,
             "env": env.name
           }));
     }
@@ -212,8 +212,8 @@ class ParticleAuth {
     return await _channel.invokeMethod(
         'setChainInfo',
         jsonEncode({
-          "chain_name": chainInfo.chainName,
-          "chain_id": chainInfo.chainId,
+          "chain_name": chainInfo.name,
+          "chain_id": chainInfo.id,
         }));
   }
 
@@ -227,8 +227,8 @@ class ParticleAuth {
     return await _channel.invokeMethod(
         'setChainInfoAsync',
         jsonEncode({
-          "chain_name": chainInfo.chainName,
-          "chain_id": chainInfo.chainId,
+          "chain_name": chainInfo.name,
+          "chain_id": chainInfo.id,
         }));
   }
 
