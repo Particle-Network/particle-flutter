@@ -50,7 +50,7 @@ class AAConnectLogic {
   }
 
   static void enableBiconomyMode() {
-    ParticleAA.enableBiconomyMode();
+    ParticleBiconomy.enableBiconomyMode();
   }
 
   static void rpcGetFeeQuotes() async {
@@ -62,7 +62,8 @@ class AAConnectLogic {
     final transaction = await TransactionMock.mockEvmSendNative(publicAddress!);
 
     List<String> transactions = <String>[transaction];
-    var result = await ParticleAA.rpcGetFeeQuotes(publicAddress!, transactions);
+    var result =
+        await ParticleBiconomy.rpcGetFeeQuotes(publicAddress!, transactions);
     showToast("rpcGetFeeQuotes: $result");
   }
 
@@ -75,7 +76,7 @@ class AAConnectLogic {
 
     // check if enough native for gas fee
     var result =
-        await ParticleAA.rpcGetFeeQuotes(publicAddress!, [transaction]);
+        await ParticleBiconomy.rpcGetFeeQuotes(publicAddress!, [transaction]);
     var verifyingPaymasterNative = result["verifyingPaymasterNative"];
     var feeQuote = verifyingPaymasterNative["feeQuote"];
     var fee = BigInt.parse(feeQuote["fee"], radix: 10);
@@ -105,7 +106,7 @@ class AAConnectLogic {
 
     // check if gasless available
     var result =
-        await ParticleAA.rpcGetFeeQuotes(publicAddress!, [transaction]);
+        await ParticleBiconomy.rpcGetFeeQuotes(publicAddress!, [transaction]);
     var verifyingPaymasterGasless = result["verifyingPaymasterGasless"];
     if (verifyingPaymasterGasless == null) {
       print("gasless is not available");
@@ -130,7 +131,8 @@ class AAConnectLogic {
 
     List<String> transactions = <String>[transaction];
 
-    var result = await ParticleAA.rpcGetFeeQuotes(publicAddress!, transactions);
+    var result =
+        await ParticleBiconomy.rpcGetFeeQuotes(publicAddress!, transactions);
 
     List<dynamic> feeQuotes = result["tokenPaymaster"]["feeQuotes"];
 
@@ -169,7 +171,8 @@ class AAConnectLogic {
     List<String> transactions = <String>[transaction, transaction];
 
     // check if enough native for gas fee
-    var result = await ParticleAA.rpcGetFeeQuotes(publicAddress!, transactions);
+    var result =
+        await ParticleBiconomy.rpcGetFeeQuotes(publicAddress!, transactions);
     var verifyingPaymasterNative = result["verifyingPaymasterNative"];
     var feeQuote = verifyingPaymasterNative["feeQuote"];
     var fee = BigInt.parse(feeQuote["fee"], radix: 10);

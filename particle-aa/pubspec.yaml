@@ -39,7 +39,7 @@ flutter:
   plugin:
     platforms:
       android:
-        package: network.particle.biconomy_plugin.particle_biconomy
+        package: network.particle.aa_plugin.particle_aa
         pluginClass: ParticleBiconomyPlugin
       ios:
         pluginClass: ParticleBiconomyPlugin

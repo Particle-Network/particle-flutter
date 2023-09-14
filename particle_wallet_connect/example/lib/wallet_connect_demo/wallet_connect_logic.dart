@@ -1,6 +1,5 @@
 import 'dart:convert';
 
-import 'package:oktoast/oktoast.dart';
 import 'package:particle_wallet_connect/model/Dapp_info.dart';
 import 'package:particle_wallet_connect/model/request_result.dart';
 import 'package:particle_wallet_connect/model/wallet_meta_data.dart';
@@ -42,7 +41,7 @@ class WalletConnectLogic {
           final method = eventObject["data"]["method"] as String;
           // method should be one of the following methods.
           // other methods will be handle by ParticleWalletConnect
-          // you can define rpc endpoint to 
+          // you can define rpc endpoint to
           //*
           // eth_sendTransaction
           // eth_signTypedData
@@ -50,7 +49,7 @@ class WalletConnectLogic {
           // eth_signTypedData_v3
           // eth_signTypedData_v4
           // personal_sign
-          // eth_chainId 
+          // eth_chainId
           // wallet_switchEthereumChain
           //*/
           List<dynamic>? params =
@@ -65,7 +64,8 @@ class WalletConnectLogic {
     });
   }
 
-  static Future<RequestResult> handleRequest( String requestId, String method, List<dynamic>? params) async {
+  static Future<RequestResult> handleRequest(
+      String requestId, String method, List<dynamic>? params) async {
     print("request $method with $params");
 
     // handle request from dapp and return request
@@ -103,8 +103,7 @@ class WalletConnectLogic {
   }
 
   static void getAllSessions() async {
-    List<DappInfo> dappMetaDatas =
-        await ParticleWalletConnect.getAllSessions();
+    List<DappInfo> dappMetaDatas = await ParticleWalletConnect.getAllSessions();
     print(dappMetaDatas);
     topic = dappMetaDatas.first.topic;
   }

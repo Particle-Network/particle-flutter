@@ -3,7 +3,7 @@ import 'dart:io' show Platform;
 
 import 'package:flutter/services.dart';
 
-import '../model/biconomy_fee_mode.dart';
+import '../model/aa_fee_mode.dart';
 import '../model/chain_info.dart';
 import '../model/fiat_coin.dart';
 import '../model/ios_modal_present_style.dart';
@@ -13,7 +13,7 @@ import '../model/security_account_config.dart';
 import '../model/typeddata_version.dart';
 import '../model/user_interface_style.dart';
 
-export '../model/biconomy_fee_mode.dart';
+export '../model/aa_fee_mode.dart';
 export '../model/chain_info.dart';
 export '../model/fiat_coin.dart';
 export '../model/gas_fee_level.dart';
@@ -170,7 +170,7 @@ class ParticleAuth {
   ///
   /// [transaction] transaction you want to sign and send.
   ///
-  /// [feeMode] is optional, works with biconomy service.
+  /// [feeMode] is optional, works with aa service.
   ///
   /// Result signature or error.
   static Future<String> signAndSendTransaction(String transaction,
