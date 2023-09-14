@@ -1416,7 +1416,7 @@ class ChainInfo {
   }
 
   static String getParticleNode(int id, String projectId, String projectKey) {
-    return new Uri(
+    return Uri(
         scheme: 'https',
         host: 'rpc.particle.network',
         path: 'evm-chain',
@@ -1428,22 +1428,22 @@ class ChainInfo {
   }
 
   bool isEvmChain() {
-    return this.chainType == 'evm';
+    return chainType == 'evm';
   }
 
   bool isSolanaChain() {
-    return this.chainType == 'solana';
+    return chainType == 'solana';
   }
 
   bool isMainnet() {
-    return this.network == 'Mainnet';
+    return network == 'Mainnet';
   }
 
   bool isEIP1559Supported() {
-    return this.features.contains((name: 'EIP1559'));
+    return features.contains(ChainInfoFeature('EIP1559'));
   }
 
   bool isSupportWalletConnect() {
-    return this.isEvmChain() && this.name != 'Tron';
+    return isEvmChain() && name != 'Tron';
   }
 }
