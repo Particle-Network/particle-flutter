@@ -1,5 +1,19 @@
 enum Env { dev, staging, production }
 
+class ChainInfoNativeCurrency {
+  late String name;
+  late String symbol;
+  late int decimals;
+
+  ChainInfoNativeCurrency(this.name, this.symbol, this.decimals);
+}
+
+class ChainInfoFeature {
+  late String name;
+
+  ChainInfoFeature(this.name);
+}
+
 class ChainInfo {
   late int id;
   late String name;
@@ -8,11 +22,11 @@ class ChainInfo {
   late String fullname;
   late String network;
   late String website;
-  late ({String name, String symbol, int decimals}) nativeCurrency;
+  late ChainInfoNativeCurrency nativeCurrency;
   late String rpcUrl;
   late String faucetUrl;
   late String blockExplorerUrl;
-  late List<({String name})> features;
+  late List<ChainInfoFeature> features;
 
   ChainInfo(
     this.id,
@@ -38,11 +52,11 @@ class ChainInfo {
     'Ethereum Mainnet',
     'Mainnet',
     'https://ethereum.org',
-    (name: 'Ether', symbol: 'ETH', decimals: 18),
+    ChainInfoNativeCurrency('Ether', 'ETH', 18),
     'https://ethereum.publicnode.com',
     '',
     'https://etherscan.io',
-    [(name: 'EIP1559')],
+    [ChainInfoFeature('EIP1559')],
   );
 
   static ChainInfo EthereumGoerli = ChainInfo(
@@ -53,11 +67,11 @@ class ChainInfo {
     'Ethereum Goerli',
     'Goerli',
     'https://goerli.net/#about',
-    (name: 'Ether', symbol: 'ETH', decimals: 18),
+    ChainInfoNativeCurrency('Ether', 'ETH', 18),
     'https://ethereum-goerli.publicnode.com',
     'https://goerlifaucet.com',
     'https://goerli.etherscan.io',
-    [(name: 'EIP1559')],
+    [ChainInfoFeature('EIP1559')],
   );
 
   static ChainInfo Optimism = ChainInfo(
@@ -68,7 +82,7 @@ class ChainInfo {
     'Optimism Mainnet',
     'Mainnet',
     'https://optimism.io',
-    (name: 'Ether', symbol: 'ETH', decimals: 18),
+    ChainInfoNativeCurrency('Ether', 'ETH', 18),
     'https://mainnet.optimism.io',
     '',
     'https://optimistic.etherscan.io',
@@ -83,7 +97,7 @@ class ChainInfo {
     'ThunderCore Testnet',
     'Testnet',
     'https://thundercore.com',
-    (name: 'ThunderCore Token', symbol: 'TT', decimals: 18),
+    ChainInfoNativeCurrency('ThunderCore Token', 'TT', 18),
     'https://testnet-rpc.thundercore.com',
     'https://faucet-testnet.thundercore.com',
     'https://explorer-testnet.thundercore.com',
@@ -98,11 +112,11 @@ class ChainInfo {
     'Cronos Mainnet',
     'Mainnet',
     'https://cronos.org',
-    (name: 'Cronos', symbol: 'CRO', decimals: 18),
+    ChainInfoNativeCurrency('Cronos', 'CRO', 18),
     'https://evm.cronos.org',
     '',
     'https://cronoscan.com',
-    [(name: 'EIP1559')],
+    [ChainInfoFeature('EIP1559')],
   );
 
   static ChainInfo BNBChain = ChainInfo(
@@ -113,7 +127,7 @@ class ChainInfo {
     'BNB Chain',
     'Mainnet',
     'https://www.bnbchain.org/en',
-    (name: 'BNB', symbol: 'BNB', decimals: 18),
+    ChainInfoNativeCurrency('BNB', 'BNB', 18),
     'https://bsc-dataseed1.binance.org',
     '',
     'https://bscscan.com',
@@ -128,7 +142,7 @@ class ChainInfo {
     'OKTC Testnet',
     'Testnet',
     'https://www.okex.com/okexchain',
-    (name: 'OKT', symbol: 'OKT', decimals: 18),
+    ChainInfoNativeCurrency('OKT', 'OKT', 18),
     'https://exchaintestrpc.okex.org',
     'https://docs.oxdex.com/v/en/help/gitter',
     'https://www.oklink.com/okc-test',
@@ -143,7 +157,7 @@ class ChainInfo {
     'OKTC Mainnet',
     'Mainnet',
     'https://www.okex.com/okc',
-    (name: 'OKT', symbol: 'OKT', decimals: 18),
+    ChainInfoNativeCurrency('OKT', 'OKT', 18),
     'https://exchainrpc.okex.org',
     '',
     'https://www.oklink.com/okc',
@@ -158,7 +172,7 @@ class ChainInfo {
     'Conflux eSpace Testnet',
     'Testnet',
     'https://confluxnetwork.org',
-    (name: 'CFX', symbol: 'CFX', decimals: 18),
+    ChainInfoNativeCurrency('CFX', 'CFX', 18),
     'https://evmtestnet.confluxrpc.com',
     'https://efaucet.confluxnetwork.org',
     'https://evmtestnet.confluxscan.net',
@@ -173,7 +187,7 @@ class ChainInfo {
     'BNB Chain Testnet',
     'Testnet',
     'https://www.bnbchain.org/en',
-    (name: 'BNB', symbol: 'BNB', decimals: 18),
+    ChainInfoNativeCurrency('BNB', 'BNB', 18),
     'https://data-seed-prebsc-1-s1.binance.org:8545',
     'https://testnet.bnbchain.org/faucet-smart',
     'https://testnet.bscscan.com',
@@ -188,11 +202,11 @@ class ChainInfo {
     'Gnosis Mainnet',
     'Mainnet',
     'https://docs.gnosischain.com',
-    (name: 'Gnosis', symbol: 'XDAI', decimals: 18),
+    ChainInfoNativeCurrency('Gnosis', 'XDAI', 18),
     'https://rpc.ankr.com/gnosis',
     '',
     'https://gnosisscan.io',
-    [(name: 'EIP1559')],
+    [ChainInfoFeature('EIP1559')],
   );
 
   static ChainInfo Solana = ChainInfo(
@@ -203,7 +217,7 @@ class ChainInfo {
     'Solana Mainnet',
     'Mainnet',
     'https://solana.com',
-    (name: 'SOL', symbol: 'SOL', decimals: 9),
+    ChainInfoNativeCurrency('SOL', 'SOL', 9),
     'https://api.mainnet-beta.solana.com',
     '',
     'https://solscan.io',
@@ -218,7 +232,7 @@ class ChainInfo {
     'Solana Testnet',
     'Testnet',
     'https://solana.com',
-    (name: 'SOL', symbol: 'SOL', decimals: 9),
+    ChainInfoNativeCurrency('SOL', 'SOL', 9),
     'https://api.testnet.solana.com',
     'https://solfaucet.com',
     'https://solscan.io',
@@ -233,7 +247,7 @@ class ChainInfo {
     'Solana Devnet',
     'Devnet',
     'https://solana.com',
-    (name: 'SOL', symbol: 'SOL', decimals: 9),
+    ChainInfoNativeCurrency('SOL', 'SOL', 9),
     'https://api.devnet.solana.com',
     'https://solfaucet.com',
     'https://solscan.io',
@@ -248,7 +262,7 @@ class ChainInfo {
     'ThunderCore Mainnet',
     'Mainnet',
     'https://thundercore.com',
-    (name: 'ThunderCore Token', symbol: 'TT', decimals: 18),
+    ChainInfoNativeCurrency('ThunderCore Token', 'TT', 18),
     'https://mainnet-rpc.thundercore.com',
     '',
     'https://viewblock.io/thundercore',
@@ -263,11 +277,11 @@ class ChainInfo {
     'Heco Mainnet',
     'Mainnet',
     'https://www.hecochain.com',
-    (name: 'HT', symbol: 'HT', decimals: 18),
+    ChainInfoNativeCurrency('HT', 'HT', 18),
     'https://http-mainnet.hecochain.com',
     '',
     'https://hecoinfo.com',
-    [(name: 'EIP1559')],
+    [ChainInfoFeature('EIP1559')],
   );
 
   static ChainInfo Polygon = ChainInfo(
@@ -278,11 +292,11 @@ class ChainInfo {
     'Polygon Mainnet',
     'Mainnet',
     'https://polygon.technology',
-    (name: 'MATIC', symbol: 'MATIC', decimals: 18),
+    ChainInfoNativeCurrency('MATIC', 'MATIC', 18),
     'https://polygon-rpc.com',
     '',
     'https://polygonscan.com',
-    [(name: 'EIP1559')],
+    [ChainInfoFeature('EIP1559')],
   );
 
   static ChainInfo OKBCTestnet = ChainInfo(
@@ -293,7 +307,7 @@ class ChainInfo {
     'OKBC Testnet',
     'Testnet',
     'https://www.okx.com/okbc/docs/dev/quick-start/introduction/introduction-to-okbchain',
-    (name: 'OKB', symbol: 'OKB', decimals: 18),
+    ChainInfoNativeCurrency('OKB', 'OKB', 18),
     'https://okbtestrpc.okbchain.org',
     'https://www.okx.com/cn/okbc/faucet',
     'https://www.oklink.com/cn/okbc-test',
@@ -308,11 +322,11 @@ class ChainInfo {
     'opBNB Mainnet',
     'Mainnet',
     'https://opbnb.bnbchain.org',
-    (name: 'BNB', symbol: 'BNB', decimals: 18),
+    ChainInfoNativeCurrency('BNB', 'BNB', 18),
     'https://opbnb-mainnet-rpc.bnbchain.org',
     '',
     'https://mainnet.opbnbscan.com',
-    [(name: 'EIP1559')],
+    [ChainInfoFeature('EIP1559')],
   );
 
   static ChainInfo MAPProtocolTestnet = ChainInfo(
@@ -323,11 +337,11 @@ class ChainInfo {
     'MAP Protocol Testnet',
     'Testnet',
     'https://maplabs.io',
-    (name: 'MAPO', symbol: 'MAPO', decimals: 18),
+    ChainInfoNativeCurrency('MAPO', 'MAPO', 18),
     'https://testnet-rpc.maplabs.io',
     'https://faucet.mapprotocol.io',
     'https://testnet.mapscan.io',
-    [(name: 'EIP1559')],
+    [ChainInfoFeature('EIP1559')],
   );
 
   static ChainInfo Fantom = ChainInfo(
@@ -338,7 +352,7 @@ class ChainInfo {
     'Fantom Mainnet',
     'Mainnet',
     'https://fantom.foundation',
-    (name: 'FTM', symbol: 'FTM', decimals: 18),
+    ChainInfoNativeCurrency('FTM', 'FTM', 18),
     'https://rpc.ftm.tools',
     '',
     'https://ftmscan.com',
@@ -353,11 +367,11 @@ class ChainInfo {
     'zkSync Era Testnet',
     'Testnet',
     'https://era.zksync.io/docs',
-    (name: 'zkSync', symbol: 'ETH', decimals: 18),
+    ChainInfoNativeCurrency('zkSync', 'ETH', 18),
     'https://zksync2-testnet.zksync.dev',
     'https://portal.zksync.io/faucet',
     'https://goerli.explorer.zksync.io',
-    [(name: 'EIP1559')],
+    [ChainInfoFeature('EIP1559')],
   );
 
   static ChainInfo KCC = ChainInfo(
@@ -368,7 +382,7 @@ class ChainInfo {
     'KCC Mainnet',
     'Mainnet',
     'https://kcc.io',
-    (name: 'KCS', symbol: 'KCS', decimals: 18),
+    ChainInfoNativeCurrency('KCS', 'KCS', 18),
     'https://rpc-mainnet.kcc.network',
     '',
     'https://explorer.kcc.io/en',
@@ -383,7 +397,7 @@ class ChainInfo {
     'KCC Testnet',
     'Testnet',
     'https://scan-testnet.kcc.network',
-    (name: 'KCS', symbol: 'KCS', decimals: 18),
+    ChainInfoNativeCurrency('KCS', 'KCS', 18),
     'https://rpc-testnet.kcc.network',
     'https://faucet-testnet.kcc.network',
     'https://scan-testnet.kcc.network',
@@ -398,11 +412,11 @@ class ChainInfo {
     'zkSync Era',
     'Mainnet',
     'https://zksync.io',
-    (name: 'zkSync', symbol: 'ETH', decimals: 18),
+    ChainInfoNativeCurrency('zkSync', 'ETH', 18),
     'https://zksync2-mainnet.zksync.io',
     '',
     'https://explorer.zksync.io',
-    [(name: 'EIP1559')],
+    [ChainInfoFeature('EIP1559')],
   );
 
   static ChainInfo CronosTestnet = ChainInfo(
@@ -413,11 +427,11 @@ class ChainInfo {
     'Cronos Testnet',
     'Testnet',
     'https://cronos.org',
-    (name: 'Cronos', symbol: 'CRO', decimals: 18),
+    ChainInfoNativeCurrency('Cronos', 'CRO', 18),
     'https://evm-t3.cronos.org',
     'https://cronos.org/faucet',
     'https://testnet.cronoscan.com',
-    [(name: 'EIP1559')],
+    [ChainInfoFeature('EIP1559')],
   );
 
   static ChainInfo OptimismGoerli = ChainInfo(
@@ -428,7 +442,7 @@ class ChainInfo {
     'Optimism Goerli',
     'Testnet',
     'https://optimism.io',
-    (name: 'Ether', symbol: 'ETH', decimals: 18),
+    ChainInfoNativeCurrency('Ether', 'ETH', 18),
     'https://goerli.optimism.io',
     'https://faucet.triangleplatform.com/optimism/goerli',
     'https://goerli-optimism.etherscan.io',
@@ -443,11 +457,11 @@ class ChainInfo {
     'PGN Mainnet',
     'Mainnet',
     'https://publicgoods.network',
-    (name: 'ETH', symbol: 'ETH', decimals: 18),
+    ChainInfoNativeCurrency('ETH', 'ETH', 18),
     'https://sepolia.publicgoods.network',
     '',
     'https://explorer.publicgoods.network',
-    [(name: 'EIP1559')],
+    [ChainInfoFeature('EIP1559')],
   );
 
   static ChainInfo MetisGoerli = ChainInfo(
@@ -458,7 +472,7 @@ class ChainInfo {
     'Metis Goerli',
     'Goerli',
     'https://www.metis.io',
-    (name: 'Metis', symbol: 'METIS', decimals: 18),
+    ChainInfoNativeCurrency('Metis', 'METIS', 18),
     'https://goerli.gateway.metisdevops.link',
     'https://goerli.faucet.metisdevops.link',
     'https://goerli.explorer.metisdevops.link',
@@ -473,11 +487,11 @@ class ChainInfo {
     'Zora Goerli',
     'Goerli',
     'https://testnet.wanscan.org',
-    (name: 'ETH', symbol: 'ETH', decimals: 18),
+    ChainInfoNativeCurrency('ETH', 'ETH', 18),
     'https://testnet.rpc.zora.energy',
     '',
     'https://testnet.explorer.zora.energy',
-    [(name: 'EIP1559')],
+    [ChainInfoFeature('EIP1559')],
   );
 
   static ChainInfo KlaytnTestnet = ChainInfo(
@@ -488,7 +502,7 @@ class ChainInfo {
     'Klaytn Testnet',
     'Testnet',
     'https://www.klaytn.com',
-    (name: 'Klaytn', symbol: 'KLAY', decimals: 18),
+    ChainInfoNativeCurrency('Klaytn', 'KLAY', 18),
     'https://api.baobab.klaytn.net:8651',
     'https://baobab.wallet.klaytn.foundation/faucet',
     'https://baobab.scope.klaytn.com',
@@ -503,7 +517,7 @@ class ChainInfo {
     'Conflux eSpace',
     'Mainnet',
     'https://confluxnetwork.org',
-    (name: 'CFX', symbol: 'CFX', decimals: 18),
+    ChainInfoNativeCurrency('CFX', 'CFX', 18),
     'https://evm.confluxrpc.com',
     '',
     'https://evm.confluxscan.net',
@@ -518,7 +532,7 @@ class ChainInfo {
     'Metis Mainnet',
     'Mainnet',
     'https://www.metis.io',
-    (name: 'Metis', symbol: 'METIS', decimals: 18),
+    ChainInfoNativeCurrency('Metis', 'METIS', 18),
     'https://andromeda.metis.io/?owner=1088',
     '',
     'https://andromeda-explorer.metis.io',
@@ -533,7 +547,7 @@ class ChainInfo {
     'Polygon zkEVM',
     'Mainnet',
     'https://polygon.technology/polygon-zkevm',
-    (name: 'ETH', symbol: 'ETH', decimals: 18),
+    ChainInfoNativeCurrency('ETH', 'ETH', 18),
     'https://zkevm-rpc.com',
     '',
     'https://zkevm.polygonscan.com',
@@ -548,11 +562,11 @@ class ChainInfo {
     'Moonbeam Mainnet',
     'Mainnet',
     'https://moonbeam.network/networks/moonbeam',
-    (name: 'GLMR', symbol: 'GLMR', decimals: 18),
+    ChainInfoNativeCurrency('GLMR', 'GLMR', 18),
     'https://rpc.api.moonbeam.network',
     '',
     'https://moonbeam.moonscan.io',
-    [(name: 'EIP1559')],
+    [ChainInfoFeature('EIP1559')],
   );
 
   static ChainInfo Moonriver = ChainInfo(
@@ -563,11 +577,11 @@ class ChainInfo {
     'Moonriver Mainnet',
     'Mainnet',
     'https://moonbeam.network/networks/moonriver',
-    (name: 'MOVR', symbol: 'MOVR', decimals: 18),
+    ChainInfoNativeCurrency('MOVR', 'MOVR', 18),
     'https://rpc.api.moonriver.moonbeam.network',
     '',
     'https://moonriver.moonscan.io',
-    [(name: 'EIP1559')],
+    [ChainInfoFeature('EIP1559')],
   );
 
   static ChainInfo MoonbeamTestnet = ChainInfo(
@@ -578,11 +592,11 @@ class ChainInfo {
     'Moonbeam Testnet',
     'Testnet',
     'https://docs.moonbeam.network/networks/testnet',
-    (name: 'Dev', symbol: 'DEV', decimals: 18),
+    ChainInfoNativeCurrency('Dev', 'DEV', 18),
     'https://rpc.api.moonbase.moonbeam.network',
     'https://apps.moonbeam.network/moonbase-alpha/faucet',
     'https://moonbase.moonscan.io',
-    [(name: 'EIP1559')],
+    [ChainInfoFeature('EIP1559')],
   );
 
   static ChainInfo PolygonzkEVMTestnet = ChainInfo(
@@ -593,7 +607,7 @@ class ChainInfo {
     'Polygon zkEVM Testnet',
     'Testnet',
     'https://polygon.technology/solutions/polygon-zkevm',
-    (name: 'ETH', symbol: 'ETH', decimals: 18),
+    ChainInfoNativeCurrency('ETH', 'ETH', 18),
     'https://rpc.public.zkevm-test.net',
     'https://public.zkevm-test.net',
     'https://testnet-zkevm.polygonscan.com',
@@ -608,7 +622,7 @@ class ChainInfo {
     'Fantom Testnet',
     'Testnet',
     'https://docs.fantom.foundation/quick-start/short-guide#fantom-testnet',
-    (name: 'FTM', symbol: 'FTM', decimals: 18),
+    ChainInfoNativeCurrency('FTM', 'FTM', 18),
     'https://rpc.testnet.fantom.network',
     'https://faucet.fantom.network',
     'https://testnet.ftmscan.com',
@@ -623,7 +637,7 @@ class ChainInfo {
     'Mantle Mainnet',
     'Mainnet',
     'https://mantle.xyz',
-    (name: 'MNT', symbol: 'MNT', decimals: 18),
+    ChainInfoNativeCurrency('MNT', 'MNT', 18),
     'https://rpc.mantle.xyz',
     '',
     'https://explorer.mantle.xyz',
@@ -638,7 +652,7 @@ class ChainInfo {
     'Mantle Testnet',
     'Testnet',
     'https://mantle.xyz',
-    (name: 'MNT', symbol: 'MNT', decimals: 18),
+    ChainInfoNativeCurrency('MNT', 'MNT', 18),
     'https://rpc.testnet.mantle.xyz',
     'https://faucet.testnet.mantle.xyz',
     'https://explorer.testnet.mantle.xyz',
@@ -653,11 +667,11 @@ class ChainInfo {
     'opBNB Testnet',
     'Testnet',
     'https://opbnb.bnbchain.org',
-    (name: 'BNB', symbol: 'BNB', decimals: 18),
+    ChainInfoNativeCurrency('BNB', 'BNB', 18),
     'https://opbnb-testnet-rpc.bnbchain.org',
     '',
     'https://opbnb-testnet.bscscan.com',
-    [(name: 'EIP1559')],
+    [ChainInfoFeature('EIP1559')],
   );
 
   static ChainInfo Klaytn = ChainInfo(
@@ -668,7 +682,7 @@ class ChainInfo {
     'Klaytn Mainnet',
     'Mainnet',
     'https://www.klaytn.com',
-    (name: 'Klaytn', symbol: 'KLAY', decimals: 18),
+    ChainInfoNativeCurrency('Klaytn', 'KLAY', 18),
     'https://cypress.fandom.finance/archive',
     '',
     'https://scope.klaytn.com',
@@ -683,11 +697,11 @@ class ChainInfo {
     'Base Mainnet',
     'Mainnet',
     'https://base.org',
-    (name: 'ETH', symbol: 'ETH', decimals: 18),
+    ChainInfoNativeCurrency('ETH', 'ETH', 18),
     'https://developer-access-mainnet.base.org',
     '',
     'https://basescan.org',
-    [(name: 'EIP1559')],
+    [ChainInfoFeature('EIP1559')],
   );
 
   static ChainInfo GnosisTestnet = ChainInfo(
@@ -698,11 +712,11 @@ class ChainInfo {
     'Gnosis Testnet',
     'Testnet',
     'https://docs.gnosischain.com',
-    (name: 'Gnosis', symbol: 'XDAI', decimals: 18),
+    ChainInfoNativeCurrency('Gnosis', 'XDAI', 18),
     'https://optimism.gnosischain.com',
     'https://gnosisfaucet.com',
     'https://blockscout.com/gnosis/chiado',
-    [(name: 'EIP1559')],
+    [ChainInfoFeature('EIP1559')],
   );
 
   static ChainInfo zkMetaTestnet = ChainInfo(
@@ -713,7 +727,7 @@ class ChainInfo {
     'zkMeta Testnet',
     'Testnet',
     'https://satoshichain.net',
-    (name: 'IDE', symbol: 'IDE', decimals: 18),
+    ChainInfoNativeCurrency('IDE', 'IDE', 18),
     'https://pre-alpha-zkrollup-rpc.opside.network/era7',
     '',
     'https://era7.zkevm.opside.info',
@@ -728,7 +742,7 @@ class ChainInfo {
     'ReadON Testnet',
     'Testnet',
     'https://opside.network',
-    (name: 'READ', symbol: 'READ', decimals: 18),
+    ChainInfoNativeCurrency('READ', 'READ', 18),
     'https://pre-alpha-zkrollup-rpc.opside.network/readon-content-test-chain',
     '',
     'https://readon-content-test-chain.zkevm.opside.info',
@@ -743,7 +757,7 @@ class ChainInfo {
     'GasZero Goerli',
     'Goerli',
     'https://gaszero.com',
-    (name: 'GasZero', symbol: 'GAS0', decimals: 18),
+    ChainInfoNativeCurrency('GasZero', 'GAS0', 18),
     'https://goerlitest.gaszero.com',
     '',
     'https://scangoerlitest.gaszero.com',
@@ -758,11 +772,11 @@ class ChainInfo {
     'MAP Protocol',
     'Mainnet',
     'https://maplabs.io',
-    (name: 'MAPO', symbol: 'MAPO', decimals: 18),
+    ChainInfoNativeCurrency('MAPO', 'MAPO', 18),
     'https://rpc.maplabs.io',
     '',
     'https://mapscan.io',
-    [(name: 'EIP1559')],
+    [ChainInfoFeature('EIP1559')],
   );
 
   static ChainInfo ArbitrumOne = ChainInfo(
@@ -773,11 +787,11 @@ class ChainInfo {
     'Arbitrum One',
     'Mainnet',
     'https://arbitrum.io',
-    (name: 'Ether', symbol: 'ETH', decimals: 18),
+    ChainInfoNativeCurrency('Ether', 'ETH', 18),
     'https://arb1.arbitrum.io/rpc',
     '',
     'https://arbiscan.io',
-    [(name: 'EIP1559')],
+    [ChainInfoFeature('EIP1559')],
   );
 
   static ChainInfo ArbitrumNova = ChainInfo(
@@ -788,11 +802,11 @@ class ChainInfo {
     'Arbitrum Nova',
     'Mainnet',
     'https://arbitrum.io',
-    (name: 'Ether', symbol: 'ETH', decimals: 18),
+    ChainInfoNativeCurrency('Ether', 'ETH', 18),
     'https://nova.arbitrum.io/rpc',
     '',
     'https://nova.arbiscan.io',
-    [(name: 'EIP1559')],
+    [ChainInfoFeature('EIP1559')],
   );
 
   static ChainInfo Celo = ChainInfo(
@@ -803,7 +817,7 @@ class ChainInfo {
     'Celo Mainnet',
     'Mainnet',
     'https://docs.celo.org',
-    (name: 'Celo', symbol: 'CELO', decimals: 18),
+    ChainInfoNativeCurrency('Celo', 'CELO', 18),
     'https://rpc.ankr.com/celo',
     '',
     'https://explorer.celo.org/mainnet',
@@ -818,7 +832,7 @@ class ChainInfo {
     'OasisEmerald Testnet',
     'Testnet',
     'https://docs.oasis.io/dapp/emerald',
-    (name: 'OasisEmerald', symbol: 'ROSE', decimals: 18),
+    ChainInfoNativeCurrency('OasisEmerald', 'ROSE', 18),
     'https://testnet.emerald.oasis.dev',
     'https://faucet.testnet.oasis.dev',
     'https://testnet.explorer.emerald.oasis.dev',
@@ -833,7 +847,7 @@ class ChainInfo {
     'OasisEmerald Mainnet',
     'Mainnet',
     'https://docs.oasis.io/dapp/emerald',
-    (name: 'OasisEmerald', symbol: 'ROSE', decimals: 18),
+    ChainInfoNativeCurrency('OasisEmerald', 'ROSE', 18),
     'https://emerald.oasis.dev',
     '',
     'https://explorer.emerald.oasis.dev',
@@ -848,11 +862,11 @@ class ChainInfo {
     'Avalanche Testnet',
     'Testnet',
     'https://cchain.explorer.avax-test.network',
-    (name: 'AVAX', symbol: 'AVAX', decimals: 18),
+    ChainInfoNativeCurrency('AVAX', 'AVAX', 18),
     'https://api.avax-test.network/ext/bc/C/rpc',
     'https://faucet.avax.network',
     'https://testnet.snowtrace.io',
-    [(name: 'EIP1559')],
+    [ChainInfoFeature('EIP1559')],
   );
 
   static ChainInfo Avalanche = ChainInfo(
@@ -863,11 +877,11 @@ class ChainInfo {
     'Avalanche Mainnet',
     'Mainnet',
     'https://www.avax.network',
-    (name: 'AVAX', symbol: 'AVAX', decimals: 18),
+    ChainInfoNativeCurrency('AVAX', 'AVAX', 18),
     'https://api.avax.network/ext/bc/C/rpc',
     '',
     'https://snowtrace.io',
-    [(name: 'EIP1559')],
+    [ChainInfoFeature('EIP1559')],
   );
 
   static ChainInfo CeloTestnet = ChainInfo(
@@ -878,7 +892,7 @@ class ChainInfo {
     'Celo Testnet',
     'Testnet',
     'https://docs.celo.org',
-    (name: 'Celo', symbol: 'CELO', decimals: 18),
+    ChainInfoNativeCurrency('Celo', 'CELO', 18),
     'https://alfajores-forno.celo-testnet.org',
     ' https://celo.org/developers/faucet',
     'https://explorer.celo.org/alfajores',
@@ -893,11 +907,11 @@ class ChainInfo {
     'PGN Sepolia',
     'Sepolia',
     'https://publicgoods.network',
-    (name: 'ETH', symbol: 'ETH', decimals: 18),
+    ChainInfoNativeCurrency('ETH', 'ETH', 18),
     'https://sepolia.publicgoods.network',
     '',
     'https://explorer.sepolia.publicgoods.network',
-    [(name: 'EIP1559')],
+    [ChainInfoFeature('EIP1559')],
   );
 
   static ChainInfo LineaGoerli = ChainInfo(
@@ -908,11 +922,11 @@ class ChainInfo {
     'Linea Goerli',
     'Goerli',
     'https://linea.build',
-    (name: 'ETH', symbol: 'ETH', decimals: 18),
+    ChainInfoNativeCurrency('ETH', 'ETH', 18),
     'https://rpc.goerli.linea.build',
     'https://faucet.goerli.linea.build',
     'https://goerli.lineascan.build',
-    [(name: 'EIP1559')],
+    [ChainInfoFeature('EIP1559')],
   );
 
   static ChainInfo Linea = ChainInfo(
@@ -923,11 +937,11 @@ class ChainInfo {
     'Linea Mainnet',
     'Mainnet',
     'https://linea.build',
-    (name: 'ETH', symbol: 'ETH', decimals: 18),
+    ChainInfoNativeCurrency('ETH', 'ETH', 18),
     'https://linea-mainnet.infura.io/v3/9aa3d95b3bc440fa88ea12eaa4456161',
     '',
     'https://explorer.linea.build',
-    [(name: 'EIP1559')],
+    [ChainInfoFeature('EIP1559')],
   );
 
   static ChainInfo PolygonMumbai = ChainInfo(
@@ -938,11 +952,11 @@ class ChainInfo {
     'Polygon Mumbai',
     'Mumbai',
     'https://polygon.technology',
-    (name: 'MATIC', symbol: 'MATIC', decimals: 18),
+    ChainInfoNativeCurrency('MATIC', 'MATIC', 18),
     'https://polygon-mumbai.gateway.tenderly.co',
     'https://faucet.polygon.technology',
     'https://mumbai.polygonscan.com',
-    [(name: 'EIP1559')],
+    [ChainInfoFeature('EIP1559')],
   );
 
   static ChainInfo BaseGoerli = ChainInfo(
@@ -953,11 +967,11 @@ class ChainInfo {
     'Base Goerli',
     'Goerli',
     'https://base.org',
-    (name: 'ETH', symbol: 'ETH', decimals: 18),
+    ChainInfoNativeCurrency('ETH', 'ETH', 18),
     'https://base-goerli.public.blastapi.io',
     'https://bridge.base.org/deposit',
     'https://goerli.basescan.org',
-    [(name: 'EIP1559')],
+    [ChainInfoFeature('EIP1559')],
   );
 
   static ChainInfo ComboTestnet = ChainInfo(
@@ -968,7 +982,7 @@ class ChainInfo {
     'Combo Testnet',
     'Testnet',
     'https://docs.combonetwork.io',
-    (name: 'BNB', symbol: 'BNB', decimals: 18),
+    ChainInfoNativeCurrency('BNB', 'BNB', 18),
     'https://test-rpc.combonetwork.io',
     '',
     'https://combotrace-testnet.nodereal.io',
@@ -983,11 +997,11 @@ class ChainInfo {
     'Taiko Testnet',
     'Testnet',
     'https://taiko.xyz',
-    (name: 'ETH', symbol: 'ETH', decimals: 18),
+    ChainInfoNativeCurrency('ETH', 'ETH', 18),
     'https://rpc.test.taiko.xyz',
     'https://bridge.test.taiko.xyz',
     'https://explorer.test.taiko.xyz',
-    [(name: 'EIP1559')],
+    [ChainInfoFeature('EIP1559')],
   );
 
   static ChainInfo PlatON = ChainInfo(
@@ -998,7 +1012,7 @@ class ChainInfo {
     'PlatON Mainnet',
     'Mainnet',
     'https://www.platon.network',
-    (name: 'LAT', symbol: 'LAT', decimals: 18),
+    ChainInfoNativeCurrency('LAT', 'LAT', 18),
     'https://openapi2.platon.network/rpc',
     '',
     'https://scan.platon.network',
@@ -1013,11 +1027,11 @@ class ChainInfo {
     'Arbitrum Goerli',
     'Goerli',
     'https://arbitrum.io',
-    (name: 'Arbitrum Gorli Ether', symbol: 'AGOR', decimals: 18),
+    ChainInfoNativeCurrency('Arbitrum Gorli Ether', 'AGOR', 18),
     'https://goerli-rollup.arbitrum.io/rpc',
     'https://faucet.triangleplatform.com/arbitrum/goerli',
     'https://goerli.arbiscan.io',
-    [(name: 'EIP1559')],
+    [ChainInfoFeature('EIP1559')],
   );
 
   static ChainInfo ScrollSepolia = ChainInfo(
@@ -1028,7 +1042,7 @@ class ChainInfo {
     'Scroll Sepolia',
     'Sepolia',
     'https://scroll.io',
-    (name: 'Scroll', symbol: 'ETH', decimals: 18),
+    ChainInfoNativeCurrency('Scroll', 'ETH', 18),
     'https://sepolia-rpc.scroll.io',
     '',
     'https://sepolia-blockscout.scroll.io',
@@ -1043,7 +1057,7 @@ class ChainInfo {
     'Scroll Alpha Testnet',
     'Testnet',
     'https://scroll.io',
-    (name: 'Scroll', symbol: 'ETH', decimals: 18),
+    ChainInfoNativeCurrency('Scroll', 'ETH', 18),
     'https://alpha-rpc.scroll.io/l2',
     '',
     'https://blockscout.scroll.io',
@@ -1058,7 +1072,7 @@ class ChainInfo {
     'PlatON Testnet',
     'Testnet',
     'https://www.platon.network',
-    (name: 'LAT', symbol: 'LAT', decimals: 18),
+    ChainInfoNativeCurrency('LAT', 'LAT', 18),
     'https://devnetopenapi2.platon.network/rpc',
     'https://devnet2faucet.platon.network/faucet',
     'https://devnet2scan.platon.network',
@@ -1073,11 +1087,11 @@ class ChainInfo {
     'Manta Testnet',
     'Testnet',
     'https://manta.network',
-    (name: 'ETH', symbol: 'ETH', decimals: 18),
+    ChainInfoNativeCurrency('ETH', 'ETH', 18),
     'https://manta-testnet.calderachain.xyz/http',
     'https://pacific-info.manta.network',
     'https://pacific-explorer.manta.network',
-    [(name: 'EIP1559')],
+    [ChainInfoFeature('EIP1559')],
   );
 
   static ChainInfo Zora = ChainInfo(
@@ -1088,11 +1102,11 @@ class ChainInfo {
     'Zora Mainnet',
     'Mainnet',
     'https://zora.energy',
-    (name: 'ETH', symbol: 'ETH', decimals: 18),
+    ChainInfoNativeCurrency('ETH', 'ETH', 18),
     'https://rpc.zora.energy',
     '',
     'https://explorer.zora.energy',
-    [(name: 'EIP1559')],
+    [ChainInfoFeature('EIP1559')],
   );
 
   static ChainInfo EthereumSepolia = ChainInfo(
@@ -1103,11 +1117,11 @@ class ChainInfo {
     'Ethereum Sepolia',
     'Sepolia',
     'https://sepolia.otterscan.io',
-    (name: 'Ether', symbol: 'ETH', decimals: 18),
+    ChainInfoNativeCurrency('Ether', 'ETH', 18),
     'https://eth-sepolia.g.alchemy.com/v2/demo',
     'https://faucet.quicknode.com/drip',
     'https://sepolia.etherscan.io',
-    [(name: 'EIP1559')],
+    [ChainInfoFeature('EIP1559')],
   );
 
   static ChainInfo Tron = ChainInfo(
@@ -1118,7 +1132,7 @@ class ChainInfo {
     'Tron Mainnet',
     'Mainnet',
     'https://tron.network',
-    (name: 'TRX', symbol: 'TRX', decimals: 6),
+    ChainInfoNativeCurrency('TRX', 'TRX', 6),
     'https://api.trongrid.io',
     '',
     'https://tronscan.io',
@@ -1133,7 +1147,7 @@ class ChainInfo {
     'Aurora Mainnet',
     'Mainnet',
     'https://aurora.dev',
-    (name: 'Ether', symbol: 'ETH', decimals: 18),
+    ChainInfoNativeCurrency('Ether', 'ETH', 18),
     'https://mainnet.aurora.dev',
     '',
     'https://explorer.aurora.dev',
@@ -1148,7 +1162,7 @@ class ChainInfo {
     'Aurora Testnet',
     'Testnet',
     'https://aurora.dev',
-    (name: 'Ether', symbol: 'ETH', decimals: 18),
+    ChainInfoNativeCurrency('Ether', 'ETH', 18),
     'https://testnet.aurora.dev',
     'https://aurora.dev/faucet',
     'https://explorer.testnet.aurora.dev',
@@ -1163,7 +1177,7 @@ class ChainInfo {
     'SKALE Nebula',
     'Mainnet',
     'https://mainnet.skalenodes.com',
-    (name: 'sFUEL', symbol: 'sFUEL', decimals: 18),
+    ChainInfoNativeCurrency('sFUEL', 'sFUEL', 18),
     'https://mainnet.skalenodes.com/v1/green-giddy-denebola',
     '',
     'https://green-giddy-denebola.explorer.mainnet.skalenodes.com',
@@ -1178,7 +1192,7 @@ class ChainInfo {
     'Harmony Mainnet',
     'Mainnet',
     'https://www.harmony.one',
-    (name: 'ONE', symbol: 'ONE', decimals: 18),
+    ChainInfoNativeCurrency('ONE', 'ONE', 18),
     'https://api.harmony.one',
     '',
     'https://explorer.harmony.one',
@@ -1193,7 +1207,7 @@ class ChainInfo {
     'Harmony Testnet',
     'Testnet',
     'https://www.harmony.one',
-    (name: 'ONE', symbol: 'ONE', decimals: 18),
+    ChainInfoNativeCurrency('ONE', 'ONE', 18),
     'https://api.s0.b.hmny.io',
     'https://faucet.pops.one',
     'https://explorer.pops.one',
@@ -1208,7 +1222,7 @@ class ChainInfo {
     'Tron Shasta',
     'Shasta',
     'https://www.trongrid.io/shasta',
-    (name: 'TRX', symbol: 'TRX', decimals: 6),
+    ChainInfoNativeCurrency('TRX', 'TRX', 6),
     'https://api.shasta.trongrid.io',
     '',
     'https://shasta.tronscan.org',
@@ -1223,7 +1237,7 @@ class ChainInfo {
     'Tron Nile',
     'Nile',
     'https://nileex.io',
-    (name: 'TRX', symbol: 'TRX', decimals: 6),
+    ChainInfoNativeCurrency('TRX', 'TRX', 6),
     'https://nile.trongrid.io',
     'https://nileex.io/join/getJoinPage',
     'https://nile.tronscan.org',
