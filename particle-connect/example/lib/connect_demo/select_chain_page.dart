@@ -13,16 +13,16 @@ class SelectChainPage extends StatefulWidget {
 
 class SelectChainPageState extends State<SelectChainPage> {
   List<ChainInfo> chainList = <ChainInfo>[
-    SolanaChain.mainnet(),
-    SolanaChain.testnet(),
-    SolanaChain.devnet(),
-    EthereumChain.mainnet(),
-    EthereumChain.goerli(),
-    EthereumChain.sepolia(),
-    BSCChain.mainnet(),
-    BSCChain.testnet(),
-    PolygonChain.mainnet(),
-    PolygonChain.mumbai()
+    ChainInfo.Solana,
+    ChainInfo.SolanaTestnet,
+    ChainInfo.SolanaDevnet,
+    ChainInfo.Ethereum,
+    ChainInfo.EthereumGoerli,
+    ChainInfo.EthereumSepolia,
+    ChainInfo.BNBChain,
+    ChainInfo.BNBChainTestnet,
+    ChainInfo.Polygon,
+    ChainInfo.PolygonMumbai
   ];
 
   @override
@@ -39,12 +39,12 @@ class SelectChainPageState extends State<SelectChainPage> {
                 print('Clicked: ${chainList[index]}');
                 final chainInfo = chainList[index];
                 ParticleAuth.setChainInfo(chainInfo);
-                showToast("set chain info: ${chainList[index].chainName!}  ${chainList[index].chainId}");
+                showToast(
+                    "set chain info: ${chainList[index].name!}  ${chainList[index].id}");
                 ConnectLogic.currChainInfo = chainInfo;
                 Navigator.pop(context);
               },
-              child: Text(
-                  "${chainList[index].chainName!}  ${chainList[index].chainId}"),
+              child: Text("${chainList[index].name!}  ${chainList[index].id}"),
             );
           },
         ));

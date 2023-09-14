@@ -36,8 +36,8 @@ class ParticleConnect {
       _channel.invokeMethod(
           'initialize',
           jsonEncode({
-            "chain_name": chainInfo.chainName,
-            "chain_id": chainInfo.chainId,
+            "chain_name": chainInfo.name,
+            "chain_id": chainInfo.id,
             "env": env.name,
             "metadata": dappMetaData,
             "rpc_url": rpcUrlConfig
@@ -46,8 +46,8 @@ class ParticleConnect {
       _channel.invokeMethod(
           'init',
           jsonEncode({
-            "chain_name": chainInfo.chainName,
-            "chain_id": chainInfo.chainId,
+            "chain_name": chainInfo.name,
+            "chain_id": chainInfo.id,
             "env": env.name,
             "metadata": dappMetaData,
             "rpc_url": rpcUrlConfig
@@ -61,8 +61,8 @@ class ParticleConnect {
     for (var i = 0; i < chainInfos.length; i++) {
       ChainInfo chainInfo = chainInfos[i];
       allInfos.add({
-        "chain_name": chainInfo.chainName,
-        "chain_id": chainInfo.chainId,
+        "chain_name": chainInfo.name,
+        "chain_id": chainInfo.id,
       });
     }
     _channel.invokeMethod(
@@ -348,8 +348,8 @@ class ParticleConnect {
         jsonEncode({
           "wallet_type": walletType.name,
           "public_address": publicAddress,
-          "chain_name": chainInfo.chainName,
-          "chain_id": chainInfo.chainId,
+          "chain_name": chainInfo.name,
+          "chain_id": chainInfo.id,
         }));
   }
 
@@ -363,8 +363,8 @@ class ParticleConnect {
         jsonEncode({
           "wallet_type": walletType.name,
           "public_address": publicAddress,
-          "chain_name": chainInfo.chainName,
-          "chain_id": chainInfo.chainId,
+          "chain_name": chainInfo.name,
+          "chain_id": chainInfo.id,
         }));
   }
 

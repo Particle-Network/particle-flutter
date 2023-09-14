@@ -1,9 +1,9 @@
 import 'dart:io';
 
 import 'package:oktoast/oktoast.dart';
+import 'package:particle_auth/particle_auth.dart';
 import 'package:particle_connect/particle_connect.dart';
 import 'package:particle_wallet/particle_wallet.dart';
-import 'package:particle_auth/particle_auth.dart';
 
 class WalletLogic {
   static void init() {
@@ -100,9 +100,9 @@ class WalletLogic {
 
   static void setSupportChain() {
     List<ChainInfo> chainInfos = <ChainInfo>[];
-    chainInfos.add(EthereumChain.mainnet());
-    chainInfos.add(PolygonChain.mainnet());
-    chainInfos.add(BSCChain.mainnet());
+    chainInfos.add(ChainInfo.Ethereum);
+    chainInfos.add(ChainInfo.Polygon);
+    chainInfos.add(ChainInfo.BNBChain);
     ParticleWallet.setSupportChain(chainInfos);
   }
 
@@ -189,9 +189,8 @@ class WalletLogic {
         "particle auth wallet": "Playbux"
       };
 
-      Map<Language, Map<String, String>> localizables = <Language, Map<String, String>> {
-        Language.en:  enLocalizables
-      };
+      Map<Language, Map<String, String>> localizables =
+          <Language, Map<String, String>>{Language.en: enLocalizables};
 
       ParticleWallet.setCustomLocalizable(localizables);
     }

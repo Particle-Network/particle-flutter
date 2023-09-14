@@ -8,7 +8,7 @@ import 'package:particle_wallet_example/mock/test_account.dart';
 import 'package:particle_wallet_example/mock/transaction_mock.dart';
 
 class ConnectLogic {
-  static ChainInfo currChainInfo = EthereumChain.mainnet();
+  static ChainInfo currChainInfo = ChainInfo.Ethereum;
 
   static WalletType walletType = WalletType.particle;
 
@@ -35,7 +35,7 @@ class ConnectLogic {
     ParticleConnect.init(currChainInfo, dappInfo, Env.dev);
 
     ParticleConnect.setWalletConnectV2SupportChainInfos(
-        <ChainInfo>[EthereumChain.mainnet(), PolygonChain.mainnet()]);
+        <ChainInfo>[ChainInfo.Ethereum, ChainInfo.Polygon]);
   }
 
   static void connect() async {
@@ -103,7 +103,7 @@ class ConnectLogic {
 
   static void signTransaction() async {
     String trans;
-    if (currChainInfo is SolanaChain) {
+    if (currChainInfo.isSolanaChain()) {
       trans = await TransactionMock.mockSolanaTransaction(getPublicAddress());
       print("trans:" + trans);
       String result = await ParticleConnect.signTransaction(
@@ -116,7 +116,7 @@ class ConnectLogic {
   }
 
   static void signAllTransactions() async {
-    if (currChainInfo is SolanaChain) {
+    if (currChainInfo.isSolanaChain()) {
       final trans1 =
           await TransactionMock.mockSolanaTransaction(getPublicAddress());
       final trans2 =
@@ -134,7 +134,7 @@ class ConnectLogic {
   }
 
   static void signAndSendTransaction() async {
-    if (currChainInfo is SolanaChain) {
+    if (currChainInfo.isSolanaChain()) {
       final trans =
           await TransactionMock.mockSolanaTransaction(getPublicAddress());
       String result = await ParticleConnect.signAndSendTransaction(
@@ -161,7 +161,7 @@ class ConnectLogic {
 
   static void importPrivateKey() async {
     String privateKey;
-    if (currChainInfo is SolanaChain) {
+    if (currChainInfo.isSolanaChain()) {
       privateKey = TestAccount.solana.privateKey;
     } else {
       privateKey = TestAccount.evm.privateKey;
@@ -180,7 +180,7 @@ class ConnectLogic {
 
   static void importMnemonic() async {
     String mnemonic;
-    if (currChainInfo is SolanaChain) {
+    if (currChainInfo.isSolanaChain()) {
       mnemonic = TestAccount.solana.mnemonic;
     } else {
       mnemonic = TestAccount.evm.mnemonic;

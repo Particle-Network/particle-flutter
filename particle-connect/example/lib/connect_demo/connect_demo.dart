@@ -13,7 +13,8 @@ class ConnectDemoPage extends StatefulWidget {
 }
 
 class _ConnectDemoPageState extends State<ConnectDemoPage> {
-  static const EventChannel _walletConnectEventChannel = EventChannel('connect_event_bridge');
+  static const EventChannel _walletConnectEventChannel =
+      EventChannel('connect_event_bridge');
   var walletConnectUri = "";
 
   @override
@@ -54,7 +55,8 @@ class _ConnectDemoPageState extends State<ConnectDemoPage> {
               ),
             ),
             Padding(
-              padding: const EdgeInsets.only(left: 8.0, top: 16.0, right: 8.0, bottom: 8.0),
+              padding: const EdgeInsets.only(
+                  left: 8.0, top: 16.0, right: 8.0, bottom: 8.0),
               child: SizedBox(
                 width: double.infinity,
                 height: 50,
@@ -62,7 +64,8 @@ class _ConnectDemoPageState extends State<ConnectDemoPage> {
                     onPressed: () => {
                           Navigator.push(
                             context,
-                            MaterialPageRoute(builder: (context) => const SelectChainPage()),
+                            MaterialPageRoute(
+                                builder: (context) => const SelectChainPage()),
                           )
                         },
                     child: const Text(
@@ -72,7 +75,8 @@ class _ConnectDemoPageState extends State<ConnectDemoPage> {
               ),
             ),
             Padding(
-              padding: const EdgeInsets.only(left: 8.0, top: 16.0, right: 8.0, bottom: 8.0),
+              padding: const EdgeInsets.only(
+                  left: 8.0, top: 16.0, right: 8.0, bottom: 8.0),
               child: SizedBox(
                 width: double.infinity,
                 height: 50,
@@ -80,7 +84,8 @@ class _ConnectDemoPageState extends State<ConnectDemoPage> {
                     onPressed: () => {
                           Navigator.push(
                             context,
-                            MaterialPageRoute(builder: (context) => const SelectWalletPage()),
+                            MaterialPageRoute(
+                                builder: (context) => const SelectWalletPage()),
                           )
                         },
                     child: const Text(
@@ -154,7 +159,9 @@ class _ConnectDemoPageState extends State<ConnectDemoPage> {
                     )),
               ),
             ),
-            Offstage(offstage: walletConnectUri.isEmpty ? true : false, child: QrImage(data: walletConnectUri, size: 200)),
+            Offstage(
+                offstage: walletConnectUri.isEmpty ? true : false,
+                child: QrImage(data: walletConnectUri, size: 200)),
             Padding(
               padding: const EdgeInsets.all(8.0),
               child: SizedBox(

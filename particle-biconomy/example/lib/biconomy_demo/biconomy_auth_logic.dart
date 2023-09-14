@@ -1,22 +1,22 @@
 import 'dart:convert';
 
 import 'package:oktoast/oktoast.dart';
-import 'package:particle_biconomy/particle_biconomy.dart';
 import 'package:particle_auth/particle_auth.dart';
+import 'package:particle_biconomy/particle_biconomy.dart';
 import 'package:particle_biconomy_example/mock/transaction_mock.dart';
 
 class BiconomyAuthLogic {
   static void init() {
     // should call ParticleAuth init first.
-    // ParticleAuth.init(PolygonChain.mumbai(), Env.dev);
+    // ParticleAuth.init(ChainInfo.PolygonMumbai, Env.dev);
 
     Map<int, String> dappKeys = {
-      1: "",//your ethereum mainnet key
+      1: "", //your ethereum mainnet key
       5: "", //your ethereum goerli key
       137: "", //your polygon mainnet key
       80001: "hYZIwIsf2.e18c790b-cafb-4c4e-a438-0289fc25dba1"
     };
-    ParticleAuth.init(PolygonChain.mainnet(), Env.production);
+    ParticleAuth.init(ChainInfo.Polygon, Env.production);
 
     // Get your project id and client from dashboard, https://dashboard.particle.network
     const projectId =
@@ -33,7 +33,8 @@ class BiconomyAuthLogic {
   }
 
   static void isSupportChainInfo() async {
-    var result = await ParticleBiconomy.isSupportChainInfo(ArbitrumChain.one());
+    var result =
+        await ParticleBiconomy.isSupportChainInfo(ChainInfo.ArbitrumOne);
     print(result);
     showToast("isSupportChainInfo: $result");
   }

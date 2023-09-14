@@ -41,8 +41,8 @@ class ParticleBiconomy {
     return await _channel.invokeMethod(
         'isSupportChainInfo',
         jsonEncode({
-          "chain_name": chainInfo.chainName,
-          "chain_id": chainInfo.chainId,
+          "chain_name": chainInfo.name,
+          "chain_id": chainInfo.id,
         }));
   }
 

@@ -178,8 +178,8 @@ class ParticleWallet {
     for (var i = 0; i < chainInfos.length; i++) {
       ChainInfo chainInfo = chainInfos[i];
       allInfos.add({
-        "chain_name": chainInfo.chainName,
-        "chain_id": chainInfo.chainId,
+        "chain_name": chainInfo.name,
+        "chain_id": chainInfo.id,
       });
     }
     _channel.invokeMethod('setSupportChain', jsonEncode(allInfos));
