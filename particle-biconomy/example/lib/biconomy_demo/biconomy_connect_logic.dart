@@ -1,8 +1,8 @@
 import 'dart:convert';
 
 import 'package:oktoast/oktoast.dart';
-import 'package:particle_biconomy/particle_biconomy.dart';
 import 'package:particle_auth/particle_auth.dart';
+import 'package:particle_biconomy/particle_biconomy.dart';
 import 'package:particle_biconomy_example/mock/transaction_mock.dart';
 import 'package:particle_connect/particle_connect.dart';
 
@@ -31,7 +31,7 @@ class BiconomyConnectLogic {
         "https://connect.particle.network",
         "desc");
 
-    ParticleConnect.init(PolygonChain.mumbai(), dappInfo, Env.dev);
+    ParticleConnect.init(ChainInfo.PolygonMumbai, dappInfo, Env.dev);
 
     Map<int, String> dappKeys = {
       1: "your ethereum mainnet key",
@@ -39,7 +39,7 @@ class BiconomyConnectLogic {
       137: "your polygon mainnet key",
       80001: "hYZIwIsf2.e18c790b-cafb-4c4e-a438-0289fc25dba1"
     };
-    ParticleAuth.init(PolygonChain.mainnet(), Env.production);
+    ParticleAuth.init(ChainInfo.Polygon, Env.production);
     ParticleBiconomy.init(dappKeys);
   }
 
@@ -54,7 +54,7 @@ class BiconomyConnectLogic {
   }
 
   static void rpcGetFeeQuotes() async {
-     if (publicAddress == null) {
+    if (publicAddress == null) {
       print("not connect");
       return;
     }
