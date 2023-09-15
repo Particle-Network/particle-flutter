@@ -161,7 +161,7 @@ class _ConnectDemoPageState extends State<ConnectDemoPage> {
             ),
             Offstage(
                 offstage: walletConnectUri.isEmpty ? true : false,
-                child: QrImage(data: walletConnectUri, size: 200)),
+                child: QrImageView(data: walletConnectUri, size: 200)),
             Padding(
               padding: const EdgeInsets.all(8.0),
               child: SizedBox(
