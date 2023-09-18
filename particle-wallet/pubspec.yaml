@@ -10,7 +10,7 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-  particle_connect: ^1.0.6
+  particle_connect: ^1.0.7
   particle_auth: ^1.0.7
 
 #  particle_connect:
