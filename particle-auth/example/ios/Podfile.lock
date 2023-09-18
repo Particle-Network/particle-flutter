@@ -1,9 +1,9 @@
 PODS:
-  - Alamofire (5.7.1)
+  - Alamofire (5.8.0)
   - Base58.swift (1.0.2):
     - BigInt
   - BigInt (5.2.0)
-  - CryptoSwift (1.7.1)
+  - CryptoSwift (1.8.0)
   - Flutter (1.0.0)
   - particle_auth (0.0.1):
     - Flutter
@@ -67,10 +67,10 @@ EXTERNAL SOURCES:
     :path: ".symlinks/plugins/particle_auth/ios"
 
 SPEC CHECKSUMS:
-  Alamofire: 0123a34370cb170936ae79a8df46cc62b2edeb88
+  Alamofire: 0e92e751b3e9e66d7982db43919d01f313b8eb91
   Base58.swift: e0e16655f9db843b8cd367593ed6f7d90d136b7f
   BigInt: f668a80089607f521586bbe29513d708491ef2f7
-  CryptoSwift: d3d18dc357932f7e6d580689e065cf1f176007c1
+  CryptoSwift: 52aaf3fce7337552863b1d952e408085f0e65030
   Flutter: f04841e97a9d0b0a8025694d0796dd46242b2854
   particle_auth: 7df9934788402bd80156fa5f56422d941af0745c
   ParticleAuthService: 632009f0b286e395ac6db50af852775547ba278c
@@ -82,6 +82,6 @@ SPEC CHECKSUMS:
   SwiftyJSON: 2f33a42c6fbc52764d96f13368585094bfd8aa5e
   SwiftyUserDefaults: 63f80248cf5bfb3458825d9a78f2eb7e1293a040
 
-PODFILE CHECKSUM: 24fa1e9328d75fca78004a37aa0c098b904e5308
+PODFILE CHECKSUM: c3afecdebfae9da9cbfc1a9f66a00516b5a2d83e
 
 COCOAPODS: 1.12.1
