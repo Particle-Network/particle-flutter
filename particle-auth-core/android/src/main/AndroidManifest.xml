@@ -1,0 +1,14 @@
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+  package="com.particleauthcore">
+  <application>
+    <meta-data
+      android:name="particle.network.project_id"
+      android:value="${PN_PROJECT_ID}" />
+    <meta-data
+      android:name="particle.network.project_client_key"
+      android:value="${PN_PROJECT_CLIENT_KEY}" />
+    <meta-data
+      android:name="particle.network.app_id"
+      android:value="${PN_APP_ID}" />
+  </application>
+</manifest>
