@@ -2,32 +2,7 @@ import 'dart:convert';
 import 'dart:io' show Platform;
 
 import 'package:flutter/services.dart';
-
-import '../model/aa_fee_mode.dart';
-import '../model/chain_info.dart';
-import '../model/fiat_coin.dart';
-import '../model/ios_modal_present_style.dart';
-import '../model/language.dart';
-import '../model/login_info.dart';
-import '../model/security_account_config.dart';
-import '../model/typeddata_version.dart';
-import '../model/user_interface_style.dart';
-
-export '../model/aa_fee_mode.dart';
-export '../model/chain_info.dart';
-export '../model/fiat_coin.dart';
-export '../model/gas_fee_level.dart';
-export '../model/ios_modal_present_style.dart';
-export '../model/language.dart';
-export '../model/login_info.dart';
-export '../model/particle_info.dart';
-export '../model/security_account_config.dart';
-export '../model/typeddata_version.dart';
-export '../model/user_interface_style.dart';
-export '../network/model/rpc_error.dart';
-export '../network/model/serialize_sol_transreqentity.dart';
-export '../network/net/particle_rpc.dart';
-export '../network/net/request_body_entity.dart';
+import 'package:particle_auth/particle_auth.dart';
 
 /// A utility class for string operations.
 class StringUtils {
@@ -36,15 +11,12 @@ class StringUtils {
   /// The [input] string is first converted to UTF-8 bytes,
   /// and then each byte is converted to a two-digit hexadecimal number.
   static String toHexString(String input) {
-    return utf8
-        .encode(input)
-        .map((e) => e.toRadixString(16).padLeft(2, '0'))
-        .join();
+    return utf8.encode(input).map((e) => e.toRadixString(16).padLeft(2, '0')).join();
   }
 }
 
-class ParticleAuth {
-  ParticleAuth._();
+class ParticleAuthCore {
+  ParticleAuthCore._();
 
   static const MethodChannel _channel = MethodChannel('auth_bridge');
 
@@ -55,21 +27,9 @@ class ParticleAuth {
   /// [env] Development environment.
   static Future<void> init(ChainInfo chainInfo, Env env) async {
     if (Platform.isIOS) {
-      await _channel.invokeMethod(
-          'initialize',
-          jsonEncode({
-            "chain_name": chainInfo.name,
-            "chain_id": chainInfo.id,
-            "env": env.name
-          }));
+      await _channel.invokeMethod('initialize', jsonEncode({"chain_name": chainInfo.name, "chain_id": chainInfo.id, "env": env.name}));
     } else {
-      await _channel.invokeMethod(
-          'init',
-          jsonEncode({
-            "chain_name": chainInfo.name,
-            "chain_id": chainInfo.id,
-            "env": env.name
-          }));
+      await _channel.invokeMethod('init', jsonEncode({"chain_name": chainInfo.name, "chain_id": chainInfo.id, "env": env.name}));
     }
   }
 
@@ -87,10 +47,7 @@ class ParticleAuth {
   ///
   /// [authorization] optional, login and sign a message
   /// Return userinfo or error
-  static Future<String> login(LoginType loginType, String account,
-      List<SupportAuthType> supportAuthTypes,
-      {SocialLoginPrompt? socialLoginPrompt,
-      LoginAuthorization? authorization}) async {
+  static Future<String> login(LoginType loginType, String account, List<SupportAuthType> supportAuthTypes, {SocialLoginPrompt? socialLoginPrompt, LoginAuthorization? authorization}) async {
     final params = jsonEncode({
       "login_type": loginType.name,
       "account": account,
@@ -162,8 +119,7 @@ class ParticleAuth {
   ///
   /// Result signatures or error.
   static Future<String> signAllTransactions(List<String> transactions) async {
-    return await _channel.invokeMethod(
-        'signAllTransactions', jsonEncode(transactions));
+    return await _channel.invokeMethod('signAllTransactions', jsonEncode(transactions));
   }
 
   /// Sign and send transaction.
@@ -173,8 +129,7 @@ class ParticleAuth {
   /// [feeMode] is optional, works with aa service.
   ///
   /// Result signature or error.
-  static Future<String> signAndSendTransaction(String transaction,
-      {BiconomyFeeMode? feeMode}) async {
+  static Future<String> signAndSendTransaction(String transaction, {BiconomyFeeMode? feeMode}) async {
     final json = jsonEncode({"transaction": transaction, "fee_mode": feeMode});
     return await _channel.invokeMethod('signAndSendTransaction', json);
   }
@@ -186,10 +141,8 @@ class ParticleAuth {
   /// [feeMode] is optional, works with biconomy service.
   ///
   /// Result signature or error.
-  static Future<String> batchSendTransactions(List<String> transactions,
-      {BiconomyFeeMode? feeMode}) async {
-    final json =
-        jsonEncode({"transactions": transactions, "fee_mode": feeMode});
+  static Future<String> batchSendTransactions(List<String> transactions, {BiconomyFeeMode? feeMode}) async {
+    final json = jsonEncode({"transactions": transactions, "fee_mode": feeMode});
     return await _channel.invokeMethod('batchSendTransactions', json);
   }
 
@@ -198,10 +151,8 @@ class ParticleAuth {
   /// [typedData] typed data you want to sign, requires hexadecimal string.
   ///
   /// [version] support v1, v3, v4.
-  static Future<String> signTypedData(
-      String typedData, SignTypedDataVersion version) async {
-    return await _channel.invokeMethod('signTypedData',
-        jsonEncode({"message": typedData, "version": version.name}));
+  static Future<String> signTypedData(String typedData, SignTypedDataVersion version) async {
+    return await _channel.invokeMethod('signTypedData', jsonEncode({"message": typedData, "version": version.name}));
   }
 
   /// Set chain info, update chain info to SDK.
@@ -252,10 +203,7 @@ class ParticleAuth {
 
   /// Set web auth config
   static setWebAuthConfig(bool displayWallet, Appearance appearance) {
-    _channel.invokeMethod(
-        'setWebAuthConfig',
-        jsonEncode(
-            {"display_wallet": displayWallet, "appearance": appearance.name}));
+    _channel.invokeMethod('setWebAuthConfig', jsonEncode({"display_wallet": displayWallet, "appearance": appearance.name}));
   }
 
   /// Set user inerface style
@@ -319,8 +267,7 @@ class ParticleAuth {
     final email = userinfo["security_account"]["email"];
     final phone = userinfo["security_account"]["phone"];
 
-    return (email != null && !email.isEmpty) ||
-        (phone != null && !phone.isEmpty);
+    return (email != null && !email.isEmpty) || (phone != null && !phone.isEmpty);
   }
 
   /// sync secuirty account from remote server

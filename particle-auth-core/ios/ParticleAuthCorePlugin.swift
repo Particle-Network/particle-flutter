@@ -1,6 +1,6 @@
 //
-//  ParticleAuthPlugin.swift
-//  ParticleAuthExample
+//  ParticleAuthCorePlugin.swift
+//  ParticleAuthCoreExample
 //
 //  Created by link on 2022/9/28.
 //

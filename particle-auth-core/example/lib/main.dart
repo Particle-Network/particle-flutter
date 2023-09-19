@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:oktoast/oktoast.dart';
+import 'package:particle_auth_core_example/auth_core_demo/auth_core_demo.dart';
 
 void main() {
   runApp(const MyApp());

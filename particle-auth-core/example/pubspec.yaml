@@ -1,4 +1,4 @@
-name: particle_auth_example
+name: particle_auth_core_example
 version: 0.1.0
 description: Demonstrates how to use the particle_auth_core plugin.
 
@@ -37,6 +37,7 @@ dependencies:
   uuid: ^3.0.6
   oktoast: ^3.1.5
   retrofit: ^4.0.1
+  particle_auth: ^1.0.7
 
 dev_dependencies:
   retrofit_generator: '>=5.0.0 <6.0.0'
