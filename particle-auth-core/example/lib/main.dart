@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:oktoast/oktoast.dart';
-import 'package:particle_auth_core_example/auth_core_demo/auth_core_demo.dart';
 
 void main() {
   runApp(const MyApp());
@@ -24,7 +23,7 @@ class MyApp extends StatelessWidget {
         theme: ThemeData(
           primarySwatch: Colors.blue,
         ),
-        home: const MyHomePage(title: 'Particle Network Flutter Demo'),
+        home: const MyHomePage(title: 'Particle Network Flutter Demo '),
       ),
     );
   }
@@ -54,22 +53,21 @@ class _MyHomePageState extends State<MyHomePage> {
             Padding(
               padding: const EdgeInsets.all(8.0),
               child: SizedBox(
-                  width: 200,
-                  height: 50,
                   child: ElevatedButton(
-                    onPressed: () => {
-                      Navigator.push(
+                onPressed: () {
+                  print('hello');
+                  /* Navigator.push(
                         context,
                         MaterialPageRoute(
-                          builder: (context) => const AuthCoreDemoPage(),
+                          builder: (context) => const AuthDemoPage(),
                         ),
-                      )
-                    },
-                    child: const Text(
-                      "Auth Core Demo",
-                      style: TextStyle(fontSize: 20),
-                    ),
-                  )),
+                      ) */
+                },
+                child: const Text(
+                  "Auth Core Demo",
+                  style: TextStyle(fontSize: 20),
+                ),
+              )),
             ),
           ],
         ),
