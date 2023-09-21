@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:oktoast/oktoast.dart';
+import 'package:particle_auth_core/particle_auth_core.dart';
 
 void main() {
   runApp(const MyApp());
@@ -8,11 +9,9 @@ void main() {
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
 
-  // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
     return OKToast(
-      // 2-A: wrap your app with OKToast
       textStyle: const TextStyle(fontSize: 19.0, color: Colors.white),
       backgroundColor: Colors.black,
       animationCurve: Curves.easeIn,
@@ -49,26 +48,23 @@ class _MyHomePageState extends State<MyHomePage> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
-            //add a button
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: SizedBox(
-                  child: ElevatedButton(
-                onPressed: () {
-                  print('hello');
-                  /* Navigator.push(
+            SizedBox(
+                child: ElevatedButton(
+              onPressed: () {
+                print('hello');
+                print(ParticleAuthCore);
+                /* Navigator.push(
                         context,
                         MaterialPageRoute(
                           builder: (context) => const AuthDemoPage(),
                         ),
                       ) */
-                },
-                child: const Text(
-                  "Auth Core Demo",
-                  style: TextStyle(fontSize: 20),
-                ),
-              )),
-            ),
+              },
+              child: const Text(
+                "Auth Core Demo",
+                style: TextStyle(fontSize: 20),
+              ),
+            )),
           ],
         ),
       ),

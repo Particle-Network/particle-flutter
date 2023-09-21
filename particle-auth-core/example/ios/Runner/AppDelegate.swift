@@ -1,6 +1,6 @@
 import Flutter
+// import ParticleAuthService
 import UIKit
-import ParticleAuthService
 
 @UIApplicationMain
 @objc class AppDelegate: FlutterAppDelegate {
@@ -13,10 +13,11 @@ import ParticleAuthService
     }
 
     override func application(_ app: UIApplication, open url: URL, options: [UIApplication.OpenURLOptionsKey: Any] = [:]) -> Bool {
-        if ParticleAuthService.handleUrl(url) {
-            return true
-        } else {
-            return super.application(app, open: url, options: options)
-        }
+        return true
+        // if ParticleAuthService.handleUrl(url) {
+        //     return true
+        // } else {
+        //     return super.application(app, open: url, options: options)
+        // }
     }
 }
