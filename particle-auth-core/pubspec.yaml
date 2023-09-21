@@ -10,13 +10,6 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-    
-  plugin_platform_interface: ^2.0.2
-  retrofit: ^4.0.1
-  json_serializable: ^6.6.0
-  uuid: ^3.0.6
-  dio: ^5.2.0
-  json_annotation: ^4.8.0
 
 dev_dependencies:
   flutter_test:
