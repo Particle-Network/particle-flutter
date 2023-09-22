@@ -51,6 +51,7 @@ class _MyHomePageState extends State<MyHomePage> {
           children: <Widget>[
             ElevatedButton(
               onPressed: () {
+                print('init');
                 AuthCoreDemo.init(Env.dev);
               },
               child: const Text(
@@ -60,10 +61,21 @@ class _MyHomePageState extends State<MyHomePage> {
             ),
             ElevatedButton(
               onPressed: () {
+                print('getUserInfo');
                 AuthCoreDemo.getUserInfo();
               },
               child: const Text(
                 "getUserInfo",
+                style: TextStyle(fontSize: 20),
+              ),
+            ),
+            ElevatedButton(
+              onPressed: () {
+                print('isConnected');
+                AuthCoreDemo.isConnected();
+              },
+              child: const Text(
+                "isConnected",
                 style: TextStyle(fontSize: 20),
               ),
             )

@@ -21,4 +21,10 @@ class AuthCoreDemo {
     print("getUserInfo: $userInfo");
     showToast("getUserInfo: $userInfo");
   }
+
+  static void isConnected() async {
+    final result = await ParticleAuthCore.isConnected();
+    print("isConnected: $result");
+    showToast("isConnected: $result");
+  }
 }

@@ -12,15 +12,18 @@ import RxSwift
 import SwiftyJSON
 
 public class ParticleAuthCorePlugin: NSObject, FlutterPlugin {
+    let auth = Auth()
+
     let bag = DisposeBag()
-    
+
     public enum Method: String {
         case initialize
         case getUserInfo
+        case isConnected
     }
 
     public static func register(with registrar: FlutterPluginRegistrar) {
-        let channel = FlutterMethodChannel(name: "auth_bridge", binaryMessenger: registrar.messenger())
+        let channel = FlutterMethodChannel(name: "auth_core_bridge", binaryMessenger: registrar.messenger())
         
         let instance = ParticleAuthCorePlugin()
         
@@ -36,10 +39,12 @@ public class ParticleAuthCorePlugin: NSObject, FlutterPlugin {
         let json = call.arguments
         
         switch method {
-        case .initialize:
-            self.initialize(json as? String)
-        case .getUserInfo:
-            self.getUserInfo(flutterResult: result)
+            case .initialize:
+                self.initialize(json as? String)
+            case .getUserInfo:
+                self.getUserInfo(flutterResult: result)
+            case .isConnected:
+                self.isConnected(flutterResult: result)
         }
     }
 }
@@ -74,22 +79,29 @@ public extension ParticleAuthCorePlugin {
     }
 
     func getUserInfo(flutterResult: @escaping FlutterResult) {
-        flutterResult("aaa")
-        return
-        // let auth = Auth();
-        // print("1111");
-        // guard let userInfo = auth.getUserInfo() else {
-        //     print("2222");
-        //     flutterResult(FlutterError(code: "", message: "user is not login", details: nil))
-        //     return
-        // }
+        guard let userInfo = auth.getUserInfo() else {
+            flutterResult(FlutterError(code: "", message: "user is not login", details: nil))
+            return
+        }
         
-        // let userInfoJsonString = userInfo.jsonStringFullSnake()
-        // let newUserInfo = JSON(parseJSON: userInfoJsonString)
+        let userInfoJsonString = userInfo.jsonStringFullSnake()
+        let newUserInfo = JSON(parseJSON: userInfoJsonString)
         
-        // let data = try! JSONEncoder().encode(newUserInfo)
-        // let json = String(data: data, encoding: .utf8)
-        // flutterResult(json ?? "")
+        let data = try! JSONEncoder().encode(newUserInfo)
+        let json = String(data: data, encoding: .utf8)
+        flutterResult(json ?? "")
+    }
+    
+    func isConnected(flutterResult: @escaping FlutterResult) {
+        Task {
+            do {
+                let result = try await auth.isConnected()
+                flutterResult(result)
+            } catch {
+                print(error)
+                flutterResult(false)
+            }
+        }
     }
 }
 

@@ -9,16 +9,7 @@ class ParticleAuthCore {
 
   static const MethodChannel _channel = MethodChannel('auth_core_bridge');
 
-  /// Init particle-auth SDK
-  ///
-  /// [chainInfo] Chain info, for example EthereumChain, BscChain.
-  ///
-  /// [env] Development environment.
-  /// Init particle-auth SDK
-  ///
-  /// [chainInfo] Chain info, for example EthereumChain, BscChain.
-  ///
-  /// [env] Development environment.
+  /// Init particle-auth-core SDK
   static Future<void> init(ChainInfo chainInfo, Env env) async {
     if (Platform.isIOS) {
       await _channel.invokeMethod('initialize', jsonEncode({"chain_name": chainInfo.name, "chain_id": chainInfo.id, "env": env.name}));
@@ -30,5 +21,10 @@ class ParticleAuthCore {
   /// Get userinfo
   static Future<String> getUserInfo() async {
     return await _channel.invokeMethod("getUserInfo");
+  }
+
+  /// isConnected
+  static Future<bool> isConnected() async {
+    return await _channel.invokeMethod("isConnected");
   }
 }
