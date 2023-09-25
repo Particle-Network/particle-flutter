@@ -132,6 +132,28 @@ class _MyHomePageState extends State<MyHomePage> {
                 style: TextStyle(fontSize: 20),
               ),
             ),
+            ElevatedButton(
+              onPressed: () {
+                print('personalSign');
+                const message = 'Hello world!';
+                AuthCoreDemo.personalSign(message);
+              },
+              child: const Text(
+                'personalSign evm',
+                style: TextStyle(fontSize: 20),
+              ),
+            ),
+            ElevatedButton(
+              onPressed: () {
+                print('personalSignUnique');
+                const message = 'Hello world!';
+                AuthCoreDemo.personalSignUnique(message);
+              },
+              child: const Text(
+                'personalSignUnique evm',
+                style: TextStyle(fontSize: 20),
+              ),
+            ),
           ],
         ),
       ),

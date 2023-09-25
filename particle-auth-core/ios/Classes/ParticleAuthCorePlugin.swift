@@ -25,6 +25,11 @@ public class ParticleAuthCorePlugin: NSObject, FlutterPlugin {
         case evmGetAddress
         case solanaGetAddress
         case switchChain
+        case personalSign
+        case personalSignUnique
+        case signTypedData
+        case signTypedDataUnique
+        case sendTransaction
     }
 
     public static func register(with registrar: FlutterPluginRegistrar) {
@@ -40,7 +45,7 @@ public class ParticleAuthCorePlugin: NSObject, FlutterPlugin {
             result(FlutterMethodNotImplemented)
             return
         }
-        
+
         let json = call.arguments
         
         switch method {
@@ -60,6 +65,16 @@ public class ParticleAuthCorePlugin: NSObject, FlutterPlugin {
                 self.evmGetAddress(flutterResult: result)
             case .solanaGetAddress:
                 self.solanaGetAddress(flutterResult: result)
+            case .personalSign:
+                self.personalSign(json as? String, flutterResult: result)
+            case .personalSignUnique:
+                self.personalSignUnique(json as? String, flutterResult: result)
+            case .signTypedData:
+                self.signTypedData(json as? String, flutterResult: result)
+            case .signTypedDataUnique:
+                self.signTypedDataUnique(json as? String, flutterResult: result)
+            case .sendTransaction:
+                self.sendTransaction(json as? String, flutterResult: result)
         }
     }
 }
@@ -92,7 +107,7 @@ public extension ParticleAuthCorePlugin {
         let config = ParticleNetworkConfiguration(chainInfo: chainInfo, devEnv: devEnv)
         ParticleNetwork.initialize(config: config)
     }
-    
+
     func connect(_ json: String?, flutterResult: @escaping FlutterResult) {
         let jwt = json ?? ""
         Task {
@@ -127,7 +142,7 @@ public extension ParticleAuthCorePlugin {
         let json = String(data: data, encoding: .utf8)
         flutterResult(json ?? "")
     }
-    
+
     func disconnect(flutterResult: @escaping FlutterResult) {
         Task {
             do {
@@ -178,6 +193,76 @@ public extension ParticleAuthCorePlugin {
         let result: String? = auth.solana.getAddress()
 
         flutterResult(result ?? "")
+    }
+
+    func personalSign(_ json: String?, flutterResult: @escaping FlutterResult) {
+        let messageHex = json ?? ""
+        
+        Task {
+            do {
+                let signature = try await auth.evm.personalSign(messageHex)
+                flutterResult(signature)
+            } catch {
+                print(error)
+                flutterResult("")
+            }
+        }
+    }
+    
+    func personalSignUnique(_ json: String?, flutterResult: @escaping FlutterResult) {
+        let messageHex = json ?? ""
+        
+        Task {
+            do {
+                let signature = try await auth.evm.personalSignUnique(messageHex)
+                flutterResult(signature)
+            } catch {
+                print(error)
+                flutterResult("")
+            }
+        }
+    }
+    
+    func signTypedData(_ json: String?, flutterResult: @escaping FlutterResult) {
+        let typedDataV4 = json ?? ""
+        
+        Task {
+            do {
+                let signature = try await auth.evm.signTypedData(typedDataV4)
+                flutterResult(signature)
+            } catch {
+                print(error)
+                flutterResult("")
+            }
+        }
+    }
+
+    func signTypedDataUnique(_ json: String?, flutterResult: @escaping FlutterResult) {
+        let typedDataV4 = json ?? ""
+        
+        Task {
+            do {
+                let signature = try await auth.evm.signTypedDataUnique(typedDataV4)
+                flutterResult(signature)
+            } catch {
+                print(error)
+                flutterResult("")
+            }
+        }
+    }
+    
+    func sendTransaction(_ json: String?, flutterResult: @escaping FlutterResult) {
+        let transaction = json ?? ""
+        
+        Task {
+            do {
+                let signature = try await auth.evm.sendTransaction(transaction)
+                flutterResult(signature)
+            } catch {
+                print(error)
+                flutterResult("")
+            }
+        }
     }
 }
 

@@ -52,4 +52,34 @@ class ParticleAuthCore {
   static Future<bool> switchChain(int chainId) async {
     return await _channel.invokeMethod('switchChain', chainId);
   }
+
+  // evm
+  // personal sign
+  static Future<String> personalSign(String messageHex) async {
+    return await _channel.invokeMethod('personalSign', messageHex);
+  }
+
+  // evm
+  // personal sign unique
+  static Future<String> personalSignUnique(String messageHex) async {
+    return await _channel.invokeMethod('personalSignUnique', messageHex);
+  }
+
+  // evm
+  // sign typed data
+  static Future<String> signTypedData(String typedDataV4) async {
+    return await _channel.invokeMethod('signTypedData', typedDataV4);
+  }
+
+  // evm
+  // sign typed data unique
+  static Future<String> signTypedDataUnique(String typedDataV4) async {
+    return await _channel.invokeMethod('signTypedDataUnique', typedDataV4);
+  }
+
+  // evm
+  // send transaction
+  static Future<String> sendTransaction(String transaction) async {
+    return await _channel.invokeMethod('sendTransaction', transaction);
+  }
 }

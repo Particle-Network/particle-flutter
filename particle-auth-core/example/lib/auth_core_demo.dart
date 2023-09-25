@@ -57,4 +57,14 @@ class AuthCoreDemo {
     print("solanaGetAddress: $result");
     showToast("solana: $result");
   }
+
+  static void personalSign(messageHex) async {
+    final result = await ParticleAuthCore.personalSign(messageHex);
+    print("personalSign: $result");
+  }
+
+  static void personalSignUnique(messageHex) async {
+    final result = await ParticleAuthCore.personalSignUnique(messageHex);
+    print("personalSign: $result");
+  }
 }
