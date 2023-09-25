@@ -19,7 +19,7 @@ class ParticleAuthCore {
   }
 
   /// connect
-  static Future<bool> connect(String jwt) async {
+  static Future<String> connect(String jwt) async {
     return await _channel.invokeMethod('connect', jwt);
   }
 

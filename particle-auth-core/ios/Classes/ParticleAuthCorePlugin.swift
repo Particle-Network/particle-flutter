@@ -81,8 +81,8 @@ public extension ParticleAuthCorePlugin {
         ParticleNetwork.initialize(config: config)
     }
     
-    func connect(_ json: String, callback: @escaping RCTResponseSenderBlock) {
-        let jwt = json
+    func connect(_ json: String?, flutterResult: @escaping FlutterResult) {
+        let jwt = json ?? ""
         Task {
             do {
                 let userInfo = try await auth.connect(jwt: jwt)
@@ -91,13 +91,13 @@ public extension ParticleAuthCorePlugin {
                 let statusModel = FlutterStatusModel(status: true, data: newUserInfo)
                 let data = try! JSONEncoder().encode(statusModel)
                 guard let json = String(data: data, encoding: .utf8) else { return }
-                callback([json])
+                flutterResult(json ?? "")
             } catch {
                 let response = self.ResponseFromError(error)
                 let statusModel = FlutterStatusModel(status: false, data: response)
                 let data = try! JSONEncoder().encode(statusModel)
                 guard let json = String(data: data, encoding: .utf8) else { return }
-                callback([json])
+                flutterResult(json ?? "")
             }
         }
     }
