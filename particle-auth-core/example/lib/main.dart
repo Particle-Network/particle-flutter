@@ -136,7 +136,7 @@ class _MyHomePageState extends State<MyHomePage> {
               onPressed: () {
                 print('personalSign');
                 const message = 'Hello world!';
-                AuthCoreDemo.personalSign(message);
+                AuthCoreDemo.evmPersonalSign(message);
               },
               child: const Text(
                 'personalSign evm',
@@ -147,7 +147,7 @@ class _MyHomePageState extends State<MyHomePage> {
               onPressed: () {
                 print('personalSignUnique');
                 const message = 'Hello world!';
-                AuthCoreDemo.personalSignUnique(message);
+                AuthCoreDemo.evmPersonalSignUnique(message);
               },
               child: const Text(
                 'personalSignUnique evm',

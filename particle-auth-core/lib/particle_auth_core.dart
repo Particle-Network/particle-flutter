@@ -55,31 +55,31 @@ class ParticleAuthCore {
 
   // evm
   // personal sign
-  static Future<String> personalSign(String messageHex) async {
-    return await _channel.invokeMethod('personalSign', messageHex);
+  static Future<String> evmPersonalSign(String messageHex) async {
+    return await _channel.invokeMethod('evmPersonalSign', messageHex);
   }
 
   // evm
   // personal sign unique
-  static Future<String> personalSignUnique(String messageHex) async {
-    return await _channel.invokeMethod('personalSignUnique', messageHex);
+  static Future<String> evmPersonalSignUnique(String messageHex) async {
+    return await _channel.invokeMethod('evmPersonalSignUnique', messageHex);
   }
 
   // evm
   // sign typed data
-  static Future<String> signTypedData(String typedDataV4) async {
-    return await _channel.invokeMethod('signTypedData', typedDataV4);
+  static Future<String> evmSignTypedData(String typedDataV4) async {
+    return await _channel.invokeMethod('evmSignTypedData', typedDataV4);
   }
 
   // evm
   // sign typed data unique
-  static Future<String> signTypedDataUnique(String typedDataV4) async {
-    return await _channel.invokeMethod('signTypedDataUnique', typedDataV4);
+  static Future<String> evmSignTypedDataUnique(String typedDataV4) async {
+    return await _channel.invokeMethod('evmSignTypedDataUnique', typedDataV4);
   }
 
   // evm
   // send transaction
-  static Future<String> sendTransaction(String transaction) async {
-    return await _channel.invokeMethod('sendTransaction', transaction);
+  static Future<String> evmSendTransaction(String transaction) async {
+    return await _channel.invokeMethod('evmSendTransaction', transaction);
   }
 }

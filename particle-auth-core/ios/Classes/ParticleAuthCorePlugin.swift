@@ -25,11 +25,11 @@ public class ParticleAuthCorePlugin: NSObject, FlutterPlugin {
         case evmGetAddress
         case solanaGetAddress
         case switchChain
-        case personalSign
-        case personalSignUnique
-        case signTypedData
-        case signTypedDataUnique
-        case sendTransaction
+        case evmPersonalSign
+        case evmPersonalSignUnique
+        case evmSignTypedData
+        case evmSignTypedDataUnique
+        case evmSendTransaction
     }
 
     public static func register(with registrar: FlutterPluginRegistrar) {
@@ -65,16 +65,16 @@ public class ParticleAuthCorePlugin: NSObject, FlutterPlugin {
                 self.evmGetAddress(flutterResult: result)
             case .solanaGetAddress:
                 self.solanaGetAddress(flutterResult: result)
-            case .personalSign:
-                self.personalSign(json as? String, flutterResult: result)
-            case .personalSignUnique:
-                self.personalSignUnique(json as? String, flutterResult: result)
-            case .signTypedData:
-                self.signTypedData(json as? String, flutterResult: result)
-            case .signTypedDataUnique:
-                self.signTypedDataUnique(json as? String, flutterResult: result)
-            case .sendTransaction:
-                self.sendTransaction(json as? String, flutterResult: result)
+            case .evmPersonalSign:
+                self.evmPersonalSign(json as? String, flutterResult: result)
+            case .evmPersonalSignUnique:
+                self.evmPersonalSignUnique(json as? String, flutterResult: result)
+            case .evmSignTypedData:
+                self.evmSignTypedData(json as? String, flutterResult: result)
+            case .evmSignTypedDataUnique:
+                self.evmSignTypedDataUnique(json as? String, flutterResult: result)
+            case .evmSendTransaction:
+                self.evmSendTransaction(json as? String, flutterResult: result)
         }
     }
 }
@@ -195,7 +195,7 @@ public extension ParticleAuthCorePlugin {
         flutterResult(result ?? "")
     }
 
-    func personalSign(_ json: String?, flutterResult: @escaping FlutterResult) {
+    func evmPersonalSign(_ json: String?, flutterResult: @escaping FlutterResult) {
         let messageHex = json ?? ""
         
         Task {
@@ -209,7 +209,7 @@ public extension ParticleAuthCorePlugin {
         }
     }
     
-    func personalSignUnique(_ json: String?, flutterResult: @escaping FlutterResult) {
+    func evmPersonalSignUnique(_ json: String?, flutterResult: @escaping FlutterResult) {
         let messageHex = json ?? ""
         
         Task {
@@ -223,7 +223,7 @@ public extension ParticleAuthCorePlugin {
         }
     }
     
-    func signTypedData(_ json: String?, flutterResult: @escaping FlutterResult) {
+    func evmSignTypedData(_ json: String?, flutterResult: @escaping FlutterResult) {
         let typedDataV4 = json ?? ""
         
         Task {
@@ -237,7 +237,7 @@ public extension ParticleAuthCorePlugin {
         }
     }
 
-    func signTypedDataUnique(_ json: String?, flutterResult: @escaping FlutterResult) {
+    func evmSignTypedDataUnique(_ json: String?, flutterResult: @escaping FlutterResult) {
         let typedDataV4 = json ?? ""
         
         Task {
@@ -251,7 +251,7 @@ public extension ParticleAuthCorePlugin {
         }
     }
     
-    func sendTransaction(_ json: String?, flutterResult: @escaping FlutterResult) {
+    func evmSendTransaction(_ json: String?, flutterResult: @escaping FlutterResult) {
         let transaction = json ?? ""
         
         Task {
