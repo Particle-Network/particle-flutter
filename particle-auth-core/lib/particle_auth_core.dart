@@ -108,4 +108,24 @@ class ParticleAuthCore {
   static Future<String> solanaSignAndSendTransaction(String transaction) async {
     return await _channel.invokeMethod('solanaSignAndSendTransaction', transaction);
   }
+
+  // check user has master password or not
+  static Future<bool> hasMasterPassword() async {
+    return await _channel.invokeMethod('hasMasterPassword');
+  }
+
+  // set or change master password
+  static Future<bool> changeMasterPassword() async {
+    return await _channel.invokeMethod('changeMasterPassword');
+  }
+
+  // check user has payment password or not
+  static Future<bool> hasPaymentPassword() async {
+    return await _channel.invokeMethod('hasPaymentPassword');
+  }
+
+  // Open account and security
+  static Future<bool> openAccountAndSecurity() async {
+    return await _channel.invokeMethod('openAccountAndSecurity');
+  }
 }

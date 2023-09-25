@@ -72,4 +72,28 @@ class AuthCoreDemo {
     final result = await ParticleAuthCore.solanaSignMessage(message);
     print("evmPersonalSignUnique: $result");
   }
+
+  static void hasMasterPassword() async {
+    final result = await ParticleAuthCore.hasMasterPassword();
+    print("hasMasterPassword: $result");
+    showToast("hasMasterPassword: $result");
+  }
+
+  static void changeMasterPassword() async {
+    final result = await ParticleAuthCore.changeMasterPassword();
+    print("changeMasterPassword: $result");
+    showToast("changeMasterPassword: $result");
+  }
+
+  static void hasPaymentPassword() async {
+    final result = await ParticleAuthCore.hasPaymentPassword();
+    print("hasPaymentPassword: $result");
+    showToast("hasPaymentPassword: $result");
+  }
+
+  static void openAccountAndSecurity() async {
+    final result = await ParticleAuthCore.openAccountAndSecurity();
+    print("openAccountAndSecurity: $result");
+    showToast("openAccountAndSecurity: $result");
+  }
 }

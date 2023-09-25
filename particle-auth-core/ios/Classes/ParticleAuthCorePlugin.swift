@@ -34,6 +34,11 @@ public class ParticleAuthCorePlugin: NSObject, FlutterPlugin {
         case solanaSignMessage
         case solanaSignTransaction
         case solanaSignAllTransactions
+        case solanaSignAndSendTransaction
+        case hasMasterPassword
+        case changeMasterPassword
+        case hasPaymentPassword
+        case openAccountAndSecurity
     }
 
     public static func register(with registrar: FlutterPluginRegistrar) {
@@ -87,6 +92,14 @@ public class ParticleAuthCorePlugin: NSObject, FlutterPlugin {
                 self.solanaSignAllTransactions(json as? String, flutterResult: result)
             case .solanaSignAndSendTransaction:
                 self.solanaSignAndSendTransaction(json as? String, flutterResult: result)
+            case .hasMasterPassword:
+                self.hasMasterPassword(flutterResult: result)
+            case .changeMasterPassword:
+                self.changeMasterPassword(flutterResult: result)
+            case .hasPaymentPassword:
+                self.hasPaymentPassword(flutterResult: result)
+            case .openAccountAndSecurity:
+                self.openAccountAndSecurity(flutterResult: result)
         }
     }
 }
@@ -307,6 +320,54 @@ public extension ParticleAuthCorePlugin {
     
     func solanaSignAndSendTransaction(_ message: String?, flutterResult: @escaping FlutterResult) {
 
+    }
+    
+    func hasMasterPassword(flutterResult: @escaping FlutterResult) {
+        Task {
+            do {
+                let result = try auth.hasMasterPassword()
+                flutterResult(result)
+            } catch {
+                print(error)
+                flutterResult(false)
+            }
+        }
+    }
+
+    func changeMasterPassword(flutterResult: @escaping FlutterResult) {
+        Task {
+            do {
+                let result = try await auth.changeMasterPassword()
+                flutterResult(result)
+            } catch {
+                print(error)
+                flutterResult(false)
+            }
+        }
+    }
+
+    func hasPaymentPassword(flutterResult: @escaping FlutterResult) {
+        Task {
+            do {
+                let result = try auth.hasPaymentPassword()
+                flutterResult(result)
+            } catch {
+                print(error)
+                flutterResult(false)
+            }
+        }
+    }
+    
+    func openAccountAndSecurity(flutterResult: @escaping FlutterResult) {
+        Task {
+            do {
+                let result = try await auth.openAccountAndSecurity()
+                flutterResult(result)
+            } catch {
+                print(error)
+                flutterResult(false)
+            }
+        }
     }
 }
 

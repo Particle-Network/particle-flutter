@@ -165,6 +165,46 @@ class _MyHomePageState extends State<MyHomePage> {
                 style: TextStyle(fontSize: 20),
               ),
             ),
+            ElevatedButton(
+              onPressed: () {
+                print('hasMasterPassword');
+                AuthCoreDemo.hasMasterPassword();
+              },
+              child: const Text(
+                'hasMasterPassword',
+                style: TextStyle(fontSize: 20),
+              ),
+            ),
+            ElevatedButton(
+              onPressed: () {
+                print('changeMasterPassword');
+                AuthCoreDemo.changeMasterPassword();
+              },
+              child: const Text(
+                'changeMasterPassword',
+                style: TextStyle(fontSize: 20),
+              ),
+            ),
+            ElevatedButton(
+              onPressed: () {
+                print('hasPaymentPassword');
+                AuthCoreDemo.hasPaymentPassword();
+              },
+              child: const Text(
+                'hasPaymentPassword',
+                style: TextStyle(fontSize: 20),
+              ),
+            ),
+            ElevatedButton(
+              onPressed: () {
+                print('openAccountAndSecurity');
+                AuthCoreDemo.openAccountAndSecurity();
+              },
+              child: const Text(
+                'openAccountAndSecurity',
+                style: TextStyle(fontSize: 20),
+              ),
+            ),
           ],
         ),
       ),
