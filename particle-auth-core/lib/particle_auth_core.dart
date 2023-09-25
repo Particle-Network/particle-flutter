@@ -9,7 +9,7 @@ class ParticleAuthCore {
 
   static const MethodChannel _channel = MethodChannel('auth_core_bridge');
 
-  /// Init particle-auth-core SDK
+  // Init particle-auth-core SDK
   static Future<void> init(ChainInfo chainInfo, Env env) async {
     if (Platform.isIOS) {
       await _channel.invokeMethod('initialize', jsonEncode({'chain_name': chainInfo.name, 'chain_id': chainInfo.id, 'env': env.name}));
@@ -18,38 +18,38 @@ class ParticleAuthCore {
     }
   }
 
-  /// connect
+  // Login
   static Future<String> connect(String jwt) async {
     return await _channel.invokeMethod('connect', jwt);
   }
 
-  /// disconnect
-  static Future<String> disconnect() async {
-    return await _channel.invokeMethod('disconnect');
-  }
-
-  /// isConnected
-  static Future<bool> isConnected() async {
-    return await _channel.invokeMethod('isConnected');
-  }
-
-  /// Get userinfo
+  // Get user info
   static Future<String> getUserInfo() async {
     return await _channel.invokeMethod('getUserInfo');
   }
 
-  /// switchChain
-  static Future<bool> switchChain(int chainId) async {
-    return await _channel.invokeMethod('switchChain', chainId);
+  // Logout
+  static Future<String> disconnect() async {
+    return await _channel.invokeMethod('disconnect');
   }
 
-  /// evmGetAddress
+  // Is User Logged In
+  static Future<bool> isConnected() async {
+    return await _channel.invokeMethod('isConnected');
+  }
+
+  // Get Wallet Evm Address
   static Future<String> evmGetAddress() async {
     return await _channel.invokeMethod('evmGetAddress');
   }
 
-  /// solanaGetAddress
+  // Get Wallet Solana Address
   static Future<String> solanaGetAddress() async {
     return await _channel.invokeMethod('solanaGetAddress');
+  }
+
+  // Switch ChainInfo
+  static Future<bool> switchChain(int chainId) async {
+    return await _channel.invokeMethod('switchChain', chainId);
   }
 }

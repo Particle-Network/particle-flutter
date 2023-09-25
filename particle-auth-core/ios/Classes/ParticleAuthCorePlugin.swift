@@ -19,12 +19,12 @@ public class ParticleAuthCorePlugin: NSObject, FlutterPlugin {
     public enum Method: String {
         case initialize
         case connect
+        case getUserInfo
         case disconnect
         case isConnected
-        case getUserInfo
-        case switchChain
         case evmGetAddress
         case solanaGetAddress
+        case switchChain
     }
 
     public static func register(with registrar: FlutterPluginRegistrar) {
@@ -114,16 +114,18 @@ public extension ParticleAuthCorePlugin {
         }
     }
 
-    func isConnected(flutterResult: @escaping FlutterResult) {
-        Task {
-            do {
-                let result = try await auth.isConnected()
-                flutterResult(result)
-            } catch {
-                print(error)
-                flutterResult(false)
-            }
+    func getUserInfo(flutterResult: @escaping FlutterResult) {
+        guard let userInfo = auth.getUserInfo() else {
+            flutterResult(FlutterError(code: "", message: "user is not login", details: nil))
+            return
         }
+        
+        let userInfoJsonString = userInfo.jsonStringFullSnake()
+        let newUserInfo = JSON(parseJSON: userInfoJsonString)
+        
+        let data = try! JSONEncoder().encode(newUserInfo)
+        let json = String(data: data, encoding: .utf8)
+        flutterResult(json ?? "")
     }
     
     func disconnect(flutterResult: @escaping FlutterResult) {
@@ -138,18 +140,16 @@ public extension ParticleAuthCorePlugin {
         }
     }
 
-    func getUserInfo(flutterResult: @escaping FlutterResult) {
-        guard let userInfo = auth.getUserInfo() else {
-            flutterResult(FlutterError(code: "", message: "user is not login", details: nil))
-            return
+    func isConnected(flutterResult: @escaping FlutterResult) {
+        Task {
+            do {
+                let result = try await auth.isConnected()
+                flutterResult(result)
+            } catch {
+                print(error)
+                flutterResult(false)
+            }
         }
-        
-        let userInfoJsonString = userInfo.jsonStringFullSnake()
-        let newUserInfo = JSON(parseJSON: userInfoJsonString)
-        
-        let data = try! JSONEncoder().encode(newUserInfo)
-        let json = String(data: data, encoding: .utf8)
-        flutterResult(json ?? "")
     }
 
     func switchChain(_ json: Int?, flutterResult: @escaping FlutterResult) {
