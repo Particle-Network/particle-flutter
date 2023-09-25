@@ -19,6 +19,7 @@ public class ParticleAuthCorePlugin: NSObject, FlutterPlugin {
     public enum Method: String {
         case initialize
         case connect
+        case disconnect
         case isConnected
         case getUserInfo
         case switchChain
@@ -45,6 +46,8 @@ public class ParticleAuthCorePlugin: NSObject, FlutterPlugin {
                 self.initialize(json as? String)
             case .connect:
                 self.connect(json as? String, flutterResult: result)
+            case .disconnect:
+                self.disconnect(flutterResult: result)
             case .isConnected:
                 self.isConnected(flutterResult: result)
             case .getUserInfo:
@@ -109,6 +112,18 @@ public extension ParticleAuthCorePlugin {
         Task {
             do {
                 let result = try await auth.isConnected()
+                flutterResult(result)
+            } catch {
+                print(error)
+                flutterResult(false)
+            }
+        }
+    }
+    
+    func disconnect(flutterResult: @escaping FlutterResult) {
+        Task {
+            do {
+                let result = try await auth.disconnect()
                 flutterResult(result)
             } catch {
                 print(error)

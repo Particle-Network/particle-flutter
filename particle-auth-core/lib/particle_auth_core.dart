@@ -23,6 +23,11 @@ class ParticleAuthCore {
     return await _channel.invokeMethod('connect', jwt);
   }
 
+  /// disconnect
+  static Future<String> disconnect() async {
+    return await _channel.invokeMethod('disconnect');
+  }
+
   /// isConnected
   static Future<bool> isConnected() async {
     return await _channel.invokeMethod('isConnected');

@@ -22,6 +22,12 @@ class AuthCoreDemo {
     showToast("connect: $result");
   }
 
+  static void disconnect() async {
+    final result = await ParticleAuthCore.disconnect();
+    print("disconnect: $result");
+    showToast("disconnect: $result");
+  }
+
   static void isConnected() async {
     final result = await ParticleAuthCore.isConnected();
     print("isConnected: $result");

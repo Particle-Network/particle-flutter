@@ -74,6 +74,16 @@ class _MyHomePageState extends State<MyHomePage> {
             ),
             ElevatedButton(
               onPressed: () {
+                print('disconnect');
+                AuthCoreDemo.disconnect();
+              },
+              child: const Text(
+                'disConnect',
+                style: TextStyle(fontSize: 20),
+              ),
+            ),
+            ElevatedButton(
+              onPressed: () {
                 print('isConnected');
                 AuthCoreDemo.isConnected();
               },
