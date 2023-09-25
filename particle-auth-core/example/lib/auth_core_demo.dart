@@ -67,4 +67,9 @@ class AuthCoreDemo {
     final result = await ParticleAuthCore.evmPersonalSignUnique(messageHex);
     print("evmPersonalSignUnique: $result");
   }
+
+  static void solanaSignMessage(message) async {
+    final result = await ParticleAuthCore.solanaSignMessage(message);
+    print("evmPersonalSignUnique: $result");
+  }
 }

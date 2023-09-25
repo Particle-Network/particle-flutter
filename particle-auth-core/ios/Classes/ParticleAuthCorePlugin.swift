@@ -10,6 +10,7 @@ import ParticleAuthCore
 import Flutter
 import RxSwift
 import SwiftyJSON
+import Base58_swift
 
 public class ParticleAuthCorePlugin: NSObject, FlutterPlugin {
     let auth = Auth()
@@ -30,6 +31,9 @@ public class ParticleAuthCorePlugin: NSObject, FlutterPlugin {
         case evmSignTypedData
         case evmSignTypedDataUnique
         case evmSendTransaction
+        case solanaSignMessage
+        case solanaSignTransaction
+        case solanaSignAllTransactions
     }
 
     public static func register(with registrar: FlutterPluginRegistrar) {
@@ -75,6 +79,14 @@ public class ParticleAuthCorePlugin: NSObject, FlutterPlugin {
                 self.evmSignTypedDataUnique(json as? String, flutterResult: result)
             case .evmSendTransaction:
                 self.evmSendTransaction(json as? String, flutterResult: result)
+            case .solanaSignMessage:
+                self.solanaSignMessage(json as? String, flutterResult: result)
+            case .solanaSignTransaction:
+                self.solanaSignTransaction(json as? String, flutterResult: result)
+            case .solanaSignAllTransactions:
+                self.solanaSignAllTransactions(json as? String, flutterResult: result)
+            case .solanaSignAndSendTransaction:
+                self.solanaSignAndSendTransaction(json as? String, flutterResult: result)
         }
     }
 }
@@ -263,6 +275,38 @@ public extension ParticleAuthCorePlugin {
                 flutterResult("")
             }
         }
+    }
+
+    func solanaSignMessage(_ message: String?, flutterResult: @escaping FlutterResult) {
+        // let serializedMessage = Base58.encode(message.data(using: .utf8)!)
+
+        // Task {
+        //     do {
+        //         let signature = try await auth.solana.signMessage(serializedMessage)
+        //         let statusModel = FlutterStatusModel(status: true, data: signature)
+        //         let data = try! JSONEncoder().encode(statusModel)
+        //         guard let json = String(data: data, encoding: .utf8) else { return }
+        //         flutterResult(json)
+        //     } catch {
+        //         let response = self.ResponseFromError(error)
+        //         let statusModel = FlutterStatusModel(status: false, data: response)
+        //         let data = try! JSONEncoder().encode(statusModel)
+        //         guard let json = String(data: data, encoding: .utf8) else { return }
+        //         flutterResult(json)
+        //     }
+        // }
+    }
+
+    func solanaSignTransaction(_ message: String?, flutterResult: @escaping FlutterResult) {
+
+    }
+    
+    func solanaSignAllTransactions(_ message: String?, flutterResult: @escaping FlutterResult) {
+
+    }
+    
+    func solanaSignAndSendTransaction(_ message: String?, flutterResult: @escaping FlutterResult) {
+
     }
 }
 

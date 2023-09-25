@@ -154,6 +154,17 @@ class _MyHomePageState extends State<MyHomePage> {
                 style: TextStyle(fontSize: 20),
               ),
             ),
+            ElevatedButton(
+              onPressed: () {
+                print('solanaSignMessage');
+                const message = 'Hello world!';
+                AuthCoreDemo.solanaSignMessage(message);
+              },
+              child: const Text(
+                'solanaSignMessage solana',
+                style: TextStyle(fontSize: 20),
+              ),
+            ),
           ],
         ),
       ),

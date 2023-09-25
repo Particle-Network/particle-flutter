@@ -38,12 +38,14 @@ class ParticleAuthCore {
     return await _channel.invokeMethod('isConnected');
   }
 
-  // Get Wallet Evm Address
+  // evm
+  // Get Wallet Address
   static Future<String> evmGetAddress() async {
     return await _channel.invokeMethod('evmGetAddress');
   }
 
-  // Get Wallet Solana Address
+  // solana
+  // Get Wallet Address
   static Future<String> solanaGetAddress() async {
     return await _channel.invokeMethod('solanaGetAddress');
   }
@@ -81,5 +83,29 @@ class ParticleAuthCore {
   // send transaction
   static Future<String> evmSendTransaction(String transaction) async {
     return await _channel.invokeMethod('evmSendTransaction', transaction);
+  }
+
+  // solana
+  // sign message
+  static Future<String> solanaSignMessage(String message) async {
+    return await _channel.invokeMethod('solanaSignMessage', message);
+  }
+
+  // solana
+  // sign transaction
+  static Future<String> solanaSignTransaction(String transaction) async {
+    return await _channel.invokeMethod('solanaSignTransaction', transaction);
+  }
+
+  // solana
+  // sign all transactions
+  static Future<String> solanaSignAllTransactions(String transactions) async {
+    return await _channel.invokeMethod('solanaSignAllTransactions', transactions);
+  }
+
+  // solana
+  // sign and send transaction
+  static Future<String> solanaSignAndSendTransaction(String transaction) async {
+    return await _channel.invokeMethod('solanaSignAndSendTransaction', transaction);
   }
 }
