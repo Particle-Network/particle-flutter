@@ -42,4 +42,14 @@ class ParticleAuthCore {
   static Future<bool> switchChain(int chainId) async {
     return await _channel.invokeMethod('switchChain', chainId);
   }
+
+  /// evmGetAddress
+  static Future<String> evmGetAddress() async {
+    return await _channel.invokeMethod('evmGetAddress');
+  }
+
+  /// solanaGetAddress
+  static Future<String> solanaGetAddress() async {
+    return await _channel.invokeMethod('solanaGetAddress');
+  }
 }

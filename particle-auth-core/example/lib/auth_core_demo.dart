@@ -45,4 +45,16 @@ class AuthCoreDemo {
     print("switchChain: $result");
     showToast("switchChain: $result");
   }
+
+  static evmGetAddress() async {
+    final result = await ParticleAuthCore.evmGetAddress();
+    print("evmGetAddress: $result");
+    showToast("evm: $result");
+  }
+
+  static solanaGetAddress() async {
+    final result = await ParticleAuthCore.solanaGetAddress();
+    print("solanaGetAddress: $result");
+    showToast("solana: $result");
+  }
 }

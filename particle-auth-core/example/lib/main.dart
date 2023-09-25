@@ -112,6 +112,26 @@ class _MyHomePageState extends State<MyHomePage> {
                 style: TextStyle(fontSize: 20),
               ),
             ),
+            ElevatedButton(
+              onPressed: () {
+                print('evmGetAddress');
+                AuthCoreDemo.evmGetAddress();
+              },
+              child: const Text(
+                'evmGetAddress',
+                style: TextStyle(fontSize: 20),
+              ),
+            ),
+            ElevatedButton(
+              onPressed: () {
+                print('solanaGetAddress');
+                AuthCoreDemo.solanaGetAddress();
+              },
+              child: const Text(
+                'solanaGetAddress',
+                style: TextStyle(fontSize: 20),
+              ),
+            ),
           ],
         ),
       ),

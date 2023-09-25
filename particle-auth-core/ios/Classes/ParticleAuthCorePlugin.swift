@@ -23,6 +23,8 @@ public class ParticleAuthCorePlugin: NSObject, FlutterPlugin {
         case isConnected
         case getUserInfo
         case switchChain
+        case evmGetAddress
+        case solanaGetAddress
     }
 
     public static func register(with registrar: FlutterPluginRegistrar) {
@@ -54,6 +56,10 @@ public class ParticleAuthCorePlugin: NSObject, FlutterPlugin {
                 self.getUserInfo(flutterResult: result)
             case .switchChain:
                 self.switchChain(json as? Int, flutterResult: result)
+            case .evmGetAddress:
+                self.evmGetAddress(flutterResult: result)
+            case .solanaGetAddress:
+                self.solanaGetAddress(flutterResult: result)
         }
     }
 }
@@ -160,6 +166,18 @@ public extension ParticleAuthCorePlugin {
                 flutterResult(false)
             }
         }
+    }
+
+    func evmGetAddress(flutterResult: @escaping FlutterResult) {
+        let result: String? = auth.evm.getAddress()
+
+        flutterResult(result ?? "")
+    }
+
+    func solanaGetAddress(flutterResult: @escaping FlutterResult) {
+        let result: String? = auth.solana.getAddress()
+
+        flutterResult(result ?? "")
     }
 }
 
