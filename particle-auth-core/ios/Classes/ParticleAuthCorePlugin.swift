@@ -18,8 +18,9 @@ public class ParticleAuthCorePlugin: NSObject, FlutterPlugin {
 
     public enum Method: String {
         case initialize
-        case getUserInfo
+        case connect
         case isConnected
+        case getUserInfo
     }
 
     public static func register(with registrar: FlutterPluginRegistrar) {
@@ -41,10 +42,12 @@ public class ParticleAuthCorePlugin: NSObject, FlutterPlugin {
         switch method {
             case .initialize:
                 self.initialize(json as? String)
-            case .getUserInfo:
-                self.getUserInfo(flutterResult: result)
+            case .connect:
+                self.connect(json as? String, flutterResult: result)
             case .isConnected:
                 self.isConnected(flutterResult: result)
+            case .getUserInfo:
+                self.getUserInfo(flutterResult: result)
         }
     }
 }
@@ -77,6 +80,39 @@ public extension ParticleAuthCorePlugin {
         let config = ParticleNetworkConfiguration(chainInfo: chainInfo, devEnv: devEnv)
         ParticleNetwork.initialize(config: config)
     }
+    
+    func connect(_ json: String, callback: @escaping RCTResponseSenderBlock) {
+        let jwt = json
+        Task {
+            do {
+                let userInfo = try await auth.connect(jwt: jwt)
+                let userInfoJsonString = userInfo.jsonStringFullSnake()
+                let newUserInfo = JSON(parseJSON: userInfoJsonString)
+                let statusModel = FlutterStatusModel(status: true, data: newUserInfo)
+                let data = try! JSONEncoder().encode(statusModel)
+                guard let json = String(data: data, encoding: .utf8) else { return }
+                callback([json])
+            } catch {
+                let response = self.ResponseFromError(error)
+                let statusModel = FlutterStatusModel(status: false, data: response)
+                let data = try! JSONEncoder().encode(statusModel)
+                guard let json = String(data: data, encoding: .utf8) else { return }
+                callback([json])
+            }
+        }
+    }
+
+    func isConnected(flutterResult: @escaping FlutterResult) {
+        Task {
+            do {
+                let result = try await auth.isConnected()
+                flutterResult(result)
+            } catch {
+                print(error)
+                flutterResult(false)
+            }
+        }
+    }
 
     func getUserInfo(flutterResult: @escaping FlutterResult) {
         guard let userInfo = auth.getUserInfo() else {
@@ -90,18 +126,6 @@ public extension ParticleAuthCorePlugin {
         let data = try! JSONEncoder().encode(newUserInfo)
         let json = String(data: data, encoding: .utf8)
         flutterResult(json ?? "")
-    }
-    
-    func isConnected(flutterResult: @escaping FlutterResult) {
-        Task {
-            do {
-                let result = try await auth.isConnected()
-                flutterResult(result)
-            } catch {
-                print(error)
-                flutterResult(false)
-            }
-        }
     }
 }
 

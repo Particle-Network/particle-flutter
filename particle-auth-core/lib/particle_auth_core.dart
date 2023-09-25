@@ -12,19 +12,24 @@ class ParticleAuthCore {
   /// Init particle-auth-core SDK
   static Future<void> init(ChainInfo chainInfo, Env env) async {
     if (Platform.isIOS) {
-      await _channel.invokeMethod('initialize', jsonEncode({"chain_name": chainInfo.name, "chain_id": chainInfo.id, "env": env.name}));
+      await _channel.invokeMethod('initialize', jsonEncode({'chain_name': chainInfo.name, 'chain_id': chainInfo.id, 'env': env.name}));
     } else {
-      await _channel.invokeMethod('init', jsonEncode({"chain_name": chainInfo.name, "chain_id": chainInfo.id, "env": env.name}));
+      await _channel.invokeMethod('init', jsonEncode({'chain_name': chainInfo.name, 'chain_id': chainInfo.id, 'env': env.name}));
     }
+  }
+
+  /// connect
+  static Future<bool> connect(String jwt) async {
+    return await _channel.invokeMethod('connect', jwt);
   }
 
   /// Get userinfo
   static Future<String> getUserInfo() async {
-    return await _channel.invokeMethod("getUserInfo");
+    return await _channel.invokeMethod('getUserInfo');
   }
 
   /// isConnected
   static Future<bool> isConnected() async {
-    return await _channel.invokeMethod("isConnected");
+    return await _channel.invokeMethod('isConnected');
   }
 }

@@ -16,15 +16,21 @@ class AuthCoreDemo {
     ParticleAuth.init(currChainInfo, env);
   }
 
-  static void getUserInfo() async {
-    final userInfo = await ParticleAuthCore.getUserInfo();
-    print("getUserInfo: $userInfo");
-    showToast("getUserInfo: $userInfo");
+  static void connect(jwt) async {
+    final result = await ParticleAuthCore.connect(jwt);
+    print("connect: $result");
+    showToast("connect: $result");
   }
 
   static void isConnected() async {
     final result = await ParticleAuthCore.isConnected();
     print("isConnected: $result");
     showToast("isConnected: $result");
+  }
+
+  static void getUserInfo() async {
+    final userInfo = await ParticleAuthCore.getUserInfo();
+    print("getUserInfo: $userInfo");
+    showToast("getUserInfo: $userInfo");
   }
 }
