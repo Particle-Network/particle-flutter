@@ -33,4 +33,10 @@ class AuthCoreDemo {
     print("getUserInfo: $userInfo");
     showToast("getUserInfo: $userInfo");
   }
+
+  static void switchChain(chainId) async {
+    final result = await ParticleAuthCore.switchChain(chainId);
+    print("switchChain: $result");
+    showToast("switchChain: $result");
+  }
 }

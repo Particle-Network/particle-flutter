@@ -55,7 +55,7 @@ class _MyHomePageState extends State<MyHomePage> {
                 AuthCoreDemo.init(Env.dev);
               },
               child: const Text(
-                "Init",
+                'Init',
                 style: TextStyle(fontSize: 20),
               ),
             ),
@@ -68,7 +68,7 @@ class _MyHomePageState extends State<MyHomePage> {
                 AuthCoreDemo.connect(jwt);
               },
               child: const Text(
-                "Connect",
+                'Connect',
                 style: TextStyle(fontSize: 20),
               ),
             ),
@@ -78,7 +78,7 @@ class _MyHomePageState extends State<MyHomePage> {
                 AuthCoreDemo.isConnected();
               },
               child: const Text(
-                "isConnected",
+                'isConnected',
                 style: TextStyle(fontSize: 20),
               ),
             ),
@@ -88,7 +88,17 @@ class _MyHomePageState extends State<MyHomePage> {
                 AuthCoreDemo.getUserInfo();
               },
               child: const Text(
-                "getUserInfo",
+                'getUserInfo',
+                style: TextStyle(fontSize: 20),
+              ),
+            ),
+            ElevatedButton(
+              onPressed: () {
+                print('switchChain');
+                AuthCoreDemo.switchChain(ChainInfo.EthereumGoerli.id);
+              },
+              child: const Text(
+                'switchChain',
                 style: TextStyle(fontSize: 20),
               ),
             ),

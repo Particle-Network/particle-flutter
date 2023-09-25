@@ -21,6 +21,7 @@ public class ParticleAuthCorePlugin: NSObject, FlutterPlugin {
         case connect
         case isConnected
         case getUserInfo
+        case switchChain
     }
 
     public static func register(with registrar: FlutterPluginRegistrar) {
@@ -48,6 +49,8 @@ public class ParticleAuthCorePlugin: NSObject, FlutterPlugin {
                 self.isConnected(flutterResult: result)
             case .getUserInfo:
                 self.getUserInfo(flutterResult: result)
+            case .switchChain:
+                self.switchChain(json as? Int, flutterResult: result)
         }
     }
 }
@@ -126,6 +129,22 @@ public extension ParticleAuthCorePlugin {
         let data = try! JSONEncoder().encode(newUserInfo)
         let json = String(data: data, encoding: .utf8)
         flutterResult(json ?? "")
+    }
+
+    func switchChain(_ json: Int?, flutterResult: @escaping FlutterResult) {
+        let chainId = json ?? 0
+        Task {
+            do {
+                guard let chainInfo = ParticleNetwork.searchChainInfo(by: chainId) else {
+                    return print("initialize error, can't find right chainId \(chainId)")
+                }
+                let result = try await auth.switchChain(chainInfo: chainInfo)
+                flutterResult(result)
+            } catch {
+                print(error)
+                flutterResult(false)
+            }
+        }
     }
 }
 
