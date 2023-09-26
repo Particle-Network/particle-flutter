@@ -26,5 +26,8 @@ dev_dependencies:
 flutter:
   plugin:
     platforms:
+      android:
+        package: network.particle.auth_core_plugin.particle_auth_core
+        pluginClass: ParticleAuthCorePlugin
       ios:
         pluginClass: ParticleAuthCorePlugin
