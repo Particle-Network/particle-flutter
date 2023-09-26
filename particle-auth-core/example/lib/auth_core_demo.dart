@@ -62,16 +62,19 @@ class AuthCoreDemo {
   static void evmPersonalSign(messageHex) async {
     final result = await ParticleAuthCore.evmPersonalSign(messageHex);
     print("evmPersonalSign: $result");
+    showToast("evmPersonalSign: $result");
   }
 
   static void evmPersonalSignUnique(messageHex) async {
     final result = await ParticleAuthCore.evmPersonalSignUnique(messageHex);
     print("evmPersonalSignUnique: $result");
+    showToast("evmPersonalSignUnique: $result");
   }
 
   static void solanaSignMessage(message) async {
     final result = await ParticleAuthCore.solanaSignMessage(message);
     print("evmPersonalSignUnique: $result");
+    showToast("evmPersonalSignUnique: $result");
   }
 
   static void hasMasterPassword() async {

@@ -361,11 +361,18 @@ public extension ParticleAuthCorePlugin {
     func openAccountAndSecurity(flutterResult: @escaping FlutterResult) {
         Task {
             do {
-                let result = try await auth.openAccountAndSecurity()
-                flutterResult(result)
+                try await auth.openAccountAndSecurity()
+                let null: String? = nil
+                let statusModel = FlutterStatusModel(status: false, data: null)
+                let data = try! JSONEncoder().encode(statusModel)
+                guard let json = String(data: data, encoding: .utf8) else { return }
+                flutterResult(json)
             } catch {
-                print(error)
-                flutterResult(false)
+                let response = self.ResponseFromError(error)
+                let statusModel = FlutterStatusModel(status: false, data: response)
+                let data = try! JSONEncoder().encode(statusModel)
+                guard let json = String(data: data, encoding: .utf8) else { return }
+                flutterResult(json)
             }
         }
     }
