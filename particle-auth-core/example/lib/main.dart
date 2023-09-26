@@ -55,7 +55,7 @@ class _MyHomePageState extends State<MyHomePage> {
                 AuthCoreDemo.init(Env.dev);
               },
               child: const Text(
-                'Init',
+                'Init Ethereum',
                 style: TextStyle(fontSize: 20),
               ),
             ),
@@ -105,10 +105,10 @@ class _MyHomePageState extends State<MyHomePage> {
             ElevatedButton(
               onPressed: () {
                 print('switchChain');
-                AuthCoreDemo.switchChain(ChainInfo.EthereumGoerli.id);
+                AuthCoreDemo.switchChain(ChainInfo.EthereumGoerli);
               },
               child: const Text(
-                'switchChain',
+                'switchChain => EthereumGoerli',
                 style: TextStyle(fontSize: 20),
               ),
             ),
