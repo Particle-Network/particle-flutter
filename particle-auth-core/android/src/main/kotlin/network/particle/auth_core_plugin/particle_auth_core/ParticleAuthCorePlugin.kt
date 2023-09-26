@@ -8,7 +8,12 @@ import io.flutter.embedding.engine.plugins.activity.ActivityPluginBinding
 import io.flutter.plugin.common.MethodCall
 import io.flutter.plugin.common.MethodChannel
 import io.flutter.plugin.common.MethodChannel.MethodCallHandler
-import network.particle.auth_core_flutter.bridge.module.AuthBridge
+import network.particle.auth_core_flutter.bridge.module.AuthCoreBridge
+
+import com.particle.base.Env
+import com.particle.base.LanguageEnum
+import com.particle.base.ParticleNetwork
+import network.particle.chains.ChainInfo
 
 /** ParticleAuthCorePlugin */
 class ParticleAuthCorePlugin : FlutterPlugin, MethodCallHandler, ActivityAware {
@@ -37,110 +42,8 @@ class ParticleAuthCorePlugin : FlutterPlugin, MethodCallHandler, ActivityAware {
     override fun onMethodCall(call: MethodCall, result: MethodChannel.Result) {
         when (call.method) {
             "init" -> {
-                AuthBridge.init(activity!!, call.arguments as String)
+                AuthCoreBridge.init(activity!!, call.arguments as String)
             }
-
-            "login" -> {
-                AuthBridge.login(call.arguments as String, result)
-            }
-
-            "logout" -> {
-                AuthBridge.logout(result)
-            }
-
-            "fastLogout" -> {
-                AuthBridge.fastLogout(result)
-            }
-
-            "getAddress" -> {
-                AuthBridge.getAddress(result)
-            }
-
-            "signMessage" -> {
-                AuthBridge.signMessage(call.arguments as String, result)
-            }
-
-            "signMessageUnique" -> {
-                AuthBridge.signMessageUnique(call.arguments as String, result)
-            }
-
-            "signTransaction" -> {
-                AuthBridge.signTransaction(call.arguments as String, result)
-            }
-
-            "signAllTransactions" -> {
-                AuthBridge.signAllTransactions(call.arguments as String, result)
-            }
-
-            "batchSendTransactions" -> {
-                AuthBridge.batchSendTransactions(call.arguments as String, result)
-            }
-
-            "signAndSendTransaction" -> {
-                AuthBridge.signAndSendTransaction(call.arguments as String, result)
-            }
-
-            "signTypedData" -> {
-                AuthBridge.signTypedData(call.arguments as String, result)
-            }
-
-            "setChainInfo" -> {
-                AuthBridge.setChainInfo(call.arguments as String, result)
-            }
-
-            "setChainInfoAsync" -> {
-                AuthBridge.setChainInfoAsync(call.arguments as String, result)
-            }
-
-            "getChainInfo" -> {
-                AuthBridge.getChainInfo(result)
-            }
-
-            "getUserInfo" -> {
-                AuthBridge.getUserInfo(result)
-            }
-
-            "setSecurityAccountConfig" -> {
-                AuthBridge.setSecurityAccountConfig(call.arguments as String)
-            }
-
-            "setLanguage" -> {
-                AuthBridge.setLanguage(call.arguments as String)
-            }
-
-            "setAppearance" -> {
-                AuthBridge.setAppearance(call.arguments as String)
-            }
-
-            "setFiatCoin" -> {
-                AuthBridge.setFiatCoin(call.arguments as String)
-            }
-
-            "openAccountAndSecurity" -> {
-                AuthBridge.openAccountAndSecurity()
-            }
-
-            "isLogin" -> {
-                AuthBridge.isLogin(result)
-            }
-
-            "getSecurityAccount" -> {
-                AuthBridge.getSecurityAccount(result)
-            }
-
-            "isLoginAsync" -> {
-                AuthBridge.isLoginAsync(result)
-            }
-
-            "openWebWallet" -> {
-                AuthBridge.openWebWallet(activity!!, call.arguments as String, result)
-            }
-
-            "setWebAuthConfig" -> {
-                AuthBridge.setWebAuthConfig(activity!!, call.arguments as String, result)
-            }
-
-
             else -> result.notImplemented()
         }
     }
