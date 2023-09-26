@@ -125,7 +125,7 @@ class ParticleAuthCore {
   }
 
   // Open account and security
-  static Future<bool> openAccountAndSecurity() async {
+  static Future<String> openAccountAndSecurity() async {
     return await _channel.invokeMethod('openAccountAndSecurity');
   }
 }
