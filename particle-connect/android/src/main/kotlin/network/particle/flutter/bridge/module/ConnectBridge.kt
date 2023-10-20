@@ -147,12 +147,20 @@ object ConnectBridge {
         connectAdapter.connect<ConnectConfig>(particleConnectConfig, object : ConnectCallback {
             override fun onConnected(account: Account) {
                 LogUtils.d("onConnected", account.toString())
-                result.success(FlutterCallBack.success(account).toGson())
+                try {
+                    result.success(FlutterCallBack.success(account).toGson())
+                } catch (_: Exception) {
+
+                }
             }
 
             override fun onError(connectError: ConnectError) {
                 LogUtils.d("onError", connectError.toString())
-                result.success(FlutterCallBack.failed(connectError.message).toGson())
+                try {
+                    result.success(FlutterCallBack.failed(connectError.message).toGson())
+                } catch (_: Exception) {
+
+                }
             }
         })
         if (connectAdapter is WalletConnectAdapter) {
