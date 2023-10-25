@@ -235,8 +235,6 @@ class EvmService {
   ///
   /// [eoaAddresses] Eoa address list
   ///
-  /// [version] biconomy version
-  ///
   /// return json object
   static Future<String> getSmartAccount(List<String> eoaAddresses) async {
     const method = "particle_aa_getSmartAccount";

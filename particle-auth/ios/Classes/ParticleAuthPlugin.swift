@@ -359,7 +359,7 @@ public extension ParticleAuthPlugin {
         let data = JSON(parseJSON: json)
         let transaction = data["transaction"].stringValue
         let mode = data["fee_mode"]["option"].stringValue
-        var feeMode: Biconomy.FeeMode = .native
+        var feeMode: AA.FeeMode = .native
         if mode == "native" {
             feeMode = .native
         } else if mode == "gasless" {
@@ -367,18 +367,18 @@ public extension ParticleAuthPlugin {
         } else if mode == "token" {
             let feeQuoteJson = JSON(data["fee_mode"]["fee_quote"].dictionaryValue)
             let tokenPaymasterAddress = data["fee_mode"]["token_paymaster_address"].stringValue
-            let feeQuote = Biconomy.FeeQuote(json: feeQuoteJson, tokenPaymasterAddress: tokenPaymasterAddress)
+            let feeQuote = AA.FeeQuote(json: feeQuoteJson, tokenPaymasterAddress: tokenPaymasterAddress)
 
             feeMode = .token(feeQuote)
         }
         
         let wholeFeeQuoteData = (try? data["fee_mode"]["whole_fee_quote"].rawData()) ?? Data()
-        let wholeFeeQuote = try? JSONDecoder().decode(Biconomy.WholeFeeQuote.self, from: wholeFeeQuoteData)
+        let wholeFeeQuote = try? JSONDecoder().decode(AA.WholeFeeQuote.self, from: wholeFeeQuoteData)
         
-        let biconomy = ParticleNetwork.getBiconomyService()
+        let aaService = ParticleNetwork.getAAService()
         var sendObservable: Single<String>
-        if biconomy != nil, biconomy!.isBiconomyModeEnable() {
-            sendObservable = biconomy!.quickSendTransactions([transaction], feeMode: feeMode, messageSigner: self, wholeFeeQuote: wholeFeeQuote)
+        if aaService != nil, aaService!.isAAModeEnable() {
+            sendObservable = aaService!.quickSendTransactions([transaction], feeMode: feeMode, messageSigner: self, wholeFeeQuote: wholeFeeQuote)
         } else {
             sendObservable = ParticleAuthService.signAndSendTransaction(transaction, feeMode: feeMode)
         }
@@ -397,7 +397,7 @@ public extension ParticleAuthPlugin {
             $0.stringValue
         }
         let mode = data["fee_mode"]["option"].stringValue
-        var feeMode: Biconomy.FeeMode = .native
+        var feeMode: AA.FeeMode = .native
         if mode == "native" {
             feeMode = .native
         } else if mode == "gasless" {
@@ -405,24 +405,24 @@ public extension ParticleAuthPlugin {
         } else if mode == "token" {
             let feeQuoteJson = JSON(data["fee_mode"]["fee_quote"].dictionaryValue)
             let tokenPaymasterAddress = data["fee_mode"]["token_paymaster_address"].stringValue
-            let feeQuote = Biconomy.FeeQuote(json: feeQuoteJson, tokenPaymasterAddress: tokenPaymasterAddress)
+            let feeQuote = AA.FeeQuote(json: feeQuoteJson, tokenPaymasterAddress: tokenPaymasterAddress)
 
             feeMode = .token(feeQuote)
         }
         
         let wholeFeeQuoteData = (try? data["fee_mode"]["whole_fee_quote"].rawData()) ?? Data()
-        let wholeFeeQuote = try? JSONDecoder().decode(Biconomy.WholeFeeQuote.self, from: wholeFeeQuoteData)
+        let wholeFeeQuote = try? JSONDecoder().decode(AA.WholeFeeQuote.self, from: wholeFeeQuoteData)
         
-        guard let biconomy = ParticleNetwork.getBiconomyService() else {
-            flutterResult(FlutterError(code: "", message: "biconomy is not init", details: nil))
+        guard let aaService = ParticleNetwork.getAAService() else {
+            flutterResult(FlutterError(code: "", message: "aa service is not init", details: nil))
             return
         }
         
-        guard biconomy.isBiconomyModeEnable() else {
-            flutterResult(FlutterError(code: "", message: "biconomy is not enable", details: nil))
+        guard aaService.isAAModeEnable() else {
+            flutterResult(FlutterError(code: "", message: "aa service is not enable", details: nil))
             return
         }
-        let sendObservable: Single<String> = biconomy.quickSendTransactions(transactions, feeMode: feeMode, messageSigner: self, wholeFeeQuote: wholeFeeQuote)
+        let sendObservable: Single<String> = aaService.quickSendTransactions(transactions, feeMode: feeMode, messageSigner: self, wholeFeeQuote: wholeFeeQuote)
         
         subscribeAndCallback(observable: sendObservable, flutterResult: flutterResult)
     }
@@ -479,7 +479,7 @@ public extension ParticleAuthPlugin {
         if style == "fullScreen" {
             ParticleAuthService.setModalPresentStyle(.fullScreen)
         } else {
-            ParticleAuthService.setModalPresentStyle(.formSheet)
+            ParticleAuthService.setModalPresentStyle(.pageSheet)
         }
     }
     

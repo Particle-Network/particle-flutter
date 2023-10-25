@@ -174,7 +174,7 @@ class ParticleAuth {
   ///
   /// Result signature or error.
   static Future<String> signAndSendTransaction(String transaction,
-      {BiconomyFeeMode? feeMode}) async {
+      {AAFeeMode? feeMode}) async {
     final json = jsonEncode({"transaction": transaction, "fee_mode": feeMode});
     return await _channel.invokeMethod('signAndSendTransaction', json);
   }
@@ -183,11 +183,11 @@ class ParticleAuth {
   ///
   /// [transactions] transactions you want to sign and send.
   ///
-  /// [feeMode] is optional, works with biconomy service.
+  /// [feeMode] is optional, works with aa service.
   ///
   /// Result signature or error.
   static Future<String> batchSendTransactions(List<String> transactions,
-      {BiconomyFeeMode? feeMode}) async {
+      {AAFeeMode? feeMode}) async {
     final json =
         jsonEncode({"transactions": transactions, "fee_mode": feeMode});
     return await _channel.invokeMethod('batchSendTransactions', json);

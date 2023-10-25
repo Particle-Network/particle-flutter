@@ -11,18 +11,7 @@ class SelectChainPage extends StatefulWidget {
 }
 
 class SelectChainPageState extends State<SelectChainPage> {
-  List<ChainInfo> chainList = <ChainInfo>[
-    ChainInfo.Solana,
-    ChainInfo.SolanaTestnet,
-    ChainInfo.SolanaDevnet,
-    ChainInfo.Ethereum,
-    ChainInfo.EthereumGoerli,
-    ChainInfo.EthereumSepolia,
-    ChainInfo.BNBChain,
-    ChainInfo.BNBChainTestnet,
-    ChainInfo.Polygon,
-    ChainInfo.PolygonMumbai
-  ];
+  List<ChainInfo> chainList = ChainInfo.getAllChains();
 
   @override
   Widget build(BuildContext context) {
@@ -39,11 +28,11 @@ class SelectChainPageState extends State<SelectChainPage> {
                 final chainInfo = chainList[index];
                 ParticleAuth.setChainInfo(chainInfo);
                 showToast(
-                    "set chain info: ${chainList[index].name!} ${chainList[index].id}");
+                    "set chain info: ${chainList[index].name} ${chainList[index].id}");
                 AuthLogic.currChainInfo = chainInfo;
                 Navigator.pop(context);
               },
-              child: Text("${chainList[index].name!} ${chainList[index].id}"),
+              child: Text("${chainList[index].name} ${chainList[index].id}"),
             );
           },
         ));
