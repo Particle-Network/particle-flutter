@@ -1,5 +1,5 @@
 //
-//  ParticleBiconomyPlugin.swift
+//  ParticleAAPlugin.swift
 //  Runner
 //
 //  Created by link on 2022/10/8.
@@ -7,36 +7,36 @@
 
 import Flutter
 import Foundation
-import ParticleBiconomy
+import ParticleAA
 import ParticleNetworkBase
 import RxSwift
 import SwiftyJSON
 
-public class ParticleBiconomyPlugin: NSObject, FlutterPlugin {
+public class ParticleAAPlugin: NSObject, FlutterPlugin {
     let bag = DisposeBag()
     
-    let biconomy = BiconomyService()
+    let aaService = AAService()
     
     public enum Method: String {
         case initialize
         case isSupportChainInfo
         case isDeploy
-        case isBiconomyModeEnable
-        case enableBiconomyMode
-        case disableBiconomyMode
+        case isAAModeEnable
+        case enableAAMode
+        case disableAAMode
         case rpcGetFeeQuotes
     }
     
     public static func register(with registrar: FlutterPluginRegistrar) {
-        let channel = FlutterMethodChannel(name: "biconomy_bridge", binaryMessenger: registrar.messenger())
+        let channel = FlutterMethodChannel(name: "aa_bridge", binaryMessenger: registrar.messenger())
         
-        let instance = ParticleBiconomyPlugin()
+        let instance = ParticleAAPlugin()
         
         registrar.addMethodCallDelegate(instance, channel: channel)
     }
     
     public func handle(_ call: FlutterMethodCall, result: @escaping FlutterResult) {
-        guard let method = ParticleBiconomyPlugin.Method(rawValue: call.method) else {
+        guard let method = ParticleAAPlugin.Method(rawValue: call.method) else {
             result(FlutterMethodNotImplemented)
             return
         }
@@ -50,12 +50,12 @@ public class ParticleBiconomyPlugin: NSObject, FlutterPlugin {
             isSupportChainInfo(json as? String, flutterResult: result)
         case .isDeploy:
             isDeploy(json as? String, flutterResult: result)
-        case .isBiconomyModeEnable:
-            isBiconomyModeEnable(flutterResult: result)
-        case .enableBiconomyMode:
-            enableBiconomyMode()
-        case .disableBiconomyMode:
-            disableBiconomyMode()
+        case .isAAModeEnable:
+            isAAModeEnable(flutterResult: result)
+        case .enableAAMode:
+            enableAAMode()
+        case .disableAAMode:
+            disableAAMode()
         case .rpcGetFeeQuotes:
             rpcGetFeeQuotes(json as? String, flutterResult: result)
         }
@@ -64,7 +64,7 @@ public class ParticleBiconomyPlugin: NSObject, FlutterPlugin {
 
 // MARK: -  Methods
 
-public extension ParticleBiconomyPlugin {
+public extension ParticleAAPlugin {
     func initialize(_ json: String?) {
         guard let json = json else {
             return
@@ -81,8 +81,8 @@ public extension ParticleBiconomyPlugin {
             }
         }
         
-        BiconomyService.initialize(dappApiKeys: dappAppKeys)
-        ParticleNetwork.setBiconomyService(biconomy)
+        AAService.initialize(dappApiKeys: dappAppKeys)
+        ParticleNetwork.setAAService(aaService)
     }
     
     func isSupportChainInfo(_ json: String?, flutterResult: @escaping FlutterResult) {
@@ -96,27 +96,27 @@ public extension ParticleBiconomyPlugin {
             flutterResult(false)
             return
         }
-        let result = biconomy.isSupportChainInfo(chainInfo)
+        let result = aaService.isSupportChainInfo(chainInfo)
         flutterResult(result)
     }
 
     func isDeploy(_ json: String?, flutterResult: @escaping FlutterResult) {
         guard let json = json else { return }
         let eoaAddress = json
-        subscribeAndCallback(observable: biconomy.isDeploy(eoaAddress: eoaAddress), flutterResult: flutterResult)
+        subscribeAndCallback(observable: aaService.isDeploy(eoaAddress: eoaAddress), flutterResult: flutterResult)
     }
     
-    func isBiconomyModeEnable(flutterResult: FlutterResult) {
-        let result = biconomy.isBiconomyModeEnable()
+    func isAAModeEnable(flutterResult: FlutterResult) {
+        let result = aaService.isAAModeEnable()
         flutterResult(result)
     }
     
-    func enableBiconomyMode() {
-        biconomy.enableBiconomyMode()
+    func enableAAMode() {
+        aaService.enableAAMode()
     }
     
-    func disableBiconomyMode() {
-        biconomy.disableBiconomyMode()
+    func disableAAMode() {
+        aaService.disableAAMode()
     }
     
     func rpcGetFeeQuotes(_ json: String?, flutterResult: @escaping FlutterResult) {
@@ -128,11 +128,11 @@ public extension ParticleBiconomyPlugin {
             $0.stringValue
         }
         
-        subscribeAndCallback(observable: biconomy.rpcGetFeeQuotes(eoaAddress: eoaAddress, transactions: transactions), flutterResult: flutterResult)
+        subscribeAndCallback(observable: aaService.rpcGetFeeQuotes(eoaAddress: eoaAddress, transactions: transactions), flutterResult: flutterResult)
     }
 }
 
-extension ParticleBiconomyPlugin {
+extension ParticleAAPlugin {
     private func subscribeAndCallback<T: Codable>(observable: Single<T>, flutterResult: @escaping FlutterResult) {
         observable.subscribe { [weak self] result in
             guard let self = self else { return }

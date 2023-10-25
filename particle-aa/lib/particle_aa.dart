@@ -4,16 +4,14 @@ import 'dart:io' show Platform;
 import 'package:flutter/services.dart';
 import 'package:particle_auth/particle_auth.dart';
 
-class ParticleBiconomy {
-  ParticleBiconomy._();
+class ParticleAA {
+  ParticleAA._();
 
-  static const MethodChannel _channel = MethodChannel('biconomy_bridge');
+  static const MethodChannel _channel = MethodChannel('aa_bridge');
 
-  /// Init particle-biconomy SDK
+  /// Init particle-aa SDK
   ///
-  /// [version] Biconomy version
-  ///
-  /// [dappKeys] Biconomy dapp keys
+  /// [dappKeys] AA biconomy dapp keys
   static init(Map<int, String> dappKeys) {
     // Convert integer keys to strings
     var stringKeyMap =
@@ -53,24 +51,24 @@ class ParticleBiconomy {
     return await _channel.invokeMethod('isDeploy', eoaAddress);
   }
 
-  /// Is biconomy mode enable
-  static Future<bool> isBiconomyModeEnable() async {
-    return await _channel.invokeMethod("isBiconomyModeEnable");
+  /// Is aa mode enable
+  static Future<bool> isAAModeEnable() async {
+    return await _channel.invokeMethod("isAAModeEnable");
   }
 
-  /// Enable biconomy mode
-  static enableBiconomyMode() {
-    _channel.invokeMethod("enableBiconomyMode");
+  /// Enable aa mode
+  static enableAAMode() {
+    _channel.invokeMethod("enableAAMode");
   }
 
-  /// Disable biconomy mode
-  static disableBiconomyMode() {
-    _channel.invokeMethod("disableBiconomyMode");
+  /// Disable aa mode
+  static disableAAMode() {
+    _channel.invokeMethod("disableAAMode");
   }
 
   /// Rpc get fee quotes
   ///
-  /// Pick one fee quote, then send with BiconomyFeeMode.custom
+  /// Pick one fee quote, then send with AAFeeMode.custom
   ///
   /// [eoaAddress] Eoa address
   ///

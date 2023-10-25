@@ -15,9 +15,9 @@ Pod::Spec.new do |s|
   s.source           = { :path => '.' }
   s.source_files = 'Classes/**/*'
   s.dependency 'Flutter'
-  s.platform = :ios, '13.0'
+  s.platform = :ios, '14.0'
 
-  s.swift_version = '5.0'
+  s.swift_version = '5.7'
 
   s.dependency 'ParticleWalletConnect'
   s.dependency 'SwiftyJSON'

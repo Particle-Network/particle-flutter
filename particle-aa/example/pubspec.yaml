@@ -28,10 +28,14 @@ dependencies:
     path: ../
 
 
-  particle_connect: ^1.0.7
-    # path: ../../particle-connect/
-  particle_auth: ^1.0.7
-  #  path: ../../particle-auth/
+  # particle_connect: ^1.0.7
+  # particle_auth: ^1.0.7
+
+  particle_connect:
+    path: ../../particle-connect/
+  particle_auth: 
+    path: ../../particle-auth/
+
   
   #^0.13.7
   # The following adds the Cupertino Icons font to your application.

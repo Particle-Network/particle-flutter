@@ -16,7 +16,7 @@ class AADemoConnectPageState extends State<AADemoConnectPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text("Biconomy Demo Connect"),
+        title: const Text("AA Demo Connect"),
       ),
       body: SingleChildScrollView(
         child: Column(
@@ -71,7 +71,7 @@ class AADemoConnectPageState extends State<AADemoConnectPage> {
                 width: double.infinity,
                 height: 50,
                 child: ElevatedButton(
-                    onPressed: () => {AAConnectLogic.enableBiconomyMode()},
+                    onPressed: () => {AAConnectLogic.enableAAMode()},
                     child: const Text(
                       "Enable",
                       style: TextStyle(fontSize: 18),

@@ -1,4 +1,4 @@
-package network.particle.biconomy_plugin.particle_biconomy
+package network.particle.aa_plugin.particle_aa
 
 import android.app.Activity
 
@@ -8,10 +8,10 @@ import io.flutter.embedding.engine.plugins.activity.ActivityPluginBinding
 import io.flutter.plugin.common.MethodCall
 import io.flutter.plugin.common.MethodChannel
 import io.flutter.plugin.common.MethodChannel.MethodCallHandler
-import network.particle.biconomy_flutter.bridge.module.BiconomyBridge
+import network.particle.aa_flutter.bridge.module.BiconomyBridge
 
 /** ParticleAuthPlugin */
-class ParticleBiconomyPlugin : FlutterPlugin, MethodCallHandler, ActivityAware {
+class ParticleAAPlugin : FlutterPlugin, MethodCallHandler, ActivityAware {
     private var activity: Activity? = null
     private var channel: MethodChannel? = null
 
@@ -21,11 +21,11 @@ class ParticleBiconomyPlugin : FlutterPlugin, MethodCallHandler, ActivityAware {
 
     companion object {
         @JvmStatic
-        lateinit var instance: ParticleBiconomyPlugin
+        lateinit var instance: ParticleAAPlugin
     }
 
     override fun onAttachedToEngine(binding: FlutterPlugin.FlutterPluginBinding) {
-        channel = MethodChannel(binding.binaryMessenger, "biconomy_bridge")
+        channel = MethodChannel(binding.binaryMessenger, "aa_bridge")
         channel?.setMethodCallHandler(this)
     }
 

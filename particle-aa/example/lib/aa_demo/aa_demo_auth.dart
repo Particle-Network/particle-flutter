@@ -88,7 +88,7 @@ class AADemoAuthPageState extends State<AADemoAuthPage> {
                 width: double.infinity,
                 height: 50,
                 child: ElevatedButton(
-                    onPressed: () => {AAAuthLogic.isBiconomyModeEnable()},
+                    onPressed: () => {AAAuthLogic.isAAModeEnable()},
                     child: const Text(
                       "Is enable",
                       style: TextStyle(fontSize: 18),
@@ -101,7 +101,7 @@ class AADemoAuthPageState extends State<AADemoAuthPage> {
                 width: double.infinity,
                 height: 50,
                 child: ElevatedButton(
-                    onPressed: () => {AAAuthLogic.enableBiconomyMode()},
+                    onPressed: () => {AAAuthLogic.enableAAMode()},
                     child: const Text(
                       "Enable",
                       style: TextStyle(fontSize: 18),
@@ -114,7 +114,7 @@ class AADemoAuthPageState extends State<AADemoAuthPage> {
                 width: double.infinity,
                 height: 50,
                 child: ElevatedButton(
-                    onPressed: () => {AAAuthLogic.disableBiconomyMode()},
+                    onPressed: () => {AAAuthLogic.disableAAMode()},
                     child: const Text(
                       "Disable",
                       style: TextStyle(fontSize: 18),

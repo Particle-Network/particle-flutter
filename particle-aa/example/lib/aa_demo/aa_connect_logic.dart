@@ -40,7 +40,7 @@ class AAConnectLogic {
       80001: "hYZIwIsf2.e18c790b-cafb-4c4e-a438-0289fc25dba1"
     };
     ParticleAuth.init(ChainInfo.Polygon, Env.production);
-    ParticleBiconomy.init(dappKeys);
+    ParticleAA.init(dappKeys);
   }
 
   static void loginMetamask() async {
@@ -49,8 +49,8 @@ class AAConnectLogic {
     print(result);
   }
 
-  static void enableBiconomyMode() {
-    ParticleBiconomy.enableBiconomyMode();
+  static void enableAAMode() {
+    ParticleAA.enableAAMode();
   }
 
   static void rpcGetFeeQuotes() async {
@@ -63,7 +63,7 @@ class AAConnectLogic {
 
     List<String> transactions = <String>[transaction];
     var result =
-        await ParticleBiconomy.rpcGetFeeQuotes(publicAddress!, transactions);
+        await ParticleAA.rpcGetFeeQuotes(publicAddress!, transactions);
     showToast("rpcGetFeeQuotes: $result");
   }
 
@@ -76,7 +76,7 @@ class AAConnectLogic {
 
     // check if enough native for gas fee
     var result =
-        await ParticleBiconomy.rpcGetFeeQuotes(publicAddress!, [transaction]);
+        await ParticleAA.rpcGetFeeQuotes(publicAddress!, [transaction]);
     var verifyingPaymasterNative = result["verifyingPaymasterNative"];
     var feeQuote = verifyingPaymasterNative["feeQuote"];
     var fee = BigInt.parse(feeQuote["fee"], radix: 10);
@@ -91,7 +91,7 @@ class AAConnectLogic {
 
     final signature = await ParticleConnect.signAndSendTransaction(
         WalletType.metaMask, publicAddress!, transaction,
-        feeMode: BiconomyFeeMode.native(result));
+        feeMode: AAFeeMode.native(result));
 
     showToast("signature $signature");
   }
@@ -106,7 +106,7 @@ class AAConnectLogic {
 
     // check if gasless available
     var result =
-        await ParticleBiconomy.rpcGetFeeQuotes(publicAddress!, [transaction]);
+        await ParticleAA.rpcGetFeeQuotes(publicAddress!, [transaction]);
     var verifyingPaymasterGasless = result["verifyingPaymasterGasless"];
     if (verifyingPaymasterGasless == null) {
       print("gasless is not available");
@@ -117,7 +117,7 @@ class AAConnectLogic {
 
     final signature = await ParticleConnect.signAndSendTransaction(
         WalletType.metaMask, publicAddress!, transaction,
-        feeMode: BiconomyFeeMode.gasless(result));
+        feeMode: AAFeeMode.gasless(result));
     showToast("signature $signature");
   }
 
@@ -132,7 +132,7 @@ class AAConnectLogic {
     List<String> transactions = <String>[transaction];
 
     var result =
-        await ParticleBiconomy.rpcGetFeeQuotes(publicAddress!, transactions);
+        await ParticleAA.rpcGetFeeQuotes(publicAddress!, transactions);
 
     List<dynamic> feeQuotes = result["tokenPaymaster"]["feeQuotes"];
 
@@ -156,7 +156,7 @@ class AAConnectLogic {
 
     final signature = await ParticleConnect.signAndSendTransaction(
         WalletType.metaMask, publicAddress!, transaction,
-        feeMode: BiconomyFeeMode.token(feeQuote, tokenPaymasterAddress));
+        feeMode: AAFeeMode.token(feeQuote, tokenPaymasterAddress));
     showToast("signature $signature");
   }
 
@@ -172,7 +172,7 @@ class AAConnectLogic {
 
     // check if enough native for gas fee
     var result =
-        await ParticleBiconomy.rpcGetFeeQuotes(publicAddress!, transactions);
+        await ParticleAA.rpcGetFeeQuotes(publicAddress!, transactions);
     var verifyingPaymasterNative = result["verifyingPaymasterNative"];
     var feeQuote = verifyingPaymasterNative["feeQuote"];
     var fee = BigInt.parse(feeQuote["fee"], radix: 10);
@@ -185,7 +185,7 @@ class AAConnectLogic {
 
     final signature = await ParticleConnect.batchSendTransactions(
         WalletType.metaMask, publicAddress!, transactions,
-        feeMode: BiconomyFeeMode.native(result));
+        feeMode: AAFeeMode.native(result));
     print("signature $signature");
     showToast("signature $signature");
   }
