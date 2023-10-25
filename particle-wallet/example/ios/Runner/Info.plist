@@ -48,12 +48,18 @@
 		<string>argent</string>
 		<string>1inch</string>
 		<string>awallet</string>
-		<string>bitpie</string>
+		<string>okex</string>
 	</array>
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
+	<key>NSBonjourServices</key>
+	<array>
+		<string>_dartVmService._tcp</string>
+	</array>
 	<key>NSCameraUsageDescription</key>
 	<string>We use the camera to scan barcodes</string>
+	<key>NSLocalNetworkUsageDescription</key>
+	<string>Allow Flutter tools on your computer to connect and debug your application</string>
 	<key>NSPhotoLibraryUsageDescription</key>
 	<string>We need access in order to open photos of barcodes</string>
 	<key>UIApplicationSupportsIndirectInputEvents</key>
@@ -77,11 +83,5 @@
 	</array>
 	<key>UIViewControllerBasedStatusBarAppearance</key>
 	<false/>
-	<key>NSLocalNetworkUsageDescription</key>
-	<string>Allow Flutter tools on your computer to connect and debug your application</string>
-	<key>NSBonjourServices</key>
-	<array>
-		<string>_dartVmService._tcp</string>
-	</array>
 </dict>
 </plist>

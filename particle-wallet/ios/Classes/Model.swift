@@ -54,8 +54,8 @@ extension NSObject {
             walletType = .zengo
         } else if str == "alpha" {
             walletType = .alpha
-        } else if str == "bitpie" {
-            walletType = .bitpie
+        } else if str == "okx" {
+            walletType = .okx
         } else if str == "inch1" {
             walletType = .inch1
         } else {

@@ -31,20 +31,20 @@ target 'Runner' do
   use_frameworks! :linkage => :static
   use_modular_headers!
 
-  pod 'ParticleConnect', '0.2.9'
-  pod 'ConnectWalletConnectAdapter', '0.2.9'
-  pod 'ConnectSolanaAdapter', '0.2.9'
-  pod 'ConnectEVMAdapter', '0.2.9'
-  pod 'ConnectCommon', '0.2.9'
-  pod 'ConnectPhantomAdapter', '0.2.9'
-  pod 'ParticleAuthAdapter', '0.2.9'
+  pod 'ParticleConnect', '0.2.12'
+  pod 'ConnectWalletConnectAdapter', '0.2.12'
+  pod 'ConnectSolanaAdapter', '0.2.12'
+  pod 'ConnectEVMAdapter', '0.2.12'
+  pod 'ConnectCommon', '0.2.12'
+  pod 'ConnectPhantomAdapter', '0.2.12'
+  pod 'ParticleAuthAdapter', '0.2.12'
   
-  pod 'ParticleNetworkBase', '1.0.6'
-  pod 'ParticleAuthService', '1.0.6'
-  pod 'ParticleWalletGUI', '1.0.6'
-  pod 'ParticleWalletAPI', '1.0.6'
-  pod 'ParticleWalletConnect', '1.0.6'
-  pod 'ParticleBiconomy', '1.0.6'
+  pod 'ParticleNetworkBase', '1.2.2'
+  pod 'ParticleAuthService', '1.2.2'
+  pod 'ParticleWalletGUI', '1.2.2'
+  pod 'ParticleWalletAPI', '1.2.2'
+  pod 'ParticleWalletConnect', '1.2.2'
+  pod 'ParticleAA', '1.2.2'
   
   pod 'SkeletonView', :git => 'https://github.com/SunZhiC/SkeletonView.git', :branch => 'main'
   pod 'SwiftMessages', :git => 'https://github.com/SunZhiC/SwiftMessages', :branch => 'master'

@@ -14,7 +14,7 @@ dependencies:
   plugin_platform_interface: ^2.0.2
   retrofit: ^4.0.1
   json_serializable: ^6.6.0
-  uuid: ^3.0.6
+  uuid: ^4.1.0
   dio: ^5.2.0
   json_annotation: ^4.8.0
 

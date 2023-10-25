@@ -210,7 +210,7 @@ extension ParticleConnectPlugin {
              Inch1ConnectAdapter.self,
              ZengoConnectAdapter.self,
              AlphaConnectAdapter.self,
-             BitpieConnectAdapter.self]
+             OKXConnectAdapter.self]
 
         adapters.append(contentsOf: moreAdapterClasses.map {
             $0.init()
@@ -460,7 +460,7 @@ extension ParticleConnectPlugin {
         self.latestWalletType = walletType
         
         let mode = data["fee_mode"]["option"].stringValue
-        var feeMode: Biconomy.FeeMode = .native
+        var feeMode: AA.FeeMode = .native
         if mode == "native" {
             feeMode = .native
         } else if mode == "gasless" {
@@ -468,13 +468,13 @@ extension ParticleConnectPlugin {
         } else if mode == "token" {
             let feeQuoteJson = JSON(data["fee_mode"]["fee_quote"].dictionaryValue)
             let tokenPaymasterAddress = data["fee_mode"]["token_paymaster_address"].stringValue
-            let feeQuote = Biconomy.FeeQuote(json: feeQuoteJson, tokenPaymasterAddress: tokenPaymasterAddress)
+            let feeQuote = AA.FeeQuote(json: feeQuoteJson, tokenPaymasterAddress: tokenPaymasterAddress)
 
             feeMode = .token(feeQuote)
         }
         
         let wholeFeeQuoteData = (try? data["fee_mode"]["whole_fee_quote"].rawData()) ?? Data()
-        let wholeFeeQuote = try? JSONDecoder().decode(Biconomy.WholeFeeQuote.self, from: wholeFeeQuoteData)
+        let wholeFeeQuote = try? JSONDecoder().decode(AA.WholeFeeQuote.self, from: wholeFeeQuoteData)
         
         guard let adapter = map2ConnectAdapter(from: walletType) else {
             print("adapter for \(walletTypeString) is not init")
@@ -486,10 +486,10 @@ extension ParticleConnectPlugin {
             return
         }
         
-        let biconomy = ParticleNetwork.getBiconomyService()
+        let aaService = ParticleNetwork.getAAService()
         var sendObservable: Single<String>
-        if biconomy != nil, biconomy!.isBiconomyModeEnable() {
-            sendObservable = biconomy!.quickSendTransactions([transaction], feeMode: feeMode, messageSigner: self, wholeFeeQuote: wholeFeeQuote)
+        if aaService != nil, aaService!.isAAModeEnable() {
+            sendObservable = aaService!.quickSendTransactions([transaction], feeMode: feeMode, messageSigner: self, wholeFeeQuote: wholeFeeQuote)
         } else {
             sendObservable = adapter.signAndSendTransaction(publicAddress: publicAddress, transaction: transaction, feeMode: feeMode)
         }
@@ -524,7 +524,7 @@ extension ParticleConnectPlugin {
         self.latestWalletType = walletType
         
         let mode = data["fee_mode"]["option"].stringValue
-        var feeMode: Biconomy.FeeMode = .native
+        var feeMode: AA.FeeMode = .native
         if mode == "native" {
             feeMode = .native
         } else if mode == "gasless" {
@@ -532,24 +532,24 @@ extension ParticleConnectPlugin {
         } else if mode == "token" {
             let feeQuoteJson = JSON(data["fee_mode"]["fee_quote"].dictionaryValue)
             let tokenPaymasterAddress = data["fee_mode"]["token_paymaster_address"].stringValue
-            let feeQuote = Biconomy.FeeQuote(json: feeQuoteJson, tokenPaymasterAddress: tokenPaymasterAddress)
+            let feeQuote = AA.FeeQuote(json: feeQuoteJson, tokenPaymasterAddress: tokenPaymasterAddress)
 
             feeMode = .token(feeQuote)
         }
         
         let wholeFeeQuoteData = (try? data["fee_mode"]["whole_fee_quote"].rawData()) ?? Data()
-        let wholeFeeQuote = try? JSONDecoder().decode(Biconomy.WholeFeeQuote.self, from: wholeFeeQuoteData)
-        guard let biconomy = ParticleNetwork.getBiconomyService() else {
-            flutterResult(FlutterError(code: "", message: "biconomy is not init", details: nil))
+        let wholeFeeQuote = try? JSONDecoder().decode(AA.WholeFeeQuote.self, from: wholeFeeQuoteData)
+        guard let aaService = ParticleNetwork.getAAService() else {
+            flutterResult(FlutterError(code: "", message: "aa service is not init", details: nil))
             return
         }
         
-        guard biconomy.isBiconomyModeEnable() else {
-            flutterResult(FlutterError(code: "", message: "biconomy is not enable", details: nil))
+        guard aaService.isAAModeEnable() else {
+            flutterResult(FlutterError(code: "", message: "aa service is not enable", details: nil))
             return
         }
         
-        let sendObservable = biconomy.quickSendTransactions(transactions, feeMode: feeMode, messageSigner: self, wholeFeeQuote: wholeFeeQuote)
+        let sendObservable = aaService.quickSendTransactions(transactions, feeMode: feeMode, messageSigner: self, wholeFeeQuote: wholeFeeQuote)
         subscribeAndCallback(observable: sendObservable, flutterResult: flutterResult)
     }
     

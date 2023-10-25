@@ -14,5 +14,5 @@ enum WalletType {
   omni,
   zengo,
   alpha,
-  bitpie,
+  okx,
 }
