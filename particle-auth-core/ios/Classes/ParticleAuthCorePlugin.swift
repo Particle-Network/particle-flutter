@@ -5,28 +5,400 @@
 //  Created by link on 2022/10/8.
 //
 
-import ParticleAuthCore
+import AuthCoreAdapter
+import Base58_swift
+import ConnectCommon
 import Flutter
+import Foundation
+import ParticleAuthCore
+import ParticleNetworkBase
 import RxSwift
+import SwiftyJSON
 
 public class ParticleAuthCorePlugin: NSObject, FlutterPlugin {
     let bag = DisposeBag()
-    
+
+    let auth = Auth()
+
     public enum Method: String {
         case initialize
+        case switchChain
+        case connect
+        case disconnect
+        case isConnected
+        case solanaSignMessage
+        case solanaSignTransaction
+        case solanaSignAllTransactions
+        case solanaSignAndSendTransaction
+        case evmPersonalSign
+        case evmPersonalSignUnique
+        case evmSignTypedData
+        case evmSignTypedDataUnique
+        case evmSendTransaction
+        case solanaGetAddress
+        case evmGetAddress
+        case getUserInfo
+        case openAccountAndSecurity
+        case hasPaymentPassword
+        case hasMasterPassword
+        case changeMasterPassword
     }
 
     public static func register(with registrar: FlutterPluginRegistrar) {
-        // let channel = FlutterMethodChannel(name: "auth_core_bridge", binaryMessenger: registrar.messenger())
-        
-        // let instance = ParticleAuthCore()
-        
-        // channel.invokeMethod(Method.initialize.rawValue, arguments: nil)
+        let channel = FlutterMethodChannel(name: "auth_core_bridge", binaryMessenger: registrar.messenger())
 
-        // registrar.addMethodCallDelegate(instance, channel: channel)
+        let instance = ParticleAuthCorePlugin()
+
+        registrar.addMethodCallDelegate(instance, channel: channel)
     }
 
     public func handle(_ call: FlutterMethodCall, result: @escaping FlutterResult) {
+        guard let method = Method(rawValue: call.method) else {
+            result(FlutterMethodNotImplemented)
+            return
+        }
 
+        let json = call.arguments
+
+        switch method {
+        case .initialize:
+            self.initialize()
+        case .switchChain:
+            self.switchChain(json as? String, flutterResult: result)
+        case .connect:
+            self.connect(json as? String, flutterResult: result)
+        case .disconnect:
+            self.disconnect(result)
+        case .isConnected:
+            self.isConnected(result)
+        case .solanaSignMessage:
+            self.solanaSignMessage(json as? String, flutterResult: result)
+        case .solanaSignTransaction:
+            self.solanaSignTransaction(json as? String, flutterResult: result)
+        case .solanaSignAllTransactions:
+            self.solanaSignAllTransactions(json as? String, flutterResult: result)
+        case .solanaSignAndSendTransaction:
+            self.solanaSignAndSendTransaction(json as? String, flutterResult: result)
+        case .evmPersonalSign:
+            self.evmPersonalSign(json as? String, flutterResult: result)
+        case .evmPersonalSignUnique:
+            self.evmPersonalSignUnique(json as? String, flutterResult: result)
+        case .evmSignTypedData:
+            self.evmSignTypedData(json as? String, flutterResult: result)
+        case .evmSignTypedDataUnique:
+            self.evmSignTypedDataUnique(json as? String, flutterResult: result)
+        case .evmSendTransaction:
+            self.evmSendTransaction(json as? String, flutterResult: result)
+        case .solanaGetAddress:
+            self.solanaGetAddress(result)
+        case .evmGetAddress:
+            self.evmGetAddress(result)
+        case .getUserInfo:
+            self.getUserInfo(result)
+        case .openAccountAndSecurity:
+            self.openAccountAndSecurity(result)
+        case .hasPaymentPassword:
+            self.hasPaymentPassword(result)
+        case .hasMasterPassword:
+            self.hasMasterPassword(result)
+        case .changeMasterPassword:
+            self.changeMasterPassword(result)
+        }
+    }
+}
+
+// MARK: -  Methods
+
+public extension ParticleAuthCorePlugin {
+    func initialize() {
+        ConnectManager.setMoreAdapters([AuthCoreAdapter()])
+    }
+
+    func switchChain(_ json: String?, flutterResult: @escaping FlutterResult) {
+        guard let json = json else {
+            return
+        }
+        let data = JSON(parseJSON: json)
+
+        let chainId = data["chain_id"].intValue
+        guard let chainInfo = ParticleNetwork.searchChainInfo(by: chainId) else {
+            flutterResult(false)
+            return
+        }
+
+        Task {
+            do {
+                let flag = try await auth.switchChain(chainInfo: chainInfo)
+                flutterResult(flag)
+            } catch {
+                flutterResult(false)
+            }
+        }
+    }
+
+    func connect(_ json: String?, flutterResult: @escaping FlutterResult) {
+        guard let jwt = json else { return }
+
+        let observable = Single<String>.fromAsync { [weak self] in
+            guard let self = self else {
+                throw ParticleNetwork.ResponseError(code: nil, message: "self is nil")
+            }
+            return try await self.auth.connect(jwt: jwt)
+        }.map { userInfo in
+            let userInfoJsonString = userInfo.jsonStringFullSnake()
+            let newUserInfo = JSON(parseJSON: userInfoJsonString)
+            return newUserInfo
+        }
+
+        subscribeAndCallback(observable: observable, flutterResult: flutterResult)
+    }
+
+    func disconnect(_ flutterResult: @escaping FlutterResult) {
+        subscribeAndCallback(observable: Single<String>.fromAsync { [weak self] in
+            guard let self = self else {
+                throw ParticleNetwork.ResponseError(code: nil, message: "self is nil")
+            }
+            return try await self.auth.disconnect()
+        }, flutterResult: flutterResult)
+    }
+
+    func isConnected(_ flutterResult: @escaping FlutterResult) {
+        subscribeAndCallback(observable: Single<Bool>.fromAsync { [weak self] in
+            guard let self = self else {
+                throw ParticleNetwork.ResponseError(code: nil, message: "self is nil")
+            }
+            return try await self.auth.isConnected()
+        }, flutterResult: flutterResult)
+    }
+
+    func solanaSignMessage(_ json: String?, flutterResult: @escaping FlutterResult) {
+        guard let message = json else { return }
+        let serializedMessage = Base58.encode(message.data(using: .utf8)!)
+
+        subscribeAndCallback(observable: Single<Bool>.fromAsync { [weak self] in
+            guard let self = self else {
+                throw ParticleNetwork.ResponseError(code: nil, message: "self is nil")
+            }
+            return try await self.auth.solana.signMessage(serializedMessage)
+        }, flutterResult: flutterResult)
+    }
+
+    func solanaSignTransaction(_ json: String?, flutterResult: @escaping FlutterResult) {
+        guard let transaction = json else { return }
+
+        subscribeAndCallback(observable: Single<Bool>.fromAsync { [weak self] in
+            guard let self = self else {
+                throw ParticleNetwork.ResponseError(code: nil, message: "self is nil")
+            }
+            return try await self.auth.solana.signTransaction(transaction)
+        }, flutterResult: flutterResult)
+    }
+
+    func solanaSignAllTransactions(_ json: String?, flutterResult: @escaping FlutterResult) {
+        guard let json = json else { return }
+        let transactions = JSON(parseJSON: json).arrayValue.map { $0.stringValue }
+
+        subscribeAndCallback(observable: Single<Bool>.fromAsync { [weak self] in
+            guard let self = self else {
+                throw ParticleNetwork.ResponseError(code: nil, message: "self is nil")
+            }
+            return try await self.auth.solana.signAllTransactions(transactions)
+        }, flutterResult: flutterResult)
+    }
+
+    func solanaSignAndSendTransaction(_ transaction: String?, flutterResult: @escaping FlutterResult) {
+        guard let transaction = transaction else { return }
+
+        subscribeAndCallback(observable: Single<Bool>.fromAsync { [weak self] in
+            guard let self = self else {
+                throw ParticleNetwork.ResponseError(code: nil, message: "self is nil")
+            }
+            return try await self.auth.solana.signAndSendTransaction(transaction)
+        }, flutterResult: flutterResult)
+    }
+
+    func evmPersonalSign(_ message: String?, flutterResult: @escaping FlutterResult) {
+        guard let message = message else { return }
+
+        subscribeAndCallback(observable: Single<Bool>.fromAsync { [weak self] in
+            guard let self = self else {
+                throw ParticleNetwork.ResponseError(code: nil, message: "self is nil")
+            }
+            return try await self.auth.evm.personalSign(message)
+        }, flutterResult: flutterResult)
+    }
+
+    func evmPersonalSignUnique(_ message: String?, flutterResult: @escaping FlutterResult) {
+        guard let message = message else { return }
+
+        subscribeAndCallback(observable: Single<Bool>.fromAsync { [weak self] in
+            guard let self = self else {
+                throw ParticleNetwork.ResponseError(code: nil, message: "self is nil")
+            }
+            return try await self.auth.evm.personalSignUnique(message)
+        }, flutterResult: flutterResult)
+    }
+
+    func evmSignTypedData(_ message: String?, flutterResult: @escaping FlutterResult) {
+        guard let message = message else { return }
+
+        subscribeAndCallback(observable: Single<Bool>.fromAsync { [weak self] in
+            guard let self = self else {
+                throw ParticleNetwork.ResponseError(code: nil, message: "self is nil")
+            }
+            return try await self.auth.evm.signTypedData(message)
+        }, flutterResult: flutterResult)
+    }
+
+    func evmSignTypedDataUnique(_ message: String?, flutterResult: @escaping FlutterResult) {
+        guard let message = message else { return }
+
+        subscribeAndCallback(observable: Single<Bool>.fromAsync { [weak self] in
+            guard let self = self else {
+                throw ParticleNetwork.ResponseError(code: nil, message: "self is nil")
+            }
+            return try await self.auth.evm.signTypedDataUnique(message)
+        }, flutterResult: flutterResult)
+    }
+
+    func evmSendTransaction(_ transaction: String?, flutterResult: @escaping FlutterResult) {
+        guard let transaction = transaction else { return }
+
+//        Task {
+//            do {
+//                let signature = try await self.auth.evm.sendTransaction(transaction)
+//                let statusModel = FlutterStatusModel(status: true, data: signature)
+//                let data = try! JSONEncoder().encode(statusModel)
+//                guard let json = String(data: data, encoding: .utf8) else { return }
+//                flutterResult(json)
+//            } catch {
+//                let response = self.ResponseFromError(error)
+//                let statusModel = FlutterStatusModel(status: false, data: response)
+//                let data = try! JSONEncoder().encode(statusModel)
+//                guard let json = String(data: data, encoding: .utf8) else { return }
+//                flutterResult(json)
+//            }
+//        }
+        subscribeAndCallback(observable: Single<Bool>.fromAsync { [weak self] in
+            guard let self = self else {
+                throw ParticleNetwork.ResponseError(code: nil, message: "self is nil")
+            }
+            return try await self.auth.evm.sendTransaction(transaction)
+        }, flutterResult: flutterResult)
+    }
+
+    func solanaGetAddress(_ flutterResult: @escaping FlutterResult) {
+        let address = self.auth.solana.getAddress()
+        flutterResult(address)
+    }
+
+    func evmGetAddress(_ flutterResult: @escaping FlutterResult) {
+        let address = self.auth.evm.getAddress()
+        flutterResult(address)
+    }
+
+    func getUserInfo(_ flutterResult: @escaping FlutterResult) {
+        guard let userInfo = self.auth.getUserInfo() else {
+            let error = ParticleNetwork.ResponseError(code: nil, message: "user is not login")
+            let response = self.ResponseFromError(error)
+            let statusModel = FlutterStatusModel(status: false, data: response)
+            let data = try! JSONEncoder().encode(statusModel)
+            guard let json = String(data: data, encoding: .utf8) else { return }
+            flutterResult(json)
+
+            return
+        }
+
+        let userInfoJsonString = userInfo.jsonStringFullSnake()
+        let newUserInfo = JSON(parseJSON: userInfoJsonString)
+
+        let data = try! JSONEncoder().encode(newUserInfo)
+        let json = String(data: data, encoding: .utf8)
+        flutterResult(json ?? "")
+    }
+
+    func openAccountAndSecurity(_ flutterResult: @escaping FlutterResult) {
+        let observable = Single<Void>.fromAsync {
+            [weak self] in
+                guard let self = self else {
+                    throw ParticleNetwork.ResponseError(code: nil, message: "self is nil")
+                }
+                try self.auth.openAccountAndSecurity()
+        }.map {
+            ""
+        }
+
+        subscribeAndCallback(observable: observable, flutterResult: flutterResult)
+    }
+
+    func hasPaymentPassword(_ flutterResult: @escaping FlutterResult) {
+        subscribeAndCallback(observable: Single<Bool>.fromAsync { [weak self] in
+            guard let self = self else {
+                throw ParticleNetwork.ResponseError(code: nil, message: "self is nil")
+            }
+            return try self.auth.hasPaymentPassword()
+        }, flutterResult: flutterResult)
+    }
+
+    func hasMasterPassword(_ flutterResult: @escaping FlutterResult) {
+        subscribeAndCallback(observable: Single<Bool>.fromAsync { [weak self] in
+            guard let self = self else {
+                throw ParticleNetwork.ResponseError(code: nil, message: "self is nil")
+            }
+            return try self.auth.hasMasterPassword()
+        }, flutterResult: flutterResult)
+    }
+    
+    func changeMasterPassword(_ flutterResult: @escaping FlutterResult) {
+        subscribeAndCallback(observable: Single<Bool>.fromAsync { [weak self] in
+            guard let self = self else {
+                throw ParticleNetwork.ResponseError(code: nil, message: "self is nil")
+            }
+            return try await self.auth.changeMasterPassword()
+        }, flutterResult: flutterResult)
+    }
+}
+
+public extension Dictionary {
+    /// - Parameter prettify: set true to prettify string (default is false).
+    /// - Returns: optional JSON String (if applicable).
+    func jsonString(prettify: Bool = false) -> String? {
+        guard JSONSerialization.isValidJSONObject(self) else { return nil }
+        let options = (prettify == true) ? JSONSerialization.WritingOptions.prettyPrinted : JSONSerialization.WritingOptions()
+        guard let jsonData = try? JSONSerialization.data(withJSONObject: self, options: options) else { return nil }
+        return String(data: jsonData, encoding: .utf8)
+    }
+}
+
+extension ParticleAuthCorePlugin {
+    private func subscribeAndCallback<T: Codable>(observable: Single<T>, flutterResult: @escaping FlutterResult) {
+        observable.subscribe { [weak self] result in
+            guard let self = self else { return }
+            switch result {
+            case .failure(let error):
+                let response = self.ResponseFromError(error)
+                let statusModel = FlutterStatusModel(status: false, data: response)
+                let data = try! JSONEncoder().encode(statusModel)
+                guard let json = String(data: data, encoding: .utf8) else { return }
+                flutterResult(json)
+            case .success(let signedMessage):
+                let statusModel = FlutterStatusModel(status: true, data: signedMessage)
+                let data = try! JSONEncoder().encode(statusModel)
+                guard let json = String(data: data, encoding: .utf8) else { return }
+                flutterResult(json)
+            }
+        }.disposed(by: self.bag)
+    }
+}
+
+extension Single {
+    static func fromAsync<T>(_ fn: @escaping () async throws -> T) -> Single<T> {
+        .create { observer in
+            let task = Task {
+                do { try await observer(.success(fn())) }
+                catch { observer(.failure(error)) }
+            }
+            return Disposables.create { task.cancel() }
+        }.observe(on: MainScheduler.instance)
     }
 }

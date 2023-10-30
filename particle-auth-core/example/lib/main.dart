@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:oktoast/oktoast.dart';
-import 'package:particle_auth_core/particle_auth_core.dart';
+import 'package:particle_auth_core_example/auth_core_demo/auth_core_demo.dart';
 
 void main() {
   runApp(const MyApp());
@@ -9,9 +9,11 @@ void main() {
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
 
+  // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
     return OKToast(
+      // 2-A: wrap your app with OKToast
       textStyle: const TextStyle(fontSize: 19.0, color: Colors.white),
       backgroundColor: Colors.black,
       animationCurve: Curves.easeIn,
@@ -48,23 +50,27 @@ class _MyHomePageState extends State<MyHomePage> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
-            SizedBox(
-                child: ElevatedButton(
-              onPressed: () {
-                print('hello');
-                print(ParticleAuthCore);
-                /* Navigator.push(
+            //add a button
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: SizedBox(
+                  width: 200,
+                  height: 50,
+                  child: ElevatedButton(
+                    onPressed: () => {
+                      Navigator.push(
                         context,
                         MaterialPageRoute(
                           builder: (context) => const AuthDemoPage(),
                         ),
-                      ) */
-              },
-              child: const Text(
-                "Auth Core Demo",
-                style: TextStyle(fontSize: 20),
-              ),
-            )),
+                      )
+                    },
+                    child: const Text(
+                      "Auth Demo",
+                      style: TextStyle(fontSize: 20),
+                    ),
+                  )),
+            ),
           ],
         ),
       ),

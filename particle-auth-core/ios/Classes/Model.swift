@@ -1,8 +1,8 @@
 //
 //  Model.swift
-//  Runner
+//  reactnativeparticle
 //
-//  Created by link on 2022/10/8.
+//  Created by link on 2022/9/23.
 //
 
 import Foundation
@@ -33,3 +33,4 @@ struct FlutterConnectLoginResult: Codable {
     let message: String
     let signature: String
 }
+

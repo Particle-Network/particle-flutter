@@ -1,6 +1,6 @@
-# particle_auth
+# particle_auth_core
 
-A flutter plugin project for particle auth
+A new Flutter plugin project.
 
 ## Getting Started
 
