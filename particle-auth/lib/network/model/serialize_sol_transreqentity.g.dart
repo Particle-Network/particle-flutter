@@ -18,5 +18,5 @@ Map<String, dynamic> _$SerializeSOLTransReqEntityToJson(
     <String, dynamic>{
       'sender': instance.sender,
       'receiver': instance.receiver,
-      'lamports': instance.lamports.toString(),
+      'lamports': instance.lamports.toInt(),
     };

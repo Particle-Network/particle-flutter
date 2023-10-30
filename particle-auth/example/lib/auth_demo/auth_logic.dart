@@ -351,14 +351,13 @@ class AuthLogic {
       "100000000"
     ];
     String abiJsonString = "";
-    bool isSupportEIP1559 = true;
     final result = await EvmService.writeContract(address, contractAddress,
-        methodName, parameters, abiJsonString, isSupportEIP1559,
+        methodName, parameters, abiJsonString,
         gasFeeLevel: GasFeeLevel.low);
     print("transaction: $result");
     showToast("transaction: $result");
     final transaction = await EvmService.writeContract(address, contractAddress,
-        methodName, parameters, abiJsonString, isSupportEIP1559,
+        methodName, parameters, abiJsonString,
         gasFeeLevel: GasFeeLevel.low);
     print("transaction: $transaction");
     showToast("transaction: $transaction");
@@ -373,9 +372,8 @@ class AuthLogic {
       "100000000"
     ];
     String abiJsonString = "";
-    bool isSupportEIP1559 = true;
     final transaction = await EvmService.writeContract(address, contractAddress,
-        methodName, parameters, abiJsonString, isSupportEIP1559,
+        methodName, parameters, abiJsonString,
         gasFeeLevel: GasFeeLevel.low);
     print("transaction: $transaction");
     showToast("transaction: $transaction");

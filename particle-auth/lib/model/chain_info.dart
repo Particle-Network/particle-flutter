@@ -1440,7 +1440,7 @@ class ChainInfo {
   }
 
   bool isEIP1559Supported() {
-    return features.contains(ChainInfoFeature('EIP1559'));
+    return features.map((e) => e.name).contains('EIP1559');
   }
 
   bool isSupportWalletConnect() {

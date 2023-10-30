@@ -283,8 +283,6 @@ class EvmService {
   ///
   /// [abiJsonString] is abi json string, such as "[{\"inputs\":[{\"internalType\":\"uint256\",\"name\":\"quantity\",\"type\":\"uint256\"},{\"internalType\":\"uint256\",\"name\":\"amount\",\"type\":\"uint256\"}],\"name\":\"mint\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"}]"
   ///
-  /// [isSupportEIP1559] is your current chain support EIP1559, pass true to get a EIP 1559 transaction, pass false to get a legacy transaction.
-  ///
   /// [gasFeeLevel] is gas fee level, default is high.
   static Future<String> writeContract(
       String address,
@@ -292,14 +290,13 @@ class EvmService {
       String methodName,
       List<Object> parameters,
       String abiJsonString,
-      bool isSupportEIP1559,
       {GasFeeLevel gasFeeLevel = GasFeeLevel.high}) async {
     final customMethodCall = await EvmService.customMethod(
         contractAddress, methodName, parameters, abiJsonString);
     final data = jsonDecode(customMethodCall)["result"];
 
     return createTransaction(
-        address, data, BigInt.from(0), contractAddress, isSupportEIP1559,
+        address, data, BigInt.from(0), contractAddress,
         gasFeeLevel: gasFeeLevel);
   }
 
@@ -314,11 +311,9 @@ class EvmService {
   /// [to] if it is a contract transaction, to is contract address, if it is a native transaciton, to is receiver address.
   ///
   ///
-  /// [isSupportEIP1559] is your current chain support EIP1559, pass true to get a EIP 1559 transaction, pass false to get a legacy transaction.
-  ///
   /// [gasFeeLevel] is gas fee level, default is high.
   static Future<String> createTransaction(
-      String from, String data, BigInt value, String to, bool isSupportEIP1559,
+      String from, String data, BigInt value, String to,
       {GasFeeLevel gasFeeLevel = GasFeeLevel.high}) async {
     final valueHex = "0x${value.toRadixString(16)}";
     final gasLimitResult =
@@ -354,8 +349,14 @@ class EvmService {
         "0x${BigInt.from(maxPriorityFeePerGas * pow(10, 9)).toRadixString(16)}";
 
     final chainId = await ParticleAuth.getChainId();
+    final chainInfo = ChainInfo.getEvmChain(chainId);
+
+    if (chainInfo == null) {
+      throw Exception("cant find chain info for chain id $chainId");
+    }
 
     Map<String, dynamic> req;
+    final isSupportEIP1559 = chainInfo.isEIP1559Supported();
     // evm transaction
     if (isSupportEIP1559) {
       req = {
