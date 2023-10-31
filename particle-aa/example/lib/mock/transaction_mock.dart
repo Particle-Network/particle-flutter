@@ -27,9 +27,7 @@ class TransactionMock {
     final erc20Resp = await EvmService.erc20Transfer(contractAddress, receiver, amount);
     final data = jsonDecode(erc20Resp)["result"];
 
-    const isSupportEIP1559 = true;
-
-    final transaction = await EvmService.createTransaction(from, data, BigInt.from(0), to, isSupportEIP1559, gasFeeLevel: GasFeeLevel.high);
+    final transaction = await EvmService.createTransaction(from, data, BigInt.from(0), to, gasFeeLevel: GasFeeLevel.high);
     return transaction;
   }
 
@@ -42,8 +40,7 @@ class TransactionMock {
     BigInt amount = TestAccount.evm.amount;
     String to = receiver;
     const data = "0x";
-    const isSupportEIP1559 = true;
-    final transaction = await EvmService.createTransaction(from, data, amount, to, isSupportEIP1559, gasFeeLevel: GasFeeLevel.high);
+    final transaction = await EvmService.createTransaction(from, data, amount, to, gasFeeLevel: GasFeeLevel.high);
 
     return transaction;
   }
@@ -60,8 +57,7 @@ class TransactionMock {
     final erc20Resp = await EvmService.erc20Transfer(contractAddress, receiver, amount);
     final data = jsonDecode(erc20Resp)["result"];
 
-    const isSupportEIP1559 = false;
-    final transaction = await EvmService.createTransaction(from, data, BigInt.from(0), to, isSupportEIP1559, gasFeeLevel: GasFeeLevel.high);
+    final transaction = await EvmService.createTransaction(from, data, BigInt.from(0), to, gasFeeLevel: GasFeeLevel.high);
 
     return transaction;
   }
@@ -80,8 +76,7 @@ class TransactionMock {
     final erc20Resp = await EvmService.erc721SafeTransferFrom(contractAddress, from, receiver, tokenId);
     final data = jsonDecode(erc20Resp)["result"];
 
-    const isSupportEIP1559 = true;
-    final transaction = await EvmService.createTransaction(from, data, BigInt.from(0), to, isSupportEIP1559, gasFeeLevel: GasFeeLevel.high);
+    final transaction = await EvmService.createTransaction(from, data, BigInt.from(0), to, gasFeeLevel: GasFeeLevel.high);
 
     return transaction;
   }
@@ -99,8 +94,7 @@ class TransactionMock {
     String amount = "1";
     final erc20Resp = await EvmService.erc1155SafeTransferFrom(contractAddress, from, receiver, tokenId, amount, "0x");
     final data = jsonDecode(erc20Resp)["result"];
-    const isSupportEIP1559 = true;
-    final transaction = await EvmService.createTransaction(from, data, BigInt.from(0), to, isSupportEIP1559, gasFeeLevel: GasFeeLevel.high);
+    final transaction = await EvmService.createTransaction(from, data, BigInt.from(0), to, gasFeeLevel: GasFeeLevel.high);
 
     return transaction;
   }
@@ -116,8 +110,7 @@ class TransactionMock {
     // such as
     // [{\"inputs\":[{\"internalType\":\"uint256\",\"name\":\"quantity\",\"type\":\"uint256\"},{\"internalType\":\"uint256\",\"name\":\"amount\",\"type\":\"uint256\"}],\"name\":\"mint\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"}]
     const abiJsonString = null;
-    const isSupportEIP1559 = true;
-    final result = EvmService.writeContract(publicAddress, contractAddress, methodName, params, abiJsonString, isSupportEIP1559, gasFeeLevel: GasFeeLevel.high);
+    final result = EvmService.writeContract(publicAddress, contractAddress, methodName, params, abiJsonString, gasFeeLevel: GasFeeLevel.high);
 
     return result;
   }

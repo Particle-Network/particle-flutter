@@ -456,8 +456,6 @@ extension ParticleConnectPlugin {
             flutterResult(json)
             return
         }
-        self.latestPublicAddress = publicAddress
-        self.latestWalletType = walletType
         
         let mode = data["fee_mode"]["option"].stringValue
         var feeMode: AA.FeeMode = .native
@@ -489,6 +487,8 @@ extension ParticleConnectPlugin {
         let aaService = ParticleNetwork.getAAService()
         var sendObservable: Single<String>
         if aaService != nil, aaService!.isAAModeEnable() {
+            self.latestPublicAddress = publicAddress
+            self.latestWalletType = walletType
             sendObservable = aaService!.quickSendTransactions([transaction], feeMode: feeMode, messageSigner: self, wholeFeeQuote: wholeFeeQuote)
         } else {
             sendObservable = adapter.signAndSendTransaction(publicAddress: publicAddress, transaction: transaction, feeMode: feeMode)
@@ -520,9 +520,6 @@ extension ParticleConnectPlugin {
             return
         }
         
-        self.latestPublicAddress = publicAddress
-        self.latestWalletType = walletType
-        
         let mode = data["fee_mode"]["option"].stringValue
         var feeMode: AA.FeeMode = .native
         if mode == "native" {
@@ -548,6 +545,9 @@ extension ParticleConnectPlugin {
             flutterResult(FlutterError(code: "", message: "aa service is not enable", details: nil))
             return
         }
+        
+        self.latestPublicAddress = publicAddress
+        self.latestWalletType = walletType
         
         let sendObservable = aaService.quickSendTransactions(transactions, feeMode: feeMode, messageSigner: self, wholeFeeQuote: wholeFeeQuote)
         subscribeAndCallback(observable: sendObservable, flutterResult: flutterResult)

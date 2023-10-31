@@ -68,7 +68,7 @@ class ParticleAA {
 
   /// Rpc get fee quotes
   ///
-  /// Pick one fee quote, then send with AAFeeMode.custom
+  /// Pick one fee quote, then send with native, gasless or token.
   ///
   /// [eoaAddress] Eoa address
   ///
