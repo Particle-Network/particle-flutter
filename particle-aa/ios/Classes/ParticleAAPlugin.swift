@@ -12,6 +12,8 @@ import ParticleNetworkBase
 import RxSwift
 import SwiftyJSON
 
+public typealias ParticleCallback = FlutterResult
+
 public class ParticleAAPlugin: NSObject, FlutterPlugin {
     let bag = DisposeBag()
     
@@ -47,17 +49,17 @@ public class ParticleAAPlugin: NSObject, FlutterPlugin {
         case .initialize:
             initialize(json as? String)
         case .isSupportChainInfo:
-            isSupportChainInfo(json as? String, flutterResult: result)
+            isSupportChainInfo(json as? String, callback: result)
         case .isDeploy:
-            isDeploy(json as? String, flutterResult: result)
+            isDeploy(json as? String, callback: result)
         case .isAAModeEnable:
-            isAAModeEnable(flutterResult: result)
+            isAAModeEnable(result)
         case .enableAAMode:
             enableAAMode()
         case .disableAAMode:
             disableAAMode()
         case .rpcGetFeeQuotes:
-            rpcGetFeeQuotes(json as? String, flutterResult: result)
+            rpcGetFeeQuotes(json as? String, callback: result)
         }
     }
 }
@@ -85,7 +87,7 @@ public extension ParticleAAPlugin {
         ParticleNetwork.setAAService(aaService)
     }
     
-    func isSupportChainInfo(_ json: String?, flutterResult: @escaping FlutterResult) {
+    func isSupportChainInfo(_ json: String?, callback: @escaping ParticleCallback) {
         guard let json = json else {
             return
         }
@@ -93,22 +95,22 @@ public extension ParticleAAPlugin {
         let data = JSON(parseJSON: json)
         let chainId = data["chain_id"].intValue
         guard let chainInfo = ParticleNetwork.searchChainInfo(by: chainId) else {
-            flutterResult(false)
+            callback(false)
             return
         }
         let result = aaService.isSupportChainInfo(chainInfo)
-        flutterResult(result)
+        callback(result)
     }
 
-    func isDeploy(_ json: String?, flutterResult: @escaping FlutterResult) {
+    func isDeploy(_ json: String?, callback: @escaping ParticleCallback) {
         guard let json = json else { return }
         let eoaAddress = json
-        subscribeAndCallback(observable: aaService.isDeploy(eoaAddress: eoaAddress), flutterResult: flutterResult)
+        subscribeAndCallback(observable: aaService.isDeploy(eoaAddress: eoaAddress), callback: callback)
     }
     
-    func isAAModeEnable(flutterResult: FlutterResult) {
+    func isAAModeEnable(_ callback: ParticleCallback) {
         let result = aaService.isAAModeEnable()
-        flutterResult(result)
+        callback(result)
     }
     
     func enableAAMode() {
@@ -119,7 +121,7 @@ public extension ParticleAAPlugin {
         aaService.disableAAMode()
     }
     
-    func rpcGetFeeQuotes(_ json: String?, flutterResult: @escaping FlutterResult) {
+    func rpcGetFeeQuotes(_ json: String?, callback: @escaping ParticleCallback) {
         guard let json = json else { return }
         
         let data = JSON(parseJSON: json)
@@ -128,12 +130,12 @@ public extension ParticleAAPlugin {
             $0.stringValue
         }
         
-        subscribeAndCallback(observable: aaService.rpcGetFeeQuotes(eoaAddress: eoaAddress, transactions: transactions), flutterResult: flutterResult)
+        subscribeAndCallback(observable: aaService.rpcGetFeeQuotes(eoaAddress: eoaAddress, transactions: transactions), callback: callback)
     }
 }
 
 extension ParticleAAPlugin {
-    private func subscribeAndCallback<T: Codable>(observable: Single<T>, flutterResult: @escaping FlutterResult) {
+    private func subscribeAndCallback<T: Codable>(observable: Single<T>, callback: @escaping ParticleCallback) {
         observable.subscribe { [weak self] result in
             guard let self = self else { return }
             switch result {
@@ -142,12 +144,12 @@ extension ParticleAAPlugin {
                 let statusModel = FlutterStatusModel(status: false, data: response)
                 let data = try! JSONEncoder().encode(statusModel)
                 guard let json = String(data: data, encoding: .utf8) else { return }
-                flutterResult(json)
+                callback(json)
             case .success(let signedMessage):
                 let statusModel = FlutterStatusModel(status: true, data: signedMessage)
                 let data = try! JSONEncoder().encode(statusModel)
                 guard let json = String(data: data, encoding: .utf8) else { return }
-                flutterResult(json)
+                callback(json)
             }
         }.disposed(by: bag)
     }
