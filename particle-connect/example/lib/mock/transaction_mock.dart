@@ -1,4 +1,5 @@
 import 'dart:convert';
+
 import 'package:particle_auth/particle_auth.dart';
 import 'package:particle_connect_example/mock/test_account.dart';
 
@@ -15,8 +16,6 @@ class TransactionMock {
 
   /// Mock a transaction
   /// Send contract token in our test account, chain id 5.
-  /// Chain id 5 is Ethereum goerli, supports EIP1559, so the transaction is type2.
-  /// If your chain id did not support EIP1559, go to method `mockEvmSendTokenUnsupportEip1559`.
   static Future<String> mockEvmSendToken(String publicAddress) async {
     String from = publicAddress;
     String receiver = TestAccount.evm.receiverAddress;
@@ -27,48 +26,22 @@ class TransactionMock {
         await EvmService.erc20Transfer(contractAddress, receiver, amount);
     final data = jsonDecode(erc20Resp)["result"];
 
-    const isSupportEIP1559 = true;
-
     final transaction = await EvmService.createTransaction(
-        from, data, BigInt.from(0), to, isSupportEIP1559,
+        from, data, BigInt.from(0), to,
         gasFeeLevel: GasFeeLevel.high);
     return transaction;
   }
 
   /// Mock a transaction
-  /// Send native token in our test account, chain id 5.
-  /// Chain id 5 is Ethereum goerli, supports EIP1559.
+  /// Send native token in our test account
   static Future<String> mockEvmSendNative(String publicAddress) async {
     String from = publicAddress;
     String receiver = TestAccount.evm.receiverAddress;
     BigInt amount = TestAccount.evm.amount;
     String to = receiver;
     const data = "0x";
-    const isSupportEIP1559 = true;
     final transaction = await EvmService.createTransaction(
-        from, data, amount, to, isSupportEIP1559,
-        gasFeeLevel: GasFeeLevel.high);
-
-    return transaction;
-  }
-
-  /// Mock a transaction that chain not support eip1559.
-  /// The example show you how to config a type0/legacy transaction.
-  /// You can replace parameters to test.
-  static Future<String> mockEvmSendTokenUnsupportEip1559(
-      String publicAddress) async {
-    String from = publicAddress;
-    String receiver = TestAccount.evm.receiverAddress;
-    String contractAddress = TestAccount.evm.tokenContractAddress;
-    BigInt amount = TestAccount.evm.amount;
-    String to = contractAddress;
-    final erc20Resp =
-        await EvmService.erc20Transfer(contractAddress, receiver, amount);
-    final data = jsonDecode(erc20Resp)["result"];
-
-    const isSupportEIP1559 = false;
-    final transaction = await EvmService.createTransaction(
-        from, data, BigInt.from(0), to, isSupportEIP1559,
+        from, data, amount, to,
         gasFeeLevel: GasFeeLevel.high);
 
     return transaction;
@@ -76,8 +49,6 @@ class TransactionMock {
 
   /// Mock a transaction
   /// Send erc721 nft in our test account, chain id 5.
-  /// Chain id 5 is Ethereum goerli, supports EIP1559, so the transaction is type2.
-  /// If your chain id did not support EIP1559, go to method mockEvmSendTokenUnsupportEip1559.
   static Future<String> mockEvmErc721NFT(String publicAddress) async {
     String from = publicAddress;
     String receiver = TestAccount.evm.receiverAddress;
@@ -89,9 +60,8 @@ class TransactionMock {
         contractAddress, from, receiver, tokenId);
     final data = jsonDecode(erc20Resp)["result"];
 
-    const isSupportEIP1559 = true;
     final transaction = await EvmService.createTransaction(
-        from, data, BigInt.from(0), to, isSupportEIP1559,
+        from, data, BigInt.from(0), to,
         gasFeeLevel: GasFeeLevel.high);
 
     return transaction;
@@ -99,8 +69,6 @@ class TransactionMock {
 
   /// Mock a transaction
   /// Send erc1155 nft in our test account, chain id 5.
-  /// Chain id 5 is Ethereum goerli, supports EIP1559, so the transaction is type2.
-  /// If your chain id did not support EIP1559, go to method mockEvmSendTokenUnsupportEip1559.
   static Future<String> mockEvmErc1155NFT(String publicAddress) async {
     String from = publicAddress;
     String receiver = TestAccount.evm.receiverAddress;
@@ -111,9 +79,8 @@ class TransactionMock {
     final erc20Resp = await EvmService.erc1155SafeTransferFrom(
         contractAddress, from, receiver, tokenId, amount, "0x");
     final data = jsonDecode(erc20Resp)["result"];
-    const isSupportEIP1559 = true;
     final transaction = await EvmService.createTransaction(
-        from, data, BigInt.from(0), to, isSupportEIP1559,
+        from, data, BigInt.from(0), to,
         gasFeeLevel: GasFeeLevel.high);
 
     return transaction;
@@ -131,9 +98,9 @@ class TransactionMock {
     // such as
     // [{\"inputs\":[{\"internalType\":\"uint256\",\"name\":\"quantity\",\"type\":\"uint256\"},{\"internalType\":\"uint256\",\"name\":\"amount\",\"type\":\"uint256\"}],\"name\":\"mint\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"}]
     const abiJsonString = null;
-    const isSupportEIP1559 = true;
-    final result = EvmService.writeContract(publicAddress, contractAddress,
-        methodName, params, abiJsonString, isSupportEIP1559, gasFeeLevel: GasFeeLevel.high);
+    final result = EvmService.writeContract(
+        publicAddress, contractAddress, methodName, params, abiJsonString,
+        gasFeeLevel: GasFeeLevel.high);
 
     return result;
   }

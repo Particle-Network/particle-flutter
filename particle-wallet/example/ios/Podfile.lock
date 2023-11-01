@@ -314,9 +314,9 @@ SPEC CHECKSUMS:
   libwebp: 1786c9f4ff8a279e4dac1e8f385004d5fc253009
   metamask-ios-sdk: 7a39b6bf9c4d2b6edf35d857a6038c8148c8e704
   MJRefresh: fdf5e979eb406a0341468932d1dfc8b7f9fce961
-  particle_auth: 7df9934788402bd80156fa5f56422d941af0745c
+  particle_auth: f63e17b5dc9b5f7b3ad4d5c13fbfc03d3739b3ab
   particle_connect: 0192191b9fcae5c955c4752920acc5f05deb762a
-  particle_wallet: 19474f7dedbf8ea3fe07459ff85c37defa83c24e
+  particle_wallet: f7e7dec6e3dc03937e492dd053375e460ba02825
   ParticleAA: 32d2dd73f26da5d158bb08bd3842d5ba5dc69da2
   ParticleAuthAdapter: f7634024533b8b3060ef8cbac2413efc5953204e
   ParticleAuthService: 670572cd509913c25fc331a5287cf62e148f9529
@@ -343,6 +343,6 @@ SPEC CHECKSUMS:
   TweetNacl: 3abf4d1d2082b0114e7a67410e300892448951e6
   WalletConnectSwiftV2: 66aef6e7bbe881c465e6bce164f61c5bbf61d796
 
-PODFILE CHECKSUM: ee578a5f15703891bd31ded34e42c64efe85ce89
+PODFILE CHECKSUM: c0d1fae167bda2316513b0f7fc281037a406a1d2
 
 COCOAPODS: 1.12.1

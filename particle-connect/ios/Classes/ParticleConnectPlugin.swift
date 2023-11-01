@@ -31,6 +31,8 @@ import ConnectPhantomAdapter
 import ConnectWalletConnectAdapter
 #endif
 
+public typealias ParticleCallback = FlutterResult
+
 public class ParticleConnectPlugin: NSObject, FlutterPlugin {
     let bag = DisposeBag()
     
@@ -88,45 +90,45 @@ public class ParticleConnectPlugin: NSObject, FlutterPlugin {
         case .initialize:
             self.initialize(json as? String)
         case .getAccounts:
-            self.getAccounts(json as? String, flutterResult: result)
+            self.getAccounts(json as? String, callback: result)
         case .connect:
-            self.connect(json as? String, flutterResult: result)
+            self.connect(json as? String, callback: result)
         case .disconnect:
-            self.disconnect(json as? String, flutterResult: result)
+            self.disconnect(json as? String, callback: result)
         case .isConnected:
-            self.isConnected(json as? String, flutterResult: result)
+            self.isConnected(json as? String, callback: result)
         case .signMessage:
-            self.signMessage(json as? String, flutterResult: result)
+            self.signMessage(json as? String, callback: result)
         case .signTransaction:
-            self.signTransaction(json as? String, flutterResult: result)
+            self.signTransaction(json as? String, callback: result)
         case .signAllTransactions:
-            self.signAllTransactions(json as? String, flutterResult: result)
+            self.signAllTransactions(json as? String, callback: result)
         case .signAndSendTransaction:
-            self.signAndSendTransaction(json as? String, flutterResult: result)
+            self.signAndSendTransaction(json as? String, callback: result)
         case .signTypedData:
-            self.signTypedData(json as? String, flutterResult: result)
+            self.signTypedData(json as? String, callback: result)
         case .login:
-            self.login(json as? String, flutterResult: result)
+            self.login(json as? String, callback: result)
         case .verify:
-            self.verify(json as? String, flutterResult: result)
+            self.verify(json as? String, callback: result)
         case .importPrivateKey:
-            self.importPrivateKey(json as? String, flutterResult: result)
+            self.importPrivateKey(json as? String, callback: result)
         case .importMnemonic:
-            self.importMnemonic(json as? String, flutterResult: result)
+            self.importMnemonic(json as? String, callback: result)
         case .exportPrivateKey:
-            self.exportPrivateKey(json as? String, flutterResult: result)
+            self.exportPrivateKey(json as? String, callback: result)
         case .switchEthereumChain:
-            self.switchEthereumChain(json as? String, flutterResult: result)
+            self.switchEthereumChain(json as? String, callback: result)
         case .addEthereumChain:
-            self.addEthereumChain(json as? String, flutterResult: result)
+            self.addEthereumChain(json as? String, callback: result)
         case .walletReadyState:
-            self.walletReadyState(json as? String, flutterResult: result)
+            self.walletReadyState(json as? String, callback: result)
         case .reconnectIfNeeded:
             self.reconnectIfNeeded(json as? String)
         case .connectWalletConnect:
-            self.connectWalletConnect(flutterResult: result)
+            self.connectWalletConnect(callback: result)
         case .batchSendTransactions:
-            self.batchSendTransactions(json as? String, flutterResult: result)
+            self.batchSendTransactions(json as? String, callback: result)
         case .setWalletConnectV2SupportChainInfos:
             self.setWalletConnectV2SupportChainInfos(json as? String)
         }
@@ -238,22 +240,22 @@ extension ParticleConnectPlugin {
         ParticleConnect.setWalletConnectV2SupportChainInfos(chainInfos)
     }
     
-    func getAccounts(_ json: String?, flutterResult: FlutterResult) {
+    func getAccounts(_ json: String?, callback: ParticleCallback) {
         guard let json = json else {
-            flutterResult(FlutterError(code: "", message: "json is nil", details: nil))
+            callback(FlutterError(code: "", message: "json is nil", details: nil))
             return
         }
         
         let walletTypeString = json
         guard let walletType = map2WalletType(from: walletTypeString) else {
             print("walletType \(walletTypeString) is not existed")
-            flutterResult(FlutterError(code: "", message: "walletType \(walletTypeString) is not existed", details: nil))
+            callback(FlutterError(code: "", message: "walletType \(walletTypeString) is not existed", details: nil))
             return
         }
         
         guard let adapter = map2ConnectAdapter(from: walletType) else {
             print("adapter for \(walletTypeString) is not init")
-            flutterResult(FlutterError(code: "", message: "adapter for \(walletTypeString) is not init", details: nil))
+            callback(FlutterError(code: "", message: "adapter for \(walletTypeString) is not init", details: nil))
             return
         }
         
@@ -261,12 +263,12 @@ extension ParticleConnectPlugin {
         let statusModel = FlutterStatusModel(status: true, data: accounts)
         let data = try! JSONEncoder().encode(statusModel)
         let jsonString = String(data: data, encoding: .utf8) ?? ""
-        flutterResult(jsonString)
+        callback(jsonString)
     }
     
-    func connect(_ json: String?, flutterResult: @escaping FlutterResult) {
+    func connect(_ json: String?, callback: @escaping ParticleCallback) {
         guard let json = json else {
-            flutterResult(FlutterError(code: "", message: "json is nil", details: nil))
+            callback(FlutterError(code: "", message: "json is nil", details: nil))
             return
         }
         
@@ -341,7 +343,7 @@ extension ParticleConnectPlugin {
             let statusModel = FlutterStatusModel(status: false, data: response)
             let data = try! JSONEncoder().encode(statusModel)
             guard let json = String(data: data, encoding: .utf8) else { return }
-            flutterResult(json)
+            callback(json)
             return
         }
         guard let adapter = map2ConnectAdapter(from: walletType) else {
@@ -350,7 +352,7 @@ extension ParticleConnectPlugin {
             let statusModel = FlutterStatusModel(status: false, data: response)
             let data = try! JSONEncoder().encode(statusModel)
             guard let json = String(data: data, encoding: .utf8) else { return }
-            flutterResult(json)
+            callback(json)
             return
         }
         
@@ -367,12 +369,12 @@ extension ParticleConnectPlugin {
             observable = adapter.connect(ConnectConfig.none)
         }
         
-        subscribeAndCallback(observable: observable, flutterResult: flutterResult)
+        subscribeAndCallback(observable: observable, callback: callback)
     }
     
-    func disconnect(_ json: String?, flutterResult: @escaping FlutterResult) {
+    func disconnect(_ json: String?, callback: @escaping ParticleCallback) {
         guard let json = json else {
-            flutterResult(FlutterError(code: "", message: "json is nil", details: nil))
+            callback(FlutterError(code: "", message: "json is nil", details: nil))
             return
         }
         
@@ -386,7 +388,7 @@ extension ParticleConnectPlugin {
             let statusModel = FlutterStatusModel(status: false, data: response)
             let data = try! JSONEncoder().encode(statusModel)
             guard let json = String(data: data, encoding: .utf8) else { return }
-            flutterResult(json)
+            callback(json)
             return
         }
         
@@ -396,16 +398,16 @@ extension ParticleConnectPlugin {
             let statusModel = FlutterStatusModel(status: false, data: response)
             let data = try! JSONEncoder().encode(statusModel)
             guard let json = String(data: data, encoding: .utf8) else { return }
-            flutterResult(json)
+            callback(json)
             return
         }
         
-        subscribeAndCallback(observable: adapter.disconnect(publicAddress: publicAddress), flutterResult: flutterResult)
+        subscribeAndCallback(observable: adapter.disconnect(publicAddress: publicAddress), callback: callback)
     }
     
-    func isConnected(_ json: String?, flutterResult: FlutterResult) {
+    func isConnected(_ json: String?, callback: ParticleCallback) {
         guard let json = json else {
-            flutterResult(FlutterError(code: "", message: "json is nil", details: nil))
+            callback(FlutterError(code: "", message: "json is nil", details: nil))
             return
         }
         
@@ -419,7 +421,7 @@ extension ParticleConnectPlugin {
             let statusModel = FlutterStatusModel(status: false, data: response)
             let data = try! JSONEncoder().encode(statusModel)
             guard let json = String(data: data, encoding: .utf8) else { return }
-            flutterResult(json)
+            callback(json)
             return
         }
         
@@ -429,16 +431,16 @@ extension ParticleConnectPlugin {
             let statusModel = FlutterStatusModel(status: false, data: response)
             let data = try! JSONEncoder().encode(statusModel)
             guard let json = String(data: data, encoding: .utf8) else { return }
-            flutterResult(json)
+            callback(json)
             return
         }
         
-        flutterResult(adapter.isConnected(publicAddress: publicAddress))
+        callback(adapter.isConnected(publicAddress: publicAddress))
     }
     
-    func signAndSendTransaction(_ json: String?, flutterResult: @escaping FlutterResult) {
+    func signAndSendTransaction(_ json: String?, callback: @escaping ParticleCallback) {
         guard let json = json else {
-            flutterResult(FlutterError(code: "", message: "json is nil", details: nil))
+            callback(FlutterError(code: "", message: "json is nil", details: nil))
             return
         }
         
@@ -453,7 +455,7 @@ extension ParticleConnectPlugin {
             let statusModel = FlutterStatusModel(status: false, data: response)
             let data = try! JSONEncoder().encode(statusModel)
             guard let json = String(data: data, encoding: .utf8) else { return }
-            flutterResult(json)
+            callback(json)
             return
         }
         
@@ -480,7 +482,7 @@ extension ParticleConnectPlugin {
             let statusModel = FlutterStatusModel(status: false, data: response)
             let data = try! JSONEncoder().encode(statusModel)
             guard let json = String(data: data, encoding: .utf8) else { return }
-            flutterResult(json)
+            callback(json)
             return
         }
         
@@ -494,12 +496,12 @@ extension ParticleConnectPlugin {
             sendObservable = adapter.signAndSendTransaction(publicAddress: publicAddress, transaction: transaction, feeMode: feeMode)
         }
         
-        subscribeAndCallback(observable: sendObservable, flutterResult: flutterResult)
+        subscribeAndCallback(observable: sendObservable, callback: callback)
     }
     
-    func batchSendTransactions(_ json: String?, flutterResult: @escaping FlutterResult) {
+    func batchSendTransactions(_ json: String?, callback: @escaping ParticleCallback) {
         guard let json = json else {
-            flutterResult(FlutterError(code: "", message: "json is nil", details: nil))
+            callback(FlutterError(code: "", message: "json is nil", details: nil))
             return
         }
         
@@ -516,7 +518,7 @@ extension ParticleConnectPlugin {
             let statusModel = FlutterStatusModel(status: false, data: response)
             let data = try! JSONEncoder().encode(statusModel)
             guard let json = String(data: data, encoding: .utf8) else { return }
-            flutterResult(json)
+            callback(json)
             return
         }
         
@@ -537,12 +539,12 @@ extension ParticleConnectPlugin {
         let wholeFeeQuoteData = (try? data["fee_mode"]["whole_fee_quote"].rawData()) ?? Data()
         let wholeFeeQuote = try? JSONDecoder().decode(AA.WholeFeeQuote.self, from: wholeFeeQuoteData)
         guard let aaService = ParticleNetwork.getAAService() else {
-            flutterResult(FlutterError(code: "", message: "aa service is not init", details: nil))
+            callback(FlutterError(code: "", message: "aa service is not init", details: nil))
             return
         }
         
         guard aaService.isAAModeEnable() else {
-            flutterResult(FlutterError(code: "", message: "aa service is not enable", details: nil))
+            callback(FlutterError(code: "", message: "aa service is not enable", details: nil))
             return
         }
         
@@ -550,12 +552,12 @@ extension ParticleConnectPlugin {
         self.latestWalletType = walletType
         
         let sendObservable = aaService.quickSendTransactions(transactions, feeMode: feeMode, messageSigner: self, wholeFeeQuote: wholeFeeQuote)
-        subscribeAndCallback(observable: sendObservable, flutterResult: flutterResult)
+        subscribeAndCallback(observable: sendObservable, callback: callback)
     }
     
-    func signTransaction(_ json: String?, flutterResult: @escaping FlutterResult) {
+    func signTransaction(_ json: String?, callback: @escaping ParticleCallback) {
         guard let json = json else {
-            flutterResult(FlutterError(code: "", message: "json is nil", details: nil))
+            callback(FlutterError(code: "", message: "json is nil", details: nil))
             return
         }
         
@@ -570,7 +572,7 @@ extension ParticleConnectPlugin {
             let statusModel = FlutterStatusModel(status: false, data: response)
             let data = try! JSONEncoder().encode(statusModel)
             guard let json = String(data: data, encoding: .utf8) else { return }
-            flutterResult(json)
+            callback(json)
             return
         }
         
@@ -580,17 +582,17 @@ extension ParticleConnectPlugin {
             let statusModel = FlutterStatusModel(status: false, data: response)
             let data = try! JSONEncoder().encode(statusModel)
             guard let json = String(data: data, encoding: .utf8) else { return }
-            flutterResult(json)
+            callback(json)
             return
         }
         
         let observable = adapter.signTransaction(publicAddress: publicAddress, transaction: transaction)
-        subscribeAndCallback(observable: observable, flutterResult: flutterResult)
+        subscribeAndCallback(observable: observable, callback: callback)
     }
     
-    func signAllTransactions(_ json: String?, flutterResult: @escaping FlutterResult) {
+    func signAllTransactions(_ json: String?, callback: @escaping ParticleCallback) {
         guard let json = json else {
-            flutterResult(FlutterError(code: "", message: "json is nil", details: nil))
+            callback(FlutterError(code: "", message: "json is nil", details: nil))
             return
         }
         
@@ -607,7 +609,7 @@ extension ParticleConnectPlugin {
             let statusModel = FlutterStatusModel(status: false, data: response)
             let data = try! JSONEncoder().encode(statusModel)
             guard let json = String(data: data, encoding: .utf8) else { return }
-            flutterResult(json)
+            callback(json)
             return
         }
         
@@ -617,17 +619,17 @@ extension ParticleConnectPlugin {
             let statusModel = FlutterStatusModel(status: false, data: response)
             let data = try! JSONEncoder().encode(statusModel)
             guard let json = String(data: data, encoding: .utf8) else { return }
-            flutterResult(json)
+            callback(json)
             return
         }
         
         let observable = adapter.signAllTransactions(publicAddress: publicAddress, transactions: transactions)
-        subscribeAndCallback(observable: observable, flutterResult: flutterResult)
+        subscribeAndCallback(observable: observable, callback: callback)
     }
     
-    func signMessage(_ json: String?, flutterResult: @escaping FlutterResult) {
+    func signMessage(_ json: String?, callback: @escaping ParticleCallback) {
         guard let json = json else {
-            flutterResult(FlutterError(code: "", message: "json is nil", details: nil))
+            callback(FlutterError(code: "", message: "json is nil", details: nil))
             return
         }
         
@@ -647,7 +649,7 @@ extension ParticleConnectPlugin {
             let statusModel = FlutterStatusModel(status: false, data: response)
             let data = try! JSONEncoder().encode(statusModel)
             guard let json = String(data: data, encoding: .utf8) else { return }
-            flutterResult(json)
+            callback(json)
             return
         }
         
@@ -657,17 +659,17 @@ extension ParticleConnectPlugin {
             let statusModel = FlutterStatusModel(status: false, data: response)
             let data = try! JSONEncoder().encode(statusModel)
             guard let json = String(data: data, encoding: .utf8) else { return }
-            flutterResult(json)
+            callback(json)
             return
         }
         
         let observable = adapter.signMessage(publicAddress: publicAddress, message: message)
-        subscribeAndCallback(observable: observable, flutterResult: flutterResult)
+        subscribeAndCallback(observable: observable, callback: callback)
     }
     
-    func signTypedData(_ json: String?, flutterResult: @escaping FlutterResult) {
+    func signTypedData(_ json: String?, callback: @escaping ParticleCallback) {
         guard let json = json else {
-            flutterResult(FlutterError(code: "", message: "json is nil", details: nil))
+            callback(FlutterError(code: "", message: "json is nil", details: nil))
             return
         }
         
@@ -682,7 +684,7 @@ extension ParticleConnectPlugin {
             let statusModel = FlutterStatusModel(status: false, data: response)
             let data = try! JSONEncoder().encode(statusModel)
             guard let json = String(data: data, encoding: .utf8) else { return }
-            flutterResult(json)
+            callback(json)
             return
         }
         
@@ -692,17 +694,17 @@ extension ParticleConnectPlugin {
             let statusModel = FlutterStatusModel(status: false, data: response)
             let data = try! JSONEncoder().encode(statusModel)
             guard let json = String(data: data, encoding: .utf8) else { return }
-            flutterResult(json)
+            callback(json)
             return
         }
         
         let observable = adapter.signTypedData(publicAddress: publicAddress, data: message)
-        subscribeAndCallback(observable: observable, flutterResult: flutterResult)
+        subscribeAndCallback(observable: observable, callback: callback)
     }
     
-    func importPrivateKey(_ json: String?, flutterResult: @escaping FlutterResult) {
+    func importPrivateKey(_ json: String?, callback: @escaping ParticleCallback) {
         guard let json = json else {
-            flutterResult(FlutterError(code: "", message: "json is nil", details: nil))
+            callback(FlutterError(code: "", message: "json is nil", details: nil))
             return
         }
         
@@ -716,7 +718,7 @@ extension ParticleConnectPlugin {
             let statusModel = FlutterStatusModel(status: false, data: response)
             let data = try! JSONEncoder().encode(statusModel)
             guard let json = String(data: data, encoding: .utf8) else { return }
-            flutterResult(json)
+            callback(json)
             return
         }
         
@@ -726,7 +728,7 @@ extension ParticleConnectPlugin {
             let statusModel = FlutterStatusModel(status: false, data: response)
             let data = try! JSONEncoder().encode(statusModel)
             guard let json = String(data: data, encoding: .utf8) else { return }
-            flutterResult(json)
+            callback(json)
             return
         }
         
@@ -736,18 +738,18 @@ extension ParticleConnectPlugin {
             let statusModel = FlutterStatusModel(status: false, data: response)
             let data = try! JSONEncoder().encode(statusModel)
             guard let json = String(data: data, encoding: .utf8) else { return }
-            flutterResult(json)
+            callback(json)
             
             return
         }
         
         let observable = (adapter as! LocalAdapter).importWalletFromPrivateKey(privateKey)
-        subscribeAndCallback(observable: observable, flutterResult: flutterResult)
+        subscribeAndCallback(observable: observable, callback: callback)
     }
     
-    func importMnemonic(_ json: String?, flutterResult: @escaping FlutterResult) {
+    func importMnemonic(_ json: String?, callback: @escaping ParticleCallback) {
         guard let json = json else {
-            flutterResult(FlutterError(code: "", message: "json is nil", details: nil))
+            callback(FlutterError(code: "", message: "json is nil", details: nil))
             return
         }
         
@@ -761,7 +763,7 @@ extension ParticleConnectPlugin {
             let statusModel = FlutterStatusModel(status: false, data: response)
             let data = try! JSONEncoder().encode(statusModel)
             guard let json = String(data: data, encoding: .utf8) else { return }
-            flutterResult(json)
+            callback(json)
             return
         }
         
@@ -771,7 +773,7 @@ extension ParticleConnectPlugin {
             let statusModel = FlutterStatusModel(status: false, data: response)
             let data = try! JSONEncoder().encode(statusModel)
             guard let json = String(data: data, encoding: .utf8) else { return }
-            flutterResult(json)
+            callback(json)
             return
         }
         
@@ -781,18 +783,18 @@ extension ParticleConnectPlugin {
             let statusModel = FlutterStatusModel(status: false, data: response)
             let data = try! JSONEncoder().encode(statusModel)
             guard let json = String(data: data, encoding: .utf8) else { return }
-            flutterResult(json)
+            callback(json)
             
             return
         }
         
         let observable = (adapter as! LocalAdapter).importWalletFromMnemonic(mnemonic)
-        subscribeAndCallback(observable: observable, flutterResult: flutterResult)
+        subscribeAndCallback(observable: observable, callback: callback)
     }
     
-    func exportPrivateKey(_ json: String?, flutterResult: @escaping FlutterResult) {
+    func exportPrivateKey(_ json: String?, callback: @escaping ParticleCallback) {
         guard let json = json else {
-            flutterResult(FlutterError(code: "", message: "json is nil", details: nil))
+            callback(FlutterError(code: "", message: "json is nil", details: nil))
             return
         }
         
@@ -806,7 +808,7 @@ extension ParticleConnectPlugin {
             let statusModel = FlutterStatusModel(status: false, data: response)
             let data = try! JSONEncoder().encode(statusModel)
             guard let json = String(data: data, encoding: .utf8) else { return }
-            flutterResult(json)
+            callback(json)
             return
         }
         
@@ -816,7 +818,7 @@ extension ParticleConnectPlugin {
             let statusModel = FlutterStatusModel(status: false, data: response)
             let data = try! JSONEncoder().encode(statusModel)
             guard let json = String(data: data, encoding: .utf8) else { return }
-            flutterResult(json)
+            callback(json)
             return
         }
         
@@ -826,18 +828,18 @@ extension ParticleConnectPlugin {
             let statusModel = FlutterStatusModel(status: false, data: response)
             let data = try! JSONEncoder().encode(statusModel)
             guard let json = String(data: data, encoding: .utf8) else { return }
-            flutterResult(json)
+            callback(json)
             
             return
         }
         
         let observable = (adapter as! LocalAdapter).exportWalletPrivateKey(publicAddress: publicAddress)
-        subscribeAndCallback(observable: observable, flutterResult: flutterResult)
+        subscribeAndCallback(observable: observable, callback: callback)
     }
     
-    func login(_ json: String?, flutterResult: @escaping FlutterResult) {
+    func login(_ json: String?, callback: @escaping ParticleCallback) {
         guard let json = json else {
-            flutterResult(FlutterError(code: "", message: "json is nil", details: nil))
+            callback(FlutterError(code: "", message: "json is nil", details: nil))
             return
         }
         
@@ -854,7 +856,7 @@ extension ParticleConnectPlugin {
             let statusModel = FlutterStatusModel(status: false, data: response)
             let data = try! JSONEncoder().encode(statusModel)
             guard let json = String(data: data, encoding: .utf8) else { return }
-            flutterResult(json)
+            callback(json)
             return
         }
         
@@ -864,7 +866,7 @@ extension ParticleConnectPlugin {
             let statusModel = FlutterStatusModel(status: false, data: response)
             let data = try! JSONEncoder().encode(statusModel)
             guard let json = String(data: data, encoding: .utf8) else { return }
-            flutterResult(json)
+            callback(json)
             return
         }
         
@@ -873,12 +875,12 @@ extension ParticleConnectPlugin {
         let observable = adapter.login(config: siwe, publicAddress: publicAddress).map { sourceMessage, signedMessage in
             FlutterConnectLoginResult(message: sourceMessage, signature: signedMessage)
         }
-        subscribeAndCallback(observable: observable, flutterResult: flutterResult)
+        subscribeAndCallback(observable: observable, callback: callback)
     }
     
-    func verify(_ json: String?, flutterResult: @escaping FlutterResult) {
+    func verify(_ json: String?, callback: @escaping ParticleCallback) {
         guard let json = json else {
-            flutterResult(FlutterError(code: "", message: "json is nil", details: nil))
+            callback(FlutterError(code: "", message: "json is nil", details: nil))
             return
         }
         
@@ -897,7 +899,7 @@ extension ParticleConnectPlugin {
             let statusModel = FlutterStatusModel(status: false, data: response)
             let data = try! JSONEncoder().encode(statusModel)
             guard let json = String(data: data, encoding: .utf8) else { return }
-            flutterResult(json)
+            callback(json)
             return
         }
         
@@ -907,19 +909,19 @@ extension ParticleConnectPlugin {
             let statusModel = FlutterStatusModel(status: false, data: response)
             let data = try! JSONEncoder().encode(statusModel)
             guard let json = String(data: data, encoding: .utf8) else { return }
-            flutterResult(json)
+            callback(json)
             return
         }
         
         let siwe = try! SiweMessage(message)
         
         let observable = adapter.verify(message: siwe, against: signature)
-        subscribeAndCallback(observable: observable, flutterResult: flutterResult)
+        subscribeAndCallback(observable: observable, callback: callback)
     }
     
-    func switchEthereumChain(_ json: String?, flutterResult: @escaping FlutterResult) {
+    func switchEthereumChain(_ json: String?, callback: @escaping ParticleCallback) {
         guard let json = json else {
-            flutterResult(FlutterError(code: "", message: "json is nil", details: nil))
+            callback(FlutterError(code: "", message: "json is nil", details: nil))
             return
         }
         
@@ -934,7 +936,7 @@ extension ParticleConnectPlugin {
             let statusModel = FlutterStatusModel(status: false, data: response)
             let data = try! JSONEncoder().encode(statusModel)
             guard let json = String(data: data, encoding: .utf8) else { return }
-            flutterResult(json)
+            callback(json)
             return
         }
         
@@ -944,17 +946,17 @@ extension ParticleConnectPlugin {
             let statusModel = FlutterStatusModel(status: false, data: response)
             let data = try! JSONEncoder().encode(statusModel)
             guard let json = String(data: data, encoding: .utf8) else { return }
-            flutterResult(json)
+            callback(json)
             return
         }
         
         let observable = adapter.switchEthereumChain(publicAddress: publicAddress, chainId: chainId)
-        subscribeAndCallback(observable: observable, flutterResult: flutterResult)
+        subscribeAndCallback(observable: observable, callback: callback)
     }
     
-    func addEthereumChain(_ json: String?, flutterResult: @escaping FlutterResult) {
+    func addEthereumChain(_ json: String?, callback: @escaping ParticleCallback) {
         guard let json = json else {
-            flutterResult(FlutterError(code: "", message: "json is nil", details: nil))
+            callback(FlutterError(code: "", message: "json is nil", details: nil))
             return
         }
         
@@ -969,7 +971,7 @@ extension ParticleConnectPlugin {
             let statusModel = FlutterStatusModel(status: false, data: response)
             let data = try! JSONEncoder().encode(statusModel)
             guard let json = String(data: data, encoding: .utf8) else { return }
-            flutterResult(json)
+            callback(json)
             return
         }
         
@@ -979,17 +981,17 @@ extension ParticleConnectPlugin {
             let statusModel = FlutterStatusModel(status: false, data: response)
             let data = try! JSONEncoder().encode(statusModel)
             guard let json = String(data: data, encoding: .utf8) else { return }
-            flutterResult(json)
+            callback(json)
             return
         }
         
         let observable = adapter.addEthereumChain(publicAddress: publicAddress, chainId: chainId, chainName: nil, nativeCurrency: nil, rpcUrl: nil, blockExplorerUrl: nil)
-        subscribeAndCallback(observable: observable, flutterResult: flutterResult)
+        subscribeAndCallback(observable: observable, callback: callback)
     }
     
-    func walletReadyState(_ json: String?, flutterResult: @escaping FlutterResult) {
+    func walletReadyState(_ json: String?, callback: @escaping ParticleCallback) {
         guard let json = json else {
-            flutterResult(FlutterError(code: "", message: "json is nil", details: nil))
+            callback(FlutterError(code: "", message: "json is nil", details: nil))
             return
         }
         
@@ -1002,7 +1004,7 @@ extension ParticleConnectPlugin {
             let statusModel = FlutterStatusModel(status: false, data: response)
             let data = try! JSONEncoder().encode(statusModel)
             guard let json = String(data: data, encoding: .utf8) else { return }
-            flutterResult(json)
+            callback(json)
             return
         }
         
@@ -1012,7 +1014,7 @@ extension ParticleConnectPlugin {
             let statusModel = FlutterStatusModel(status: false, data: response)
             let data = try! JSONEncoder().encode(statusModel)
             guard let json = String(data: data, encoding: .utf8) else { return }
-            flutterResult(json)
+            callback(json)
             return
         }
         
@@ -1032,7 +1034,7 @@ extension ParticleConnectPlugin {
             str = "undetectable"
         }
         
-        flutterResult(str)
+        callback(str)
     }
     
     func reconnectIfNeeded(_ json: String?) {
@@ -1057,7 +1059,7 @@ extension ParticleConnectPlugin {
         (adapter as? WalletConnectAdapter)?.reconnectIfNeeded(publicAddress: publicAddress)
     }
     
-    func connectWalletConnect(flutterResult: @escaping FlutterResult) {
+    func connectWalletConnect(callback: @escaping ParticleCallback) {
         guard let adapter = map2ConnectAdapter(from: .walletConnect) else {
             print("adapter for walletConnect is not init")
             return
@@ -1065,7 +1067,7 @@ extension ParticleConnectPlugin {
         Task {
             let (uri, observable) = await (adapter as! WalletConnectAdapter).getConnectionUrl()
             
-            subscribeAndCallback(observable: observable, flutterResult: flutterResult)
+            subscribeAndCallback(observable: observable, callback: callback)
             
             self.eventSink?(uri)
         }
@@ -1084,7 +1086,7 @@ extension ParticleConnectPlugin: FlutterStreamHandler {
 }
 
 extension ParticleConnectPlugin {
-    private func subscribeAndCallback<T: Codable>(observable: Single<T>, flutterResult: @escaping FlutterResult) {
+    private func subscribeAndCallback<T: Codable>(observable: Single<T>, callback: @escaping ParticleCallback) {
         observable.subscribe { [weak self] result in
             guard let self = self else { return }
             switch result {
@@ -1093,12 +1095,12 @@ extension ParticleConnectPlugin {
                 let statusModel = FlutterStatusModel(status: false, data: response)
                 let data = try! JSONEncoder().encode(statusModel)
                 guard let json = String(data: data, encoding: .utf8) else { return }
-                flutterResult(json)
+                callback(json)
             case .success(let signedMessage):
                 let statusModel = FlutterStatusModel(status: true, data: signedMessage)
                 let data = try! JSONEncoder().encode(statusModel)
                 guard let json = String(data: data, encoding: .utf8) else { return }
-                flutterResult(json)
+                callback(json)
             }
         }.disposed(by: self.bag)
     }

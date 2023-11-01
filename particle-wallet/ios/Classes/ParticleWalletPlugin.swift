@@ -14,6 +14,8 @@ import ParticleWalletGUI
 import RxSwift
 import SwiftyJSON
 
+public typealias ParticleCallback = FlutterResult
+
 public class ParticleWalletPlugin: NSObject, FlutterPlugin {
     let bag = DisposeBag()
 
@@ -90,7 +92,7 @@ public class ParticleWalletPlugin: NSObject, FlutterPlugin {
         case .navigatorBuyCrypto:
             self.navigatorBuyCrypto(json as? String)
         case .navigatorLoginList:
-            self.navigatorLoginList(flutterResult: result)
+            self.navigatorLoginList(result)
         case .navigatorSwap:
             self.navigatorSwap(json as? String)
         case .navigatorDappBrowser:
@@ -110,8 +112,7 @@ public class ParticleWalletPlugin: NSObject, FlutterPlugin {
         case .getSwapDisabled:
             self.getSwapDisabled(flutterResult: result)
         case .switchWallet:
-            self.switchWallet(json as? String, flutterResult: result)
-
+            self.switchWallet(json as? String, callback: result)
         case .setSupportWalletConnect:
             self.setSupportWalletConnect((json as? Bool) ?? true)
         case .setSupportDappBrowser:
@@ -265,11 +266,11 @@ extension ParticleWalletPlugin {
         PNRouter.navigatorBuy(buyCryptoConfig: buyConfig)
     }
 
-    func navigatorLoginList(flutterResult: @escaping FlutterResult) {
+    func navigatorLoginList(_ callback: @escaping ParticleCallback) {
         subscribeAndCallback(observable: PNRouter.navigatorLoginList().map { walletType, account in
             let loginListModel = FlutterLoginListModel(walletType: walletType.stringValue, account: account)
             return loginListModel
-        }, flutterResult: flutterResult)
+        }, callback: callback)
     }
 
     func navigatorSwap(_ json: String?) {
@@ -334,11 +335,11 @@ extension ParticleWalletPlugin {
         flutterResult(ParticleWalletGUI.getSwapDisabled())
     }
 
-    func switchWallet(_ json: String?, flutterResult: @escaping FlutterResult) {
+    func switchWallet(_ json: String?, callback: @escaping ParticleCallback) {
         guard let json = json else {
-            flutterResult(FlutterError(code: "",
-                                       message: "json is nil",
-                                       details: nil))
+            callback(FlutterError(code: "",
+                                  message: "json is nil",
+                                  details: nil))
             return
         }
 
@@ -349,18 +350,11 @@ extension ParticleWalletPlugin {
         if let walletType = map2WalletType(from: walletTypeString) {
             let result = ParticleWalletGUI.switchWallet(walletType: walletType, publicAddress: publicAddress)
 
-//            let statusModel = FlutterStatusModel(status: true, data: result == true ? "success" : "failed")
-//
-//            let data = try! JSONEncoder().encode(statusModel)
-//            guard let json = String(data: data, encoding: .utf8) else { return }
-            flutterResult(result)
+            callback(result)
         } else {
             print("walletType \(walletTypeString) is not existed")
-//            let response = FlutterResponseError(code: nil, message: "walletType \(walletTypeString) is not existed", data: nil)
-//            let statusModel = FlutterStatusModel(status: false, data: response)
-//            let data = try! JSONEncoder().encode(statusModel)
-//            guard let json = String(data: data, encoding: .utf8) else { return }
-            flutterResult(false)
+
+            callback(false)
         }
     }
 
@@ -554,7 +548,7 @@ extension ParticleWalletPlugin {
 }
 
 extension ParticleWalletPlugin {
-    private func subscribeAndCallback<T: Codable>(observable: Single<T>, flutterResult: @escaping FlutterResult) {
+    private func subscribeAndCallback<T: Codable>(observable: Single<T>, callback: @escaping ParticleCallback) {
         observable.subscribe { [weak self] result in
             guard let self = self else { return }
             switch result {
@@ -563,12 +557,12 @@ extension ParticleWalletPlugin {
                 let statusModel = FlutterStatusModel(status: false, data: response)
                 let data = try! JSONEncoder().encode(statusModel)
                 guard let json = String(data: data, encoding: .utf8) else { return }
-                flutterResult(json)
+                callback(json)
             case .success(let signedMessage):
                 let statusModel = FlutterStatusModel(status: true, data: signedMessage)
                 let data = try! JSONEncoder().encode(statusModel)
                 guard let json = String(data: data, encoding: .utf8) else { return }
-                flutterResult(json)
+                callback(json)
             }
         }.disposed(by: self.bag)
     }

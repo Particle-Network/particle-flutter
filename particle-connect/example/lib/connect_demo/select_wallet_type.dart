@@ -22,7 +22,8 @@ class SelectWalletPageState extends State<SelectWalletPage> {
     WalletType.solanaPrivateKey,
     WalletType.imToken,
     WalletType.phantom,
-    WalletType.zerion
+    WalletType.zerion,
+    WalletType.okx
   ];
 
   @override

@@ -228,7 +228,7 @@ SPEC CHECKSUMS:
   Flutter: f04841e97a9d0b0a8025694d0796dd46242b2854
   libwebp: 1786c9f4ff8a279e4dac1e8f385004d5fc253009
   metamask-ios-sdk: 7a39b6bf9c4d2b6edf35d857a6038c8148c8e704
-  particle_auth: 7df9934788402bd80156fa5f56422d941af0745c
+  particle_auth: f63e17b5dc9b5f7b3ad4d5c13fbfc03d3739b3ab
   particle_connect: 0192191b9fcae5c955c4752920acc5f05deb762a
   ParticleAuthAdapter: f7634024533b8b3060ef8cbac2413efc5953204e
   ParticleAuthService: 670572cd509913c25fc331a5287cf62e148f9529

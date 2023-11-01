@@ -340,7 +340,7 @@ class ParticleConnect {
 
   /// Add ethereum chain, only support metamask
   /// Pass [walletType] and [publicAddress] to decide a wallet.
-  /// [chainId] tell metamask which chain to add.
+  /// [chainInfo] tell metamask which chain to add.
   static Future<String> addEthereumChain(
       WalletType walletType, String publicAddress, ChainInfo chainInfo) async {
     return await _channel.invokeMethod(
@@ -355,7 +355,7 @@ class ParticleConnect {
 
   /// Add ethereum chain, only support metamask
   /// Pass [walletType] and [publicAddress] to decide a wallet.
-  /// [chainId] tell metamask which chain to switch.
+  /// [chainInfo] tell metamask which chain to switch.
   static Future<String> switchEthereumChain(
       WalletType walletType, String publicAddress, ChainInfo chainInfo) async {
     return await _channel.invokeMethod(
