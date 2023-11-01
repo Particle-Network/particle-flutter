@@ -66,7 +66,7 @@ public class ParticleAuthCorePlugin: NSObject, FlutterPlugin {
         case .initialize:
             self.initialize()
         case .switchChain:
-            self.switchChain(json as? String, flutterResult: result)
+            self.switchChain(json as? String, callback: result)
         case .connect:
             self.connect(json as? String, callback: result)
         case .disconnect:
@@ -116,7 +116,7 @@ public extension ParticleAuthCorePlugin {
         ConnectManager.setMoreAdapters([AuthCoreAdapter()])
     }
 
-    func switchChain(_ json: String?, flutterResult: @escaping FlutterResult) {
+    func switchChain(_ json: String?, callback: @escaping ParticleCallback) {
         guard let json = json else {
             return
         }
@@ -124,21 +124,21 @@ public extension ParticleAuthCorePlugin {
 
         let chainId = data["chain_id"].intValue
         guard let chainInfo = ParticleNetwork.searchChainInfo(by: chainId) else {
-            flutterResult(false)
+            callback(false)
             return
         }
 
         Task {
             do {
                 let flag = try await auth.switchChain(chainInfo: chainInfo)
-                flutterResult(flag)
+                callback(flag)
             } catch {
-                flutterResult(false)
+                callback(false)
             }
         }
     }
 
-    func connect(_ json: String?, callback: @escaping FlutterResult) {
+    func connect(_ json: String?, callback: @escaping ParticleCallback) {
         guard let jwt = json else { return }
 
         let observable = Single<String>.fromAsync { [weak self] in
