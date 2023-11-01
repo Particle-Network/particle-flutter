@@ -13,6 +13,8 @@ import ParticleNetworkBase
 import RxSwift
 import SwiftyJSON
 
+public typealias ParticleCallback = FlutterResult
+
 public class ParticleAuthPlugin: NSObject, FlutterPlugin {
     let bag = DisposeBag()
     
@@ -68,35 +70,35 @@ public class ParticleAuthPlugin: NSObject, FlutterPlugin {
         case .initialize:
             self.initialize(json as? String)
         case .setChainInfo:
-            self.setChainInfo(json as? String, flutterResult: result)
+            self.setChainInfo(json as? String, callback: result)
         case .getChainInfo:
-            self.getChainInfo(flutterResult: result)
+            self.getChainInfo(result)
         case .setChainInfoAsync:
-            self.setChainInfoAsync(json as? String, flutterResult: result)
+            self.setChainInfoAsync(json as? String, callback: result)
         case .login:
-            self.login(json as? String, flutterResult: result)
+            self.login(json as? String, callback: result)
         case .logout:
-            self.logout(flutterResult: result)
+            self.logout(result)
         case .isLogin:
-            self.isLogin(flutterResult: result)
+            self.isLogin(result)
         case .isLoginAsync:
-            self.isLoginAsync(flutterResult: result)
+            self.isLoginAsync(result)
         case .signMessage:
-            self.signMessage(json as? String, flutterResult: result)
+            self.signMessage(json as? String, callback: result)
         case .signMessageUnique:
-            self.signMessageUnique(json as? String, flutterResult: result)
+            self.signMessageUnique(json as? String, callback: result)
         case .signTransaction:
-            self.signTransaction(json as? String, flutterResult: result)
+            self.signTransaction(json as? String, callback: result)
         case .signAllTransactions:
-            self.signAllTransactions(json as? String, flutterResult: result)
+            self.signAllTransactions(json as? String, callback: result)
         case .signAndSendTransaction:
-            self.signAndSendTransaction(json as? String, flutterResult: result)
+            self.signAndSendTransaction(json as? String, callback: result)
         case .signTypedData:
-            self.signTypedData(json as? String, flutterResult: result)
+            self.signTypedData(json as? String, callback: result)
         case .getAddress:
-            self.getAddress(flutterResult: result)
+            self.getAddress(result)
         case .getUserInfo:
-            self.getUserInfo(flutterResult: result)
+            self.getUserInfo(result)
         case .setModalPresentStyle:
             self.setModalPresentStyle(json as? String)
         case .setWebAuthConfig:
@@ -110,15 +112,15 @@ public class ParticleAuthPlugin: NSObject, FlutterPlugin {
         case .setSecurityAccountConfig:
             self.setSecurityAccountConfig(json as? String)
         case .openAccountAndSecurity:
-            self.openAccountAndSecurity(flutterResult: result)
+            self.openAccountAndSecurity(result)
         case .setLanguage:
             self.setLanguage(json as? String)
         case .fastLogout:
-            self.fastLogout(flutterResult: result)
+            self.fastLogout(result)
         case .batchSendTransactions:
-            self.batchSendTransactions(json as? String, flutterResult: result)
+            self.batchSendTransactions(json as? String, callback: result)
         case .getSecurityAccount:
-            self.getSecurityAccount(flutterResult: result)
+            self.getSecurityAccount(result)
         case .setAppearance:
             self.setAppearance(json as? String)
         case .setFiatCoin:
@@ -156,7 +158,7 @@ public extension ParticleAuthPlugin {
         ParticleNetwork.initialize(config: config)
     }
     
-    func setChainInfo(_ json: String?, flutterResult: @escaping FlutterResult) {
+    func setChainInfo(_ json: String?, callback: @escaping ParticleCallback) {
         guard let json = json else {
             return
         }
@@ -165,46 +167,46 @@ public extension ParticleAuthPlugin {
         
         let chainId = data["chain_id"].intValue
         guard let chainInfo = ParticleNetwork.searchChainInfo(by: chainId) else {
-            flutterResult(false)
+            callback(false)
             return
         }
         ParticleNetwork.setChainInfo(chainInfo)
-        flutterResult(true)
+        callback(true)
     }
 
-    func setChainInfoAsync(_ json: String?, flutterResult: @escaping FlutterResult) {
+    func setChainInfoAsync(_ json: String?, callback: @escaping ParticleCallback) {
         guard let json = json else {
-            flutterResult(FlutterError(code: "", message: "json is nil", details: nil))
+            callback(FlutterError(code: "", message: "json is nil", details: nil))
             return
         }
         let data = JSON(parseJSON: json)
         
         let chainId = data["chain_id"].intValue
         guard let chainInfo = ParticleNetwork.searchChainInfo(by: chainId) else {
-            flutterResult(FlutterError(code: "", message: "did not find chain info for \(chainId)", details: nil))
+            callback(FlutterError(code: "", message: "did not find chain info for \(chainId)", details: nil))
             return
         }
         ParticleAuthService.switchChain(chainInfo).subscribe { result in
             switch result {
             case .failure:
-                flutterResult(false)
+                callback(false)
             case .success:
-                flutterResult(true)
+                callback(true)
             }
         }.disposed(by: self.bag)
     }
     
-    func getChainInfo(flutterResult: FlutterResult) {
+    func getChainInfo(_ callback: FlutterResult) {
         let chainInfo = ParticleNetwork.getChainInfo()
         
         let jsonString = ["chain_name": chainInfo.name, "chain_id": chainInfo.chainId, "chain_id_name": chainInfo.network].jsonString() ?? ""
         
-        flutterResult(jsonString)
+        callback(jsonString)
     }
     
-    func login(_ json: String?, flutterResult: @escaping FlutterResult) {
+    func login(_ json: String?, callback: @escaping ParticleCallback) {
         guard let json = json else {
-            flutterResult(FlutterError(code: "", message: "json is nil", details: nil))
+            callback(FlutterError(code: "", message: "json is nil", details: nil))
             return
         }
 
@@ -273,34 +275,34 @@ public extension ParticleAuthPlugin {
             return newUserInfo
         }
         
-        subscribeAndCallback(observable: observable, flutterResult: flutterResult)
+        subscribeAndCallback(observable: observable, callback: callback)
     }
     
-    func logout(flutterResult: @escaping FlutterResult) {
-        subscribeAndCallback(observable: ParticleAuthService.logout(), flutterResult: flutterResult)
+    func logout(_ callback: @escaping ParticleCallback) {
+        subscribeAndCallback(observable: ParticleAuthService.logout(), callback: callback)
     }
     
-    func fastLogout(flutterResult: @escaping FlutterResult) {
-        subscribeAndCallback(observable: ParticleAuthService.logout(), flutterResult: flutterResult)
+    func fastLogout(_ callback: @escaping ParticleCallback) {
+        subscribeAndCallback(observable: ParticleAuthService.logout(), callback: callback)
     }
     
-    func isLogin(flutterResult: @escaping FlutterResult) {
-        flutterResult(ParticleAuthService.isLogin())
+    func isLogin(_ callback: @escaping ParticleCallback) {
+        callback(ParticleAuthService.isLogin())
     }
 
-    func isLoginAsync(flutterResult: @escaping FlutterResult) {
+    func isLoginAsync(_ callback: @escaping ParticleCallback) {
         let observable = ParticleAuthService.isLoginAsync().map { userInfo in
             let userInfoJsonString = userInfo.jsonStringFullSnake()
             let newUserInfo = JSON(parseJSON: userInfoJsonString)
             return newUserInfo
         }
         
-        subscribeAndCallback(observable: observable, flutterResult: flutterResult)
+        subscribeAndCallback(observable: observable, callback: callback)
     }
     
-    func signMessage(_ json: String?, flutterResult: @escaping FlutterResult) {
+    func signMessage(_ json: String?, callback: @escaping ParticleCallback) {
         guard let message = json else {
-            flutterResult(FlutterError(code: "", message: "json is nil", details: nil))
+            callback(FlutterError(code: "", message: "json is nil", details: nil))
             return
         }
         
@@ -312,12 +314,12 @@ public extension ParticleAuthPlugin {
             serializedMessage = message
         }
         
-        subscribeAndCallback(observable: ParticleAuthService.signMessage(serializedMessage), flutterResult: flutterResult)
+        subscribeAndCallback(observable: ParticleAuthService.signMessage(serializedMessage), callback: callback)
     }
     
-    func signMessageUnique(_ json: String?, flutterResult: @escaping FlutterResult) {
+    func signMessageUnique(_ json: String?, callback: @escaping ParticleCallback) {
         guard let message = json else {
-            flutterResult(FlutterError(code: "", message: "json is nil", details: nil))
+            callback(FlutterError(code: "", message: "json is nil", details: nil))
             return
         }
         
@@ -328,31 +330,31 @@ public extension ParticleAuthPlugin {
         default:
             serializedMessage = message
         }
-        subscribeAndCallback(observable: ParticleAuthService.signMessageUnique(serializedMessage), flutterResult: flutterResult)
+        subscribeAndCallback(observable: ParticleAuthService.signMessageUnique(serializedMessage), callback: callback)
     }
     
-    func signTransaction(_ json: String?, flutterResult: @escaping FlutterResult) {
+    func signTransaction(_ json: String?, callback: @escaping ParticleCallback) {
         guard let transaction = json else {
-            flutterResult(FlutterError(code: "", message: "json is nil", details: nil))
+            callback(FlutterError(code: "", message: "json is nil", details: nil))
             return
         }
-        subscribeAndCallback(observable: ParticleAuthService.signTransaction(transaction), flutterResult: flutterResult)
+        subscribeAndCallback(observable: ParticleAuthService.signTransaction(transaction), callback: callback)
     }
     
-    func signAllTransactions(_ json: String?, flutterResult: @escaping FlutterResult) {
+    func signAllTransactions(_ json: String?, callback: @escaping ParticleCallback) {
         guard let json = json else {
-            flutterResult(FlutterError(code: "", message: "json is nil", details: nil))
+            callback(FlutterError(code: "", message: "json is nil", details: nil))
             return
         }
         
         let transactions = JSON(parseJSON: json).arrayValue.map { $0.stringValue }
         
-        self.subscribeAndCallback(observable: ParticleAuthService.signAllTransactions(transactions), flutterResult: flutterResult)
+        self.subscribeAndCallback(observable: ParticleAuthService.signAllTransactions(transactions), callback: callback)
     }
     
-    func signAndSendTransaction(_ json: String?, flutterResult: @escaping FlutterResult) {
+    func signAndSendTransaction(_ json: String?, callback: @escaping ParticleCallback) {
         guard let json = json else {
-            flutterResult(FlutterError(code: "", message: "json is nil", details: nil))
+            callback(FlutterError(code: "", message: "json is nil", details: nil))
             return
         }
         
@@ -383,12 +385,12 @@ public extension ParticleAuthPlugin {
             sendObservable = ParticleAuthService.signAndSendTransaction(transaction, feeMode: feeMode)
         }
         
-        subscribeAndCallback(observable: sendObservable, flutterResult: flutterResult)
+        subscribeAndCallback(observable: sendObservable, callback: callback)
     }
     
-    func batchSendTransactions(_ json: String?, flutterResult: @escaping FlutterResult) {
+    func batchSendTransactions(_ json: String?, callback: @escaping ParticleCallback) {
         guard let json = json else {
-            flutterResult(FlutterError(code: "", message: "json is nil", details: nil))
+            callback(FlutterError(code: "", message: "json is nil", details: nil))
             return
         }
         
@@ -414,22 +416,22 @@ public extension ParticleAuthPlugin {
         let wholeFeeQuote = try? JSONDecoder().decode(AA.WholeFeeQuote.self, from: wholeFeeQuoteData)
         
         guard let aaService = ParticleNetwork.getAAService() else {
-            flutterResult(FlutterError(code: "", message: "aa service is not init", details: nil))
+            callback(FlutterError(code: "", message: "aa service is not init", details: nil))
             return
         }
         
         guard aaService.isAAModeEnable() else {
-            flutterResult(FlutterError(code: "", message: "aa service is not enable", details: nil))
+            callback(FlutterError(code: "", message: "aa service is not enable", details: nil))
             return
         }
         let sendObservable: Single<String> = aaService.quickSendTransactions(transactions, feeMode: feeMode, messageSigner: self, wholeFeeQuote: wholeFeeQuote)
         
-        subscribeAndCallback(observable: sendObservable, flutterResult: flutterResult)
+        subscribeAndCallback(observable: sendObservable, callback: callback)
     }
     
-    func signTypedData(_ json: String?, flutterResult: @escaping FlutterResult) {
+    func signTypedData(_ json: String?, callback: @escaping ParticleCallback) {
         guard let json = json else {
-            flutterResult(FlutterError(code: "", message: "json is nil", details: nil))
+            callback(FlutterError(code: "", message: "json is nil", details: nil))
             return
         }
         
@@ -447,20 +449,20 @@ public extension ParticleAuthPlugin {
             signTypedDataVersion = .v4Unique
         }
         guard let signTypedDataVersion = signTypedDataVersion else {
-            flutterResult(FlutterError(code: "", message: "version is wrong", details: nil))
+            callback(FlutterError(code: "", message: "version is wrong", details: nil))
             return
         }
        
-        subscribeAndCallback(observable: ParticleAuthService.signTypedData(message, version: signTypedDataVersion), flutterResult: flutterResult)
+        subscribeAndCallback(observable: ParticleAuthService.signTypedData(message, version: signTypedDataVersion), callback: callback)
     }
     
-    func getAddress(flutterResult: @escaping FlutterResult) {
-        flutterResult(ParticleAuthService.getAddress())
+    func getAddress(_ callback: @escaping ParticleCallback) {
+        callback(ParticleAuthService.getAddress())
     }
     
-    func getUserInfo(flutterResult: @escaping FlutterResult) {
+    func getUserInfo(_ callback: @escaping ParticleCallback) {
         guard let userInfo = ParticleAuthService.getUserInfo() else {
-            flutterResult(FlutterError(code: "", message: "user is not login", details: nil))
+            callback(FlutterError(code: "", message: "user is not login", details: nil))
             return
         }
         
@@ -469,7 +471,7 @@ public extension ParticleAuthPlugin {
         
         let data = try! JSONEncoder().encode(newUserInfo)
         let json = String(data: data, encoding: .utf8)
-        flutterResult(json ?? "")
+        callback(json ?? "")
     }
     
     func setModalPresentStyle(_ json: String?) {
@@ -548,10 +550,10 @@ public extension ParticleAuthPlugin {
         ParticleNetwork.setSecurityAccountConfig(config: .init(promptSettingWhenSign: promptSettingWhenSign, promptMasterPasswordSettingWhenLogin: promptMasterPasswordSettingWhenLogin))
     }
     
-    func openAccountAndSecurity(flutterResult: @escaping FlutterResult) {
+    func openAccountAndSecurity(_ callback: @escaping ParticleCallback) {
         subscribeAndCallback(observable: ParticleAuthService.openAccountAndSecurity().map {
             ""
-        }, flutterResult: flutterResult)
+        }, callback: callback)
     }
     
     func setLanguage(_ json: String?) {
@@ -606,7 +608,7 @@ public extension ParticleAuthPlugin {
         }
     }
     
-    func getSecurityAccount(flutterResult: @escaping FlutterResult) {
+    func getSecurityAccount(_ callback: @escaping ParticleCallback) {
         subscribeAndCallback(observable: ParticleAuthService.getSecurityAccount().map { securityAccountInfo in
             let dict = ["phone": securityAccountInfo.phone,
                         "email": securityAccountInfo.email,
@@ -615,12 +617,12 @@ public extension ParticleAuthPlugin {
             
             let json = JSON(dict)
             return json
-        }, flutterResult: flutterResult)
+        }, callback: callback)
     }
 }
 
 extension ParticleAuthPlugin {
-    private func subscribeAndCallback<T: Codable>(observable: Single<T>, flutterResult: @escaping FlutterResult) {
+    private func subscribeAndCallback<T: Codable>(observable: Single<T>, callback: @escaping ParticleCallback) {
         observable.subscribe { [weak self] result in
             guard let self = self else { return }
             switch result {
@@ -629,12 +631,12 @@ extension ParticleAuthPlugin {
                 let statusModel = FlutterStatusModel(status: false, data: response)
                 let data = try! JSONEncoder().encode(statusModel)
                 guard let json = String(data: data, encoding: .utf8) else { return }
-                flutterResult(json)
+                callback(json)
             case .success(let signedMessage):
                 let statusModel = FlutterStatusModel(status: true, data: signedMessage)
                 let data = try! JSONEncoder().encode(statusModel)
                 guard let json = String(data: data, encoding: .utf8) else { return }
-                flutterResult(json)
+                callback(json)
             }
         }.disposed(by: self.bag)
     }
