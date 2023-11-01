@@ -1,4 +1,4 @@
-package network.particle.biconomy_flutter.bridge.module
+package network.particle.aa_flutter.bridge.module
 
 import android.app.Activity
 import androidx.annotation.Keep
@@ -6,20 +6,21 @@ import com.blankj.utilcode.util.GsonUtils
 import com.blankj.utilcode.util.LogUtils
 import com.particle.base.ParticleNetwork
 import com.particle.base.isSupportedERC4337
-import com.particle.erc4337.ParticleNetworkBiconomy.initBiconomyMode
-import com.particle.erc4337.biconomy.BiconomyService
+import com.particle.erc4337.ParticleNetworkAA.initAAMode
+import com.particle.erc4337.aa.AAService
 
 import io.flutter.plugin.common.MethodChannel
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import network.particle.aa_flutter.bridge.model.BiconomyInitData
+import network.particle.aa_flutter.bridge.model.FeeQuotesParams
 import network.particle.auth_flutter.bridge.model.ChainData
 import network.particle.auth_flutter.bridge.model.FlutterCallBack
 import network.particle.auth_flutter.bridge.utils.ChainUtils
-import network.particle.biconomy_flutter.bridge.model.*
 
 @Keep
-object BiconomyBridge {
+object AABridge {
     ///////////////////////////////////////////////////////////////////////////
     //////////////////////////// AUTH //////////////////////////////////////////
     ///////////////////////////////////////////////////////////////////////////
@@ -33,8 +34,8 @@ object BiconomyBridge {
     fun init(activity: Activity, initParams: String?) {
         LogUtils.d("init", initParams)
         val initData = GsonUtils.fromJson(initParams, BiconomyInitData::class.java)
-        ParticleNetwork.initBiconomyMode(initData.dAppKeys)
-        ParticleNetwork.setBiconomyService(BiconomyService)
+        ParticleNetwork.initAAMode(initData.dAppKeys)
+        ParticleNetwork.setAAService(AAService)
     }
 
     fun isSupportChainInfo(chainParams: String, result: MethodChannel.Result) {
@@ -56,7 +57,7 @@ object BiconomyBridge {
     fun isDeploy(eoaAddress: String, result: MethodChannel.Result) {
         CoroutineScope(Dispatchers.IO).launch {
             try {
-                val isDeploy = ParticleNetwork.getBiconomyService().isDeploy(eoaAddress)
+                val isDeploy = ParticleNetwork.getAAService().isDeploy(eoaAddress)
                 result.success(FlutterCallBack.success(isDeploy).toGson())
             } catch (e: Exception) {
                 result.success(FlutterCallBack.failed(e.message ?: "failed").toGson())
@@ -66,7 +67,7 @@ object BiconomyBridge {
 
     fun isBiconomyModeEnable(result: MethodChannel.Result) {
         try {
-            val isBiconomyModeEnable = ParticleNetwork.getBiconomyService().isBiconomyModeEnable()
+            val isBiconomyModeEnable = ParticleNetwork.getAAService().isAAModeEnable()
             result.success(isBiconomyModeEnable)
         } catch (e: Exception) {
             result.success(false)
@@ -74,11 +75,11 @@ object BiconomyBridge {
     }
 
     fun enableBiconomyMode() {
-        ParticleNetwork.getBiconomyService().enableBiconomyMode()
+        ParticleNetwork.getAAService().enableAAMode()
     }
 
     fun disableBiconomyMode() {
-        ParticleNetwork.getBiconomyService().disableBiconomyMode()
+        ParticleNetwork.getAAService().disableAAMode()
     }
 
     fun rpcGetFeeQuotes(feeQuotesParams: String, result: MethodChannel.Result) {
@@ -86,7 +87,7 @@ object BiconomyBridge {
         val feeQuotesParams = GsonUtils.fromJson(feeQuotesParams, FeeQuotesParams::class.java)
         CoroutineScope(Dispatchers.IO).launch {
             try {
-                val resp = ParticleNetwork.getBiconomyService().rpcGetFeeQuotes(feeQuotesParams.eoaAddress, feeQuotesParams.transactions)
+                val resp = ParticleNetwork.getAAService().rpcGetFeeQuotes(feeQuotesParams.eoaAddress, feeQuotesParams.transactions)
                 LogUtils.d("rpcGetFeeQuotes", resp)
                 if (resp.isSuccess()) {
                     result.success(FlutterCallBack.success(resp.result).toGson())

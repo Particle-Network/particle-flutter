@@ -16,11 +16,11 @@ import com.particle.base.ParticleNetwork
 import com.particle.base.data.ErrorInfo
 import com.particle.base.data.SignOutput
 import com.particle.base.data.WebServiceCallback
-import com.particle.base.ibiconomy.FeeMode
-import com.particle.base.ibiconomy.FeeModeGasless
-import com.particle.base.ibiconomy.FeeModeNative
-import com.particle.base.ibiconomy.FeeModeToken
-import com.particle.base.ibiconomy.MessageSigner
+import com.particle.base.iaa.FeeMode
+import com.particle.base.iaa.FeeModeGasless
+import com.particle.base.iaa.FeeModeNative
+import com.particle.base.iaa.FeeModeToken
+import com.particle.base.iaa.MessageSigner
 import com.particle.base.model.ChainType
 import com.particle.base.model.LoginType
 import com.particle.base.model.MobileWCWallet
@@ -298,9 +298,9 @@ object ConnectBridge {
             return
         }
 
-        if (ParticleNetwork.isBiconomyModeEnable()) {
+        if (ParticleNetwork.isAAModeEnable()) {
             var feeMode: FeeMode = FeeModeNative()
-            if (transParams.feeMode != null) {
+            if (transParams.feeMode != null ) {
                 val option = transParams.feeMode.option
                 if (option == "token") {
                     val tokenPaymasterAddress = transParams.feeMode.tokenPaymasterAddress
@@ -765,7 +765,7 @@ object ConnectBridge {
         }
         CoroutineScope(Dispatchers.IO).launch {
             try {
-                ParticleNetwork.getBiconomyService()
+                ParticleNetwork.getAAService()
                     .quickSendTransaction(
                         transParams.transactions,
                         feeMode,

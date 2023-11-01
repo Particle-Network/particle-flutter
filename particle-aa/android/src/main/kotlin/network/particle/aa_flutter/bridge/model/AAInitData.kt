@@ -1,4 +1,4 @@
-package network.particle.biconomy_flutter.bridge.model
+package network.particle.aa_flutter.bridge.model
 
 import androidx.annotation.Keep
 import com.google.gson.annotations.SerializedName

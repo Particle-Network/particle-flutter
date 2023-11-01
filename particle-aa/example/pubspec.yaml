@@ -28,13 +28,13 @@ dependencies:
     path: ../
 
 
-  # particle_connect: ^1.0.7
-  # particle_auth: ^1.0.7
+  particle_connect: ^1.2.0
+  particle_auth: ^1.2.0
 
-  particle_connect:
-    path: ../../particle-connect/
-  particle_auth: 
-    path: ../../particle-auth/
+#  particle_connect:
+#    path: ../../particle-connect/
+#  particle_auth:
+#    path: ../../particle-auth/
 
   
   #^0.13.7

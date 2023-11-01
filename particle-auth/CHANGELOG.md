@@ -1,5 +1,6 @@
+## 1.2.0
+Update ChainInfo
 ## 1.0.7
-
 Update ChainInfo
 
 ## 1.0.6

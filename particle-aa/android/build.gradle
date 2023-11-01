@@ -1,4 +1,4 @@
-group 'network.particle.biconomy_plugin.particle_biconomy'
+group 'network.particle.aa_plugin.particle_biconomy'
 version '1.0-SNAPSHOT'
 
 buildscript {
@@ -50,8 +50,8 @@ android {
 
 dependencies {
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
-    def sdkVersion = "1.0.1"
-    implementation("network.particle:biconomy-service:$sdkVersion")
+    def sdkVersion = "1.2.2"
+    implementation("network.particle:aa-service:$sdkVersion")
     implementation("com.blankj:utilcodex:1.31.0")
     implementation("commons-codec:commons-codec:1.15")
     implementation("com.google.code.gson:gson:2.8.5")

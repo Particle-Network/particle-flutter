@@ -8,7 +8,7 @@ import io.flutter.embedding.engine.plugins.activity.ActivityPluginBinding
 import io.flutter.plugin.common.MethodCall
 import io.flutter.plugin.common.MethodChannel
 import io.flutter.plugin.common.MethodChannel.MethodCallHandler
-import network.particle.aa_flutter.bridge.module.BiconomyBridge
+import network.particle.aa_flutter.bridge.module.AABridge
 
 /** ParticleAuthPlugin */
 class ParticleAAPlugin : FlutterPlugin, MethodCallHandler, ActivityAware {
@@ -37,32 +37,33 @@ class ParticleAAPlugin : FlutterPlugin, MethodCallHandler, ActivityAware {
     override fun onMethodCall(call: MethodCall, result: MethodChannel.Result) {
         when (call.method) {
             "init" -> {
-                BiconomyBridge.init(activity!!, call.arguments as String)
+                AABridge.init(activity!!, call.arguments as String)
             }
 
             "isSupportChainInfo" -> {
-                BiconomyBridge.isSupportChainInfo(call.arguments as String, result)
+                AABridge.isSupportChainInfo(call.arguments as String, result)
             }
 
             "isDeploy" -> {
-                BiconomyBridge.isDeploy(call.arguments as String, result)
+                AABridge.isDeploy(call.arguments as String, result)
             }
 
-            "isBiconomyModeEnable" -> {
-                BiconomyBridge.isBiconomyModeEnable(result)
+            "isAAModeEnable" -> {
+                AABridge.isBiconomyModeEnable(result)
             }
 
-            "enableBiconomyMode" -> {
-                BiconomyBridge.enableBiconomyMode()
+            "enableAAMode" -> {
+                AABridge.enableBiconomyMode()
             }
 
-            "disableBiconomyMode" -> {
-                BiconomyBridge.disableBiconomyMode()
+            "disableAAMode" -> {
+                AABridge.disableBiconomyMode()
             }
 
             "rpcGetFeeQuotes" -> {
-                BiconomyBridge.rpcGetFeeQuotes(call.arguments as String, result)
+                AABridge.rpcGetFeeQuotes(call.arguments as String, result)
             }
+
 
 
             else -> result.notImplemented()

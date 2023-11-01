@@ -33,8 +33,7 @@ class AAAuthLogic {
   }
 
   static void isSupportChainInfo() async {
-    var result =
-        await ParticleAA.isSupportChainInfo(ChainInfo.ArbitrumOne);
+    var result = await ParticleAA.isSupportChainInfo(ChainInfo.ArbitrumOne);
     print(result);
     showToast("isSupportChainInfo: $result");
   }
@@ -72,10 +71,9 @@ class AAAuthLogic {
   static void rpcGetFeeQuotes() async {
     final publicAddress = await ParticleAuth.getAddress();
     final transaction = await TransactionMock.mockEvmSendNative(publicAddress);
-
+    print("transaction" + transaction);
     List<String> transactions = <String>[transaction];
-    var result =
-        await ParticleAA.rpcGetFeeQuotes(publicAddress, transactions);
+    var result = await ParticleAA.rpcGetFeeQuotes(publicAddress, transactions);
     showToast("rpcGetFeeQuotes: $result");
   }
 
@@ -84,8 +82,7 @@ class AAAuthLogic {
     final transaction = await TransactionMock.mockEvmSendNative(publicAddress);
 
     // check if enough native for gas fee
-    var result =
-        await ParticleAA.rpcGetFeeQuotes(publicAddress, [transaction]);
+    var result = await ParticleAA.rpcGetFeeQuotes(publicAddress, [transaction]);
     var verifyingPaymasterNative = result["verifyingPaymasterNative"];
     var feeQuote = verifyingPaymasterNative["feeQuote"];
     var fee = BigInt.parse(feeQuote["fee"], radix: 10);
@@ -108,8 +105,7 @@ class AAAuthLogic {
     final transaction = await TransactionMock.mockEvmSendNative(publicAddress);
 
     // check if gasless available
-    var result =
-        await ParticleAA.rpcGetFeeQuotes(publicAddress, [transaction]);
+    var result = await ParticleAA.rpcGetFeeQuotes(publicAddress, [transaction]);
     var verifyingPaymasterGasless = result["verifyingPaymasterGasless"];
     if (verifyingPaymasterGasless == null) {
       print("gasless is not available");
@@ -129,8 +125,7 @@ class AAAuthLogic {
 
     List<String> transactions = <String>[transaction];
 
-    var result =
-        await ParticleAA.rpcGetFeeQuotes(publicAddress, transactions);
+    var result = await ParticleAA.rpcGetFeeQuotes(publicAddress, transactions);
     print("rpcGetFeeQuotes result $result");
     List<dynamic> feeQuotes = result["tokenPaymaster"]["feeQuotes"];
 
@@ -170,8 +165,7 @@ class AAAuthLogic {
     List<String> transactions = <String>[transaction, transaction];
 
     // check if enough native for gas fee
-    var result =
-        await ParticleAA.rpcGetFeeQuotes(publicAddress, transactions);
+    var result = await ParticleAA.rpcGetFeeQuotes(publicAddress, transactions);
     var verifyingPaymasterNative = result["verifyingPaymasterNative"];
     var feeQuote = verifyingPaymasterNative["feeQuote"];
     var fee = BigInt.parse(feeQuote["fee"], radix: 10);

@@ -1,7 +1,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="network.particle.biconomy_plugin.particle_biconomy_example">
+    package="network.particle.aa_plugin.particle_aa_example">
    <application
-        android:label="particle_biconomy_example"
+        android:label="particle_aa_example"
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher">
         <activity

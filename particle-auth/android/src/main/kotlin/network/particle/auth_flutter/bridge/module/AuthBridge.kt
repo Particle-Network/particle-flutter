@@ -17,11 +17,11 @@ import com.particle.base.data.ErrorInfo
 import com.particle.base.data.SignOutput
 import com.particle.base.data.WebOutput
 import com.particle.base.data.WebServiceCallback
-import com.particle.base.ibiconomy.FeeMode
-import com.particle.base.ibiconomy.FeeModeGasless
-import com.particle.base.ibiconomy.FeeModeNative
-import com.particle.base.ibiconomy.FeeModeToken
-import com.particle.base.ibiconomy.MessageSigner
+import com.particle.base.iaa.FeeMode
+import com.particle.base.iaa.FeeModeGasless
+import com.particle.base.iaa.FeeModeNative
+import com.particle.base.iaa.FeeModeToken
+import com.particle.base.iaa.MessageSigner
 import com.particle.base.model.LoginType
 import com.particle.base.model.ResultCallback
 import com.particle.base.model.SecurityAccountConfig
@@ -221,23 +221,28 @@ object AuthBridge {
         val transParams =
             GsonUtils.fromJson<TransactionsParams>(transactions, TransactionsParams::class.java)
         var feeMode: FeeMode = FeeModeNative()
-        if (transParams.feeMode != null) {
-            val option = transParams.feeMode.option
-            if (option == "token") {
-                val tokenPaymasterAddress = transParams.feeMode.tokenPaymasterAddress
-                val feeQuote = transParams.feeMode.feeQuote!!
-                feeMode = FeeModeToken(feeQuote,tokenPaymasterAddress!!)
-            } else if (option == "gasless") {
-                val verifyingPaymasterGasless = transParams.feeMode.wholeFeeQuote.verifyingPaymasterGasless
-                feeMode = FeeModeGasless(verifyingPaymasterGasless)
-            } else if(option == "native"){
-                val verifyingPaymasterNative = transParams.feeMode.wholeFeeQuote.verifyingPaymasterNative
-                feeMode = FeeModeNative(verifyingPaymasterNative)
+        if (transParams.feeMode != null && ParticleNetwork.isAAModeEnable()) {
+            when (transParams.feeMode.option) {
+                "token" -> {
+                    val tokenPaymasterAddress = transParams.feeMode.tokenPaymasterAddress
+                    val feeQuote = transParams.feeMode.feeQuote!!
+                    feeMode = FeeModeToken(feeQuote, tokenPaymasterAddress!!)
+                }
+                "gasless" -> {
+                    val verifyingPaymasterGasless =
+                        transParams.feeMode.wholeFeeQuote.verifyingPaymasterGasless
+                    feeMode = FeeModeGasless(verifyingPaymasterGasless)
+                }
+                "native" -> {
+                    val verifyingPaymasterNative =
+                        transParams.feeMode.wholeFeeQuote.verifyingPaymasterNative
+                    feeMode = FeeModeNative(verifyingPaymasterNative)
+                }
             }
         }
         CoroutineScope(Dispatchers.IO).launch {
             try {
-                ParticleNetwork.getBiconomyService().quickSendTransaction(
+                ParticleNetwork.getAAService().quickSendTransaction(
                     transParams.transactions,
                     feeMode,
                     object : MessageSigner {
@@ -290,12 +295,14 @@ object AuthBridge {
             if (option == "token") {
                 val tokenPaymasterAddress = transParams.feeMode.tokenPaymasterAddress
                 val feeQuote = transParams.feeMode.feeQuote!!
-                feeMode = FeeModeToken(feeQuote,tokenPaymasterAddress!!)
+                feeMode = FeeModeToken(feeQuote, tokenPaymasterAddress!!)
             } else if (option == "gasless") {
-                val verifyingPaymasterGasless = transParams.feeMode.wholeFeeQuote.verifyingPaymasterGasless
+                val verifyingPaymasterGasless =
+                    transParams.feeMode.wholeFeeQuote.verifyingPaymasterGasless
                 feeMode = FeeModeGasless(verifyingPaymasterGasless)
-            } else if(option == "native"){
-                val verifyingPaymasterNative = transParams.feeMode.wholeFeeQuote.verifyingPaymasterNative
+            } else if (option == "native") {
+                val verifyingPaymasterNative =
+                    transParams.feeMode.wholeFeeQuote.verifyingPaymasterNative
                 feeMode = FeeModeNative(verifyingPaymasterNative)
             }
         }

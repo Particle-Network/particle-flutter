@@ -1,4 +1,4 @@
-package network.particle.biconomy_plugin.particle_biconomy_example
+package network.particle.aa_plugin.particle_aa_example
 
 import io.flutter.embedding.android.FlutterActivity
 

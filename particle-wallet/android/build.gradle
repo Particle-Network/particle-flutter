@@ -96,7 +96,7 @@ android {
 
 dependencies {
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
-    def sdkVersion = "1.0.1"
+    def sdkVersion = "1.2.2"
     implementation("network.particle:auth-service:$sdkVersion")
     implementation("network.particle:api-service:$sdkVersion")
     implementation("network.particle:wallet-service:$sdkVersion"){

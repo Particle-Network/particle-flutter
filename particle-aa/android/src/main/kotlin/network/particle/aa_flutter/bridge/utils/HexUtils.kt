@@ -1,4 +1,4 @@
-package network.particle.biconomy_flutter.bridge.utils
+package network.particle.aa_flutter.bridge.utils
 
 import org.apache.commons.codec.DecoderException
 import org.apache.commons.codec.binary.Hex
