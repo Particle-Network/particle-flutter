@@ -31,4 +31,8 @@ class Account {
         "chainId": chainId,
         "walletType": walletType,
       };
+  @override
+  String toString() {
+    return 'UserInfo(publicAddress: $publicAddress, name: $name, url: $url, icons: $icons, description: $description, mnemonic: $mnemonic, chainId: $chainId, walletType: $walletType';
+  }
 }

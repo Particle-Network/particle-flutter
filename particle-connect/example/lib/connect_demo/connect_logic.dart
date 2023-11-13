@@ -1,4 +1,3 @@
-
 import 'package:oktoast/oktoast.dart';
 import 'package:particle_auth/particle_auth.dart';
 import 'package:particle_connect/particle_connect.dart';
@@ -233,10 +232,15 @@ class ConnectLogic {
     ''';
 
     String typedDataHex = "0x${StringUtils.toHexString(typedData)}";
-    String result = await ParticleConnect.signTypedData(
-        walletType, getPublicAddress(), typedDataHex);
-    print("signTypedData: $result");
-    showToast("signTypedData: $result");
+    try {
+      String signature = await ParticleConnect.signTypedData(
+          walletType, getPublicAddress(), typedDataHex);
+      print("signTypedData: $signature");
+      showToast("signTypedData: $signature");
+    } catch (error) {
+      print("signTypedData: $error");
+      showToast("signTypedData: $error");
+    }
   }
 
   static void importPrivateKey() async {

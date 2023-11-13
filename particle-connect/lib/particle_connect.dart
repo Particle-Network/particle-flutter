@@ -154,14 +154,8 @@ class ParticleConnect {
           "public_address": publicAddress,
         }));
 
-    if (jsonDecode(result)["status"] == true ||
-        jsonDecode(result)["status"] == 1) {
-      final isConnected = jsonDecode(result)["data"] as bool;
-      return isConnected;
-    } else {
-      final error = RpcError.fromJson(jsonDecode(result)["data"]);
-      return Future.error(error);
-    }
+    final isConnected = result as bool;
+    return isConnected;
   }
 
   /// Get accounts from specify wallet type.
