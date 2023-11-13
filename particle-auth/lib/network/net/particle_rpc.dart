@@ -1,6 +1,8 @@
 import 'dart:convert';
 import 'dart:math';
 
+import 'package:dio/dio.dart';
+import 'package:particle_auth/network/net/response.dart';
 import 'package:particle_auth/network/net/rest_client.dart';
 import 'package:particle_auth/particle_auth.dart';
 import 'package:uuid/uuid.dart';
@@ -13,14 +15,20 @@ class RpcOutput<T> {
 }
 
 class EvmService {
-  static Future<String> rpc(String method, List<dynamic> params) async {
+  static Future<dynamic> rpc(String method, List<dynamic> params) async {
     final req = RequestBodyEntity();
     req.chainId = await ParticleAuth.getChainId();
     req.jsonrpc = "2.0";
     req.id = const Uuid().v4();
     req.method = method;
     req.params = params;
-    return await EvmRpcApi.getClient().rpc(req);
+    final result = await EvmRpcApi.getClient().rpc(req);
+    RpcResponse response = RpcResponse.fromJson(jsonDecode(result));
+    if (response.error != null) {
+      return Future.error(response.error!);
+    } else {
+      return response.result;
+    }
   }
 
   /// Request data when send erc20 token.
@@ -147,7 +155,7 @@ class EvmService {
 
   /// Get suggesst fee
   /// return value unit is GWEI
-  static Future<String> suggestedGasFees() async {
+  static Future<dynamic> suggestedGasFees() async {
     const method = "particle_suggestedGasFees";
     final params = [];
     return await EvmService.rpc(method, params);
@@ -173,8 +181,8 @@ class EvmService {
 
   /// Get tokens and nfts
   ///
-  /// [address] is user public address
-  static Future<String> getTokensAndNFTs(String address) async {
+  /// [address] is user's public address
+  static Future<dynamic> getTokensAndNFTs(String address) async {
     const method = "particle_getTokensAndNFTs";
     final params = [address];
     return await EvmService.rpc(method, params);
@@ -182,8 +190,8 @@ class EvmService {
 
   /// Get tokens
   ///
-  /// [address] is user public address
-  static Future<String> getTokens(String address) async {
+  /// [address] is user's public address
+  static Future<dynamic> getTokens(String address) async {
     const method = "particle_getTokens";
     final params = [address];
     return await EvmService.rpc(method, params);
@@ -191,8 +199,8 @@ class EvmService {
 
   /// Get nfts
   ///
-  /// [address] is user public address
-  static Future<String> getNFTs(String address) async {
+  /// [address] is user's public address
+  static Future<dynamic> getNFTs(String address) async {
     const method = "particle_getNFTs";
     final params = [address];
     return await EvmService.rpc(method, params);
@@ -200,10 +208,10 @@ class EvmService {
 
   /// Get token by token addresses
   ///
-  /// [address] is user public address
+  /// [address] is user's public address
   ///
   /// [tokenAddresses] is a token address list
-  static Future<String> getTokenByTokenAddresses(
+  static Future<dynamic> getTokenByTokenAddresses(
       String address, List<String> tokenAddresses) async {
     const method = "particle_getTokensByTokenAddresses";
     final params = [address, tokenAddresses];
@@ -212,8 +220,8 @@ class EvmService {
 
   /// Get transacions
   ///
-  /// [address] is user public address
-  static Future<String> getTransactionsByAddress(String address) async {
+  /// [address] is user's public address
+  static Future<dynamic> getTransactionsByAddress(String address) async {
     const method = "particle_getTransactionsByAddress";
     final params = [address];
     return await EvmService.rpc(method, params);
@@ -224,7 +232,7 @@ class EvmService {
   /// [tokenAddresses] is a token address list, for native token, pass "native"
   ///
   /// [currencies] is currency array, like ["usd", "cny"]
-  static Future<String> getPrice(
+  static Future<dynamic> getPrice(
       List<String> tokenAddresses, List<String> currencies) async {
     const method = "particle_getPrice";
     final params = [tokenAddresses, currencies];
@@ -236,7 +244,7 @@ class EvmService {
   /// [eoaAddresses] Eoa address list
   ///
   /// return json object
-  static Future<String> getSmartAccount(List<String> eoaAddresses) async {
+  static Future<dynamic> getSmartAccount(List<String> eoaAddresses) async {
     const method = "particle_aa_getSmartAccount";
     final params = [eoaAddresses];
     return await EvmService.rpc(method, params);
@@ -253,12 +261,11 @@ class EvmService {
   /// [parameters] is parameters required by the method
   ///
   /// [abiJsonString] is abi json string, such as "[{\"inputs\":[{\"internalType\":\"uint256\",\"name\":\"quantity\",\"type\":\"uint256\"},{\"internalType\":\"uint256\",\"name\":\"amount\",\"type\":\"uint256\"}],\"name\":\"mint\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"}]"
-  static Future<String> readContract(String address, String contractAddress,
+  static Future<dynamic> readContract(String address, String contractAddress,
       String methodName, List<Object> parameters, String abiJsonString) async {
-    final customMethodCall = await EvmService.customMethod(
+    final data = await EvmService.customMethod(
         contractAddress, methodName, parameters, abiJsonString);
 
-    final data = jsonDecode(customMethodCall)["result"];
     final req = RequestBodyEntity();
     req.chainId = await ParticleAuth.getChainId();
     const method = "eth_call";
@@ -284,19 +291,13 @@ class EvmService {
   /// [abiJsonString] is abi json string, such as "[{\"inputs\":[{\"internalType\":\"uint256\",\"name\":\"quantity\",\"type\":\"uint256\"},{\"internalType\":\"uint256\",\"name\":\"amount\",\"type\":\"uint256\"}],\"name\":\"mint\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"}]"
   ///
   /// [gasFeeLevel] is gas fee level, default is high.
-  static Future<String> writeContract(
-      String address,
-      String contractAddress,
-      String methodName,
-      List<Object> parameters,
-      String abiJsonString,
+  static Future<String> writeContract(String address, String contractAddress,
+      String methodName, List<Object> parameters, String abiJsonString,
       {GasFeeLevel gasFeeLevel = GasFeeLevel.high}) async {
-    final customMethodCall = await EvmService.customMethod(
+    final data = await EvmService.customMethod(
         contractAddress, methodName, parameters, abiJsonString);
-    final data = jsonDecode(customMethodCall)["result"];
 
-    return createTransaction(
-        address, data, BigInt.from(0), contractAddress,
+    return createTransaction(address, data, BigInt.from(0), contractAddress,
         gasFeeLevel: gasFeeLevel);
   }
 
@@ -316,12 +317,9 @@ class EvmService {
       String from, String data, BigInt value, String to,
       {GasFeeLevel gasFeeLevel = GasFeeLevel.high}) async {
     final valueHex = "0x${value.toRadixString(16)}";
-    final gasLimitResult =
-        await EvmService.ethEstimateGas(from, to, valueHex, data);
-    final jsonObj = jsonDecode(gasLimitResult);
-    final gasLimit = jsonObj["result"];
+    final gasLimit = await EvmService.ethEstimateGas(from, to, valueHex, data);
 
-    final gasFeesResult = await EvmService.suggestedGasFees();
+    final gasFees = await EvmService.suggestedGasFees();
     String level;
 
     switch (gasFeeLevel) {
@@ -338,13 +336,12 @@ class EvmService {
         break;
     }
 
-    final maxFeePerGas = double.parse(
-        jsonDecode(gasFeesResult)["result"][level]["maxFeePerGas"]);
+    final maxFeePerGas = double.parse(gasFees[level]["maxFeePerGas"]);
     final maxFeePerGasHex =
         "0x${BigInt.from(maxFeePerGas * pow(10, 9)).toRadixString(16)}";
 
-    final maxPriorityFeePerGas = double.parse(
-        jsonDecode(gasFeesResult)["result"][level]["maxPriorityFeePerGas"]);
+    final maxPriorityFeePerGas =
+        double.parse(gasFees[level]["maxPriorityFeePerGas"]);
     final maxPriorityFeePerGasHex =
         "0x${BigInt.from(maxPriorityFeePerGas * pow(10, 9)).toRadixString(16)}";
 
@@ -393,27 +390,71 @@ class EvmService {
 }
 
 class SolanaService {
-  static Future<String> rpc(String method, List<dynamic> params) async {
+  static Future<dynamic> rpc(String method, List<dynamic> params) async {
     final req = RequestBodyEntity();
     req.chainId = await ParticleAuth.getChainId();
     req.jsonrpc = "2.0";
     req.id = const Uuid().v4();
     req.method = method;
     req.params = params;
-    return await SolanaRpcApi.getClient().rpc(req);
+    final result = await SolanaRpcApi.getClient().rpc(req);
+    RpcResponse response = RpcResponse.fromJson(jsonDecode(result));
+    if (response.error != null) {
+      return Future.error(response.error!);
+    } else {
+      return response.result;
+    }
   }
 
-  static Future<String> enhancedGetTokensAndNFTs(
-      List<dynamic> parameters) async {
+  /// Get tokens and NFTs
+  ///
+  /// [address] is user's solana public address
+  static Future<dynamic> getTokensAndNFTs(
+      String address, bool parseMetadataUri) async {
     const method = "enhancedGetTokensAndNFTs";
-    final params = parameters;
+    Map<String, dynamic> dict = {"parseMetadataUri": parseMetadataUri};
+    final params = [address, dict];
     return await SolanaService.rpc(method, params);
   }
 
-  static Future<String> enhancedSerializeTransaction(
+  /// Serialize transaction
+  static Future<dynamic> serializeTransaction(
       SerializeSOLTransReqEntity reqEntity) async {
     const method = "enhancedSerializeTransaction";
     final params = ["transfer-sol", reqEntity];
+    return await SolanaService.rpc(method, params);
+  }
+
+  /// Get token price,
+  ///
+  /// [tokenAddresses] is a token address list, for native token, pass "native"
+  ///
+  /// [currencies] is currency array, like ["usd", "cny"]
+  static Future<dynamic> getPrice(
+      List<String> tokenAddresses, List<String> currencies) async {
+    const method = "enhancedGetPrice";
+    final params = [tokenAddresses, currencies];
+    return await SolanaService.rpc(method, params);
+  }
+
+  /// Get transacions
+  ///
+  /// [address] is user's public address
+  static Future<dynamic> getTransactionsByAddress(String address) async {
+    const method = "enhancedGetTransactionsByAddress";
+    final params = [address];
+    return await SolanaService.rpc(method, params);
+  }
+
+  /// Get token by token addresses
+  ///
+  /// [address] is user's public address
+  ///
+  /// [tokenAddresses] is a token address list
+  static Future<dynamic> getTokenByTokenAddresses(
+      String address, List<String> tokenAddresses) async {
+    const method = "enhancedGetTokensByTokenAddresses";
+    final params = [address, tokenAddresses];
     return await SolanaService.rpc(method, params);
   }
 }

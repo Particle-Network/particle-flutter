@@ -259,6 +259,19 @@ class _WalletDemoPageState extends State<WalletDemoPage> {
                 width: double.infinity,
                 height: 50,
                 child: ElevatedButton(
+                    onPressed: () => {WalletLogic.setShowSmartAccountSetting()},
+                    child: const Text(
+                      "Set Show Smart Account Setting",
+                      style: TextStyle(fontSize: 18),
+                    )),
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: SizedBox(
+                width: double.infinity,
+                height: 50,
+                child: ElevatedButton(
                     onPressed: () => {WalletLogic.setShowManageWallet()},
                     child: const Text(
                       "Set Show Manage Wallet",

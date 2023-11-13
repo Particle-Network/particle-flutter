@@ -1,8 +1,7 @@
-import 'dart:convert';
-
 import 'package:flutter/foundation.dart';
 import 'package:flutter/widgets.dart';
 import 'package:oktoast/oktoast.dart';
+import 'package:particle_auth/network/net/response.dart';
 import 'package:particle_auth/particle_auth.dart';
 import 'package:particle_auth_example/mock/transaction_mock.dart';
 
@@ -31,28 +30,20 @@ class AuthLogic {
     supportAuthType.add(SupportAuthType.google);
     supportAuthType.add(SupportAuthType.email);
 
-    String result = await ParticleAuth.login(
-        LoginType.phone, "", supportAuthType,
-        socialLoginPrompt: SocialLoginPrompt.select_account);
-
-    if (jsonDecode(result)["status"] == true ||
-        jsonDecode(result)["status"] == 1) {
-      final userInfo = jsonDecode(result)["data"];
-      List<Map<String, dynamic>> wallets = (userInfo["wallets"] as List)
-          .map((dynamic e) => e as Map<String, dynamic>)
-          .toList();
-
-      for (var element in wallets) {
-        if (element["chainName"] == "solana") {
-          solPubAddress = element["publicAddress"];
-        } else if (element["chainName"] == "evm_chain") {
-          evmPubAddress = element["publicAddress"];
+    try {
+      final userInfo = await ParticleAuth.login(
+          LoginType.phone, "", supportAuthType,
+          socialLoginPrompt: SocialLoginPrompt.select_account);
+      for (var element in userInfo.wallets) {
+        if (element.chainName == "solana") {
+          solPubAddress = element.publicAddress;
+        } else if (element.chainName == "evm_chain") {
+          evmPubAddress = element.publicAddress;
         }
       }
       print("login: $userInfo");
       showToast("login: $userInfo");
-    } else {
-      final error = RpcError.fromJson(jsonDecode(result)["data"]);
+    } catch (error) {
       print(error);
       showToast("login: $error");
     }
@@ -68,29 +59,22 @@ class AuthLogic {
     final messageHex = "0x${StringUtils.toHexString("Hello Particle")}";
 
     final authorization = LoginAuthorization(messageHex, true);
-    String result = await ParticleAuth.login(
-        LoginType.email, "", supportAuthType,
-        socialLoginPrompt: SocialLoginPrompt.select_account,
-        authorization: authorization);
 
-    if (jsonDecode(result)["status"] == true ||
-        jsonDecode(result)["status"] == 1) {
-      final userInfo = jsonDecode(result)["data"];
-      List<Map<String, dynamic>> wallets = (userInfo["wallets"] as List)
-          .map((dynamic e) => e as Map<String, dynamic>)
-          .toList();
-
-      for (var element in wallets) {
-        if (element["chainName"] == "solana") {
-          solPubAddress = element["publicAddress"];
-        } else if (element["chainName"] == "evm_chain") {
-          evmPubAddress = element["publicAddress"];
+    try {
+      final userInfo = await ParticleAuth.login(
+          LoginType.email, "", supportAuthType,
+          socialLoginPrompt: SocialLoginPrompt.select_account,
+          authorization: authorization);
+      for (var element in userInfo.wallets) {
+        if (element.chainName == "solana") {
+          solPubAddress = element.publicAddress;
+        } else if (element.chainName == "evm_chain") {
+          evmPubAddress = element.publicAddress;
         }
       }
       print("login: $userInfo");
       showToast("login: $userInfo");
-    } else {
-      final error = RpcError.fromJson(jsonDecode(result)["data"]);
+    } catch (error) {
       print(error);
       showToast("login: $error");
     }
@@ -103,77 +87,115 @@ class AuthLogic {
   }
 
   static void isLoginAsync() async {
-    String result = await ParticleAuth.isLoginAsync();
-    print("isLoginAsync:" + result);
-    if (jsonDecode(result)["status"] == true ||
-        jsonDecode(result)["status"] == 1) {
-      print("isLoginAsync: $result");
-      showToast("isLoginAsync: $result");
-    } else {
-      print("isLoginAsync: $result");
-      showToast("isLoginAsync: $result");
+    try {
+      final userInfo = await ParticleAuth.isLoginAsync();
+      print("isLoginAsync: $userInfo");
+      showToast("isLoginAsync: $userInfo");
+    } catch (error) {
+      print("isLoginAsync: $error");
+      showToast("isLoginAsync: $error");
     }
   }
 
   static void getSmartAccount() async {
-    const eoaAddress = "";
-    String result = await EvmService.getSmartAccount([eoaAddress]);
-    print("getSmartAccount:" + result);
-    if (jsonDecode(result)["status"] == true ||
-        jsonDecode(result)["status"] == 1) {
-      print("getSmartAccount: $result");
-      showToast("getSmartAccount: $result");
-    } else {
-      print("getSmartAccount: $result");
-      showToast("getSmartAccount: $result");
+    if (currChainInfo.isSolanaChain()) {
+      showToast("only evm chain support!");
+      return;
+    }
+
+    try {
+      final eoaAddress = await ParticleAuth.getAddress();
+      RpcResponse response = await EvmService.getSmartAccount([eoaAddress]);
+      print("getSmartAccount: $response");
+      showToast("getSmartAccount: $response");
+    } catch (error) {
+      print("getSmartAccount: $error");
+      showToast("getSmartAccount: $error");
     }
   }
 
   static void getAddress() async {
-    final address = await ParticleAuth.getAddress();
-    print("getAddress: $address");
-    showToast("getAddress: $address");
+    try {
+      final address = await ParticleAuth.getAddress();
+      print("getAddress: $address");
+      showToast("getAddress: $address");
+    } catch (error) {
+      print("getAddress: $error");
+      showToast("getAddress: $error");
+    }
   }
 
   static void getUserInfo() async {
-    final userInfo = await ParticleAuth.getUserInfo();
-    print("getUserInfo: $userInfo");
-    showToast("getUserInfo: $userInfo");
+    try {
+      final userInfo = await ParticleAuth.getUserInfo();
+      print("getUserInfo: $userInfo");
+      showToast("getUserInfo: $userInfo");
+    } catch (error) {
+      print("getUserInfo: $error");
+      showToast("getUserInfo: $error");
+    }
   }
 
   static void logout() async {
-    String result = await ParticleAuth.logout();
-    debugPrint("logout: $result");
-    showToast("logout: $result");
+    try {
+      String result = await ParticleAuth.logout();
+      print("logout: $result");
+      showToast("logout: $result");
+    } catch (error) {
+      print("logout: $error");
+      showToast("logout: $error");
+    }
   }
 
   static void fastLogout() async {
-    String result = await ParticleAuth.fastLogout();
-    debugPrint("logout: $result");
-    showToast("logout: $result");
+    try {
+      String result = await ParticleAuth.fastLogout();
+      print("fastLogout: $result");
+      showToast("fastLogout: $result");
+    } catch (error) {
+      print("fastLogout: $error");
+      showToast("fastLogout: $error");
+    }
   }
 
   static void signMessage() async {
     final messageHex = "0x${StringUtils.toHexString("Hello Particle")}";
-    String result = await ParticleAuth.signMessage(messageHex);
-    debugPrint("signMessage: $result");
-    showToast("signMessage: $result");
+    try {
+      String signature = await ParticleAuth.signMessage(messageHex);
+      print("signMessage: $signature");
+      showToast("signMessage: $signature");
+    } catch (error) {
+      print("signMessage: $error");
+      showToast("signMessage: $error");
+    }
   }
 
   static void signMessageUnique() async {
     final messageHex = "0x${StringUtils.toHexString("Hello Particle")}";
-    String result = await ParticleAuth.signMessageUnique(messageHex);
-    debugPrint("signMessage: $result");
-    showToast("signMessage: $result");
+    try {
+      String signature = await ParticleAuth.signMessageUnique(messageHex);
+      print("signMessageUnique: $signature");
+      showToast("signMessageUnique: $signature");
+    } catch (error) {
+      print("signMessageUnique: $error");
+      showToast("signMessageUnique: $error");
+    }
   }
 
   static void signTransaction() async {
     String pubAddress = await ParticleAuth.getAddress();
     if (currChainInfo.isSolanaChain()) {
-      final trans = await TransactionMock.mockSolanaTransaction(pubAddress);
-      String result = await ParticleAuth.signTransaction(trans);
-      debugPrint("signTransaction: $result");
-      showToast("signTransaction: $result");
+      try {
+        final transaction =
+            await TransactionMock.mockSolanaTransaction(pubAddress);
+        print(transaction);
+        String signature = await ParticleAuth.signTransaction(transaction);
+        print("signTransaction: $signature");
+        showToast("signTransaction: $signature");
+      } catch (error) {
+        print("signTransaction: $error");
+        showToast("signTransaction: $error");
+      }
     } else {
       showToast('only solana chain support!');
     }
@@ -182,15 +204,23 @@ class AuthLogic {
   static void signAllTransactions() async {
     String pubAddress = await ParticleAuth.getAddress();
     if (currChainInfo.isSolanaChain()) {
-      final trans1 = await TransactionMock.mockSolanaTransaction(pubAddress);
-      final trans2 = await TransactionMock.mockSolanaTransaction(pubAddress);
+      final transaction1 =
+          await TransactionMock.mockSolanaTransaction(pubAddress);
+      final transaction2 =
+          await TransactionMock.mockSolanaTransaction(pubAddress);
 
-      List<String> trans = <String>[];
-      trans.add(trans1);
-      trans.add(trans2);
-      String result = await ParticleAuth.signAllTransactions(trans);
-      debugPrint("signAllTransactions: $result");
-      showToast("signAllTransactions: $result");
+      List<String> transactions = <String>[];
+      transactions.add(transaction1);
+      transactions.add(transaction2);
+      try {
+        List<String> signatures =
+            await ParticleAuth.signAllTransactions(transactions);
+        print("signAllTransactions: $signatures");
+        showToast("signAllTransactions: $signatures");
+      } catch (error) {
+        print("signAllTransactions: $error");
+        showToast("signAllTransactions: $error");
+      }
     } else {
       showToast('only solana chain support!');
     }
@@ -198,16 +228,19 @@ class AuthLogic {
 
   static void signAndSendTransaction() async {
     String? pubAddress = await ParticleAuth.getAddress();
+    final transction;
     if (currChainInfo.isSolanaChain()) {
-      final trans = await TransactionMock.mockSolanaTransaction(pubAddress);
-      String result = await ParticleAuth.signAndSendTransaction(trans);
-      debugPrint("signAndSendTransaction: $result");
-      showToast("signAndSendTransaction: $result");
+      transction = await TransactionMock.mockSolanaTransaction(pubAddress);
     } else {
-      final trans = await TransactionMock.mockEvmSendToken(pubAddress);
-      String result = await ParticleAuth.signAndSendTransaction(trans);
-      debugPrint("signAndSendTransaction: $result");
-      showToast("signAndSendTransaction: $result");
+      transction = await TransactionMock.mockEvmSendToken(pubAddress);
+    }
+    try {
+      String signature = await ParticleAuth.signAndSendTransaction(transction);
+      print("signAndSendTransaction: $signature");
+      showToast("signAndSendTransaction: $signature");
+    } catch (error) {
+      print("signAndSendTransaction: $error");
+      showToast("signAndSendTransaction: $error");
     }
   }
 
@@ -226,12 +259,17 @@ class AuthLogic {
 
     String typedDataHex = "0x${StringUtils.toHexString(typedData)}";
 
-    debugPrint("typedDataHex $typedDataHex");
+    print("typedDataHex $typedDataHex");
 
-    String result =
-        await ParticleAuth.signTypedData(typedDataHex, SignTypedDataVersion.v4);
-    debugPrint("signTypedData: $result");
-    showToast("signTypedData: $result");
+    try {
+      final signature = await ParticleAuth.signTypedData(
+          typedDataHex, SignTypedDataVersion.v4);
+      print("signTypedData: $signature");
+      showToast("signTypedData: $signature");
+    } catch (error) {
+      print("signTypedData: $error");
+      showToast("signTypedData: $error");
+    }
   }
 
   static void signTypedDataUnique() async {
@@ -248,11 +286,17 @@ class AuthLogic {
 
     final typedDataHex = "0x${StringUtils.toHexString(typedData)}";
 
-    debugPrint("typedDataHex $typedDataHex");
-    String result = await ParticleAuth.signTypedData(
-        typedDataHex, SignTypedDataVersion.v4Unique);
-    debugPrint("signTypedData: $result");
-    showToast("signTypedData: $result");
+    print("typedDataHex $typedDataHex");
+
+    try {
+      final signature = await ParticleAuth.signTypedData(
+          typedDataHex, SignTypedDataVersion.v4Unique);
+      print("signTypedDataUnique: $signature");
+      showToast("signTypedDataUnique: $signature");
+    } catch (error) {
+      print("signTypedDataUnique: $error");
+      showToast("signTypedDataUnique: $error");
+    }
   }
 
   static void setChainInfo() async {
@@ -267,21 +311,12 @@ class AuthLogic {
   }
 
   static void getChainInfo() async {
-    String result = await ParticleAuth.getChainInfo();
-    print(result);
-    int chainId = jsonDecode(result)["chain_id"];
+    final chainInfo = await ParticleAuth.getChainInfo();
 
-    ChainInfo? chainInfo;
-
-    try {
-      ChainInfo.ParticleChains.values
-          .firstWhere((element) => element.id == chainId);
-    } catch (e) {
-      chainInfo = null;
-    }
-
-    debugPrint("getChainInfo: $chainInfo");
-    showToast("getChainInfo: $chainInfo");
+    print(
+        "getChainInfo chain id: ${chainInfo.id} chain name: ${chainInfo.name}");
+    showToast(
+        "getChainInfo chain id: ${chainInfo.id} chain name: ${chainInfo.name}");
   }
 
   static void setModalPresentStyle() {
@@ -293,8 +328,13 @@ class AuthLogic {
   }
 
   static void openAccountAndSecurity() async {
-    String result = await ParticleAuth.openAccountAndSecurity();
-    print(result);
+    try {
+      String result = await ParticleAuth.openAccountAndSecurity();
+      print("openAccountAndSecurity: $result");
+    } catch (error) {
+      print("openAccountAndSecurity: $error");
+      showToast("openAccountAndSecurity: $error");
+    }
   }
 
   static void setSecurityAccountConfig() {
@@ -331,87 +371,114 @@ class AuthLogic {
   }
 
   static void readContract() async {
-    String address = await ParticleAuth.getAddress();
-    String contractAddress = "0x326C977E6efc84E512bB9C30f76E30c160eD06FB";
-    String methodName = "balanceOf";
-    List<Object> parameters = <Object>[address];
-    String abiJsonString = "";
-    final result = await EvmService.readContract(
-        address, contractAddress, methodName, parameters, abiJsonString);
-    print("result: $result");
-    showToast("result: $result");
+    try {
+      String address = await ParticleAuth.getAddress();
+      String contractAddress = "0x326C977E6efc84E512bB9C30f76E30c160eD06FB";
+      String methodName = "balanceOf";
+      List<Object> parameters = <Object>[address];
+      String abiJsonString = "";
+      final result = await EvmService.readContract(
+          address, contractAddress, methodName, parameters, abiJsonString);
+      print("result: $result");
+      showToast("result: $result");
+    } catch (error) {
+      print("result: $error");
+      showToast("result: $error");
+    }
   }
 
   static void writeContract() async {
-    String address = await ParticleAuth.getAddress();
-    String contractAddress = "0x326C977E6efc84E512bB9C30f76E30c160eD06FB";
-    String methodName = "transfer";
-    List<Object> parameters = <Object>[
-      "0xa0869E99886e1b6737A4364F2cf9Bb454FD637E4",
-      "100000000"
-    ];
-    String abiJsonString = "";
-    final result = await EvmService.writeContract(address, contractAddress,
-        methodName, parameters, abiJsonString,
-        gasFeeLevel: GasFeeLevel.low);
-    print("transaction: $result");
-    showToast("transaction: $result");
-    final transaction = await EvmService.writeContract(address, contractAddress,
-        methodName, parameters, abiJsonString,
-        gasFeeLevel: GasFeeLevel.low);
-    print("transaction: $transaction");
-    showToast("transaction: $transaction");
+    try {
+      String address = await ParticleAuth.getAddress();
+      String contractAddress = "0x326C977E6efc84E512bB9C30f76E30c160eD06FB";
+      String methodName = "transfer";
+      List<Object> parameters = <Object>[
+        "0xa0869E99886e1b6737A4364F2cf9Bb454FD637E4",
+        "100000000"
+      ];
+      String abiJsonString = "";
+      final transaction = await EvmService.writeContract(
+          address, contractAddress, methodName, parameters, abiJsonString,
+          gasFeeLevel: GasFeeLevel.low);
+      print("writeContract: $transaction");
+      showToast("writeContract: $transaction");
+    } catch (error) {
+      print("writeContract: $error");
+      showToast("writeContract: $error");
+    }
   }
 
-  static void writeContractSendTransaction() async {
-    String address = await ParticleAuth.getAddress();
-    String contractAddress = "0x326C977E6efc84E512bB9C30f76E30c160eD06FB";
-    String methodName = "transfer";
-    List<Object> parameters = <Object>[
-      "0xa0869E99886e1b6737A4364F2cf9Bb454FD637E4",
-      "100000000"
-    ];
-    String abiJsonString = "";
-    final transaction = await EvmService.writeContract(address, contractAddress,
-        methodName, parameters, abiJsonString,
-        gasFeeLevel: GasFeeLevel.low);
-    print("transaction: $transaction");
-    showToast("transaction: $transaction");
-    final tx = await ParticleAuth.signAndSendTransaction(transaction);
-    print("tx: $tx");
-    showToast("tx: $tx");
+  static void writeContractThenSendTransaction() async {
+    try {
+      String address = await ParticleAuth.getAddress();
+      String contractAddress = "0x9B1AAb1492c375F011811cBdBd88FFEf3ce2De76";
+      String methodName = "mint";
+      List<Object> parameters = <Object>["3"];
+      String abiJsonString = "";
+      final transaction = await EvmService.writeContract(
+          address, contractAddress, methodName, parameters, abiJsonString,
+          gasFeeLevel: GasFeeLevel.low);
+      print("transaction: $transaction");
+      showToast("transaction: $transaction");
+      final signature = await ParticleAuth.signAndSendTransaction(transaction);
+      print("signature: $signature");
+      showToast("signature: $signature");
+    } catch (error) {
+      print("writeContractThenSendTransaction: $error");
+      showToast("writeContractThenSendTransaction: $error");
+    }
   }
 
   static void sendEvmNative() async {
-    String address = await ParticleAuth.getAddress();
-    final transaction = await TransactionMock.mockEvmSendNative(address);
-    final tx = await ParticleAuth.signAndSendTransaction(transaction);
-    print("tx: $tx");
-    showToast("tx: $tx");
+    try {
+      String address = await ParticleAuth.getAddress();
+      final transaction = await TransactionMock.mockEvmSendNative(address);
+      final signature = await ParticleAuth.signAndSendTransaction(transaction);
+      print("signature: $signature");
+      showToast("signature: $signature");
+    } catch (error) {
+      print("sendEvmNative: $error");
+      showToast("sendEvmNative: $error");
+    }
   }
 
   static void sendEvmToken() async {
-    String address = await ParticleAuth.getAddress();
-    final transaction = await TransactionMock.mockEvmSendToken(address);
-    final tx = await ParticleAuth.signAndSendTransaction(transaction);
-    print("tx: $tx");
-    showToast("tx: $tx");
+    try {
+      String address = await ParticleAuth.getAddress();
+      final transaction = await TransactionMock.mockEvmSendToken(address);
+      final signature = await ParticleAuth.signAndSendTransaction(transaction);
+      print("signature: $signature");
+      showToast("signature: $signature");
+    } catch (error) {
+      print("sendEvmToken: $error");
+      showToast("sendEvmToken: $error");
+    }
   }
 
   static void sendEvmNFT721() async {
-    String address = await ParticleAuth.getAddress();
-    final transaction = await TransactionMock.mockEvmErc721NFT(address);
-    final tx = await ParticleAuth.signAndSendTransaction(transaction);
-    print("tx: $tx");
-    showToast("tx: $tx");
+    try {
+      String address = await ParticleAuth.getAddress();
+      final transaction = await TransactionMock.mockEvmErc721NFT(address);
+      final signature = await ParticleAuth.signAndSendTransaction(transaction);
+      print("signature: $signature");
+      showToast("signature: $signature");
+    } catch (error) {
+      print("sendEvmToken: $error");
+      showToast("sendEvmToken: $error");
+    }
   }
 
   static void sendEvmNFT1155() async {
-    String address = await ParticleAuth.getAddress();
-    final transaction = await TransactionMock.mockEvmErc1155NFT(address);
-    final tx = await ParticleAuth.signAndSendTransaction(transaction);
-    print("tx: $tx");
-    showToast("tx: $tx");
+    try {
+      String address = await ParticleAuth.getAddress();
+      final transaction = await TransactionMock.mockEvmErc1155NFT(address);
+      final signature = await ParticleAuth.signAndSendTransaction(transaction);
+      print("signature: $signature");
+      showToast("signature: $signature");
+    } catch (error) {
+      print("sendEvmNFT1155: $error");
+      showToast("sendEvmNFT1155: $error");
+    }
   }
 
   static void hasMasterPassword() async {
@@ -433,30 +500,8 @@ class AuthLogic {
   }
 
   static void getSecurityAccount() async {
-    final result = await ParticleAuth.getSecurityAccount();
-    print("getSecurityAccount: $result");
-    if (result == null) return;
-
-    if (jsonDecode(result)["status"] == true ||
-        jsonDecode(result)["status"] == 1) {
-      final securityAccount = jsonDecode(result)["data"];
-      bool hasMasterPassword = securityAccount["has_set_master_password"];
-      bool hasPaymentPassword = securityAccount["has_set_payment_password"];
-      final email = securityAccount["email"];
-      final phone = securityAccount["phone"];
-
-      bool hasSecurityAccount = (email != null && !email.isEmpty) ||
-          (phone != null && !phone.isEmpty);
-
-      print(
-          "hasMasterPassword: $hasMasterPassword, hasPaymentPassword: $hasPaymentPassword, hasSecurityAccount: $hasSecurityAccount");
-      showToast(
-          "hasMasterPassword: $hasMasterPassword, hasPaymentPassword: $hasPaymentPassword, hasSecurityAccount: $hasSecurityAccount");
-    } else {
-      final error = RpcError.fromJson(jsonDecode(result)["data"]);
-      print(error);
-      showToast("getSecurityAccount: $error");
-    }
+    final securityAccount = await ParticleAuth.getSecurityAccount();
+    print("getSecurityAccount: $securityAccount");
   }
 
   static void setAppearance() {
@@ -465,5 +510,124 @@ class AuthLogic {
 
   static void setFiatCoin() {
     ParticleAuth.setFiatCoin(FiatCoin.KRW);
+  }
+
+  static void getTokensAndNFTs() async {
+    try {
+      final result;
+      if (currChainInfo.isSolanaChain()) {
+        final address = await ParticleAuth.getAddress();
+        result = await SolanaService.getTokensAndNFTs(address, true);
+      } else {
+        final address = await ParticleAuth.getAddress();
+        result = await EvmService.getTokensAndNFTs(address);
+      }
+
+      print("getTokensAndNfts: $result");
+      showToast("getTokensAndNfts: $result");
+    } catch (error) {
+      print("getTokensAndNfts: $error");
+      showToast("getTokensAndNfts: $error");
+    }
+  }
+
+  static void getTokens() async {
+    if (currChainInfo.isSolanaChain()) {
+      showToast("only evm chain support!");
+      return;
+    }
+    try {
+      final address = await ParticleAuth.getAddress();
+      final result = await EvmService.getTokens(address);
+      print("getTokens: $result");
+      showToast("getTokens: $result");
+    } catch (error) {
+      print("getTokens: $error");
+      showToast("getTokens: $error");
+    }
+  }
+
+  static void getNFTs() async {
+    if (currChainInfo.isSolanaChain()) {
+      showToast("only evm chain support!");
+      return;
+    }
+    try {
+      final address = await ParticleAuth.getAddress();
+      final result = await EvmService.getNFTs(address);
+      print("getNFTs: $result");
+      showToast("getNFTs: $result");
+    } catch (error) {
+      print("getNFTs: $error");
+      showToast("getNFTs: $error");
+    }
+  }
+
+  static void getTokenByTokenAddresses() async {
+    try {
+      final result;
+      if (currChainInfo.isSolanaChain()) {
+        final address = await ParticleAuth.getAddress();
+        List<String> tokenAddresses = <String>[];
+        tokenAddresses.add('Fh79BtbpPH7Kh8BrhqG7iwKA3xSkgGg2TrtQPgM2c2SY');
+        tokenAddresses.add('GobzzzFQsFAHPvmwT42rLockfUCeV3iutEkK218BxT8K');
+        result = await SolanaService.getTokenByTokenAddresses(
+            address, tokenAddresses);
+      } else {
+        final address = await ParticleAuth.getAddress();
+        List<String> tokenAddresses = <String>[];
+        tokenAddresses.add('0x001B3B4d0F3714Ca98ba10F6042DaEbF0B1B7b6F');
+        tokenAddresses.add('0x326C977E6efc84E512bB9C30f76E30c160eD06FB');
+        result =
+            await EvmService.getTokenByTokenAddresses(address, tokenAddresses);
+      }
+
+      print("getTokenByTokenAddresses: $result");
+      showToast("getTokenByTokenAddresses: $result");
+    } catch (error) {
+      print("getTokenByTokenAddresses: $error");
+      showToast("getTokenByTokenAddresses: $error");
+    }
+  }
+
+  static void getTransactionsByAddress() async {
+    try {
+      final result;
+      if (currChainInfo.isSolanaChain()) {
+        final address = await ParticleAuth.getAddress();
+        result = await SolanaService.getTransactionsByAddress(address);
+      } else {
+        final address = await ParticleAuth.getAddress();
+        result = await EvmService.getTransactionsByAddress(address);
+      }
+
+      print("getTransactionsByAddress: $result");
+      showToast("getTransactionsByAddress: $result");
+    } catch (error) {
+      print("getTransactionsByAddress: $error");
+      showToast("getTransactionsByAddress: $error");
+    }
+  }
+
+  static void getPrice() async {
+    try {
+      final result;
+      List<String> currencies = <String>['usd'];
+      if (currChainInfo.isSolanaChain()) {
+        List<String> tokenAddresses = <String>['native'];
+        result = await SolanaService.getPrice(tokenAddresses, currencies);
+      } else {
+        List<String> tokenAddresses = <String>['native'];
+        tokenAddresses.add('0x001B3B4d0F3714Ca98ba10F6042DaEbF0B1B7b6F');
+        tokenAddresses.add('0x326C977E6efc84E512bB9C30f76E30c160eD06FB');
+        result = await EvmService.getPrice(tokenAddresses, currencies);
+      }
+
+      print("getPrice: $result");
+      showToast("getPrice: $result");
+    } catch (error) {
+      print("getPrice: $error");
+      showToast("getPrice: $error");
+    }
   }
 }

@@ -162,12 +162,18 @@ class ParticleWallet {
     return await _channel.invokeMethod('navigatorLoginList');
   }
 
-  /// Set show test network.
+  /// Set show test network, default value is false.
   static setShowTestNetwork(bool enable) {
     _channel.invokeMethod('setShowTestNetwork', enable);
   }
 
-  /// Set show manage wallet page.
+  /// Set show smart acccount setting, default value is true.
+  static setShowSmartAccountSetting(bool enable) {
+    // todo
+    _channel.invokeMethod('setShowSmartAccountSetting', enable);
+  }
+
+  /// Set show manage wallet page, default value is true.
   static setShowManageWallet(bool enable) {
     _channel.invokeMethod('setShowManageWallet', enable);
   }
@@ -238,12 +244,12 @@ class ParticleWallet {
     _channel.invokeMethod("setSupportDappBrowser", enable);
   }
 
-  /// Set show language setting button in setting page.
+  /// Set show language setting button in setting page, default value is false.
   static setShowLanguageSetting(bool isShow) {
     _channel.invokeMethod("setShowLanguageSetting", isShow);
   }
 
-  /// Set show appearance setting button in setting page.
+  /// Set show appearance setting button in setting page, default value is false.
   static setShowAppearanceSetting(bool isShow) {
     _channel.invokeMethod("setShowAppearanceSetting", isShow);
   }

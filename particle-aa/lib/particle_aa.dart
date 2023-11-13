@@ -2,7 +2,12 @@ import 'dart:convert';
 import 'dart:io' show Platform;
 
 import 'package:flutter/services.dart';
+import 'package:particle_aa/account_name.dart';
+import 'package:particle_aa/version_number.dart';
 import 'package:particle_auth/particle_auth.dart';
+
+export 'package:particle_aa/account_name.dart';
+export 'package:particle_aa/version_number.dart';
 
 class ParticleAA {
   ParticleAA._();
@@ -64,6 +69,29 @@ class ParticleAA {
   /// Disable aa mode
   static disableAAMode() {
     _channel.invokeMethod("disableAAMode");
+  }
+
+  static setAAAccountName(AccountName name) {
+    _channel.invokeMethod('setAAAccountName', name.name);
+  }
+
+  static setAAVersionNumber(VersionNumber versionNumber) {
+    _channel.invokeMethod('setAAAccountName', versionNumber.version);
+  }
+
+  static Future<AccountName> getAAAccountName() async {
+    final name = await _channel.invokeMethod("getAAAccountName");
+    AccountName result = AccountName.values.byName(name);
+    return result;
+  }
+
+  static Future<VersionNumber> getAAVersionNumber() async {
+    String version = _channel.invokeMethod('getAAVersionNumber') as String;
+    if (version == '1.0.0') {
+      return VersionNumber.V1_0_0();
+    } else {
+      return VersionNumber.V1_0_0();
+    }
   }
 
   /// Rpc get fee quotes

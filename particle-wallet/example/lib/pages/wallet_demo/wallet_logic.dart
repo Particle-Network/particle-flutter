@@ -120,6 +120,11 @@ class WalletLogic {
     ParticleWallet.setShowTestNetwork(enable);
   }
 
+  static void setShowSmartAccountSetting() {
+    bool enable = true;
+    ParticleWallet.setShowSmartAccountSetting(enable);
+  }
+
   static void setShowManageWallet() {
     bool enable = true;
     ParticleWallet.setShowManageWallet(enable);

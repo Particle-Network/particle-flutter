@@ -8,7 +8,7 @@ part 'serialize_sol_transreqentity.g.dart';
 class SerializeSOLTransReqEntity {
   late String sender;
   late String receiver;
-  late BigInt lamports;
+  late int lamports;
 
   SerializeSOLTransReqEntity();
 

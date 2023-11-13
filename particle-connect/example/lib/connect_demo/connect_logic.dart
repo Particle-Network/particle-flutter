@@ -1,4 +1,3 @@
-import 'dart:convert';
 
 import 'package:oktoast/oktoast.dart';
 import 'package:particle_auth/particle_auth.dart';
@@ -11,14 +10,12 @@ class ConnectLogic {
 
   static WalletType walletType = WalletType.metaMask;
 
-  static late String signature;
+  static late Siwe siwe;
 
-  static late String message;
-
-  static String? pubAddress;
+  static Account? account;
 
   static String getPublicAddress() {
-    return pubAddress!;
+    return account?.publicAddress ?? "";
   }
 
   static void init() {
@@ -51,34 +48,22 @@ class ConnectLogic {
   }
 
   static void getChainInfo() async {
-    String result = await ParticleAuth.getChainInfo();
-    print(result);
-    int chainId = jsonDecode(result)["chain_id"];
-
-    ChainInfo? chainInfo;
-
-    try {
-      ChainInfo.ParticleChains.values
-          .firstWhere((element) => element.id == chainId);
-    } catch (e) {
-      chainInfo = null;
-    }
-
-    print("getChainInfo: $chainInfo");
-    showToast("getChainInfo: $chainInfo, chainId: ${chainInfo?.id}");
+    ChainInfo chainInfo = await ParticleAuth.getChainInfo();
+    print(
+        "getChainInfo chain id: ${chainInfo.id} chain name: ${chainInfo.name}");
+    showToast(
+        "getChainInfo chain id: ${chainInfo.id} chain name: ${chainInfo.name}");
   }
 
   static void connect() async {
-    final result = await ParticleConnect.connect(walletType);
-    showToast('connect: $result');
-    print("connect: $result");
-    Map<String, dynamic> jsonResult = jsonDecode(result);
-    if (jsonResult["status"] == 1 || jsonResult["status"] == true) {
-      pubAddress = jsonResult["data"]["publicAddress"];
-      print("pubAddress:$pubAddress");
-      showToast("connect: $result  pubAddress:$pubAddress");
-    } else {
-      showToast("connect failed!");
+    try {
+      final account = await ParticleConnect.connect(walletType);
+      showToast('connect: $account');
+      print("connect: $account");
+      ConnectLogic.account = account;
+    } catch (error) {
+      showToast('connect: $error');
+      print("connect: $error");
     }
   }
 
@@ -90,69 +75,91 @@ class ConnectLogic {
     final config = ParticleConnectConfig(LoginType.email, "",
         [SupportAuthType.all], SocialLoginPrompt.select_account,
         authorization: authorization);
-    final result =
-        await ParticleConnect.connect(WalletType.particle, config: config);
-    showToast('connect: $result');
-    print("connect: $result");
-    Map<String, dynamic> jsonResult = jsonDecode(result);
-    if (jsonResult["status"] == 1 || jsonResult["status"] == true) {
-      pubAddress = jsonResult["data"]["publicAddress"];
-      print("pubAddress:$pubAddress");
-      showToast("connect: $result  pubAddress:$pubAddress");
-    } else {
-      showToast("connect failed!");
+    try {
+      final account =
+          await ParticleConnect.connect(WalletType.particle, config: config);
+      showToast('connectParticle: $account');
+      print("connectParticle: $account");
+      ConnectLogic.account = account;
+    } catch (error) {
+      showToast('connectParticle: $error');
+      print("connectParticle: $error");
     }
   }
 
   static void connectWalletConnect() async {
-    final result = await ParticleConnect.connectWalletConnect();
-    showToast('connect: $result');
-    print("connect: $result");
-    Map<String, dynamic> jsonResult = jsonDecode(result);
-    if (jsonResult["status"] == 1 || jsonResult["status"] == true) {
-      pubAddress = jsonResult["data"]["publicAddress"];
-      print("pubAddress:$pubAddress");
-      showToast("connect: $result  pubAddress:$pubAddress");
-    } else {
-      showToast("connect failed!");
+    try {
+      final account = await ParticleConnect.connectWalletConnect();
+      showToast('connectWalletConnect: $account');
+      print("connectWalletConnect: $account");
+      ConnectLogic.account = account;
+    } catch (error) {
+      showToast('connectWalletConnect: $error');
+      print("connectWalletConnect: $error");
     }
   }
 
   static void isConnected() async {
-    bool result =
-        await ParticleConnect.isConnected(walletType, getPublicAddress());
-    showToast("isConnected: $result");
+    try {
+      bool isConnected =
+          await ParticleConnect.isConnected(walletType, getPublicAddress());
+      showToast("isConnected: $isConnected");
+      print("isConnected: $isConnected");
+    } catch (error) {
+      showToast("isConnected: $error");
+      print("isConnected: $error");
+    }
   }
 
   static void getAccounts() async {
-    String result = await ParticleConnect.getAccounts(walletType);
-    showToast("getAccounts: $result");
-  }
-
-  static void logout() async {
-    String result =
-        await ParticleConnect.disconnect(walletType, getPublicAddress());
-    print("logout: $result");
-    showToast("logout: $result");
-  }
-
-  static void login() async {
-    String loginResult = await ParticleConnect.login(walletType,
-        getPublicAddress(), "login.xyz", "https://login.xyz/demo#login");
-    showToast("loginResult:$loginResult");
-    Map<String, dynamic> jsonResult = jsonDecode(loginResult);
-    if (jsonResult["status"] == 1 || jsonResult["status"] == true) {
-      signature = jsonResult["data"]["signature"];
-      message = jsonResult["data"]["message"];
+    try {
+      List<Account> accounts = await ParticleConnect.getAccounts(walletType);
+      showToast("getAccounts: $accounts");
+      print("getAccounts: $accounts");
+    } catch (error) {
+      showToast("getAccounts: $error");
+      print("getAccounts: $error");
     }
-    print("loginResult  message:$message  signature:$signature");
+  }
+
+  static void disconnect() async {
+    try {
+      String result =
+          await ParticleConnect.disconnect(walletType, getPublicAddress());
+      print("disconnect: $result");
+      showToast("disconnect: $result");
+    } catch (error) {
+      print("disconnect: $error");
+      showToast("disconnect: $error");
+    }
+  }
+
+  static void signInWithEthereum() async {
+    try {
+      const domain = "login.xyz";
+      const uri = "https://login.xyz/demo#login";
+      ConnectLogic.siwe = await ParticleConnect.signInWithEthereum(
+          walletType, getPublicAddress(), domain, uri);
+      print(
+          "signInWithEthereum message:${ConnectLogic.siwe.message}}  signature:${ConnectLogic.siwe.signature}");
+      showToast(
+          "signInWithEthereum message:${ConnectLogic.siwe.message}}  signature:${ConnectLogic.siwe.signature}");
+    } catch (error) {
+      print("signInWithEthereum: $error");
+      showToast("signInWithEthereum: $error");
+    }
   }
 
   static void verify() async {
-    String result = await ParticleConnect.verify(
-        walletType, getPublicAddress(), message, signature);
-    print("verify: $result");
-    showToast("verify: $result");
+    try {
+      bool result = await ParticleConnect.verify(walletType, getPublicAddress(),
+          ConnectLogic.siwe.message, ConnectLogic.siwe.signature);
+      print("verify: $result");
+      showToast("verify: $result");
+    } catch (error) {
+      print("verify: $error");
+      showToast("verify: $error");
+    }
   }
 
   static void signMessage() async {
@@ -239,15 +246,16 @@ class ConnectLogic {
     } else {
       privateKey = TestAccount.evm.privateKey;
     }
-    String result =
-        await ParticleConnect.importPrivateKey(walletType, privateKey);
-    Map<String, dynamic> jsonResult = jsonDecode(result);
-    if (jsonResult["status"] == 1 || jsonResult["status"] == true) {
-      pubAddress = jsonResult["data"]["publicAddress"];
-      print("pubAddress:$pubAddress");
-      showToast("connect: $result  pubAddress:$pubAddress");
-    } else {
-      showToast("connect failed!");
+
+    try {
+      final account =
+          await ParticleConnect.importPrivateKey(walletType, privateKey);
+      showToast('importPrivateKey: $account');
+      print("importPrivateKey: $account");
+      ConnectLogic.account = account;
+    } catch (error) {
+      showToast('importPrivateKey: $error');
+      print("importPrivateKey: $error");
     }
   }
 
@@ -258,41 +266,29 @@ class ConnectLogic {
     } else {
       mnemonic = TestAccount.evm.mnemonic;
     }
-    String result = await ParticleConnect.importMnemonic(walletType, mnemonic);
-    Map<String, dynamic> jsonResult = jsonDecode(result);
-    if (jsonResult["status"] == 1 || jsonResult["status"] == true) {
-      pubAddress = jsonResult["data"]["publicAddress"];
-      print("pubAddress:$pubAddress");
-      showToast("connect: $result  pubAddress:$pubAddress");
-    } else {
-      showToast("connect failed!");
+
+    try {
+      final account =
+          await ParticleConnect.importMnemonic(walletType, mnemonic);
+      showToast('importMnemonic: $account');
+      print("importMnemonic: $account");
+      ConnectLogic.account = account;
+    } catch (error) {
+      showToast('importMnemonic: $error');
+      print("importMnemonic: $error");
     }
   }
 
   static void exportPrivateKey() async {
-    String result =
-        await ParticleConnect.exportPrivateKey(walletType, getPublicAddress());
-    Map<String, dynamic> jsonResult = jsonDecode(result);
-    if (jsonResult["status"] == 1 || jsonResult["status"] == true) {
-      pubAddress = jsonResult["data"]["publicAddress"];
-      print("pubAddress:$pubAddress");
-      showToast("connect: $result  pubAddress:$pubAddress");
-    } else {
-      print("${jsonResult["data"]}");
-      showToast("connect failed!");
+    try {
+      String privateKey = await ParticleConnect.exportPrivateKey(
+          walletType, getPublicAddress());
+      showToast('exportPrivateKey: $privateKey');
+      print("exportPrivateKey: $privateKey");
+    } catch (error) {
+      showToast('exportPrivateKey: $error');
+      print("exportPrivateKey: $error");
     }
-  }
-
-  static void addEthereumChain() async {
-    String result = await ParticleConnect.addEthereumChain(
-        walletType, getPublicAddress(), ChainInfo.Polygon);
-    print(result);
-  }
-
-  static void switchEthereumChain() async {
-    String result = await ParticleConnect.switchEthereumChain(
-        walletType, getPublicAddress(), ChainInfo.BNBChain);
-    print(result);
   }
 
   static void walletTypeState() async {

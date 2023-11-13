@@ -52,7 +52,8 @@ class AADemoAuthPageState extends State<AADemoAuthPage> {
               ),
             ),
             Padding(
-              padding: const EdgeInsets.only(left: 8.0, top: 16.0, right: 8.0, bottom: 8.0),
+              padding: const EdgeInsets.only(
+                  left: 8.0, top: 16.0, right: 8.0, bottom: 8.0),
               child: SizedBox(
                 width: double.infinity,
                 height: 50,
@@ -60,7 +61,8 @@ class AADemoAuthPageState extends State<AADemoAuthPage> {
                     onPressed: () => {
                           Navigator.push(
                             context,
-                            MaterialPageRoute(builder: (context) => const SelectChainPage()),
+                            MaterialPageRoute(
+                                builder: (context) => const SelectChainPage()),
                           )
                         },
                     child: const Text(
@@ -166,7 +168,8 @@ class AADemoAuthPageState extends State<AADemoAuthPage> {
                 width: double.infinity,
                 height: 50,
                 child: ElevatedButton(
-                    onPressed: () => {AAAuthLogic.signAndSendTransactionWithNative()},
+                    onPressed: () =>
+                        {AAAuthLogic.signAndSendTransactionWithNative()},
                     child: const Text(
                       "send transaction paid with native",
                       style: TextStyle(fontSize: 18),
@@ -179,7 +182,8 @@ class AADemoAuthPageState extends State<AADemoAuthPage> {
                 width: double.infinity,
                 height: 50,
                 child: ElevatedButton(
-                    onPressed: () => {AAAuthLogic.signAndSendTransactionWithGasless()},
+                    onPressed: () =>
+                        {AAAuthLogic.signAndSendTransactionWithGasless()},
                     child: const Text(
                       "send transaction paid gasless",
                       style: TextStyle(fontSize: 18),
@@ -192,7 +196,8 @@ class AADemoAuthPageState extends State<AADemoAuthPage> {
                 width: double.infinity,
                 height: 50,
                 child: ElevatedButton(
-                    onPressed: () => {AAAuthLogic.signAndSendTransactionWithToken()},
+                    onPressed: () =>
+                        {AAAuthLogic.signAndSendTransactionWithToken()},
                     child: const Text(
                       "send transaction paid with token",
                       style: TextStyle(fontSize: 18),
@@ -221,6 +226,58 @@ class AADemoAuthPageState extends State<AADemoAuthPage> {
                     onPressed: () => {ParticleAuth.openWebWallet(webConfig)},
                     child: const Text(
                       "open WebWallet",
+                      style: TextStyle(fontSize: 18),
+                    )),
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: SizedBox(
+                width: double.infinity,
+                height: 50,
+                child: ElevatedButton(
+                    onPressed: () => {AAAuthLogic.setAAAccountName()},
+                    child: const Text(
+                      "set account name",
+                      style: TextStyle(fontSize: 18),
+                    )),
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: SizedBox(
+                width: double.infinity,
+                height: 50,
+                child: ElevatedButton(
+                    onPressed: () => {AAAuthLogic.setAAVersionNumber()},
+                    child: const Text(
+                      "set version number",
+                      style: TextStyle(fontSize: 18),
+                    )),
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: SizedBox(
+                width: double.infinity,
+                height: 50,
+                child: ElevatedButton(
+                    onPressed: () => {AAAuthLogic.getAAAccountName()},
+                    child: const Text(
+                      "get account name",
+                      style: TextStyle(fontSize: 18),
+                    )),
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: SizedBox(
+                width: double.infinity,
+                height: 50,
+                child: ElevatedButton(
+                    onPressed: () => {AAAuthLogic.getAAVersionNumber()},
+                    child: const Text(
+                      "get version number",
                       style: TextStyle(fontSize: 18),
                     )),
               ),

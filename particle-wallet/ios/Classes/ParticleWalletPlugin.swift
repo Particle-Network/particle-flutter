@@ -42,6 +42,7 @@ public class ParticleWalletPlugin: NSObject, FlutterPlugin {
         case setSupportDappBrowser
         case setShowLanguageSetting
         case setShowAppearanceSetting
+        case setShowSmartAccountSetting
         case setSupportAddToken
         case setDisplayTokenAddresses
         case setDisplayNFTContractAddresses
@@ -99,6 +100,8 @@ public class ParticleWalletPlugin: NSObject, FlutterPlugin {
             self.navigatorDappBrowser(json as? String)
         case .setShowTestNetwork:
             self.setShowTestNetwork((json as? Bool) ?? false)
+        case .setShowSmartAccountSetting:
+            self.setShowSmartAccountSetting((json as? Bool) ?? false)
         case .setShowManageWallet:
             self.setShowManageWallet((json as? Bool) ?? true)
         case .setSupportChain:
@@ -240,6 +243,37 @@ extension ParticleWalletPlugin {
         } else {
             network = nil
         }
+        let chainInfo = ParticleNetwork.getChainInfo()
+        if network == nil {
+            switch chainInfo.chain {
+            case .solana:
+                network = OpenBuyNetwork.solana
+            case .ethereum:
+                network = OpenBuyNetwork.ethereum
+            case .bsc:
+                network = OpenBuyNetwork.binanceSmartChain
+            case .optimism:
+                network = OpenBuyNetwork.optimism
+            case .polygon:
+                network = OpenBuyNetwork.polygon
+            case .tron:
+                network = OpenBuyNetwork.tron
+            case .arbitrum:
+                if chainInfo == .arbitrum(.one) {
+                    network = OpenBuyNetwork.arbitrumOne
+                } else {
+                    network = nil
+                }
+            case .avalanche:
+                network = OpenBuyNetwork.avalanche
+            case .celo:
+                network = OpenBuyNetwork.celo
+            case .zkSync:
+                network = OpenBuyNetwork.zkSync
+            default:
+                network = nil
+            }
+        }
         let fiatCoin = data["fiat_coin"].string
         let fiatAmt = data["fiat_amt"].int
         let cryptoCoin = data["crypto_coin"].string
@@ -252,7 +286,7 @@ extension ParticleWalletPlugin {
         var buyConfig = BuyCryptoConfig()
         buyConfig.network = network
         buyConfig.walletAddress = walletAddress
-        buyConfig.cryptoCoin = cryptoCoin
+        buyConfig.cryptoCoin = cryptoCoin ?? chainInfo.nativeToken.symbol
         buyConfig.fiatAmt = fiatAmt
         if fiatCoin != nil {
             buyConfig.fiatCoin = fiatCoin!
@@ -263,7 +297,15 @@ extension ParticleWalletPlugin {
         buyConfig.theme = theme
         buyConfig.language = language?.webString ?? Language.en.webString
 
-        PNRouter.navigatorBuy(buyCryptoConfig: buyConfig)
+        let modalStyleString = data["modal_style"].stringValue.lowercased()
+        var modalStyle: ParticleGUIModalStyle
+        if modalStyleString == "fullscreen" {
+            modalStyle = .fullScreen
+        } else {
+            modalStyle = .pageSheet
+        }
+
+        PNRouter.navigatorBuy(buyCryptoConfig: buyConfig, modalStyle: modalStyle)
     }
 
     func navigatorLoginList(_ callback: @escaping ParticleCallback) {
@@ -305,16 +347,21 @@ extension ParticleWalletPlugin {
         ParticleWalletGUI.setShowTestNetwork(isShow)
     }
 
+    func setShowSmartAccountSetting(_ isShow: Bool) {
+        ParticleWalletGUI.setShowSmartAccountSetting(isShow)
+    }
+
     func setShowManageWallet(_ isShow: Bool) {
         ParticleWalletGUI.setShowManageWallet(isShow)
     }
 
     func setSupportChain(_ json: String?) {
         guard let json = json else { return }
-        let chains = JSON(parseJSON: json).arrayValue.map {
-            $0["chain_id"].intValue
-        }.compactMap {
-            ParticleNetwork.searchChainInfo(by: $0)?.chain
+        let chains = JSON(parseJSON: json).arrayValue.compactMap {
+            let chainId = $0["chain_id"].intValue
+            let chainName = $0["chain_name"].stringValue.lowercased()
+            let chainType: ChainType = chainName == "solana" ? .solana : .evm
+            return ParticleNetwork.searchChainInfo(by: chainId, chainType: chainType)?.chain
         }
         ParticleWalletGUI.setSupportChain(chains)
     }

@@ -123,7 +123,9 @@ public extension ParticleAuthCorePlugin {
         let data = JSON(parseJSON: json)
 
         let chainId = data["chain_id"].intValue
-        guard let chainInfo = ParticleNetwork.searchChainInfo(by: chainId) else {
+        let chainName = data["chain_name"].stringValue.lowercased()
+        let chainType: ChainType = chainName == "solana" ? .solana : .evm
+        guard let chainInfo = ParticleNetwork.searchChainInfo(by: chainId, chainType: chainType) else {
             callback(false)
             return
         }
@@ -177,99 +179,101 @@ public extension ParticleAuthCorePlugin {
         guard let message = json else { return }
         let serializedMessage = Base58.encode(message.data(using: .utf8)!)
 
+        let chainInfo = ParticleNetwork.getChainInfo()
         subscribeAndCallback(observable: Single<Bool>.fromAsync { [weak self] in
             guard let self = self else {
                 throw ParticleNetwork.ResponseError(code: nil, message: "self is nil")
             }
-            return try await self.auth.solana.signMessage(serializedMessage)
+            return try await self.auth.solana.signMessage(serializedMessage, chainInfo: chainInfo)
         }, callback: callback)
     }
 
     func solanaSignTransaction(_ json: String?, callback: @escaping ParticleCallback) {
         guard let transaction = json else { return }
-
+        let chainInfo = ParticleNetwork.getChainInfo()
         subscribeAndCallback(observable: Single<Bool>.fromAsync { [weak self] in
             guard let self = self else {
                 throw ParticleNetwork.ResponseError(code: nil, message: "self is nil")
             }
-            return try await self.auth.solana.signTransaction(transaction)
+            return try await self.auth.solana.signTransaction(transaction, chainInfo: chainInfo)
         }, callback: callback)
     }
 
     func solanaSignAllTransactions(_ json: String?, callback: @escaping ParticleCallback) {
         guard let json = json else { return }
         let transactions = JSON(parseJSON: json).arrayValue.map { $0.stringValue }
-
+        let chainInfo = ParticleNetwork.getChainInfo()
         subscribeAndCallback(observable: Single<Bool>.fromAsync { [weak self] in
             guard let self = self else {
                 throw ParticleNetwork.ResponseError(code: nil, message: "self is nil")
             }
-            return try await self.auth.solana.signAllTransactions(transactions)
+            return try await self.auth.solana.signAllTransactions(transactions, chainInfo: chainInfo)
         }, callback: callback)
     }
 
     func solanaSignAndSendTransaction(_ transaction: String?, callback: @escaping ParticleCallback) {
         guard let transaction = transaction else { return }
-
+        let chainInfo = ParticleNetwork.getChainInfo()
         subscribeAndCallback(observable: Single<Bool>.fromAsync { [weak self] in
             guard let self = self else {
                 throw ParticleNetwork.ResponseError(code: nil, message: "self is nil")
             }
-            return try await self.auth.solana.signAndSendTransaction(transaction)
+            return try await self.auth.solana.signAndSendTransaction(transaction, chainInfo: chainInfo)
         }, callback: callback)
     }
 
     func evmPersonalSign(_ message: String?, callback: @escaping ParticleCallback) {
         guard let message = message else { return }
-
+        let chainInfo = ParticleNetwork.getChainInfo()
         subscribeAndCallback(observable: Single<Bool>.fromAsync { [weak self] in
             guard let self = self else {
                 throw ParticleNetwork.ResponseError(code: nil, message: "self is nil")
             }
-            return try await self.auth.evm.personalSign(message)
+            return try await self.auth.evm.personalSign(message, chainInfo: chainInfo)
         }, callback: callback)
     }
 
     func evmPersonalSignUnique(_ message: String?, callback: @escaping ParticleCallback) {
         guard let message = message else { return }
-
+        let chainInfo = ParticleNetwork.getChainInfo()
         subscribeAndCallback(observable: Single<Bool>.fromAsync { [weak self] in
             guard let self = self else {
                 throw ParticleNetwork.ResponseError(code: nil, message: "self is nil")
             }
-            return try await self.auth.evm.personalSignUnique(message)
+            return try await self.auth.evm.personalSignUnique(message, chainInfo: chainInfo)
         }, callback: callback)
     }
 
     func evmSignTypedData(_ message: String?, callback: @escaping ParticleCallback) {
         guard let message = message else { return }
-
+        let chainInfo = ParticleNetwork.getChainInfo()
         subscribeAndCallback(observable: Single<Bool>.fromAsync { [weak self] in
             guard let self = self else {
                 throw ParticleNetwork.ResponseError(code: nil, message: "self is nil")
             }
-            return try await self.auth.evm.signTypedData(message)
+            return try await self.auth.evm.signTypedData(message, chainInfo: chainInfo)
         }, callback: callback)
     }
 
     func evmSignTypedDataUnique(_ message: String?, callback: @escaping ParticleCallback) {
         guard let message = message else { return }
-
+        let chainInfo = ParticleNetwork.getChainInfo()
         subscribeAndCallback(observable: Single<Bool>.fromAsync { [weak self] in
             guard let self = self else {
                 throw ParticleNetwork.ResponseError(code: nil, message: "self is nil")
             }
-            return try await self.auth.evm.signTypedDataUnique(message)
+            return try await self.auth.evm.signTypedDataUnique(message, chainInfo: chainInfo)
         }, callback: callback)
     }
 
     func evmSendTransaction(_ transaction: String?, callback: @escaping ParticleCallback) {
         guard let transaction = transaction else { return }
+        let chainInfo = ParticleNetwork.getChainInfo()
         subscribeAndCallback(observable: Single<Bool>.fromAsync { [weak self] in
             guard let self = self else {
                 throw ParticleNetwork.ResponseError(code: nil, message: "self is nil")
             }
-            return try await self.auth.evm.sendTransaction(transaction)
+            return try await self.auth.evm.sendTransaction(transaction, chainInfo: chainInfo)
         }, callback: callback)
     }
 

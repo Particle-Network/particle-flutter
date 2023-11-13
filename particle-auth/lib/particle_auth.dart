@@ -2,6 +2,8 @@ import 'dart:convert';
 import 'dart:io' show Platform;
 
 import 'package:flutter/services.dart';
+import 'package:particle_auth/model/user_info.dart';
+import 'package:particle_auth/network/model/rpc_error.dart';
 
 import '../model/aa_fee_mode.dart';
 import '../model/chain_info.dart';
@@ -87,7 +89,7 @@ class ParticleAuth {
   ///
   /// [authorization] optional, login and sign a message
   /// Return userinfo or error
-  static Future<String> login(LoginType loginType, String account,
+  static Future<UserInfo> login(LoginType loginType, String account,
       List<SupportAuthType> supportAuthTypes,
       {SocialLoginPrompt? socialLoginPrompt,
       LoginAuthorization? authorization}) async {
@@ -99,7 +101,16 @@ class ParticleAuth {
       "authorization": authorization,
     });
 
-    return await _channel.invokeMethod('login', params);
+    final result = await _channel.invokeMethod('login', params);
+
+    if (jsonDecode(result)["status"] == true ||
+        jsonDecode(result)["status"] == 1) {
+      final userInfo = UserInfo.fromJson(jsonDecode(result)["data"]);
+      return userInfo;
+    } else {
+      final error = RpcError.fromJson(jsonDecode(result)["data"]);
+      return Future.error(error);
+    }
   }
 
   /// Is user login, check locally.
@@ -109,18 +120,40 @@ class ParticleAuth {
 
   /// Check is user login from server side.
   /// If user login state is valid, return userinfo. otherwist return error
-  static Future<String> isLoginAsync() async {
-    return await _channel.invokeMethod('isLoginAsync');
+  static Future<UserInfo> isLoginAsync() async {
+    final result = await _channel.invokeMethod('isLoginAsync');
+    if (jsonDecode(result)["status"] == true ||
+        jsonDecode(result)["status"] == 1) {
+      final userInfo = UserInfo.fromJson(jsonDecode(result)["data"]);
+      return userInfo;
+    } else {
+      final error = RpcError.fromJson(jsonDecode(result)["data"]);
+      return Future.error(error);
+    }
   }
 
   /// Logout, with webview page.
   static Future<String> logout() async {
-    return await _channel.invokeMethod('logout');
+    final result = await _channel.invokeMethod('logout');
+    if (jsonDecode(result)["status"] == true ||
+        jsonDecode(result)["status"] == 1) {
+      return jsonDecode(result)["data"] as String;
+    } else {
+      final error = RpcError.fromJson(jsonDecode(result)["data"]);
+      return Future.error(error);
+    }
   }
 
   /// Fast logout, without any UI, logout silently.
   static Future<String> fastLogout() async {
-    return await _channel.invokeMethod("fastLogout");
+    final result = await _channel.invokeMethod("fastLogout");
+    if (jsonDecode(result)["status"] == true ||
+        jsonDecode(result)["status"] == 1) {
+      return jsonDecode(result)["data"] as String;
+    } else {
+      final error = RpcError.fromJson(jsonDecode(result)["data"]);
+      return Future.error(error);
+    }
   }
 
   /// Get public address
@@ -129,22 +162,40 @@ class ParticleAuth {
   }
 
   /// Get userinfo
-  static Future<String> getUserInfo() async {
-    return await _channel.invokeMethod("getUserInfo");
+  static Future<UserInfo> getUserInfo() async {
+    final result = await _channel.invokeMethod("getUserInfo");
+    final userInfo = UserInfo.fromJson(jsonDecode(result));
+    return userInfo;
   }
 
   /// Sign message
   ///
   /// [message] message you want to sign, evm chain requires hexadecimal string, solana chain requires human readable message.
   static Future<String> signMessage(String message) async {
-    return await _channel.invokeMethod('signMessage', message);
+    final result = await _channel.invokeMethod('signMessage', message);
+    if (jsonDecode(result)["status"] == true ||
+        jsonDecode(result)["status"] == 1) {
+      final signature = jsonDecode(result)["data"] as String;
+      return signature;
+    } else {
+      final error = RpcError.fromJson(jsonDecode(result)["data"]);
+      return Future.error(error);
+    }
   }
 
   /// Sign message unique, only support evm chain.
   ///
   /// [message] message you want to sign, requires hexadecimal string.
   static Future<String> signMessageUnique(String message) async {
-    return await _channel.invokeMethod('signMessageUnique', message);
+    final result = await _channel.invokeMethod('signMessageUnique', message);
+    if (jsonDecode(result)["status"] == true ||
+        jsonDecode(result)["status"] == 1) {
+      final signature = jsonDecode(result)["data"] as String;
+      return signature;
+    } else {
+      final error = RpcError.fromJson(jsonDecode(result)["data"]);
+      return Future.error(error);
+    }
   }
 
   /// Sign transaction, only support solana chain.
@@ -153,7 +204,15 @@ class ParticleAuth {
   ///
   /// Result signature or error.
   static Future<String> signTransaction(String transaction) async {
-    return await _channel.invokeMethod('signTransaction', transaction);
+    final result = await _channel.invokeMethod('signTransaction', transaction);
+    if (jsonDecode(result)["status"] == true ||
+        jsonDecode(result)["status"] == 1) {
+      final signature = jsonDecode(result)["data"] as String;
+      return signature;
+    } else {
+      final error = RpcError.fromJson(jsonDecode(result)["data"]);
+      return Future.error(error);
+    }
   }
 
   /// Sign all transactions, only support solana chain.
@@ -161,9 +220,19 @@ class ParticleAuth {
   /// [transactions] transactions you want to sign.
   ///
   /// Result signatures or error.
-  static Future<String> signAllTransactions(List<String> transactions) async {
-    return await _channel.invokeMethod(
+  static Future<List<String>> signAllTransactions(
+      List<String> transactions) async {
+    final result = await _channel.invokeMethod(
         'signAllTransactions', jsonEncode(transactions));
+    if (jsonDecode(result)["status"] == true ||
+        jsonDecode(result)["status"] == 1) {
+      var list = jsonDecode(result)["data"] as List<dynamic>;
+      List<String> signatures = list.map((e) => e.toString()).toList();
+      return signatures;
+    } else {
+      final error = RpcError.fromJson(jsonDecode(result)["data"]);
+      return Future.error(error);
+    }
   }
 
   /// Sign and send transaction.
@@ -176,7 +245,15 @@ class ParticleAuth {
   static Future<String> signAndSendTransaction(String transaction,
       {AAFeeMode? feeMode}) async {
     final json = jsonEncode({"transaction": transaction, "fee_mode": feeMode});
-    return await _channel.invokeMethod('signAndSendTransaction', json);
+    final result = await _channel.invokeMethod('signAndSendTransaction', json);
+    if (jsonDecode(result)["status"] == true ||
+        jsonDecode(result)["status"] == 1) {
+      final signature = jsonDecode(result)["data"] as String;
+      return signature;
+    } else {
+      final error = RpcError.fromJson(jsonDecode(result)["data"]);
+      return Future.error(error);
+    }
   }
 
   /// Batch send transactions
@@ -190,7 +267,15 @@ class ParticleAuth {
       {AAFeeMode? feeMode}) async {
     final json =
         jsonEncode({"transactions": transactions, "fee_mode": feeMode});
-    return await _channel.invokeMethod('batchSendTransactions', json);
+    final result = await _channel.invokeMethod('batchSendTransactions', json);
+    if (jsonDecode(result)["status"] == true ||
+        jsonDecode(result)["status"] == 1) {
+      final signature = jsonDecode(result)["data"] as String;
+      return signature;
+    } else {
+      final error = RpcError.fromJson(jsonDecode(result)["data"]);
+      return Future.error(error);
+    }
   }
 
   /// Sign typed data, only support evm chain,
@@ -200,8 +285,16 @@ class ParticleAuth {
   /// [version] support v1, v3, v4.
   static Future<String> signTypedData(
       String typedData, SignTypedDataVersion version) async {
-    return await _channel.invokeMethod('signTypedData',
+    final result = await _channel.invokeMethod('signTypedData',
         jsonEncode({"message": typedData, "version": version.name}));
+    if (jsonDecode(result)["status"] == true ||
+        jsonDecode(result)["status"] == 1) {
+      final signature = jsonDecode(result)["data"] as String;
+      return signature;
+    } else {
+      final error = RpcError.fromJson(jsonDecode(result)["data"]);
+      return Future.error(error);
+    }
   }
 
   /// Set chain info, update chain info to SDK.
@@ -235,14 +328,19 @@ class ParticleAuth {
   /// Get chain info
   ///
   /// Result chain info object.
-  static Future<String> getChainInfo() async {
-    return await _channel.invokeMethod('getChainInfo');
+  static Future<ChainInfo> getChainInfo() async {
+    final result = await _channel.invokeMethod('getChainInfo');
+    int chainId = jsonDecode(result)["chain_id"];
+    String chainName = jsonDecode(result)["chain_name"];
+
+    final chainInfo = ChainInfo.getChain(chainId, chainName);
+
+    return chainInfo!;
   }
 
   static Future<int> getChainId() async {
-    String result = await getChainInfo();
-    int chainId = jsonDecode(result)["chain_id"];
-    return chainId;
+    final chainInfo = await getChainInfo();
+    return chainInfo.id;
   }
 
   /// Open web wallet
@@ -272,7 +370,14 @@ class ParticleAuth {
   ///
   /// If user is expired, should return error, otherwise return nothing.
   static Future<String> openAccountAndSecurity() async {
-    return await _channel.invokeMethod("openAccountAndSecurity");
+    final result = await _channel.invokeMethod("openAccountAndSecurity");
+    if (jsonDecode(result)["status"] == true ||
+        jsonDecode(result)["status"] == 1) {
+      return "";
+    } else {
+      final error = RpcError.fromJson(jsonDecode(result)["data"]);
+      return Future.error(error);
+    }
   }
 
   /// Set iOS modal present style.
@@ -300,32 +405,33 @@ class ParticleAuth {
 
   /// Has master password, get value from local user info.
   static Future<bool> hasMasterPassword() async {
-    final result = await getUserInfo();
-    final userinfo = jsonDecode(result);
-    return userinfo["security_account"]["has_set_master_password"];
+    final userInfo = await getUserInfo();
+    return userInfo.securityAccount?.hasSetMasterPassword ?? false;
   }
 
   /// Has payment password, get value from local user info.
   static Future<bool> hasPaymentPassword() async {
-    final result = await getUserInfo();
-    final userinfo = jsonDecode(result);
-    return userinfo["security_account"]["has_set_payment_password"];
+    final userInfo = await getUserInfo();
+    return userInfo.securityAccount?.hasSetPaymentPassword ?? false;
   }
 
   /// Has set security account, get value from local user info.
   static Future<bool> hasSecurityAccount() async {
-    final result = await getUserInfo();
-    final userinfo = jsonDecode(result);
-    final email = userinfo["security_account"]["email"];
-    final phone = userinfo["security_account"]["phone"];
+    final userInfo = await getUserInfo();
 
-    return (email != null && !email.isEmpty) ||
-        (phone != null && !phone.isEmpty);
+    final email = userInfo.securityAccount?.email;
+    final phone = userInfo.securityAccount?.phone;
+
+    return (email != null && email.isNotEmpty) ||
+        (phone != null && phone.isNotEmpty);
   }
 
   /// sync secuirty account from remote server
-  static Future<String?> getSecurityAccount() async {
-    return await _channel.invokeMethod("getSecurityAccount");
+  static Future<SecurityAccount> getSecurityAccount() async {
+    final result = await _channel.invokeMethod("getSecurityAccount");
+
+    final securityAccount = SecurityAccount.fromJson(jsonDecode(result));
+    return securityAccount;
   }
 
   /// set fiat coin

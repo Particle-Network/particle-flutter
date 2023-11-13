@@ -181,4 +181,26 @@ class AAAuthLogic {
     print("signature $signature");
     showToast("signature $signature");
   }
+
+  static void setAAAccountName() {
+    const accountName = AccountName.BICONOMY;
+    ParticleAA.setAAAccountName(accountName);
+  }
+
+  static void setAAVersionNumber() {
+    final versionNumber = VersionNumber.V1_0_0();
+    ParticleAA.setAAVersionNumber(versionNumber);
+  }
+
+  static void getAAAccountName() async {
+    AccountName accountName = await ParticleAA.getAAAccountName();
+    print('get account name ${accountName.name}');
+    showToast('get account name ${accountName.name}');
+  }
+
+  static void getAAVersionNumber() async {
+    VersionNumber versionNumber = await ParticleAA.getAAVersionNumber();
+    print('get version number ${versionNumber.version}');
+    showToast('get version number ${versionNumber.version}');
+  }
 }

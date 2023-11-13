@@ -7,11 +7,11 @@ part of 'rpc_url_entity.dart';
 // **************************************************************************
 
 RpcUrlEntity _$RpcUrlEntityFromJson(Map<String, dynamic> json) => RpcUrlEntity()
-  ..evmUrl = json['evmUrl'] as String?
-  ..solUrl = json['solUrl'] as String?;
+  ..evmUrl = json['evm_url'] as String?
+  ..solUrl = json['sol_url'] as String?;
 
 Map<String, dynamic> _$RpcUrlEntityToJson(RpcUrlEntity instance) =>
     <String, dynamic>{
-      'evmUrl': instance.evmUrl,
-      'solUrl': instance.solUrl,
+      'evm_url': instance.evmUrl,
+      'sol_url': instance.solUrl,
     };

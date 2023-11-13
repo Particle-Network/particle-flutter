@@ -11,12 +11,12 @@ SerializeSOLTransReqEntity _$SerializeSOLTransReqEntityFromJson(
     SerializeSOLTransReqEntity()
       ..sender = json['sender'] as String
       ..receiver = json['receiver'] as String
-      ..lamports = BigInt.parse(json['lamports'] as String);
+      ..lamports = json['lamports'] as int;
 
 Map<String, dynamic> _$SerializeSOLTransReqEntityToJson(
         SerializeSOLTransReqEntity instance) =>
     <String, dynamic>{
       'sender': instance.sender,
       'receiver': instance.receiver,
-      'lamports': instance.lamports.toInt(),
+      'lamports': instance.lamports,
     };

@@ -55,31 +55,6 @@ abstract class EvmRpcApi {
   }
 }
 
-@RestApi(baseUrl: "https://api.particle.network/")
-abstract class ServiceApi {
-  factory ServiceApi(Dio dio, {String baseUrl}) = _ServiceApi;
-
-  @GET("/apps/{projectAppId}/user-simple-info")
-  Future<String> rpc(@Path("projectAppId") String projectAppId,
-      @Queries() Map<String, dynamic> queries);
-
-  static ServiceApi? _instace;
-
-  static ServiceApi getClient() {
-    if (_instace != null) return _instace!;
-    if (ParticleInfo.projectId.isEmpty || ParticleInfo.clientKey.isEmpty) {
-      throw Exception(
-          "projectId or clientKey must be not empty!!! Click here to get: https://dashboard.particle.network/");
-    }
-    final dio = Dio();
-    dio.options.headers["Content-Type"] = "application/json";
-    dio.options.headers["Authorization"] =
-        authenticate(ParticleInfo.projectId, ParticleInfo.clientKey);
-    _instace = ServiceApi(dio);
-    return _instace!;
-  }
-}
-
 authenticate(String projectId, String clientKey) {
   String auth = "$projectId:$clientKey";
   auth = base64.encode(utf8.encode(auth));

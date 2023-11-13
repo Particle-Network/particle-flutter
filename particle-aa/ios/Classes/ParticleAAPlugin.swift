@@ -27,6 +27,10 @@ public class ParticleAAPlugin: NSObject, FlutterPlugin {
         case enableAAMode
         case disableAAMode
         case rpcGetFeeQuotes
+        case setAAAccountName
+        case getAAAccountName
+        case setAAVersionNumber
+        case getAAVersionNumber
     }
     
     public static func register(with registrar: FlutterPluginRegistrar) {
@@ -60,6 +64,14 @@ public class ParticleAAPlugin: NSObject, FlutterPlugin {
             disableAAMode()
         case .rpcGetFeeQuotes:
             rpcGetFeeQuotes(json as? String, callback: result)
+        case .setAAAccountName:
+            setAAAccountName(json as? String)
+        case .getAAAccountName:
+            getAAAccountName(result)
+        case .setAAVersionNumber:
+            setAAVersionNumber(json as? String)
+        case .getAAVersionNumber:
+            getAAVersionNumber(result)
         }
     }
 }
@@ -94,7 +106,9 @@ public extension ParticleAAPlugin {
         
         let data = JSON(parseJSON: json)
         let chainId = data["chain_id"].intValue
-        guard let chainInfo = ParticleNetwork.searchChainInfo(by: chainId) else {
+        let chainName = data["chain_name"].stringValue.lowercased()
+        let chainType: ChainType = chainName == "solana" ? .solana : .evm
+        guard let chainInfo = ParticleNetwork.searchChainInfo(by: chainId, chainType: chainType) else {
             callback(false)
             return
         }
@@ -105,7 +119,8 @@ public extension ParticleAAPlugin {
     func isDeploy(_ json: String?, callback: @escaping ParticleCallback) {
         guard let json = json else { return }
         let eoaAddress = json
-        subscribeAndCallback(observable: aaService.isDeploy(eoaAddress: eoaAddress), callback: callback)
+        let chainInfo = ParticleNetwork.getChainInfo()
+        subscribeAndCallback(observable: aaService.isDeploy(eoaAddress: eoaAddress, chainInfo: chainInfo), callback: callback)
     }
     
     func isAAModeEnable(_ callback: ParticleCallback) {
@@ -129,8 +144,32 @@ public extension ParticleAAPlugin {
         let transactions = data["transactions"].arrayValue.map {
             $0.stringValue
         }
-        
-        subscribeAndCallback(observable: aaService.rpcGetFeeQuotes(eoaAddress: eoaAddress, transactions: transactions), callback: callback)
+        let chainInfo = ParticleNetwork.getChainInfo()
+        subscribeAndCallback(observable: aaService.rpcGetFeeQuotes(eoaAddress: eoaAddress, transactions: transactions, chainInfo: chainInfo), callback: callback)
+    }
+    
+    func setAAAccountName(_ json: String?) {
+        guard let json = json else { return }
+        if let accountName = AA.AccountName(rawValue: json.uppercased()) {
+            ParticleNetwork.setAAAccountName(accountName)
+        }
+    }
+    
+    func setAAVersionNumber(_ json: String?) {
+        guard let json = json else { return }
+        if let versionNumbr = AA.VersionNumber(rawValue: json.uppercased()) {
+            ParticleNetwork.setAAVersionNumber(versionNumbr)
+        }
+    }
+    
+    func getAAAccountName(_ callback: @escaping ParticleCallback) {
+        let value = ParticleNetwork.getAAAccountName().rawValue
+        callback(value)
+    }
+    
+    func getAAVersionNumber(_ callback: @escaping ParticleCallback) {
+        let value = ParticleNetwork.getAAVersionNumber().rawValue
+        callback(value)
     }
 }
 

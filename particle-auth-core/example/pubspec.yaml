@@ -36,8 +36,6 @@ dependencies:
   oktoast: ^3.1.5
   retrofit: ^4.0.1
 
-  particle_auth:
-   path: ../../particle-auth/
 
 dev_dependencies:
   integration_test:

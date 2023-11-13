@@ -292,20 +292,18 @@ packages:
     source: hosted
     version: "2.1.0"
   particle_auth:
-    dependency: "direct main"
+    dependency: transitive
     description:
-      name: particle_auth
-      sha256: "2925b74634d3b63bb7435ec1f725006fb168e342c4fd1de5953dedcf9fc0a4e3"
-      url: "https://pub.dev"
-    source: hosted
+      path: "../../particle-auth"
+      relative: true
+    source: path
     version: "1.2.0"
   particle_connect:
-    dependency: "direct main"
+    dependency: transitive
     description:
-      name: particle_connect
-      sha256: beb03a6d96d6b504839035a48e71c824e0e653caca624dc4a2fc256a2002041f
-      url: "https://pub.dev"
-    source: hosted
+      path: "../../particle-connect"
+      relative: true
+    source: path
     version: "1.2.0"
   particle_wallet:
     dependency: "direct main"

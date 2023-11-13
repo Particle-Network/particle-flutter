@@ -57,8 +57,6 @@ public class ParticleConnectPlugin: NSObject, FlutterPlugin {
         case importPrivateKey
         case importMnemonic
         case exportPrivateKey
-        case switchEthereumChain
-        case addEthereumChain
         case walletReadyState
         case reconnectIfNeeded
         case connectWalletConnect
@@ -117,10 +115,7 @@ public class ParticleConnectPlugin: NSObject, FlutterPlugin {
             self.importMnemonic(json as? String, callback: result)
         case .exportPrivateKey:
             self.exportPrivateKey(json as? String, callback: result)
-        case .switchEthereumChain:
-            self.switchEthereumChain(json as? String, callback: result)
-        case .addEthereumChain:
-            self.addEthereumChain(json as? String, callback: result)
+        
         case .walletReadyState:
             self.walletReadyState(json as? String, callback: result)
         case .reconnectIfNeeded:
@@ -144,10 +139,10 @@ extension ParticleConnectPlugin {
         }
         
         let data = JSON(parseJSON: json)
-        let chainName = data["chain_name"].stringValue.lowercased()
         let chainId = data["chain_id"].intValue
-        
-        guard let chainInfo = ParticleNetwork.searchChainInfo(by: chainId) else {
+        let chainName = data["chain_name"].stringValue.lowercased()
+        let chainType: ChainType = chainName == "solana" ? .solana : .evm
+        guard let chainInfo = ParticleNetwork.searchChainInfo(by: chainId, chainType: chainType) else {
             return print("initialize error, can't find right chain for \(chainName), chainId \(chainId)")
         }
         let env = data["env"].stringValue.lowercased()
@@ -231,10 +226,11 @@ extension ParticleConnectPlugin {
             return
         }
         
-        let chainInfos = JSON(parseJSON: json).arrayValue.map {
-            $0["chain_id"].intValue
-        }.compactMap {
-            ParticleNetwork.searchChainInfo(by: $0)
+        let chainInfos = JSON(parseJSON: json).arrayValue.compactMap {
+            let chainId = $0["chain_id"].intValue
+            let chainName = $0["chain_name"].stringValue.lowercased()
+            let chainType: ChainType = chainName == "solana" ? .solana : .evm
+            return ParticleNetwork.searchChainInfo(by: chainId, chainType: chainType)
         }
         
         ParticleConnect.setWalletConnectV2SupportChainInfos(chainInfos)
@@ -486,14 +482,15 @@ extension ParticleConnectPlugin {
             return
         }
         
+        let chainInfo = ParticleNetwork.getChainInfo()
         let aaService = ParticleNetwork.getAAService()
         var sendObservable: Single<String>
         if aaService != nil, aaService!.isAAModeEnable() {
             self.latestPublicAddress = publicAddress
             self.latestWalletType = walletType
-            sendObservable = aaService!.quickSendTransactions([transaction], feeMode: feeMode, messageSigner: self, wholeFeeQuote: wholeFeeQuote)
+            sendObservable = aaService!.quickSendTransactions([transaction], feeMode: feeMode, messageSigner: self, wholeFeeQuote: wholeFeeQuote, chainInfo: chainInfo)
         } else {
-            sendObservable = adapter.signAndSendTransaction(publicAddress: publicAddress, transaction: transaction, feeMode: feeMode)
+            sendObservable = adapter.signAndSendTransaction(publicAddress: publicAddress, transaction: transaction, feeMode: feeMode, chainInfo: chainInfo)
         }
         
         subscribeAndCallback(observable: sendObservable, callback: callback)
@@ -550,8 +547,8 @@ extension ParticleConnectPlugin {
         
         self.latestPublicAddress = publicAddress
         self.latestWalletType = walletType
-        
-        let sendObservable = aaService.quickSendTransactions(transactions, feeMode: feeMode, messageSigner: self, wholeFeeQuote: wholeFeeQuote)
+        let chainInfo = ParticleNetwork.getChainInfo()
+        let sendObservable = aaService.quickSendTransactions(transactions, feeMode: feeMode, messageSigner: self, wholeFeeQuote: wholeFeeQuote, chainInfo: chainInfo)
         subscribeAndCallback(observable: sendObservable, callback: callback)
     }
     
@@ -919,76 +916,6 @@ extension ParticleConnectPlugin {
         subscribeAndCallback(observable: observable, callback: callback)
     }
     
-    func switchEthereumChain(_ json: String?, callback: @escaping ParticleCallback) {
-        guard let json = json else {
-            callback(FlutterError(code: "", message: "json is nil", details: nil))
-            return
-        }
-        
-        let data = JSON(parseJSON: json)
-        let walletTypeString = data["wallet_type"].stringValue
-        let publicAddress = data["public_address"].stringValue
-        let chainId = data["chain_id"].intValue
-
-        guard let walletType = map2WalletType(from: walletTypeString) else {
-            print("walletType \(walletTypeString) is not existed ")
-            let response = FlutterResponseError(code: nil, message: "walletType \(walletTypeString) is not existed", data: nil)
-            let statusModel = FlutterStatusModel(status: false, data: response)
-            let data = try! JSONEncoder().encode(statusModel)
-            guard let json = String(data: data, encoding: .utf8) else { return }
-            callback(json)
-            return
-        }
-        
-        guard let adapter = map2ConnectAdapter(from: walletType) else {
-            print("adapter for \(walletTypeString) is not init")
-            let response = FlutterResponseError(code: nil, message: "adapter for \(walletTypeString) is not init", data: nil)
-            let statusModel = FlutterStatusModel(status: false, data: response)
-            let data = try! JSONEncoder().encode(statusModel)
-            guard let json = String(data: data, encoding: .utf8) else { return }
-            callback(json)
-            return
-        }
-        
-        let observable = adapter.switchEthereumChain(publicAddress: publicAddress, chainId: chainId)
-        subscribeAndCallback(observable: observable, callback: callback)
-    }
-    
-    func addEthereumChain(_ json: String?, callback: @escaping ParticleCallback) {
-        guard let json = json else {
-            callback(FlutterError(code: "", message: "json is nil", details: nil))
-            return
-        }
-        
-        let data = JSON(parseJSON: json)
-        let walletTypeString = data["wallet_type"].stringValue
-        let publicAddress = data["public_address"].stringValue
-        let chainId = data["chain_id"].intValue
-
-        guard let walletType = map2WalletType(from: walletTypeString) else {
-            print("walletType \(walletTypeString) is not existed ")
-            let response = FlutterResponseError(code: nil, message: "walletType \(walletTypeString) is not existed", data: nil)
-            let statusModel = FlutterStatusModel(status: false, data: response)
-            let data = try! JSONEncoder().encode(statusModel)
-            guard let json = String(data: data, encoding: .utf8) else { return }
-            callback(json)
-            return
-        }
-        
-        guard let adapter = map2ConnectAdapter(from: walletType) else {
-            print("adapter for \(walletTypeString) is not init")
-            let response = FlutterResponseError(code: nil, message: "adapter for \(walletTypeString) is not init", data: nil)
-            let statusModel = FlutterStatusModel(status: false, data: response)
-            let data = try! JSONEncoder().encode(statusModel)
-            guard let json = String(data: data, encoding: .utf8) else { return }
-            callback(json)
-            return
-        }
-        
-        let observable = adapter.addEthereumChain(publicAddress: publicAddress, chainId: chainId, chainName: nil, nativeCurrency: nil, rpcUrl: nil, blockExplorerUrl: nil)
-        subscribeAndCallback(observable: observable, callback: callback)
-    }
-    
     func walletReadyState(_ json: String?, callback: @escaping ParticleCallback) {
         guard let json = json else {
             callback(FlutterError(code: "", message: "json is nil", details: nil))
@@ -1107,7 +1034,7 @@ extension ParticleConnectPlugin {
 }
 
 extension ParticleConnectPlugin: MessageSigner {
-    public func signMessage(_ message: String) -> RxSwift.Single<String> {
+    public func signMessage(_ message: String, chainInfo: ParticleNetworkBase.ParticleNetwork.ChainInfo?) -> RxSwift.Single<String> {
         guard let walletType = self.latestWalletType else {
             print("walletType is nil")
             return .error(ParticleNetwork.ResponseError(code: nil, message: "walletType is nil"))
@@ -1117,7 +1044,7 @@ extension ParticleConnectPlugin: MessageSigner {
             print("adapter for \(walletType) is not init")
             return .error(ParticleNetwork.ResponseError(code: nil, message: "adapter for \(walletType) is not init"))
         }
-        return adapter.signMessage(publicAddress: self.getEoaAddress(), message: message)
+        return adapter.signMessage(publicAddress: self.getEoaAddress(), message: message, chainInfo: chainInfo)
     }
     
     public func getEoaAddress() -> String {
