@@ -133,7 +133,7 @@ class ParticleConnect {
         }));
     if (jsonDecode(result)["status"] == true ||
         jsonDecode(result)["status"] == 1) {
-      return jsonDecode(result["data"]);
+      return jsonDecode(result)["data"];
     } else {
       final error = RpcError.fromJson(jsonDecode(result)["data"]);
       return Future.error(error);
@@ -365,7 +365,7 @@ class ParticleConnect {
 
     if (jsonDecode(result)["status"] == true ||
         jsonDecode(result)["status"] == 1) {
-      final account = Account.fromJson(result["data"]);
+      final account = Account.fromJson(jsonDecode(result)["data"]);
       if (Platform.isIOS) {
       } else {
         account.walletType = walletType.name;
@@ -394,7 +394,7 @@ class ParticleConnect {
         }));
     if (jsonDecode(result)["status"] == true ||
         jsonDecode(result)["status"] == 1) {
-      final account = Account.fromJson(result["data"]);
+      final account = Account.fromJson(jsonDecode(result)["data"]);
       if (Platform.isIOS) {
       } else {
         account.walletType = walletType.name;
@@ -453,8 +453,8 @@ class ParticleConnect {
 
     if (jsonDecode(result)["status"] == true ||
         jsonDecode(result)["status"] == 1) {
-      final signature = result["data"]["signature"] as String;
-      final message = result["data"]["message"] as String;
+      final signature = jsonDecode(result)["data"]["signature"] as String;
+      final message = jsonDecode(result)["data"]["message"] as String;
       return Siwe(message, signature);
     } else {
       final error = RpcError.fromJson(jsonDecode(result)["data"]);

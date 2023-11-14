@@ -163,22 +163,30 @@ class ConnectLogic {
 
   static void signMessage() async {
     final messageHex = "0x${StringUtils.toHexString("Hello Particle")}";
-    String result = await ParticleConnect.signMessage(
-        walletType, getPublicAddress(), messageHex);
-
-    print("signMessage: $result");
-    showToast("signMessage: $result");
+    try {
+      String signature = await ParticleConnect.signMessage(
+          walletType, getPublicAddress(), messageHex);
+      print("signMessage: $signature");
+      showToast("signMessage: $signature");
+    } catch (error) {
+      print("signMessage: $error");
+      showToast("signMessage: $error");
+    }
   }
 
   static void signTransaction() async {
-    String trans;
     if (currChainInfo.isSolanaChain()) {
-      trans = await TransactionMock.mockSolanaTransaction(getPublicAddress());
-      print("trans:" + trans);
-      String result = await ParticleConnect.signTransaction(
-          walletType, getPublicAddress(), trans);
-      print("signTransaction: $result");
-      showToast("signTransaction: $result");
+      final transaction =
+          await TransactionMock.mockSolanaTransaction(getPublicAddress());
+      try {
+        String signature = await ParticleConnect.signTransaction(
+            walletType, getPublicAddress(), transaction);
+        print("signTransaction: $signature");
+        showToast("signTransaction: $signature");
+      } catch (error) {
+        print("signTransaction: $error");
+        showToast("signTransaction: $error");
+      }
     } else {
       showToast('only solana chain support!');
     }
@@ -186,36 +194,43 @@ class ConnectLogic {
 
   static void signAllTransactions() async {
     if (currChainInfo.isSolanaChain()) {
-      final trans1 =
+      final transacton1 =
           await TransactionMock.mockSolanaTransaction(getPublicAddress());
-      final trans2 =
+      final transacton2 =
           await TransactionMock.mockSolanaTransaction(getPublicAddress());
       List<String> trans = <String>[];
-      trans.add(trans1);
-      trans.add(trans2);
-      String result = await ParticleConnect.signAllTransactions(
-          walletType, getPublicAddress(), trans);
-      print("signAllTransaction: $result");
-      showToast("signAllTransaction: $result");
+      trans.add(transacton1);
+      trans.add(transacton2);
+      try {
+        String signature = await ParticleConnect.signAllTransactions(
+            walletType, getPublicAddress(), trans);
+        print("signAllTransaction: $signature");
+        showToast("signAllTransaction: $signature");
+      } catch (error) {
+        print("signAllTransaction: $error");
+        showToast("signAllTransaction: $error");
+      }
     } else {
       showToast('only solana chain support!');
     }
   }
 
   static void signAndSendTransaction() async {
+    String transaction;
     if (currChainInfo.isSolanaChain()) {
-      final trans =
+      transaction =
           await TransactionMock.mockSolanaTransaction(getPublicAddress());
-      String result = await ParticleConnect.signAndSendTransaction(
-          walletType, getPublicAddress(), trans);
-      print("signAndSendTransaction: $result");
-      showToast("signAndSendTransaction: $result");
     } else {
-      final trans = await TransactionMock.mockEvmSendNative(getPublicAddress());
-      String result = await ParticleConnect.signAndSendTransaction(
-          walletType, getPublicAddress(), trans);
-      print("signAndSendTransaction: $result");
-      showToast("signAndSendTransaction: $result");
+      transaction = await TransactionMock.mockEvmSendNative(getPublicAddress());
+    }
+    try {
+      String signature = await ParticleConnect.signAndSendTransaction(
+          walletType, getPublicAddress(), transaction);
+      print("signAndSendTransaction: $signature");
+      showToast("signAndSendTransaction: $signature");
+    } catch (error) {
+      print("signAndSendTransaction: $error");
+      showToast("signAndSendTransaction: $error");
     }
   }
 
