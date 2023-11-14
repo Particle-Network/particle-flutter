@@ -314,7 +314,7 @@ public extension ParticleAuthCorePlugin {
 
     func getUserInfo(_ callback: @escaping ParticleCallback) {
         guard let userInfo = self.auth.getUserInfo() else {
-            callback(getErrorJson("user is not login"))
+            callback("")
             return
         }
 

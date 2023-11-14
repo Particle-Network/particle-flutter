@@ -162,10 +162,14 @@ class ParticleAuth {
   }
 
   /// Get userinfo
-  static Future<UserInfo> getUserInfo() async {
+  static Future<UserInfo?> getUserInfo() async {
     final result = await _channel.invokeMethod("getUserInfo");
-    final userInfo = UserInfo.fromJson(jsonDecode(result));
-    return userInfo;
+    try {
+      final userInfo = UserInfo.fromJson(jsonDecode(result));
+      return userInfo;
+    } catch (e) {
+      return null;
+    }
   }
 
   /// Sign message
@@ -406,21 +410,21 @@ class ParticleAuth {
   /// Has master password, get value from local user info.
   static Future<bool> hasMasterPassword() async {
     final userInfo = await getUserInfo();
-    return userInfo.securityAccount?.hasSetMasterPassword ?? false;
+    return userInfo?.securityAccount?.hasSetMasterPassword ?? false;
   }
 
   /// Has payment password, get value from local user info.
   static Future<bool> hasPaymentPassword() async {
     final userInfo = await getUserInfo();
-    return userInfo.securityAccount?.hasSetPaymentPassword ?? false;
+    return userInfo?.securityAccount?.hasSetPaymentPassword ?? false;
   }
 
   /// Has set security account, get value from local user info.
   static Future<bool> hasSecurityAccount() async {
     final userInfo = await getUserInfo();
 
-    final email = userInfo.securityAccount?.email;
-    final phone = userInfo.securityAccount?.phone;
+    final email = userInfo?.securityAccount?.email;
+    final phone = userInfo?.securityAccount?.phone;
 
     return (email != null && email.isNotEmpty) ||
         (phone != null && phone.isNotEmpty);

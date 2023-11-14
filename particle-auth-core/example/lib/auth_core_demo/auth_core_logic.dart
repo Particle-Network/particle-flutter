@@ -25,7 +25,7 @@ class AuthCoreLogic {
 
   static void connect() async {
     try {
-      const jwt = ""; // paste your jwt
+      const jwt = "eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCIsImtpZCI6IndVUE05RHNycml0Sy1jVHE2OWNKcCJ9.eyJlbWFpbCI6InBhbnRhb3ZheUBnbWFpbC5jb20iLCJlbWFpbF92ZXJpZmllZCI6ZmFsc2UsImlzcyI6Imh0dHBzOi8vZGV2LXFyNi01OWVlLnVzLmF1dGgwLmNvbS8iLCJhdWQiOiJFVmpLMVpaUFN0UWNkV3VoandQZGRBdGdSaXdwNTRWUSIsImlhdCI6MTY5OTk0Njg0OSwiZXhwIjoxNjk5OTgyODQ5LCJzdWIiOiJhdXRoMHw2MzAzMjE0YjZmNjE1NjM2YWM5MTdmMWIiLCJzaWQiOiIybWRCWmJBT3Z2WEhyYlRoQUV4dnh5bmJSWnpoOEZlTyJ9.KgG0MgMMX-tW4cDI7Le57gb2xy8IeX5WsfupQZzArHok8aBDxa3wREM9CTMDP49yXYYAAtqyjjyg8j3bydhMspcs5StL9R4d7BQu6gzLfQD4wju2T14s-kOV5UaXqwi7jSmltTDtfJbFcCD_4iiaNRewQSwizpIRd3pXZnMSJg13G6b7ouaF-PWoEJJSkz8L5Uh9XMPVEgmUESs5yyN-3pY4jtJw0BEtDAW6EyHCUZ7Hu-GvjC9N4F8cvZHMNDhRzfQSbcuO0W74ITN43_igH1n5IvmeBYvrMhXJe8sZ3uLkx777giufSH7GPCp4_lXhNnlZGMurdxCKVAWmp1Eo1g"; // paste your jwt
       final userInfo = await ParticleAuthCore.connect(jwt);
       print("connect: $userInfo");
       showToast("connect: $userInfo");

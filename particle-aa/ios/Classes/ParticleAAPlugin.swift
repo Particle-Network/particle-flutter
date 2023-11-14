@@ -21,7 +21,6 @@ public class ParticleAAPlugin: NSObject, FlutterPlugin {
     
     public enum Method: String {
         case initialize
-        case isSupportChainInfo
         case isDeploy
         case isAAModeEnable
         case enableAAMode
@@ -52,8 +51,6 @@ public class ParticleAAPlugin: NSObject, FlutterPlugin {
         switch method {
         case .initialize:
             initialize(json as? String)
-        case .isSupportChainInfo:
-            isSupportChainInfo(json as? String, callback: result)
         case .isDeploy:
             isDeploy(json as? String, callback: result)
         case .isAAModeEnable:
@@ -86,7 +83,7 @@ public extension ParticleAAPlugin {
         
         let data = JSON(parseJSON: json)
         
-        let dappAppKeysDict = data["dapp_app_keys"].dictionaryValue
+        let dappAppKeysDict = data["biconomy_app_keys"].dictionaryValue
         var dappAppKeys: [Int: String] = [:]
         
         for (key, value) in dappAppKeysDict {
@@ -99,25 +96,11 @@ public extension ParticleAAPlugin {
         ParticleNetwork.setAAService(aaService)
     }
     
-    func isSupportChainInfo(_ json: String?, callback: @escaping ParticleCallback) {
-        guard let json = json else {
-            return
-        }
-        
-        let data = JSON(parseJSON: json)
-        let chainId = data["chain_id"].intValue
-        let chainName = data["chain_name"].stringValue.lowercased()
-        let chainType: ChainType = chainName == "solana" ? .solana : .evm
-        guard let chainInfo = ParticleNetwork.searchChainInfo(by: chainId, chainType: chainType) else {
-            callback(false)
-            return
-        }
-        let result = aaService.isSupportChainInfo(chainInfo)
-        callback(result)
-    }
-
     func isDeploy(_ json: String?, callback: @escaping ParticleCallback) {
-        guard let json = json else { return }
+        guard let json = json else {
+            callback(getErrorJson("json is nil"))
+            return
+        }
         let eoaAddress = json
         let chainInfo = ParticleNetwork.getChainInfo()
         subscribeAndCallback(observable: aaService.isDeploy(eoaAddress: eoaAddress, chainInfo: chainInfo), callback: callback)
@@ -137,7 +120,10 @@ public extension ParticleAAPlugin {
     }
     
     func rpcGetFeeQuotes(_ json: String?, callback: @escaping ParticleCallback) {
-        guard let json = json else { return }
+        guard let json = json else {
+            callback(getErrorJson("json is nil"))
+            return
+        }
         
         let data = JSON(parseJSON: json)
         let eoaAddress = data["eoa_address"].stringValue
@@ -191,5 +177,15 @@ extension ParticleAAPlugin {
                 callback(json)
             }
         }.disposed(by: bag)
+    }
+}
+
+extension ParticleAAPlugin {
+    private func getErrorJson(_ message: String) -> String {
+        let response = FlutterResponseError(code: nil, message: message, data: nil)
+        let statusModel = FlutterStatusModel(status: false, data: response)
+        let data1 = try! JSONEncoder().encode(statusModel)
+        guard let json = String(data: data1, encoding: .utf8) else { return "" }
+        return json
     }
 }

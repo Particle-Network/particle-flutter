@@ -11,7 +11,7 @@ class TransactionMock {
     req.sender = publicAddress;
 
     final result = await SolanaService.serializeTransaction(req);
-    return jsonDecode(result)["transaction"]["serialized"];
+    return result["transaction"]["serialized"];
   }
 
   /// Mock a transaction

@@ -1,5 +1,3 @@
-import 'dart:convert';
-
 import 'package:particle_auth/particle_auth.dart';
 import 'package:particle_connect_example/mock/test_account.dart';
 
@@ -11,7 +9,7 @@ class TransactionMock {
     req.sender = publicAddress;
 
     final result = await SolanaService.serializeTransaction(req);
-    return jsonDecode(result)["transaction"]["serialized"];
+    return result["transaction"]["serialized"];
   }
 
   /// Mock a transaction

@@ -17,43 +17,39 @@ class ParticleAA {
   /// Init particle-aa SDK
   ///
   /// [dappKeys] AA biconomy dapp keys
-  static init(Map<int, String> dappKeys) {
+  static init(Map<int, String> biconomyApiKeys) {
     // Convert integer keys to strings
     var stringKeyMap =
-        dappKeys.map((key, value) => MapEntry(key.toString(), value));
+        biconomyApiKeys.map((key, value) => MapEntry(key.toString(), value));
 
     if (Platform.isIOS) {
       _channel.invokeMethod(
           'initialize',
           jsonEncode({
-            "dapp_app_keys": stringKeyMap,
+            "biconomy_app_keys": stringKeyMap,
           }));
     } else {
       _channel.invokeMethod(
           'init',
           jsonEncode({
-            "dapp_app_keys": stringKeyMap,
+            "biconomy_app_keys": stringKeyMap,
           }));
     }
-  }
-
-  /// Is support chain info
-  ///
-  /// [chainInfo] Chain info
-  static Future<bool> isSupportChainInfo(ChainInfo chainInfo) async {
-    return await _channel.invokeMethod(
-        'isSupportChainInfo',
-        jsonEncode({
-          "chain_name": chainInfo.name,
-          "chain_id": chainInfo.id,
-        }));
   }
 
   /// Has eoa address deployed contract in current chain.
   ///
   /// [eoaAddress] Eoa address
-  static Future<String> isDeploy(String eoaAddress) async {
-    return await _channel.invokeMethod('isDeploy', eoaAddress);
+  static Future<bool> isDeploy(String eoaAddress) async {
+    final result = await _channel.invokeMethod('isDeploy', eoaAddress);
+
+    if (jsonDecode(result)["status"] == true ||
+        jsonDecode(result)["status"] == 1) {
+      return jsonDecode(result)["data"] as bool;
+    } else {
+      final error = RpcError.fromJson(jsonDecode(result)["data"]);
+      return Future.error(error);
+    }
   }
 
   /// Is aa mode enable
@@ -115,7 +111,7 @@ class ParticleAA {
       return data;
     } else {
       final error = RpcError.fromJson(data);
-      throw error;
+      return Future.error(error);
     }
   }
 }

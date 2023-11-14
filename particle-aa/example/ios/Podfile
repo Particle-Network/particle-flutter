@@ -35,12 +35,12 @@ target 'Runner' do
   pod 'ParticleAuthService', '1.3.4'
   pod 'ParticleAA', '1.3.4'
   
-  pod 'ParticleConnect', '0.2.13'
-  pod 'ConnectWalletConnectAdapter', '0.2.13'
-  pod 'ConnectSolanaAdapter', '0.2.13'
-  pod 'ConnectEVMAdapter', '0.2.13'
-  pod 'ConnectCommon', '0.2.13'
-  pod 'ConnectPhantomAdapter', '0.2.13'
+  pod 'ParticleConnect', '0.2.14'
+  pod 'ConnectWalletConnectAdapter', '0.2.14'
+  pod 'ConnectSolanaAdapter', '0.2.14'
+  pod 'ConnectEVMAdapter', '0.2.14'
+  pod 'ConnectCommon', '0.2.14'
+  pod 'ConnectPhantomAdapter', '0.2.14'
   
   flutter_install_all_ios_pods File.dirname(File.realpath(__FILE__))
 end

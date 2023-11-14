@@ -57,10 +57,14 @@ class ParticleAuthCore {
     }
   }
 
-  static Future<UserInfo> getUserInfo() async {
+  static Future<UserInfo?> getUserInfo() async {
     final result = await _channel.invokeMethod('getUserInfo');
-    final userInfo = UserInfo.fromJson(jsonDecode(result));
-    return userInfo;
+    try {
+      final userInfo = UserInfo.fromJson(jsonDecode(result));
+      return userInfo;
+    } catch (e) {
+      return null;
+    }
   }
 
   static Future<bool> switchChain(ChainInfo chainInfo) async {
