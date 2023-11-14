@@ -105,7 +105,7 @@ class AuthLogic {
 
     try {
       final eoaAddress = await ParticleAuth.getAddress();
-      RpcResponse response = await EvmService.getSmartAccount([eoaAddress]);
+      List<dynamic> response = await EvmService.getSmartAccount([eoaAddress]);
       print("getSmartAccount: $response");
       showToast("getSmartAccount: $response");
     } catch (error) {

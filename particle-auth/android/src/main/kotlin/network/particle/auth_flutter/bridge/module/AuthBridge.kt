@@ -248,7 +248,8 @@ object AuthBridge {
                     object : MessageSigner {
                         override fun signMessage(
                             message: String,
-                            callback: WebServiceCallback<SignOutput>
+                            callback: WebServiceCallback<SignOutput>,
+                            chainId: Long?
                         ) {
                             ParticleNetwork.signMessage(
                                 message,
@@ -260,7 +261,7 @@ object AuthBridge {
                                     override fun failure(errMsg: ErrorInfo) {
                                         callback.failure(errMsg)
                                     }
-                                })
+                                },chainId)
                         }
 
                         override fun eoaAddress(): String {
