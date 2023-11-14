@@ -3,10 +3,13 @@ buildscript {
     repositories {
         google()
         mavenCentral()
+        maven { setUrl("https://jitpack.io") }
+        maven { setUrl("https://s01.oss.sonatype.org/content/groups/staging/") }
+        maven { setUrl("https://s01.oss.sonatype.org/content/repositories/releases/") }
     }
 
     dependencies {
-        classpath 'com.android.tools.build:gradle:7.3.0'
+        classpath 'com.android.tools.build:gradle:7.1.2'
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
     }
 }
@@ -15,6 +18,9 @@ allprojects {
     repositories {
         google()
         mavenCentral()
+        maven { setUrl("https://jitpack.io") }
+        maven { setUrl("https://s01.oss.sonatype.org/content/groups/staging/") }
+        maven { setUrl("https://s01.oss.sonatype.org/content/repositories/releases/") }
     }
 }
 
