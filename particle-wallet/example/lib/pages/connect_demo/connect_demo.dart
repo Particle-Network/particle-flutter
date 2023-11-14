@@ -92,7 +92,7 @@ class _ConnectDemoPageState extends State<ConnectDemoPage> {
                 width: double.infinity,
                 height: 50,
                 child: ElevatedButton(
-                    onPressed: () => {ConnectLogic.logout()},
+                    onPressed: () => {ConnectLogic.disconnect()},
                     child: const Text(
                       "Disconnect",
                       style: TextStyle(fontSize: 18),
@@ -105,9 +105,9 @@ class _ConnectDemoPageState extends State<ConnectDemoPage> {
                 width: double.infinity,
                 height: 50,
                 child: ElevatedButton(
-                    onPressed: () => {ConnectLogic.login()},
+                    onPressed: () => {ConnectLogic.signInWithEthereum()},
                     child: const Text(
-                      "Login",
+                      "signInWithEthereum",
                       style: TextStyle(fontSize: 18),
                     )),
               ),

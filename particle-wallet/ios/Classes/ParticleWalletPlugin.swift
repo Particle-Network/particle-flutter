@@ -384,9 +384,7 @@ extension ParticleWalletPlugin {
 
     func switchWallet(_ json: String?, callback: @escaping ParticleCallback) {
         guard let json = json else {
-            callback(FlutterError(code: "",
-                                  message: "json is nil",
-                                  details: nil))
+            callback(getErrorJson("json is nil"))
             return
         }
 
@@ -396,11 +394,9 @@ extension ParticleWalletPlugin {
 
         if let walletType = map2WalletType(from: walletTypeString) {
             let result = ParticleWalletGUI.switchWallet(walletType: walletType, publicAddress: publicAddress)
-
             callback(result)
         } else {
             print("walletType \(walletTypeString) is not existed")
-
             callback(false)
         }
     }
@@ -612,5 +608,15 @@ extension ParticleWalletPlugin {
                 callback(json)
             }
         }.disposed(by: self.bag)
+    }
+}
+
+extension ParticleWalletPlugin {
+    private func getErrorJson(_ message: String) -> String {
+        let response = FlutterResponseError(code: nil, message: message, data: nil)
+        let statusModel = FlutterStatusModel(status: false, data: response)
+        let data1 = try! JSONEncoder().encode(statusModel)
+        guard let json = String(data: data1, encoding: .utf8) else { return "" }
+        return json
     }
 }

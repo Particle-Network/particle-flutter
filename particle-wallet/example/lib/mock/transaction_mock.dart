@@ -6,12 +6,12 @@ import 'package:particle_wallet_example/mock/test_account.dart';
 class TransactionMock {
   static Future<String> mockSolanaTransaction(String publicAddress) async {
     final req = SerializeSOLTransReqEntity();
-    req.lamports = TestAccount.solana.amount;
+    req.lamports = TestAccount.solana.amount.toInt();
     req.receiver = TestAccount.solana.publicAddress;
     req.sender = publicAddress;
 
-    final response = await SolanaService.enhancedSerializeTransaction(req);
-    return jsonDecode(response)["result"]["transaction"]["serialized"];
+    final result = await SolanaService.serializeTransaction(req);
+    return jsonDecode(result)["transaction"]["serialized"];
   }
 
   /// Mock a transaction
@@ -22,9 +22,8 @@ class TransactionMock {
     String contractAddress = TestAccount.evm.tokenContractAddress;
     BigInt amount = TestAccount.evm.amount;
     String to = contractAddress;
-    final erc20Resp =
+    final data =
         await EvmService.erc20Transfer(contractAddress, receiver, amount);
-    final data = jsonDecode(erc20Resp)["result"];
 
     final transaction = await EvmService.createTransaction(
         from, data, BigInt.from(0), to,
@@ -56,9 +55,8 @@ class TransactionMock {
     String tokenId = "5301";
     String to = contractAddress;
 
-    final erc20Resp = await EvmService.erc721SafeTransferFrom(
+    final data = await EvmService.erc721SafeTransferFrom(
         contractAddress, from, receiver, tokenId);
-    final data = jsonDecode(erc20Resp)["result"];
 
     final transaction = await EvmService.createTransaction(
         from, data, BigInt.from(0), to,
@@ -76,9 +74,8 @@ class TransactionMock {
     String tokenId = TestAccount.evm.nftTokenId;
     String to = contractAddress;
     String amount = "1";
-    final erc20Resp = await EvmService.erc1155SafeTransferFrom(
+    final data = await EvmService.erc1155SafeTransferFrom(
         contractAddress, from, receiver, tokenId, amount, "0x");
-    final data = jsonDecode(erc20Resp)["result"];
     final transaction = await EvmService.createTransaction(
         from, data, BigInt.from(0), to,
         gasFeeLevel: GasFeeLevel.high);

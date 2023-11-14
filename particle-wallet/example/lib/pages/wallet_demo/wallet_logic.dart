@@ -93,9 +93,14 @@ class WalletLogic {
   }
 
   static void navigatorLoginList() async {
-    String result = await ParticleWallet.navigatorLoginList();
-    print("result:$result");
-    showToast("result: $result");
+    try {
+      Account account = await ParticleWallet.navigatorLoginList();
+      print("navigatorLoginList:$account");
+      showToast("navigatorLoginList: $account");
+    } catch (error) {
+      print("navigatorLoginList:$error");
+      showToast("navigatorLoginList: $error");
+    }
   }
 
   static void setSupportChain() {
