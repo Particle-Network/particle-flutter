@@ -183,9 +183,9 @@ class AuthLogic {
   }
 
   static void signTransaction() async {
-    String pubAddress = await ParticleAuth.getAddress();
     if (currChainInfo.isSolanaChain()) {
       try {
+        String pubAddress = await ParticleAuth.getAddress();
         final transaction =
             await TransactionMock.mockSolanaTransaction(pubAddress);
         print(transaction);
@@ -202,17 +202,18 @@ class AuthLogic {
   }
 
   static void signAllTransactions() async {
-    String pubAddress = await ParticleAuth.getAddress();
     if (currChainInfo.isSolanaChain()) {
-      final transaction1 =
-          await TransactionMock.mockSolanaTransaction(pubAddress);
-      final transaction2 =
-          await TransactionMock.mockSolanaTransaction(pubAddress);
-
-      List<String> transactions = <String>[];
-      transactions.add(transaction1);
-      transactions.add(transaction2);
       try {
+        String pubAddress = await ParticleAuth.getAddress();
+        final transaction1 =
+            await TransactionMock.mockSolanaTransaction(pubAddress);
+        final transaction2 =
+            await TransactionMock.mockSolanaTransaction(pubAddress);
+
+        List<String> transactions = <String>[];
+        transactions.add(transaction1);
+        transactions.add(transaction2);
+
         List<String> signatures =
             await ParticleAuth.signAllTransactions(transactions);
         print("signAllTransactions: $signatures");
@@ -227,14 +228,15 @@ class AuthLogic {
   }
 
   static void signAndSendTransaction() async {
-    String? pubAddress = await ParticleAuth.getAddress();
-    final transction;
-    if (currChainInfo.isSolanaChain()) {
-      transction = await TransactionMock.mockSolanaTransaction(pubAddress);
-    } else {
-      transction = await TransactionMock.mockEvmSendToken(pubAddress);
-    }
     try {
+      String? pubAddress = await ParticleAuth.getAddress();
+      final transction;
+      if (currChainInfo.isSolanaChain()) {
+        transction = await TransactionMock.mockSolanaTransaction(pubAddress);
+      } else {
+        transction = await TransactionMock.mockEvmSendToken(pubAddress);
+      }
+
       String signature = await ParticleAuth.signAndSendTransaction(transction);
       print("signAndSendTransaction: $signature");
       showToast("signAndSendTransaction: $signature");
@@ -249,19 +251,18 @@ class AuthLogic {
       showToast("only evm chain support!");
       return;
     }
+    try {
+      final chainId = await ParticleAuth.getChainId();
+      // This typed data is version 4
 
-    final chainId = await ParticleAuth.getChainId();
-    // This typed data is version 4
-
-    String typedData = '''
+      String typedData = '''
 {"types":{"OrderComponents":[{"name":"offerer","type":"address"},{"name":"zone","type":"address"},{"name":"offer","type":"OfferItem[]"},{"name":"consideration","type":"ConsiderationItem[]"},{"name":"orderType","type":"uint8"},{"name":"startTime","type":"uint256"},{"name":"endTime","type":"uint256"},{"name":"zoneHash","type":"bytes32"},{"name":"salt","type":"uint256"},{"name":"conduitKey","type":"bytes32"},{"name":"counter","type":"uint256"}],"OfferItem":[{"name":"itemType","type":"uint8"},{"name":"token","type":"address"},{"name":"identifierOrCriteria","type":"uint256"},{"name":"startAmount","type":"uint256"},{"name":"endAmount","type":"uint256"}],"ConsiderationItem":[{"name":"itemType","type":"uint8"},{"name":"token","type":"address"},{"name":"identifierOrCriteria","type":"uint256"},{"name":"startAmount","type":"uint256"},{"name":"endAmount","type":"uint256"},{"name":"recipient","type":"address"}],"EIP712Domain":[{"name":"name","type":"string"},{"name":"version","type":"string"},{"name":"chainId","type":"uint256"},{"name":"verifyingContract","type":"address"}]},"domain":{"name":"Seaport","version":"1.1","chainId":$chainId,"verifyingContract":"0x00000000006c3852cbef3e08e8df289169ede581"},"primaryType":"OrderComponents","message":{"offerer":"0x6fc702d32e6cb268f7dc68766e6b0fe94520499d","zone":"0x0000000000000000000000000000000000000000","offer":[{"itemType":"2","token":"0xd15b1210187f313ab692013a2544cb8b394e2291","identifierOrCriteria":"33","startAmount":"1","endAmount":"1"}],"consideration":[{"itemType":"0","token":"0x0000000000000000000000000000000000000000","identifierOrCriteria":"0","startAmount":"9750000000000000","endAmount":"9750000000000000","recipient":"0x6fc702d32e6cb268f7dc68766e6b0fe94520499d"},{"itemType":"0","token":"0x0000000000000000000000000000000000000000","identifierOrCriteria":"0","startAmount":"250000000000000","endAmount":"250000000000000","recipient":"0x66682e752d592cbb2f5a1b49dd1c700c9d6bfb32"}],"orderType":"0","startTime":"1669188008","endTime":"115792089237316195423570985008687907853269984665640564039457584007913129639935","zoneHash":"0x3000000000000000000000000000000000000000000000000000000000000000","salt":"48774942683212973027050485287938321229825134327779899253702941089107382707469","conduitKey":"0x0000000000000000000000000000000000000000000000000000000000000000","counter":"0"}}
     ''';
 
-    String typedDataHex = "0x${StringUtils.toHexString(typedData)}";
+      String typedDataHex = "0x${StringUtils.toHexString(typedData)}";
 
-    print("typedDataHex $typedDataHex");
+      print("typedDataHex $typedDataHex");
 
-    try {
       final signature = await ParticleAuth.signTypedData(
           typedDataHex, SignTypedDataVersion.v4);
       print("signTypedData: $signature");
@@ -277,18 +278,18 @@ class AuthLogic {
       showToast("only evm chain support!");
       return;
     }
-    // This typed data is version 4
-    final chainId = await ParticleAuth.getChainId();
+    try {
+      // This typed data is version 4
+      final chainId = await ParticleAuth.getChainId();
 
-    String typedData = '''
+      String typedData = '''
 {"types":{"OrderComponents":[{"name":"offerer","type":"address"},{"name":"zone","type":"address"},{"name":"offer","type":"OfferItem[]"},{"name":"consideration","type":"ConsiderationItem[]"},{"name":"orderType","type":"uint8"},{"name":"startTime","type":"uint256"},{"name":"endTime","type":"uint256"},{"name":"zoneHash","type":"bytes32"},{"name":"salt","type":"uint256"},{"name":"conduitKey","type":"bytes32"},{"name":"counter","type":"uint256"}],"OfferItem":[{"name":"itemType","type":"uint8"},{"name":"token","type":"address"},{"name":"identifierOrCriteria","type":"uint256"},{"name":"startAmount","type":"uint256"},{"name":"endAmount","type":"uint256"}],"ConsiderationItem":[{"name":"itemType","type":"uint8"},{"name":"token","type":"address"},{"name":"identifierOrCriteria","type":"uint256"},{"name":"startAmount","type":"uint256"},{"name":"endAmount","type":"uint256"},{"name":"recipient","type":"address"}],"EIP712Domain":[{"name":"name","type":"string"},{"name":"version","type":"string"},{"name":"chainId","type":"uint256"},{"name":"verifyingContract","type":"address"}]},"domain":{"name":"Seaport","version":"1.1","chainId":$chainId,"verifyingContract":"0x00000000006c3852cbef3e08e8df289169ede581"},"primaryType":"OrderComponents","message":{"offerer":"0x6fc702d32e6cb268f7dc68766e6b0fe94520499d","zone":"0x0000000000000000000000000000000000000000","offer":[{"itemType":"2","token":"0xd15b1210187f313ab692013a2544cb8b394e2291","identifierOrCriteria":"33","startAmount":"1","endAmount":"1"}],"consideration":[{"itemType":"0","token":"0x0000000000000000000000000000000000000000","identifierOrCriteria":"0","startAmount":"9750000000000000","endAmount":"9750000000000000","recipient":"0x6fc702d32e6cb268f7dc68766e6b0fe94520499d"},{"itemType":"0","token":"0x0000000000000000000000000000000000000000","identifierOrCriteria":"0","startAmount":"250000000000000","endAmount":"250000000000000","recipient":"0x66682e752d592cbb2f5a1b49dd1c700c9d6bfb32"}],"orderType":"0","startTime":"1669188008","endTime":"115792089237316195423570985008687907853269984665640564039457584007913129639935","zoneHash":"0x3000000000000000000000000000000000000000000000000000000000000000","salt":"48774942683212973027050485287938321229825134327779899253702941089107382707469","conduitKey":"0x0000000000000000000000000000000000000000000000000000000000000000","counter":"0"}}
     ''';
 
-    final typedDataHex = "0x${StringUtils.toHexString(typedData)}";
+      final typedDataHex = "0x${StringUtils.toHexString(typedData)}";
 
-    print("typedDataHex $typedDataHex");
+      print("typedDataHex $typedDataHex");
 
-    try {
       final signature = await ParticleAuth.signTypedData(
           typedDataHex, SignTypedDataVersion.v4Unique);
       print("signTypedDataUnique: $signature");
@@ -413,7 +414,7 @@ class AuthLogic {
       String address = await ParticleAuth.getAddress();
       String contractAddress = "0x9B1AAb1492c375F011811cBdBd88FFEf3ce2De76";
       String methodName = "mint";
-      List<Object> parameters = <Object>["3"];
+      List<Object> parameters = <Object>["0x3"];
       String abiJsonString = "";
       final transaction = await EvmService.writeContract(
           address, contractAddress, methodName, parameters, abiJsonString,

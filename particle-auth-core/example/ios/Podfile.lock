@@ -9,7 +9,7 @@ PODS:
   - Base58.swift (1.0.2):
     - BigInt
   - BigInt (5.2.0)
-  - ConnectCommon (0.2.13):
+  - ConnectCommon (0.2.14):
     - BigInt (~> 5.2.0)
     - ParticleNetworkBase
     - RxAlamofire (~> 6.1.1)
@@ -110,7 +110,7 @@ PODS:
 
 DEPENDENCIES:
   - AuthCoreAdapter (= 1.3.0)
-  - ConnectCommon (= 0.2.13)
+  - ConnectCommon (= 0.2.14)
   - Flutter (from `Flutter`)
   - integration_test (from `.symlinks/plugins/integration_test/ios`)
   - particle_auth (from `.symlinks/plugins/particle_auth/ios`)
@@ -169,7 +169,7 @@ SPEC CHECKSUMS:
   AWSKMS: 5db68db95bdf6476701014bfa871efb4cb86ad09
   Base58.swift: e0e16655f9db843b8cd367593ed6f7d90d136b7f
   BigInt: f668a80089607f521586bbe29513d708491ef2f7
-  ConnectCommon: e85d9caedcc0422df48315733d5ee0460a0acdad
+  ConnectCommon: ed55351eccc39eda46222057c013fd7e564a28b9
   CryptoSwift: 52aaf3fce7337552863b1d952e408085f0e65030
   Flutter: f04841e97a9d0b0a8025694d0796dd46242b2854
   integration_test: 13825b8a9334a850581300559b8839134b124670
@@ -196,6 +196,6 @@ SPEC CHECKSUMS:
   Thresh: 1ecdcb7b7219f149bac88266bbc3b6333cf66ea2
   TweetNacl: 3abf4d1d2082b0114e7a67410e300892448951e6
 
-PODFILE CHECKSUM: bc2990f79f8f1fad1d25b247c9bddeed47e21bac
+PODFILE CHECKSUM: 08205e794ae3989c834bd10ce21cf1aa839d966e
 
 COCOAPODS: 1.14.2

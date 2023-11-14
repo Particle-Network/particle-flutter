@@ -118,6 +118,7 @@ public extension ParticleAuthCorePlugin {
 
     func switchChain(_ json: String?, callback: @escaping ParticleCallback) {
         guard let json = json else {
+            callback(getErrorJson("json is nil"))
             return
         }
         let data = JSON(parseJSON: json)
@@ -141,7 +142,10 @@ public extension ParticleAuthCorePlugin {
     }
 
     func connect(_ json: String?, callback: @escaping ParticleCallback) {
-        guard let jwt = json else { return }
+        guard let jwt = json else {
+            callback(getErrorJson("json is nil"))
+            return
+        }
 
         let observable = Single<String>.fromAsync { [weak self] in
             guard let self = self else {
@@ -176,7 +180,10 @@ public extension ParticleAuthCorePlugin {
     }
 
     func solanaSignMessage(_ json: String?, callback: @escaping ParticleCallback) {
-        guard let message = json else { return }
+        guard let message = json else {
+            callback(getErrorJson("json is nil"))
+            return
+        }
         let serializedMessage = Base58.encode(message.data(using: .utf8)!)
 
         let chainInfo = ParticleNetwork.getChainInfo()
@@ -189,7 +196,9 @@ public extension ParticleAuthCorePlugin {
     }
 
     func solanaSignTransaction(_ json: String?, callback: @escaping ParticleCallback) {
-        guard let transaction = json else { return }
+        guard let transaction = json else { callback(getErrorJson("json is nil"))
+            return
+        }
         let chainInfo = ParticleNetwork.getChainInfo()
         subscribeAndCallback(observable: Single<Bool>.fromAsync { [weak self] in
             guard let self = self else {
@@ -200,7 +209,9 @@ public extension ParticleAuthCorePlugin {
     }
 
     func solanaSignAllTransactions(_ json: String?, callback: @escaping ParticleCallback) {
-        guard let json = json else { return }
+        guard let json = json else { callback(getErrorJson("json is nil"))
+            return
+        }
         let transactions = JSON(parseJSON: json).arrayValue.map { $0.stringValue }
         let chainInfo = ParticleNetwork.getChainInfo()
         subscribeAndCallback(observable: Single<Bool>.fromAsync { [weak self] in
@@ -212,7 +223,9 @@ public extension ParticleAuthCorePlugin {
     }
 
     func solanaSignAndSendTransaction(_ transaction: String?, callback: @escaping ParticleCallback) {
-        guard let transaction = transaction else { return }
+        guard let transaction = transaction else { callback(getErrorJson("json is nil"))
+            return
+        }
         let chainInfo = ParticleNetwork.getChainInfo()
         subscribeAndCallback(observable: Single<Bool>.fromAsync { [weak self] in
             guard let self = self else {
@@ -223,7 +236,9 @@ public extension ParticleAuthCorePlugin {
     }
 
     func evmPersonalSign(_ message: String?, callback: @escaping ParticleCallback) {
-        guard let message = message else { return }
+        guard let message = message else { callback(getErrorJson("json is nil"))
+            return
+        }
         let chainInfo = ParticleNetwork.getChainInfo()
         subscribeAndCallback(observable: Single<Bool>.fromAsync { [weak self] in
             guard let self = self else {
@@ -234,7 +249,9 @@ public extension ParticleAuthCorePlugin {
     }
 
     func evmPersonalSignUnique(_ message: String?, callback: @escaping ParticleCallback) {
-        guard let message = message else { return }
+        guard let message = message else { callback(getErrorJson("json is nil"))
+            return
+        }
         let chainInfo = ParticleNetwork.getChainInfo()
         subscribeAndCallback(observable: Single<Bool>.fromAsync { [weak self] in
             guard let self = self else {
@@ -245,7 +262,10 @@ public extension ParticleAuthCorePlugin {
     }
 
     func evmSignTypedData(_ message: String?, callback: @escaping ParticleCallback) {
-        guard let message = message else { return }
+        guard let message = message else {
+            callback(getErrorJson("json is nil"))
+            return
+        }
         let chainInfo = ParticleNetwork.getChainInfo()
         subscribeAndCallback(observable: Single<Bool>.fromAsync { [weak self] in
             guard let self = self else {
@@ -256,7 +276,10 @@ public extension ParticleAuthCorePlugin {
     }
 
     func evmSignTypedDataUnique(_ message: String?, callback: @escaping ParticleCallback) {
-        guard let message = message else { return }
+        guard let message = message else {
+            callback(getErrorJson("json is nil"))
+            return
+        }
         let chainInfo = ParticleNetwork.getChainInfo()
         subscribeAndCallback(observable: Single<Bool>.fromAsync { [weak self] in
             guard let self = self else {
@@ -267,7 +290,9 @@ public extension ParticleAuthCorePlugin {
     }
 
     func evmSendTransaction(_ transaction: String?, callback: @escaping ParticleCallback) {
-        guard let transaction = transaction else { return }
+        guard let transaction = transaction else { callback(getErrorJson("json is nil"))
+            return
+        }
         let chainInfo = ParticleNetwork.getChainInfo()
         subscribeAndCallback(observable: Single<Bool>.fromAsync { [weak self] in
             guard let self = self else {
@@ -289,13 +314,7 @@ public extension ParticleAuthCorePlugin {
 
     func getUserInfo(_ callback: @escaping ParticleCallback) {
         guard let userInfo = self.auth.getUserInfo() else {
-            let error = ParticleNetwork.ResponseError(code: nil, message: "user is not login")
-            let response = self.ResponseFromError(error)
-            let statusModel = FlutterStatusModel(status: false, data: response)
-            let data = try! JSONEncoder().encode(statusModel)
-            guard let json = String(data: data, encoding: .utf8) else { return }
-            callback(json)
-
+            callback(getErrorJson("user is not login"))
             return
         }
 
@@ -390,5 +409,15 @@ extension Single {
             }
             return Disposables.create { task.cancel() }
         }.observe(on: MainScheduler.instance)
+    }
+}
+
+extension ParticleAuthCorePlugin {
+    private func getErrorJson(_ message: String) -> String {
+        let response = FlutterResponseError(code: nil, message: message, data: nil)
+        let statusModel = FlutterStatusModel(status: false, data: response)
+        let data1 = try! JSONEncoder().encode(statusModel)
+        guard let json = String(data: data1, encoding: .utf8) else { return "" }
+        return json
     }
 }

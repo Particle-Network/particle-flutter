@@ -181,7 +181,7 @@ public extension ParticleAuthPlugin {
 
     func setChainInfoAsync(_ json: String?, callback: @escaping ParticleCallback) {
         guard let json = json else {
-            callback(FlutterError(code: "", message: "json is nil", details: nil))
+            callback(getErrorJson("json is nil"))
             return
         }
         let data = JSON(parseJSON: json)
@@ -190,7 +190,7 @@ public extension ParticleAuthPlugin {
         let chainName = data["chain_name"].stringValue.lowercased()
         let chainType: ChainType = chainName == "solana" ? .solana : .evm
         guard let chainInfo = ParticleNetwork.searchChainInfo(by: chainId, chainType: chainType) else {
-            callback(FlutterError(code: "", message: "did not find chain info for \(chainId)", details: nil))
+            callback(getErrorJson("did not find chain info for \(chainId)"))
             return
         }
         ParticleAuthService.switchChain(chainInfo).subscribe { result in
@@ -213,7 +213,7 @@ public extension ParticleAuthPlugin {
     
     func login(_ json: String?, callback: @escaping ParticleCallback) {
         guard let json = json else {
-            callback(FlutterError(code: "", message: "json is nil", details: nil))
+            callback(getErrorJson("json is nil"))
             return
         }
 
@@ -309,7 +309,7 @@ public extension ParticleAuthPlugin {
     
     func signMessage(_ json: String?, callback: @escaping ParticleCallback) {
         guard let message = json else {
-            callback(FlutterError(code: "", message: "json is nil", details: nil))
+            callback(getErrorJson("json is nil"))
             return
         }
         
@@ -326,7 +326,7 @@ public extension ParticleAuthPlugin {
     
     func signMessageUnique(_ json: String?, callback: @escaping ParticleCallback) {
         guard let message = json else {
-            callback(FlutterError(code: "", message: "json is nil", details: nil))
+            callback(getErrorJson("json is nil"))
             return
         }
         
@@ -342,7 +342,7 @@ public extension ParticleAuthPlugin {
     
     func signTransaction(_ json: String?, callback: @escaping ParticleCallback) {
         guard let transaction = json else {
-            callback(FlutterError(code: "", message: "json is nil", details: nil))
+            callback(getErrorJson("json is nil"))
             return
         }
         subscribeAndCallback(observable: ParticleAuthService.signTransaction(transaction), callback: callback)
@@ -350,7 +350,7 @@ public extension ParticleAuthPlugin {
     
     func signAllTransactions(_ json: String?, callback: @escaping ParticleCallback) {
         guard let json = json else {
-            callback(FlutterError(code: "", message: "json is nil", details: nil))
+            callback(getErrorJson("json is nil"))
             return
         }
         
@@ -361,7 +361,7 @@ public extension ParticleAuthPlugin {
     
     func signAndSendTransaction(_ json: String?, callback: @escaping ParticleCallback) {
         guard let json = json else {
-            callback(FlutterError(code: "", message: "json is nil", details: nil))
+            callback(getErrorJson("json is nil"))
             return
         }
         
@@ -398,7 +398,7 @@ public extension ParticleAuthPlugin {
     
     func batchSendTransactions(_ json: String?, callback: @escaping ParticleCallback) {
         guard let json = json else {
-            callback(FlutterError(code: "", message: "json is nil", details: nil))
+            callback(getErrorJson("json is nil"))
             return
         }
         
@@ -424,12 +424,12 @@ public extension ParticleAuthPlugin {
         let wholeFeeQuote = try? JSONDecoder().decode(AA.WholeFeeQuote.self, from: wholeFeeQuoteData)
         
         guard let aaService = ParticleNetwork.getAAService() else {
-            callback(FlutterError(code: "", message: "aa service is not init", details: nil))
+            callback(getErrorJson("aa service is not init"))
             return
         }
         
         guard aaService.isAAModeEnable() else {
-            callback(FlutterError(code: "", message: "aa service is not enable", details: nil))
+            callback(getErrorJson("aa service is not enable"))
             return
         }
         let chainInfo = ParticleNetwork.getChainInfo()
@@ -440,7 +440,7 @@ public extension ParticleAuthPlugin {
     
     func signTypedData(_ json: String?, callback: @escaping ParticleCallback) {
         guard let json = json else {
-            callback(FlutterError(code: "", message: "json is nil", details: nil))
+            callback(getErrorJson("json is nil"))
             return
         }
         
@@ -458,7 +458,7 @@ public extension ParticleAuthPlugin {
             signTypedDataVersion = .v4Unique
         }
         guard let signTypedDataVersion = signTypedDataVersion else {
-            callback(FlutterError(code: "", message: "version is wrong", details: nil))
+            callback(getErrorJson("version is wrong"))
             return
         }
        
@@ -471,7 +471,7 @@ public extension ParticleAuthPlugin {
     
     func getUserInfo(_ callback: @escaping ParticleCallback) {
         guard let userInfo = ParticleAuthService.getUserInfo() else {
-            callback(FlutterError(code: "", message: "user is not login", details: nil))
+            callback(getErrorJson("user is not login"))
             return
         }
         
@@ -659,5 +659,15 @@ extension ParticleAuthPlugin: MessageSigner {
     
     public func getEoaAddress() -> String {
         ParticleAuthService.getAddress()
+    }
+}
+
+extension ParticleAuthPlugin {
+    private func getErrorJson(_ message: String) -> String {
+        let response = FlutterResponseError(code: nil, message: message, data: nil)
+        let statusModel = FlutterStatusModel(status: false, data: response)
+        let data1 = try! JSONEncoder().encode(statusModel)
+        guard let json = String(data: data1, encoding: .utf8) else { return "" }
+        return json
     }
 }

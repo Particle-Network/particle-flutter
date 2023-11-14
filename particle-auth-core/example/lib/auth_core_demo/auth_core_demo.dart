@@ -324,7 +324,7 @@ class AuthDemoPageState extends State<AuthDemoPage> {
                 height: 50,
                 child: ElevatedButton(
                     onPressed: () =>
-                        {AuthCoreLogic.writeContractSendTransaction()},
+                        {AuthCoreLogic.writeContractThenSendTransaction()},
                     child: const Text(
                       "Write contract then send ",
                       style: TextStyle(fontSize: 18),
@@ -405,6 +405,84 @@ class AuthDemoPageState extends State<AuthDemoPage> {
                     onPressed: () => {AuthCoreLogic.hasPaymentPassword()},
                     child: const Text(
                       "Has payment password",
+                      style: TextStyle(fontSize: 18),
+                    )),
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: SizedBox(
+                width: double.infinity,
+                height: 50,
+                child: ElevatedButton(
+                    onPressed: () => {AuthCoreLogic.getTokensAndNFTs()},
+                    child: const Text(
+                      "getTokensAndNFTs",
+                      style: TextStyle(fontSize: 18),
+                    )),
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: SizedBox(
+                width: double.infinity,
+                height: 50,
+                child: ElevatedButton(
+                    onPressed: () => {AuthCoreLogic.getTokens()},
+                    child: const Text(
+                      "getTokens",
+                      style: TextStyle(fontSize: 18),
+                    )),
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: SizedBox(
+                width: double.infinity,
+                height: 50,
+                child: ElevatedButton(
+                    onPressed: () => {AuthCoreLogic.getNFTs()},
+                    child: const Text(
+                      "getNFTs",
+                      style: TextStyle(fontSize: 18),
+                    )),
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: SizedBox(
+                width: double.infinity,
+                height: 50,
+                child: ElevatedButton(
+                    onPressed: () => {AuthCoreLogic.getTransactionsByAddress()},
+                    child: const Text(
+                      "getTransactionsByAddress",
+                      style: TextStyle(fontSize: 18),
+                    )),
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: SizedBox(
+                width: double.infinity,
+                height: 50,
+                child: ElevatedButton(
+                    onPressed: () => {AuthCoreLogic.getTokenByTokenAddresses()},
+                    child: const Text(
+                      "getTokenByTokenAddresses",
+                      style: TextStyle(fontSize: 18),
+                    )),
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: SizedBox(
+                width: double.infinity,
+                height: 50,
+                child: ElevatedButton(
+                    onPressed: () => {AuthCoreLogic.getPrice()},
+                    child: const Text(
+                      "getPrice",
                       style: TextStyle(fontSize: 18),
                     )),
               ),
