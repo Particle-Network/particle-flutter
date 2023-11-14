@@ -5,6 +5,6 @@
         <activity
             android:name="network.particle.flutter.bridge.ui.FlutterLoginOptActivity"
             android:exported="false"
-            android:theme="@style/FlutterBridgeThemeLoginOpt" />
+            android:theme="@style/PnThemeWallet.FullScreen" />
     </application>
 </manifest>

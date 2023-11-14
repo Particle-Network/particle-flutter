@@ -772,7 +772,8 @@ object ConnectBridge {
                         object : MessageSigner {
                             override fun signMessage(
                                 message: String,
-                                callback: WebServiceCallback<SignOutput>
+                                callback: WebServiceCallback<SignOutput>,
+                                chainId: Long?
                             ) {
                                 connectAdapter.signMessage(
                                     transParams.publicAddress,

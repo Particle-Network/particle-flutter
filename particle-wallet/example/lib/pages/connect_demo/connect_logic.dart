@@ -2,6 +2,7 @@
 import 'package:oktoast/oktoast.dart';
 import 'package:particle_auth/particle_auth.dart';
 import 'package:particle_connect/particle_connect.dart';
+import 'package:particle_wallet/particle_wallet.dart';
 import 'package:particle_wallet_example/mock/test_account.dart';
 import 'package:particle_wallet_example/mock/transaction_mock.dart';
 
@@ -45,6 +46,9 @@ class ConnectLogic {
       final account = await ParticleConnect.connect(walletType, config: config);
       ConnectLogic.account = account;
       showToast('connect: $account');
+
+      ParticleWallet.setWallet(walletType, account.publicAddress, "Custom WalletName");
+
       print("connect: $account");
     } catch (error) {
       showToast('connect: $error');

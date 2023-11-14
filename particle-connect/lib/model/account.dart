@@ -11,15 +11,23 @@ class Account {
   Account(this.publicAddress, this.name, this.url, this.icons, this.description,
       this.mnemonic, this.chainId, this.walletType);
 
-  Account.fromJson(Map<String, dynamic> json)
-      : publicAddress = json['publicAddress'],
-        name = json['name'],
-        url = json['url'],
-        icons = List<String>.from(json['icons'].map((x) => x)),
-        description = json['description'],
-        mnemonic = json['mnemonic'],
-        chainId = json['chainId'],
-        walletType = (json['walletType'] as Map<String, dynamic>).keys.first;
+  factory Account.fromJson(Map<String, dynamic> json) {
+    String walletType = "";
+    if (json.containsKey("walletType") &&
+        json['walletType'] != null) {
+      (json['walletType'] as Map<String, dynamic>).keys.first;
+    }
+    return Account(
+      json['publicAddress'],
+      json['name'],
+      json['url'],
+      List<String>.from(json['icons'].map((x) => x)),
+      json['description'],
+      json['mnemonic'],
+      json['chainId'],
+      walletType,
+    );
+  }
 
   Map<String, dynamic> toJson() => {
         'publicAddress': publicAddress,
@@ -31,6 +39,7 @@ class Account {
         "chainId": chainId,
         "walletType": walletType,
       };
+
   @override
   String toString() {
     return 'UserInfo(publicAddress: $publicAddress, name: $name, url: $url, icons: $icons, description: $description, mnemonic: $mnemonic, chainId: $chainId, walletType: $walletType';
