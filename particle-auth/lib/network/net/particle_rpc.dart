@@ -14,12 +14,18 @@ class RpcOutput<T> {
   late T result;
 }
 
+String getCurrentTimestamp() {
+  var now = DateTime.now();
+  var timestamp = now.millisecondsSinceEpoch;
+  return timestamp.toString();
+}
+
 class EvmService {
   static Future<dynamic> rpc(String method, List<dynamic> params) async {
     final req = RequestBodyEntity();
     req.chainId = await ParticleAuth.getChainId();
     req.jsonrpc = "2.0";
-    req.id = const Uuid().v4();
+    req.id = getCurrentTimestamp();
     req.method = method;
     req.params = params;
     final result = await EvmRpcApi.getClient().rpc(req);
@@ -394,7 +400,7 @@ class SolanaService {
     final req = RequestBodyEntity();
     req.chainId = await ParticleAuth.getChainId();
     req.jsonrpc = "2.0";
-    req.id = const Uuid().v4();
+    req.id = getCurrentTimestamp();
     req.method = method;
     req.params = params;
     final result = await SolanaRpcApi.getClient().rpc(req);

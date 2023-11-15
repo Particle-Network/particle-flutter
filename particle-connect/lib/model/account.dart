@@ -2,7 +2,7 @@ class Account {
   String publicAddress;
   String? name;
   String? url;
-  List<String> icons;
+  List<String>? icons;
   String? description;
   String? mnemonic;
   int? chainId;
@@ -13,15 +13,16 @@ class Account {
 
   factory Account.fromJson(Map<String, dynamic> json) {
     String walletType = "";
-    if (json.containsKey("walletType") &&
-        json['walletType'] != null) {
+    if (json.containsKey("walletType") && json['walletType'] != null) {
       (json['walletType'] as Map<String, dynamic>).keys.first;
     }
     return Account(
       json['publicAddress'],
       json['name'],
       json['url'],
-      List<String>.from(json['icons'].map((x) => x)),
+      json['icons'] != null
+          ? List<String>.from(json['icons'].map((x) => x))
+          : null,
       json['description'],
       json['mnemonic'],
       json['chainId'],
@@ -33,7 +34,8 @@ class Account {
         'publicAddress': publicAddress,
         'name': name,
         'url': url,
-        'icons': List<dynamic>.from(icons.map((x) => x)),
+        'icons':
+            icons != null ? List<dynamic>.from(icons!.map((x) => x)) : null,
         'description': description,
         "mnemonic": mnemonic,
         "chainId": chainId,

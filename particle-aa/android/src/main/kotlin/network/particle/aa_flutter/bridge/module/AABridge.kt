@@ -7,7 +7,6 @@ import com.blankj.utilcode.util.LogUtils
 import com.particle.base.ParticleNetwork
 import com.particle.base.isSupportedERC4337
 import com.particle.erc4337.ParticleNetworkAA.initAAMode
-import com.particle.erc4337.aa.AAService
 
 import io.flutter.plugin.common.MethodChannel
 import kotlinx.coroutines.CoroutineScope
@@ -35,7 +34,17 @@ object AABridge {
         LogUtils.d("init", initParams)
         val initData = GsonUtils.fromJson(initParams, BiconomyInitData::class.java)
         ParticleNetwork.initAAMode(initData.dAppKeys)
-        ParticleNetwork.setAAService(AAService)
+        val aaService = ParticleNetwork.getRegisterAAServices().values.firstOrNull {
+            it.getIAAProvider().apiName.equals(
+                initData.name,
+                true
+            )
+        }
+        aaService?.apply {
+            getIAAProvider().version = initData.version
+            ParticleNetwork.setAAService(aaService)
+        }
+
     }
 
     fun isSupportChainInfo(chainParams: String, result: MethodChannel.Result) {
@@ -87,7 +96,8 @@ object AABridge {
         val feeQuotesParams = GsonUtils.fromJson(feeQuotesParams, FeeQuotesParams::class.java)
         CoroutineScope(Dispatchers.IO).launch {
             try {
-                val resp = ParticleNetwork.getAAService().rpcGetFeeQuotes(feeQuotesParams.eoaAddress, feeQuotesParams.transactions)
+                val resp = ParticleNetwork.getAAService()
+                    .rpcGetFeeQuotes(feeQuotesParams.eoaAddress, feeQuotesParams.transactions)
                 LogUtils.d("rpcGetFeeQuotes", resp)
                 if (resp.isSuccess()) {
                     result.success(FlutterCallBack.success(resp.result).toGson())
