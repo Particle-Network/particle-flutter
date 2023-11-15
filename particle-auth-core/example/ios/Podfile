@@ -36,8 +36,8 @@ target 'Runner' do
   pod "ParticleAuthCore", '1.3.0'
   pod "AuthCoreAdapter", '1.3.0'
 
-  pod 'ParticleAuthService', '1.3.4'
-  pod 'ParticleNetworkBase', '1.3.4'
+  pod 'ParticleAuthService', '1.3.5'
+  pod 'ParticleNetworkBase', '1.3.5'
   pod 'ConnectCommon', '0.2.14'
     
   flutter_install_all_ios_pods File.dirname(File.realpath(__FILE__))
