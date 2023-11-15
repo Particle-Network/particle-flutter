@@ -1,11 +1,9 @@
 import 'dart:convert';
 import 'dart:math';
 
-import 'package:dio/dio.dart';
 import 'package:particle_auth/network/net/response.dart';
 import 'package:particle_auth/network/net/rest_client.dart';
 import 'package:particle_auth/particle_auth.dart';
-import 'package:uuid/uuid.dart';
 
 class RpcOutput<T> {
   late int chainId;
