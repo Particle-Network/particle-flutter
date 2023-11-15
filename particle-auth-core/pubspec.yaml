@@ -37,7 +37,7 @@ flutter:
   plugin:
     platforms:
       android:
-        package: particle.network.particle_auth_core
+        package: com.particleauthcore
         pluginClass: ParticleAuthCorePlugin
       ios:
         pluginClass: ParticleAuthCorePlugin

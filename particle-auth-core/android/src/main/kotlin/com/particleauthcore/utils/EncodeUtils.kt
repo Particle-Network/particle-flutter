@@ -1,4 +1,4 @@
-package network.particle.auth_core_flutter.bridge.utils
+package com.particleauthcore.utils
 
 import com.particle.base.ParticleNetwork
 

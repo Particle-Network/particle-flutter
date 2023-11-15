@@ -1,11 +1,9 @@
-package network.particle.auth_core_flutter.bridge.utils
+package com.particleauthcore.utils
 
 import org.apache.commons.codec.DecoderException
 import org.apache.commons.codec.binary.Hex
 
-/**
- * Created by chaichuanfa on 2022/7/18
- */
+
 object HexUtils {
 
     @Throws(DecoderException::class)

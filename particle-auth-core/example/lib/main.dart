@@ -66,7 +66,7 @@ class _MyHomePageState extends State<MyHomePage> {
                       )
                     },
                     child: const Text(
-                      "Auth Demo",
+                      "AuthCore Demo",
                       style: TextStyle(fontSize: 20),
                     ),
                   )),

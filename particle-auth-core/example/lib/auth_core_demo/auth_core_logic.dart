@@ -25,7 +25,7 @@ class AuthCoreLogic {
 
   static void connect() async {
     try {
-      const jwt = "eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCIsImtpZCI6IndVUE05RHNycml0Sy1jVHE2OWNKcCJ9.eyJlbWFpbCI6InBhbnRhb3ZheUBnbWFpbC5jb20iLCJlbWFpbF92ZXJpZmllZCI6ZmFsc2UsImlzcyI6Imh0dHBzOi8vZGV2LXFyNi01OWVlLnVzLmF1dGgwLmNvbS8iLCJhdWQiOiJFVmpLMVpaUFN0UWNkV3VoandQZGRBdGdSaXdwNTRWUSIsImlhdCI6MTY5OTk0Njg0OSwiZXhwIjoxNjk5OTgyODQ5LCJzdWIiOiJhdXRoMHw2MzAzMjE0YjZmNjE1NjM2YWM5MTdmMWIiLCJzaWQiOiIybWRCWmJBT3Z2WEhyYlRoQUV4dnh5bmJSWnpoOEZlTyJ9.KgG0MgMMX-tW4cDI7Le57gb2xy8IeX5WsfupQZzArHok8aBDxa3wREM9CTMDP49yXYYAAtqyjjyg8j3bydhMspcs5StL9R4d7BQu6gzLfQD4wju2T14s-kOV5UaXqwi7jSmltTDtfJbFcCD_4iiaNRewQSwizpIRd3pXZnMSJg13G6b7ouaF-PWoEJJSkz8L5Uh9XMPVEgmUESs5yyN-3pY4jtJw0BEtDAW6EyHCUZ7Hu-GvjC9N4F8cvZHMNDhRzfQSbcuO0W74ITN43_igH1n5IvmeBYvrMhXJe8sZ3uLkx777giufSH7GPCp4_lXhNnlZGMurdxCKVAWmp1Eo1g"; // paste your jwt
+      const jwt = "eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCIsImtpZCI6IndVUE05RHNycml0Sy1jVHE2OWNKcCJ9.eyJlbWFpbCI6InBhbnRhb3ZheUBnbWFpbC5jb20iLCJlbWFpbF92ZXJpZmllZCI6ZmFsc2UsImlzcyI6Imh0dHBzOi8vZGV2LXFyNi01OWVlLnVzLmF1dGgwLmNvbS8iLCJhdWQiOiJFVmpLMVpaUFN0UWNkV3VoandQZGRBdGdSaXdwNTRWUSIsImlhdCI6MTcwMDAxNjYzMSwiZXhwIjoxNzAwMDUyNjMxLCJzdWIiOiJhdXRoMHw2MzAzMjE0YjZmNjE1NjM2YWM5MTdmMWIiLCJzaWQiOiIybWRCWmJBT3Z2WEhyYlRoQUV4dnh5bmJSWnpoOEZlTyJ9.a_tSi4mjcgMR6VmoNFKTKqhzVKigX1XNz7lGJnPj6PoucfgMCc6MdqOfg4hmMprXvuoqe8PLWLeC1t_QOa2FA4KOdc9ast24byu3-0sy1_VI0Vp8nfsGwLPqRNr3x3bvW2tvh_ACntC_pmahg1EB6_k2rwj5ujjdBe3PnphExq7mXfUy0xc_Ovs0LW6LLxvIfL1ye4Ny23miib2rD713sTT9AH7Y7ZKN5_AX91yxVlDz5KIXpEOtbA5IS7JcD1THbHu_O3KtSzd4fklBRD8HH08VzJFyqtNMds5KKerQ4ixB3UlDZyjQQAU21Bo7LBLyPijbumVIqv-1zzplqOpP7w"; // paste your jwt
       final userInfo = await ParticleAuthCore.connect(jwt);
       print("connect: $userInfo");
       showToast("connect: $userInfo");
@@ -210,6 +210,7 @@ class AuthCoreLogic {
     bool isSuccess =
         await ParticleAuthCore.switchChain(ChainInfo.PolygonMumbai);
     print("switch chain: $isSuccess");
+    showToast("switch chain: $isSuccess");
   }
 
   static void getUserInfo() async {

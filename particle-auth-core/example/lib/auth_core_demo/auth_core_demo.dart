@@ -17,7 +17,7 @@ class AuthDemoPageState extends State<AuthDemoPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text("Auth Demo"),
+        title: const Text("AuthCore Demo"),
       ),
       body: SingleChildScrollView(
         child: Column(
@@ -260,7 +260,7 @@ class AuthDemoPageState extends State<AuthDemoPage> {
                     onPressed: () =>
                         {AuthCoreLogic.solanaSignAndSendTransaction()},
                     child: const Text(
-                      "Solana sign and send transactions",
+                      "Solana sign and send transaction",
                       style: TextStyle(fontSize: 18),
                     )),
               ),

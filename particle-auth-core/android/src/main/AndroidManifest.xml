@@ -1,7 +1,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="network.particle.auth_core_plugin.particle_auth_core">
+    package="com.particleauthcore">
 
-    <application>
+    <application >
         <!--   Particle Network config start     -->
         <activity
             android:name="com.particle.network.controller.WebActivity"
