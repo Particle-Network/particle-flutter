@@ -387,10 +387,10 @@ class AuthCoreLogic {
     try {
       final result;
       if (currChainInfo.isSolanaChain()) {
-        final address = await ParticleAuth.getAddress();
+        final address = await Solana.getAddress();
         result = await SolanaService.getTokensAndNFTs(address, true);
       } else {
-        final address = await ParticleAuth.getAddress();
+        final address = await Evm.getAddress();
         result = await EvmService.getTokensAndNFTs(address);
       }
 
@@ -408,7 +408,7 @@ class AuthCoreLogic {
       return;
     }
     try {
-      final address = await ParticleAuth.getAddress();
+      final address = await Evm.getAddress();
       final result = await EvmService.getTokens(address);
       print("getTokens: $result");
       showToast("getTokens: $result");
@@ -424,7 +424,7 @@ class AuthCoreLogic {
       return;
     }
     try {
-      final address = await ParticleAuth.getAddress();
+      final address = await Evm.getAddress();
       final result = await EvmService.getNFTs(address);
       print("getNFTs: $result");
       showToast("getNFTs: $result");
@@ -438,14 +438,14 @@ class AuthCoreLogic {
     try {
       final result;
       if (currChainInfo.isSolanaChain()) {
-        final address = await ParticleAuth.getAddress();
+        final address = await Solana.getAddress();
         List<String> tokenAddresses = <String>[];
         tokenAddresses.add('Fh79BtbpPH7Kh8BrhqG7iwKA3xSkgGg2TrtQPgM2c2SY');
         tokenAddresses.add('GobzzzFQsFAHPvmwT42rLockfUCeV3iutEkK218BxT8K');
         result = await SolanaService.getTokenByTokenAddresses(
             address, tokenAddresses);
       } else {
-        final address = await ParticleAuth.getAddress();
+        final address = await Evm.getAddress();
         List<String> tokenAddresses = <String>[];
         tokenAddresses.add('0x001B3B4d0F3714Ca98ba10F6042DaEbF0B1B7b6F');
         tokenAddresses.add('0x326C977E6efc84E512bB9C30f76E30c160eD06FB');
@@ -465,10 +465,10 @@ class AuthCoreLogic {
     try {
       final result;
       if (currChainInfo.isSolanaChain()) {
-        final address = await ParticleAuth.getAddress();
+        final address = await Solana.getAddress();
         result = await SolanaService.getTransactionsByAddress(address);
       } else {
-        final address = await ParticleAuth.getAddress();
+        final address = await Evm.getAddress();
         result = await EvmService.getTransactionsByAddress(address);
       }
 
