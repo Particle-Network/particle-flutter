@@ -149,7 +149,6 @@ class AADemoAuthPageState extends State<AADemoAuthPage> {
                     )),
               ),
             ),
-            
             Padding(
               padding: const EdgeInsets.all(8.0),
               child: SizedBox(
@@ -214,58 +213,6 @@ class AADemoAuthPageState extends State<AADemoAuthPage> {
                     onPressed: () => {ParticleAuth.openWebWallet(webConfig)},
                     child: const Text(
                       "open WebWallet",
-                      style: TextStyle(fontSize: 18),
-                    )),
-              ),
-            ),
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: SizedBox(
-                width: double.infinity,
-                height: 50,
-                child: ElevatedButton(
-                    onPressed: () => {AAAuthLogic.setAAAccountName()},
-                    child: const Text(
-                      "set account name",
-                      style: TextStyle(fontSize: 18),
-                    )),
-              ),
-            ),
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: SizedBox(
-                width: double.infinity,
-                height: 50,
-                child: ElevatedButton(
-                    onPressed: () => {AAAuthLogic.setAAVersionNumber()},
-                    child: const Text(
-                      "set version number",
-                      style: TextStyle(fontSize: 18),
-                    )),
-              ),
-            ),
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: SizedBox(
-                width: double.infinity,
-                height: 50,
-                child: ElevatedButton(
-                    onPressed: () => {AAAuthLogic.getAAAccountName()},
-                    child: const Text(
-                      "get account name",
-                      style: TextStyle(fontSize: 18),
-                    )),
-              ),
-            ),
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: SizedBox(
-                width: double.infinity,
-                height: 50,
-                child: ElevatedButton(
-                    onPressed: () => {AAAuthLogic.getAAVersionNumber()},
-                    child: const Text(
-                      "get version number",
                       style: TextStyle(fontSize: 18),
                     )),
               ),

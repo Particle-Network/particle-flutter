@@ -17,7 +17,8 @@ class ParticleAA {
   /// Init particle-aa SDK
   ///
   /// [dappKeys] AA biconomy dapp keys
-  static init(Map<int, String> biconomyApiKeys) {
+  static init(AccountName name, VersionNumber version,
+      Map<int, String> biconomyApiKeys) {
     // Convert integer keys to strings
     var stringKeyMap =
         biconomyApiKeys.map((key, value) => MapEntry(key.toString(), value));
@@ -27,12 +28,16 @@ class ParticleAA {
           'initialize',
           jsonEncode({
             "biconomy_app_keys": stringKeyMap,
+            "name": name.name,
+            "version": version.version,
           }));
     } else {
       _channel.invokeMethod(
           'init',
           jsonEncode({
             "biconomy_app_keys": stringKeyMap,
+            "name": name.name,
+            "version": version.version,
           }));
     }
   }
@@ -65,29 +70,6 @@ class ParticleAA {
   /// Disable aa mode
   static disableAAMode() {
     _channel.invokeMethod("disableAAMode");
-  }
-
-  static setAAAccountName(AccountName name) {
-    _channel.invokeMethod('setAAAccountName', name.name);
-  }
-
-  static setAAVersionNumber(VersionNumber versionNumber) {
-    _channel.invokeMethod('setAAAccountName', versionNumber.version);
-  }
-
-  static Future<AccountName> getAAAccountName() async {
-    final name = await _channel.invokeMethod("getAAAccountName");
-    AccountName result = AccountName.values.byName(name);
-    return result;
-  }
-
-  static Future<VersionNumber> getAAVersionNumber() async {
-    String version = _channel.invokeMethod('getAAVersionNumber') as String;
-    if (version == '1.0.0') {
-      return VersionNumber.V1_0_0();
-    } else {
-      return VersionNumber.V1_0_0();
-    }
   }
 
   /// Rpc get fee quotes

@@ -26,10 +26,6 @@ public class ParticleAAPlugin: NSObject, FlutterPlugin {
         case enableAAMode
         case disableAAMode
         case rpcGetFeeQuotes
-        case setAAAccountName
-        case getAAAccountName
-        case setAAVersionNumber
-        case getAAVersionNumber
     }
     
     public static func register(with registrar: FlutterPluginRegistrar) {
@@ -61,14 +57,6 @@ public class ParticleAAPlugin: NSObject, FlutterPlugin {
             disableAAMode()
         case .rpcGetFeeQuotes:
             rpcGetFeeQuotes(json as? String, callback: result)
-        case .setAAAccountName:
-            setAAAccountName(json as? String)
-        case .getAAAccountName:
-            getAAAccountName(result)
-        case .setAAVersionNumber:
-            setAAVersionNumber(json as? String)
-        case .getAAVersionNumber:
-            getAAVersionNumber(result)
         }
     }
 }
@@ -83,16 +71,20 @@ public extension ParticleAAPlugin {
         
         let data = JSON(parseJSON: json)
         
-        let dappAppKeysDict = data["biconomy_app_keys"].dictionaryValue
-        var dappAppKeys: [Int: String] = [:]
+        let biconomyAppKeysDict = data["biconomy_app_keys"].dictionaryValue
+        var biconomyAppKeys: [Int: String] = [:]
         
-        for (key, value) in dappAppKeysDict {
+        for (key, value) in biconomyAppKeysDict {
             if let chainId = Int(key) {
-                dappAppKeys[chainId] = value.stringValue
+                biconomyAppKeys[chainId] = value.stringValue
             }
         }
         
-        AAService.initialize(dappApiKeys: dappAppKeys)
+        let accountName = AA.AccountName(rawValue: data["name"].stringValue.uppercased()) ?? .biconomy
+        
+        let version = AA.VersionNumber(rawValue: data["version"].stringValue.uppercased()) ?? .v1_0_0
+        
+        AAService.initialize(name: accountName, version: version, biconomyApiKeys: biconomyAppKeys)
         ParticleNetwork.setAAService(aaService)
     }
     
@@ -132,30 +124,6 @@ public extension ParticleAAPlugin {
         }
         let chainInfo = ParticleNetwork.getChainInfo()
         subscribeAndCallback(observable: aaService.rpcGetFeeQuotes(eoaAddress: eoaAddress, transactions: transactions, chainInfo: chainInfo), callback: callback)
-    }
-    
-    func setAAAccountName(_ json: String?) {
-        guard let json = json else { return }
-        if let accountName = AA.AccountName(rawValue: json.uppercased()) {
-            ParticleNetwork.setAAAccountName(accountName)
-        }
-    }
-    
-    func setAAVersionNumber(_ json: String?) {
-        guard let json = json else { return }
-        if let versionNumbr = AA.VersionNumber(rawValue: json.uppercased()) {
-            ParticleNetwork.setAAVersionNumber(versionNumbr)
-        }
-    }
-    
-    func getAAAccountName(_ callback: @escaping ParticleCallback) {
-        let value = ParticleNetwork.getAAAccountName().rawValue
-        callback(value)
-    }
-    
-    func getAAVersionNumber(_ callback: @escaping ParticleCallback) {
-        let value = ParticleNetwork.getAAVersionNumber().rawValue
-        callback(value)
     }
 }
 

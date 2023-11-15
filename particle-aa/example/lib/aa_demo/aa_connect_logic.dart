@@ -38,7 +38,8 @@ class AAConnectLogic {
       80001: "hYZIwIsf2.e18c790b-cafb-4c4e-a438-0289fc25dba1"
     };
     ParticleAuth.init(ChainInfo.Polygon, Env.production);
-    ParticleAA.init(biconomyApiKeys);
+    ParticleAA.init(
+        AccountName.BICONOMY, VersionNumber.V1_0_0(), biconomyApiKeys);
   }
 
   static void loginMetamask() async {

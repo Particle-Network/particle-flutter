@@ -1,4 +1,3 @@
-
 import 'package:oktoast/oktoast.dart';
 import 'package:particle_aa/particle_aa.dart';
 import 'package:particle_aa_example/mock/transaction_mock.dart';
@@ -28,7 +27,8 @@ class AAAuthLogic {
     }
 
     ParticleInfo.set(projectId, clientK);
-    ParticleAA.init(biconomyApiKeys);
+    ParticleAA.init(
+        AccountName.BICONOMY, VersionNumber.V1_0_0(), biconomyApiKeys);
   }
 
   static void loginParticle() async {
@@ -212,27 +212,5 @@ class AAAuthLogic {
       print("batchSendTransactions $error");
       showToast("batchSendTransactions $error");
     }
-  }
-
-  static void setAAAccountName() {
-    const accountName = AccountName.BICONOMY;
-    ParticleAA.setAAAccountName(accountName);
-  }
-
-  static void setAAVersionNumber() {
-    final versionNumber = VersionNumber.V1_0_0();
-    ParticleAA.setAAVersionNumber(versionNumber);
-  }
-
-  static void getAAAccountName() async {
-    AccountName accountName = await ParticleAA.getAAAccountName();
-    print('get account name ${accountName.name}');
-    showToast('get account name ${accountName.name}');
-  }
-
-  static void getAAVersionNumber() async {
-    VersionNumber versionNumber = await ParticleAA.getAAVersionNumber();
-    print('get version number ${versionNumber.version}');
-    showToast('get version number ${versionNumber.version}');
   }
 }
