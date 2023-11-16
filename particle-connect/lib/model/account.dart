@@ -14,7 +14,7 @@ class Account {
   factory Account.fromJson(Map<String, dynamic> json) {
     String walletType = "";
     if (json.containsKey("walletType") && json['walletType'] != null) {
-      (json['walletType'] as Map<String, dynamic>).keys.first;
+      walletType = (json['walletType'] as Map<String, dynamic>).keys.first;
     }
     return Account(
       json['publicAddress'],
