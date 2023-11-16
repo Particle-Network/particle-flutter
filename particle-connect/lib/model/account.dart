@@ -44,6 +44,6 @@ class Account {
 
   @override
   String toString() {
-    return 'UserInfo(publicAddress: $publicAddress, name: $name, url: $url, icons: $icons, description: $description, mnemonic: $mnemonic, chainId: $chainId, walletType: $walletType';
+    return 'Account(publicAddress: $publicAddress, name: $name, url: $url, icons: $icons, description: $description, mnemonic: $mnemonic, chainId: $chainId, walletType: $walletType';
   }
 }
