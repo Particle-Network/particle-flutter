@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'dart:math';
 
+import 'package:particle_auth/model/smart_account_config.dart';
 import 'package:particle_auth/network/net/response.dart';
 import 'package:particle_auth/network/net/rest_client.dart';
 import 'package:particle_auth/particle_auth.dart';
@@ -248,10 +249,11 @@ class EvmService {
   /// [eoaAddresses] Eoa address list
   ///
   /// return json object
-  static Future<dynamic> getSmartAccount(List<String> eoaAddresses) async {
+  static Future<List<dynamic>> getSmartAccount(
+      List<SmartAccountConfig> smartAccountConfigList) async {
     const method = "particle_aa_getSmartAccount";
-    final params = [eoaAddresses];
-    return await EvmService.rpc(method, params);
+
+    return await EvmService.rpc(method, smartAccountConfigList);
   }
 
   /// Read contract

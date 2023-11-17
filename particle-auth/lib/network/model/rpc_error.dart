@@ -8,7 +8,7 @@ part 'rpc_error.g.dart';
 class RpcError {
   int? code;
   String? message;
-  dynamic? data;
+  dynamic data;
 
   RpcError();
 

@@ -14,6 +14,9 @@ import '../model/login_info.dart';
 import '../model/security_account_config.dart';
 import '../model/typeddata_version.dart';
 import '../model/user_interface_style.dart';
+import '../model/account_name.dart';
+import '../model/version_number.dart';
+import '../model/smart_account_config.dart';
 
 export '../model/aa_fee_mode.dart';
 export '../model/chain_info.dart';
@@ -30,6 +33,9 @@ export '../network/model/rpc_error.dart';
 export '../network/model/serialize_sol_transreqentity.dart';
 export '../network/net/particle_rpc.dart';
 export '../network/net/request_body_entity.dart';
+export '../model/account_name.dart';
+export '../model/version_number.dart';
+export '../model/smart_account_config.dart';
 
 /// A utility class for string operations.
 class StringUtils {

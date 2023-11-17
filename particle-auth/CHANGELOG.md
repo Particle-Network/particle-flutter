@@ -1,3 +1,5 @@
+## 1.3.1
+Fix bugs in smart account
 ## 1.3.0
 Bridge supported、Smart Wallet-as-a-Service、batch send tokens and Nfts、fix bugs
 ## 1.2.0

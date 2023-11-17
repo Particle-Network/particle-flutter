@@ -2,12 +2,8 @@ import 'dart:convert';
 import 'dart:io' show Platform;
 
 import 'package:flutter/services.dart';
-import 'package:particle_aa/account_name.dart';
-import 'package:particle_aa/version_number.dart';
 import 'package:particle_auth/particle_auth.dart';
 
-export 'package:particle_aa/account_name.dart';
-export 'package:particle_aa/version_number.dart';
 
 class ParticleAA {
   ParticleAA._();

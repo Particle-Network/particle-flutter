@@ -35,7 +35,8 @@ class AADemoConnectPageState extends State<AADemoConnectPage> {
               ),
             ),
             Padding(
-              padding: const EdgeInsets.only(left: 8.0, top: 16.0, right: 8.0, bottom: 8.0),
+              padding: const EdgeInsets.only(
+                  left: 8.0, top: 16.0, right: 8.0, bottom: 8.0),
               child: SizedBox(
                 width: double.infinity,
                 height: 50,
@@ -43,7 +44,8 @@ class AADemoConnectPageState extends State<AADemoConnectPage> {
                     onPressed: () => {
                           Navigator.push(
                             context,
-                            MaterialPageRoute(builder: (context) => const SelectChainPage()),
+                            MaterialPageRoute(
+                                builder: (context) => const SelectChainPage()),
                           )
                         },
                     child: const Text(
@@ -84,6 +86,19 @@ class AADemoConnectPageState extends State<AADemoConnectPage> {
                 width: double.infinity,
                 height: 50,
                 child: ElevatedButton(
+                    onPressed: () => {AAConnectLogic.getSmartAccountAddress()},
+                    child: const Text(
+                      "Get smart account address",
+                      style: TextStyle(fontSize: 18),
+                    )),
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: SizedBox(
+                width: double.infinity,
+                height: 50,
+                child: ElevatedButton(
                     onPressed: () => {AAConnectLogic.rpcGetFeeQuotes()},
                     child: const Text(
                       "Rpc get fee quotes",
@@ -97,7 +112,8 @@ class AADemoConnectPageState extends State<AADemoConnectPage> {
                 width: double.infinity,
                 height: 50,
                 child: ElevatedButton(
-                    onPressed: () => {AAConnectLogic.signAndSendTransactionWithNative()},
+                    onPressed: () =>
+                        {AAConnectLogic.signAndSendTransactionWithNative()},
                     child: const Text(
                       "send transaction paid with native",
                       style: TextStyle(fontSize: 18),
@@ -110,7 +126,8 @@ class AADemoConnectPageState extends State<AADemoConnectPage> {
                 width: double.infinity,
                 height: 50,
                 child: ElevatedButton(
-                    onPressed: () => {AAConnectLogic.signAndSendTransactionWithGasless()},
+                    onPressed: () =>
+                        {AAConnectLogic.signAndSendTransactionWithGasless()},
                     child: const Text(
                       "send transaction gasless",
                       style: TextStyle(fontSize: 18),
@@ -123,7 +140,8 @@ class AADemoConnectPageState extends State<AADemoConnectPage> {
                 width: double.infinity,
                 height: 50,
                 child: ElevatedButton(
-                    onPressed: () => {AAConnectLogic.signAndSendTransactionWithToken()},
+                    onPressed: () =>
+                        {AAConnectLogic.signAndSendTransactionWithToken()},
                     child: const Text(
                       "send transaction paid with token",
                       style: TextStyle(fontSize: 18),

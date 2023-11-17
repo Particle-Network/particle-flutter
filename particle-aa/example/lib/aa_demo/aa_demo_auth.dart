@@ -142,6 +142,19 @@ class AADemoAuthPageState extends State<AADemoAuthPage> {
                 width: double.infinity,
                 height: 50,
                 child: ElevatedButton(
+                    onPressed: () => {AAAuthLogic.getSmartAccountAddress()},
+                    child: const Text(
+                      "Get smart account address",
+                      style: TextStyle(fontSize: 18),
+                    )),
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: SizedBox(
+                width: double.infinity,
+                height: 50,
+                child: ElevatedButton(
                     onPressed: () => {AAAuthLogic.rpcGetFeeQuotes()},
                     child: const Text(
                       "Rpc get fee quotes",

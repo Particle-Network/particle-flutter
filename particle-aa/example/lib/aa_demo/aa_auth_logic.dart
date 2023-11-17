@@ -4,6 +4,7 @@ import 'package:particle_aa_example/mock/transaction_mock.dart';
 import 'package:particle_auth/particle_auth.dart';
 
 class AAAuthLogic {
+  static String? smartAccountAddress;
   static void init() {
     // should call ParticleAuth init first.
     // ParticleAuth.init(ChainInfo.PolygonMumbai, Env.dev);
@@ -70,15 +71,43 @@ class AAAuthLogic {
     ParticleAA.disableAAMode();
   }
 
-  static void rpcGetFeeQuotes() async {
+  static void getSmartAccountAddress() async {
     try {
-      final publicAddress = await ParticleAuth.getAddress();
+      final eoaAddress = await ParticleAuth.getAddress();
+      final smartAccountConfig = SmartAccountConfig(
+          AccountName.BICONOMY, VersionNumber.V1_0_0(), eoaAddress);
+      List<dynamic> response = await EvmService.getSmartAccount(
+          <SmartAccountConfig>[smartAccountConfig]);
+      var smartAccountJson = response.firstOrNull;
+      if (smartAccountJson != null) {
+        final smartAccount = smartAccountJson as Map<String, dynamic>;
+
+        final smartAccountAddress =
+            smartAccount["smartAccountAddress"] as String;
+        AAAuthLogic.smartAccountAddress = smartAccountAddress;
+        print("getSmartAccount: $smartAccountAddress");
+        showToast("getSmartAccount: $smartAccountAddress");
+      } else {
+        print('List is empty');
+      }
+    } catch (error) {
+      print("getSmartAccountAddress: $error");
+      showToast("getSmartAccountAddress: $error");
+    }
+  }
+
+  static void rpcGetFeeQuotes() async {
+    if (smartAccountAddress == null) {
+      print("not get smartAccountAddress");
+      return;
+    }
+    try {
       final transaction =
-          await TransactionMock.mockEvmSendNative(publicAddress);
+          await TransactionMock.mockEvmSendNative(smartAccountAddress!);
       print("transaction: $transaction");
       List<String> transactions = <String>[transaction];
       var result =
-          await ParticleAA.rpcGetFeeQuotes(publicAddress, transactions);
+          await ParticleAA.rpcGetFeeQuotes(smartAccountAddress!, transactions);
       print("rpcGetFeeQuotes: $result");
       showToast("rpcGetFeeQuotes: $result");
     } catch (error) {
@@ -88,14 +117,16 @@ class AAAuthLogic {
   }
 
   static void signAndSendTransactionWithNative() async {
+    if (smartAccountAddress == null) {
+      print("not get smartAccountAddress");
+      return;
+    }
     try {
-      final publicAddress = await ParticleAuth.getAddress();
       final transaction =
-          await TransactionMock.mockEvmSendNative(publicAddress);
-
+          await TransactionMock.mockEvmSendNative(smartAccountAddress!);
+      final eoaAddress = await ParticleAuth.getAddress();
       // check if enough native for gas fee
-      var result =
-          await ParticleAA.rpcGetFeeQuotes(publicAddress, [transaction]);
+      var result = await ParticleAA.rpcGetFeeQuotes(eoaAddress, [transaction]);
       var verifyingPaymasterNative = result["verifyingPaymasterNative"];
       var feeQuote = verifyingPaymasterNative["feeQuote"];
       var fee = BigInt.parse(feeQuote["fee"], radix: 10);
@@ -118,14 +149,16 @@ class AAAuthLogic {
   }
 
   static void signAndSendTransactionWithGasless() async {
+    if (smartAccountAddress == null) {
+      print("not get smartAccountAddress");
+      return;
+    }
     try {
-      final publicAddress = await ParticleAuth.getAddress();
       final transaction =
-          await TransactionMock.mockEvmSendNative(publicAddress);
-
+          await TransactionMock.mockEvmSendNative(smartAccountAddress!);
+      final eoaAddress = await ParticleAuth.getAddress();
       // check if gasless available
-      var result =
-          await ParticleAA.rpcGetFeeQuotes(publicAddress, [transaction]);
+      var result = await ParticleAA.rpcGetFeeQuotes(eoaAddress, [transaction]);
       var verifyingPaymasterGasless = result["verifyingPaymasterGasless"];
       if (verifyingPaymasterGasless == null) {
         print("gasless is not available");
@@ -144,15 +177,17 @@ class AAAuthLogic {
   }
 
   static void signAndSendTransactionWithToken() async {
+    if (smartAccountAddress == null) {
+      print("not get smartAccountAddress");
+      return;
+    }
     try {
-      final publicAddress = await ParticleAuth.getAddress();
       final transaction =
-          await TransactionMock.mockEvmSendNative(publicAddress);
-
+          await TransactionMock.mockEvmSendNative(smartAccountAddress!);
+      final eoaAddress = await ParticleAuth.getAddress();
       List<String> transactions = <String>[transaction];
 
-      var result =
-          await ParticleAA.rpcGetFeeQuotes(publicAddress, transactions);
+      var result = await ParticleAA.rpcGetFeeQuotes(eoaAddress, transactions);
       print("rpcGetFeeQuotes result $result");
       List<dynamic> feeQuotes = result["tokenPaymaster"]["feeQuotes"];
 
@@ -185,15 +220,17 @@ class AAAuthLogic {
   }
 
   static void batchSendTransactions() async {
+    if (smartAccountAddress == null) {
+      print("not get smartAccountAddress");
+      return;
+    }
     try {
-      final publicAddress = await ParticleAuth.getAddress();
       final transaction =
-          await TransactionMock.mockEvmSendNative(publicAddress);
+          await TransactionMock.mockEvmSendNative(smartAccountAddress!);
       List<String> transactions = <String>[transaction, transaction];
-
+      final eoaAddress = await ParticleAuth.getAddress();
       // check if enough native for gas fee
-      var result =
-          await ParticleAA.rpcGetFeeQuotes(publicAddress, transactions);
+      var result = await ParticleAA.rpcGetFeeQuotes(eoaAddress, transactions);
       var verifyingPaymasterNative = result["verifyingPaymasterNative"];
       var feeQuote = verifyingPaymasterNative["feeQuote"];
       var fee = BigInt.parse(feeQuote["fee"], radix: 10);

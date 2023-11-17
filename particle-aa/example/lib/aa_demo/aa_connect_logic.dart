@@ -6,7 +6,7 @@ import 'package:particle_connect/particle_connect.dart';
 
 class AAConnectLogic {
   static Account? account;
-
+  static String? smartAccountAddress;
   static void init() {
     // Get your project id and client from dashboard, https://dashboard.particle.network
     const projectId =
@@ -58,14 +58,47 @@ class AAConnectLogic {
     ParticleAA.enableAAMode();
   }
 
-  static void rpcGetFeeQuotes() async {
+  static void getSmartAccountAddress() async {
     if (account == null) {
       print("not connect");
       return;
     }
     try {
+      final eoaAddress = account!.publicAddress;
+      final smartAccountConfig = SmartAccountConfig(
+          AccountName.BICONOMY, VersionNumber.V1_0_0(), eoaAddress);
+      List<dynamic> response = await EvmService.getSmartAccount(
+          <SmartAccountConfig>[smartAccountConfig]);
+      var smartAccountJson = response.firstOrNull;
+      if (smartAccountJson != null) {
+        final smartAccount = smartAccountJson as Map<String, dynamic>;
+
+        final smartAccountAddress =
+            smartAccount["smartAccountAddress"] as String;
+        AAConnectLogic.smartAccountAddress = smartAccountAddress;
+        print("getSmartAccount: $smartAccountAddress");
+        showToast("getSmartAccount: $smartAccountAddress");
+      } else {
+        print('List is empty');
+      }
+    } catch (error) {
+      print("getSmartAccountAddress: $error");
+      showToast("getSmartAccountAddress: $error");
+    }
+  }
+
+  static void rpcGetFeeQuotes() async {
+    if (account == null) {
+      print("not connect");
+      return;
+    }
+    if (smartAccountAddress == null) {
+      print("not get smartAccountAddress");
+      return;
+    }
+    try {
       final transaction =
-          await TransactionMock.mockEvmSendNative(account!.publicAddress);
+          await TransactionMock.mockEvmSendNative(smartAccountAddress!);
       List<String> transactions = <String>[transaction];
       var result = await ParticleAA.rpcGetFeeQuotes(
           account!.publicAddress, transactions);
@@ -82,9 +115,13 @@ class AAConnectLogic {
       print("not connect");
       return;
     }
+    if (smartAccountAddress == null) {
+      print("not get smartAccountAddress");
+      return;
+    }
     try {
       final transaction =
-          await TransactionMock.mockEvmSendNative(account!.publicAddress);
+          await TransactionMock.mockEvmSendNative(smartAccountAddress!);
 
       // check if enough native for gas fee
       var result = await ParticleAA.rpcGetFeeQuotes(
@@ -117,9 +154,13 @@ class AAConnectLogic {
       print("not connect");
       return;
     }
+    if (smartAccountAddress == null) {
+      print("not get smartAccountAddress");
+      return;
+    }
     try {
       final transaction =
-          await TransactionMock.mockEvmSendNative(account!.publicAddress);
+          await TransactionMock.mockEvmSendNative(smartAccountAddress!);
 
       // check if gasless available
       var result = await ParticleAA.rpcGetFeeQuotes(
@@ -148,9 +189,13 @@ class AAConnectLogic {
       print("not connect");
       return;
     }
+    if (smartAccountAddress == null) {
+      print("not get smartAccountAddress");
+      return;
+    }
     try {
       final transaction =
-          await TransactionMock.mockEvmSendNative(account!.publicAddress);
+          await TransactionMock.mockEvmSendNative(smartAccountAddress!);
 
       List<String> transactions = <String>[transaction];
 
@@ -166,7 +211,7 @@ class AAConnectLogic {
       }).toList();
 
       if (overFeeQuotes.isEmpty) {
-        print("no valid token fro gas fee");
+        print("no valid token for gas fee");
         return;
       }
 
@@ -193,10 +238,13 @@ class AAConnectLogic {
       print("not connect");
       return;
     }
-
+    if (smartAccountAddress == null) {
+      print("not get smartAccountAddress");
+      return;
+    }
     try {
       final transaction =
-          await TransactionMock.mockEvmSendNative(account!.publicAddress);
+          await TransactionMock.mockEvmSendNative(smartAccountAddress!);
 
       List<String> transactions = <String>[transaction, transaction];
 

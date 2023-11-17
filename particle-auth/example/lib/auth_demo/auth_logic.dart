@@ -1,7 +1,4 @@
-import 'package:flutter/foundation.dart';
-import 'package:flutter/widgets.dart';
 import 'package:oktoast/oktoast.dart';
-import 'package:particle_auth/network/net/response.dart';
 import 'package:particle_auth/particle_auth.dart';
 import 'package:particle_auth_example/mock/transaction_mock.dart';
 
@@ -105,9 +102,24 @@ class AuthLogic {
 
     try {
       final eoaAddress = await ParticleAuth.getAddress();
-      List<dynamic> response = await EvmService.getSmartAccount([eoaAddress]);
-      print("getSmartAccount: $response");
-      showToast("getSmartAccount: $response");
+      SmartAccountConfig config = SmartAccountConfig(
+          AccountName.BICONOMY, VersionNumber.V1_0_0(), eoaAddress);
+      List<dynamic> response =
+          await EvmService.getSmartAccount(<SmartAccountConfig>[config]);
+
+      var smartAccountJson = response.firstOrNull;
+      if (smartAccountJson != null) {
+        print(smartAccountJson);
+        final smartAccount = smartAccountJson as Map<String, dynamic>;
+
+        final smartAccountAddress =
+            smartAccount["smartAccountAddress"] as String;
+
+        print("getSmartAccount: $smartAccountAddress");
+        showToast("getSmartAccount: $smartAccountAddress");
+      } else {
+        print('List is empty');
+      }
     } catch (error) {
       print("getSmartAccount: $error");
       showToast("getSmartAccount: $error");
