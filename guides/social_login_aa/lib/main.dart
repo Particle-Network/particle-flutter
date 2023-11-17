@@ -35,6 +35,7 @@ class MyHomePage extends StatefulWidget {
 
 class _MyHomePageState extends State<MyHomePage> {
   Account? account;
+  String? smartAccountAddress;
   void _init() {
     // Get your project id and client key from dashboard, https://dashboard.particle.network
     const projectId =
@@ -54,27 +55,48 @@ class _MyHomePageState extends State<MyHomePage> {
   }
 
   void _initAA() {
-    ParticleAA.init(AccountName.BICONOMY, VersionNumber.V1_0_0(), <int, String>{});
+    ParticleAA.init(
+        AccountName.BICONOMY, VersionNumber.V1_0_0(), <int, String>{});
     ParticleAA.enableAAMode();
   }
 
-  void _getSmartAccountString() {
+  void _getSmartAccountAddress() async {
     if (account == null) {
       print("didn't connect any account");
       return;
     }
-EvmService.getSmartAccount(account!.publicAddress)
+    try {
+      List<dynamic> response =
+          await EvmService.getSmartAccount(<SmartAccountConfig>[
+        SmartAccountConfig(AccountName.BICONOMY, VersionNumber.V1_0_0(),
+            account!.publicAddress)
+      ]);
+      var smartAccountJson = response.firstOrNull;
+      if (smartAccountJson != null) {
+        final smartAccount = smartAccountJson as Map<String, dynamic>;
+
+        final smartAccountAddress =
+            smartAccount["smartAccountAddress"] as String;
+        this.smartAccountAddress = smartAccountAddress;
+        print("getSmartAccount: $smartAccountAddress");
+      } else {
+        print('List is empty');
+      }
+    } catch (error) {
+      print("get smart account address $error");
+    }
   }
 
   void _connectParticle() async {
     try {
-      final config = ParticleConnectConfig(LoginType.google, "",
-          [SupportAuthType.all], SocialLoginPrompt.none);
+      final config = ParticleConnectConfig(
+          LoginType.google, "", [SupportAuthType.all], SocialLoginPrompt.none);
       final account =
           await ParticleConnect.connect(WalletType.particle, config: config);
       this.account = account;
       print("connect particle $account");
       final userInfo = ParticleAuth.getUserInfo();
+      print("particle userInfo $userInfo");
     } catch (error) {
       print("connect particle $error");
     }
@@ -121,8 +143,20 @@ EvmService.getSmartAccount(account!.publicAddress)
           "0x",
           BigInt.from(1000000000000000),
           "0x0000000000000000000000000000000000000000");
+      var wholeFeeQuote = await ParticleAA.rpcGetFeeQuotes(
+          account!.publicAddress, [transaction]);
+      var verifyingPaymasterNative = wholeFeeQuote["verifyingPaymasterNative"];
+      var feeQuote = verifyingPaymasterNative["feeQuote"];
+      var fee = BigInt.parse(feeQuote["fee"], radix: 10);
+      var balance = BigInt.parse(feeQuote["balance"], radix: 10);
+
+      if (balance < fee) {
+        print("native balance if not enough for gas fee");
+        return;
+      }
       final signature = await ParticleConnect.signAndSendTransaction(
-          walletType, account!.publicAddress, transaction);
+          walletType, account!.publicAddress, transaction,
+          feeMode: AAFeeMode.native(wholeFeeQuote));
       print("send transaction $signature");
     } catch (error) {
       print("send transaction $error");
@@ -206,6 +240,19 @@ EvmService.getSmartAccount(account!.publicAddress)
                     onPressed: _connectMetaMask,
                     child: const Text(
                       "Connect MetaMask",
+                      style: TextStyle(fontSize: 20),
+                    ),
+                  )),
+            ),
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: SizedBox(
+                  width: 300,
+                  height: 50,
+                  child: ElevatedButton(
+                    onPressed: _getSmartAccountAddress,
+                    child: const Text(
+                      "Get smart account address",
                       style: TextStyle(fontSize: 20),
                     ),
                   )),
