@@ -34,11 +34,11 @@ class ConnectLogic {
 
     ParticleConnect.init(currChainInfo, dappInfo, Env.dev);
 
-    // List<ChainInfo> chainInfos = <ChainInfo>[
-    //   EthereumChain.mainnet(),
-    //   PolygonChain.mainnet()
-    // ];
-    // ParticleConnect.setWalletConnectV2SupportChainInfos(chainInfos);
+    List<ChainInfo> chainInfos = <ChainInfo>[
+      ChainInfo.Ethereum,
+      ChainInfo.Polygon
+    ];
+    ParticleConnect.setWalletConnectV2SupportChainInfos(chainInfos);
   }
 
   static void setChainInfo() async {
@@ -135,8 +135,8 @@ class ConnectLogic {
 
   static void signInWithEthereum() async {
     try {
-      const domain = "login.xyz";
-      const uri = "https://login.xyz/demo#login";
+      const domain = "particle.network";
+      const uri = "https://docs.particle.network/";
       ConnectLogic.siwe = await ParticleConnect.signInWithEthereum(
           walletType, getPublicAddress(), domain, uri);
       print(
@@ -199,12 +199,12 @@ class ConnectLogic {
             await TransactionMock.mockSolanaTransaction(getPublicAddress());
         final transacton2 =
             await TransactionMock.mockSolanaTransaction(getPublicAddress());
-        List<String> trans = <String>[];
-        trans.add(transacton1);
-        trans.add(transacton2);
+        List<String> transactions = <String>[];
+        transactions.add(transacton1);
+        transactions.add(transacton2);
 
         String signature = await ParticleConnect.signAllTransactions(
-            walletType, getPublicAddress(), trans);
+            walletType, getPublicAddress(), transactions);
         print("signAllTransaction: $signature");
         showToast("signAllTransaction: $signature");
       } catch (error) {
