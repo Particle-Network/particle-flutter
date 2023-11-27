@@ -1,4 +1,3 @@
-import 'dart:convert';
 
 import 'package:particle_auth/particle_auth.dart';
 import 'package:particle_auth_core_example/mock/test_account.dart';
