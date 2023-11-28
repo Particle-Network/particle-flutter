@@ -1,3 +1,5 @@
+## 1.3.3
+Fix connect method call back error.
 ## 1.3.2
 Fix flutter and dart version
 ## 1.3.1
