@@ -1,5 +1,6 @@
 import 'package:oktoast/oktoast.dart';
 import 'package:particle_auth/particle_auth.dart';
+import 'package:particle_auth_example/mock/token.dart';
 import 'package:particle_auth_example/mock/transaction_mock.dart';
 
 class AuthLogic {
@@ -594,6 +595,14 @@ class AuthLogic {
         result =
             await EvmService.getTokenByTokenAddresses(address, tokenAddresses);
       }
+
+      final tokenList = result as List<dynamic>;
+
+      List<Token> tokens = tokenList.map((json) {
+        return Token.fromJson(json);
+      }).toList();
+
+      print(tokens);
 
       print("getTokenByTokenAddresses: $result");
       showToast("getTokenByTokenAddresses: $result");
