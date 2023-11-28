@@ -157,7 +157,7 @@ object ConnectBridge {
             override fun onError(connectError: ConnectError) {
                 LogUtils.d("onError", connectError.toString())
                 try {
-                    result.success(FlutterCallBack.failed(connectError.message).toGson())
+                    result.success(FlutterCallBack.failed(connectError).toGson())
                 } catch (_: Exception) {
 
                 }
@@ -179,7 +179,7 @@ object ConnectBridge {
 
             override fun onError(connectError: ConnectError) {
                 LogUtils.d("onError", connectError.toString())
-                result.success(FlutterCallBack.failed(connectError.message).toGson())
+                result.success(FlutterCallBack.failed(connectError).toGson())
             }
         })
         events?.success(connectAdapter.qrCodeUri())
