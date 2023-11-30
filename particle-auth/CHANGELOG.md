@@ -1,3 +1,5 @@
+## 1.3.4
+Fix typo bugs
 ## 1.3.2
 Fix flutter and dart version
 ## 1.3.1

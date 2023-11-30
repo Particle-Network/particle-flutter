@@ -27,8 +27,8 @@ dependencies:
     # the parent directory to use the current plugin's version.
     path: ../
 
-  particle_connect: ^1.3.2
-  particle_auth: ^1.3.2
+  particle_connect: ^1.3.4
+  particle_auth: ^1.3.4
 
 #  particle_connect:
 #    path: ../../particle-connect/
