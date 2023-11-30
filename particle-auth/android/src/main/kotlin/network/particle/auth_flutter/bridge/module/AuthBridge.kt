@@ -107,7 +107,24 @@ object AuthBridge {
         }
         var prompt: LoginPrompt? = null
         try {
-            if (loginData.prompt != null) prompt = LoginPrompt.valueOf(loginData.prompt!!)
+
+            if (loginData.prompt != null){
+                val promptStr = when (loginData.prompt) {
+                    "none" -> {
+                        "None"
+                    }
+                    "consent" -> {
+                        "ConSent"
+                    }
+                    "select_account" -> {
+                        "SelectAccount"
+                    }
+                    else -> {
+                        "None"
+                    }
+                }
+                prompt = LoginPrompt.valueOf(promptStr)
+            }
         } catch (e: Exception) {
             e.printStackTrace()
         }
