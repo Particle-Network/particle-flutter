@@ -1,3 +1,5 @@
+## 1.3.6
+## 1.3.5
 ## 1.3.4
 Sync with particle-auth
 ## 1.3.2

@@ -26,7 +26,11 @@ object AuthCoreBridge {
     fun connect(jwt: String, result: MethodChannel.Result) {
         AuthCore.connect(jwt, object : AuthCoreServiceCallback<UserInfo> {
             override fun success(output: UserInfo) {
-                result.success(FlutterCallBack.success(output).toGson())
+                try {
+                    result.success(FlutterCallBack.success(output).toGson())
+                }catch (_:Exception){
+
+                }
             }
 
             override fun failure(errMsg: ErrorInfo) {

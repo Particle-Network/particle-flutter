@@ -54,9 +54,13 @@ android {
         versionCode flutterVersionCode.toInteger()
         versionName flutterVersionName
 
-        manifestPlaceholders["PN_PROJECT_ID"] = "7399450c-7c80-4fa9-b61a-58c815a821a2"
-        manifestPlaceholders["PN_PROJECT_CLIENT_KEY"] = "cip1DpxvzNMYekotllYMmiTVtpNClCaCEccjSkqw"
-        manifestPlaceholders["PN_APP_ID"] = "67673549-a6c9-44d8-a393-e9af7b0edccf"
+//        manifestPlaceholders["PN_PROJECT_ID"] = "7399450c-7c80-4fa9-b61a-58c815a821a2"
+//        manifestPlaceholders["PN_PROJECT_CLIENT_KEY"] = "cip1DpxvzNMYekotllYMmiTVtpNClCaCEccjSkqw"
+//        manifestPlaceholders["PN_APP_ID"] = "67673549-a6c9-44d8-a393-e9af7b0edccf"
+
+        manifestPlaceholders["PN_PROJECT_ID"] = "b0991b94-8219-4499-bf8e-d92ce6087f72"
+        manifestPlaceholders["PN_PROJECT_CLIENT_KEY"] = "cEpW3oDxg8JoFK2WR4OT04d0mMffdBRPiQIbu0xF"
+        manifestPlaceholders["PN_APP_ID"] = "91d7cefb-2ee9-4770-882d-5cd03f4cc729"
 
     }
 
