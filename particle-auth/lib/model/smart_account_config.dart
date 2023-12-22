@@ -1,17 +1,15 @@
 import 'package:particle_auth/particle_auth.dart';
 
 class SmartAccountConfig {
-  AccountName name;
-
-  VersionNumber version;
+  AccounName accounName;
 
   String ownerAddress;
 
-  SmartAccountConfig(this.name, this.version, this.ownerAddress);
+  SmartAccountConfig(this.accounName, this.ownerAddress);
 
   Map<String, dynamic> toJson() => {
-        'name': name.name,
-        'version': version.version,
+        'name': accounName.name,
+        'version': accounName.version,
         'ownerAddress': ownerAddress,
       };
 }
