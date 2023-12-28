@@ -22,13 +22,13 @@ import com.particle.base.iaa.FeeModeNative
 import com.particle.base.iaa.FeeModeToken
 import com.particle.base.iaa.MessageSigner
 import com.particle.base.model.ChainType
+import com.particle.base.model.LoginPrompt
 import com.particle.base.model.LoginType
 import com.particle.base.model.MobileWCWallet
 import com.particle.base.model.SupportAuthType
 import com.particle.connect.ParticleConnect
 import com.particle.connect.ParticleConnect.setChain
 import com.particle.connect.model.AdapterAccount
-import com.particle.network.service.LoginPrompt
 import com.phantom.adapter.PhantomConnectAdapter
 import com.solana.adapter.SolanaConnectAdapter
 import com.wallet.connect.adapter.*
