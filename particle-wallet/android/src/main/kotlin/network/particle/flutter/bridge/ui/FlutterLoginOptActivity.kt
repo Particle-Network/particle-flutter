@@ -94,7 +94,7 @@ class FlutterLoginOptActivity : AppCompatActivity() {
 
         val adapter =
             ParticleConnect.getAdapters().first{it.name.equals(MobileWCWalletName.Particle.name,true)}
-        val config = ParticleConnectConfig(loginType, supportAuthType.value)
+        val config = ParticleConnectConfig(loginType, supportAuthType.value, prompt = null)
         adapter.connect(config, object : ConnectCallback {
             override fun onConnected(account: Account) {
                 lifecycleScope.launch {
