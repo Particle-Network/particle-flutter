@@ -8,21 +8,21 @@ PODS:
   - particle_auth (0.0.1):
     - Flutter
     - ParticleAuthService
-  - ParticleAuthService (1.3.7):
+  - ParticleAuthService (1.3.8):
     - CryptoSwift
     - ParticleNetworkBase
     - RxAlamofire (~> 6.1.1)
-    - RxCocoa (= 6.5.0)
-    - RxSwift (= 6.5.0)
+    - RxCocoa (= 6.6.0)
+    - RxSwift (= 6.6.0)
     - SwiftyJSON (~> 5.0)
     - SwiftyUserDefaults (~> 5.3.0)
-  - ParticleNetworkBase (1.3.7):
+  - ParticleNetworkBase (1.3.8):
     - Base58.swift
     - BigInt (~> 5.2.0)
     - CryptoSwift
     - RxAlamofire (~> 6.1.1)
-    - RxCocoa (= 6.5.0)
-    - RxSwift (= 6.5.0)
+    - RxCocoa (= 6.6.0)
+    - RxSwift (= 6.6.0)
     - SwiftyJSON (~> 5.0)
     - SwiftyUserDefaults (~> 5.3.0)
   - RxAlamofire (6.1.1):
@@ -30,20 +30,20 @@ PODS:
   - RxAlamofire/Core (6.1.1):
     - Alamofire (~> 5.4)
     - RxSwift (~> 6.0)
-  - RxCocoa (6.5.0):
-    - RxRelay (= 6.5.0)
-    - RxSwift (= 6.5.0)
-  - RxRelay (6.5.0):
-    - RxSwift (= 6.5.0)
-  - RxSwift (6.5.0)
+  - RxCocoa (6.6.0):
+    - RxRelay (= 6.6.0)
+    - RxSwift (= 6.6.0)
+  - RxRelay (6.6.0):
+    - RxSwift (= 6.6.0)
+  - RxSwift (6.6.0)
   - SwiftyJSON (5.0.1)
   - SwiftyUserDefaults (5.3.0)
 
 DEPENDENCIES:
   - Flutter (from `Flutter`)
   - particle_auth (from `.symlinks/plugins/particle_auth/ios`)
-  - ParticleAuthService (= 1.3.7)
-  - ParticleNetworkBase (= 1.3.7)
+  - ParticleAuthService (= 1.3.8)
+  - ParticleNetworkBase (= 1.3.8)
 
 SPEC REPOS:
   https://github.com/CocoaPods/Specs.git:
@@ -73,15 +73,15 @@ SPEC CHECKSUMS:
   CryptoSwift: 52aaf3fce7337552863b1d952e408085f0e65030
   Flutter: f04841e97a9d0b0a8025694d0796dd46242b2854
   particle_auth: f63e17b5dc9b5f7b3ad4d5c13fbfc03d3739b3ab
-  ParticleAuthService: 280333190ee191d57a25575900eb2936c44c79f1
-  ParticleNetworkBase: 4401070e90f59cbf4ae57c522cbff9691bfe33b7
+  ParticleAuthService: 8a104aa3e2b1ace6348a813d29e6d0e7e28a3e27
+  ParticleNetworkBase: e2dd4be2c5b1a0fec3ca356dfa1d7a6b880fcb34
   RxAlamofire: beb75a1c452d0de225651db4903f5d29d034a620
-  RxCocoa: 94f817b71c07517321eb4f9ad299112ca8af743b
-  RxRelay: 1de1523e604c72b6c68feadedd1af3b1b4d0ecbd
-  RxSwift: 5710a9e6b17f3c3d6e40d6e559b9fa1e813b2ef8
+  RxCocoa: 44a80de90e25b739b5aeaae3c8c371a32e3343cc
+  RxRelay: 45eaa5db8ee4fb50e5ebd57deec0159e97fa51e6
+  RxSwift: a4b44f7d24599f674deebd1818eab82e58410632
   SwiftyJSON: 2f33a42c6fbc52764d96f13368585094bfd8aa5e
   SwiftyUserDefaults: 63f80248cf5bfb3458825d9a78f2eb7e1293a040
 
-PODFILE CHECKSUM: 14638edb2a17bb2b566f6c807a9a28d08af284b5
+PODFILE CHECKSUM: 3105ce0ef0c1744a953756bc7d56740404d537d5
 
 COCOAPODS: 1.12.1

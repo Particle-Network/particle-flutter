@@ -314,7 +314,7 @@ public extension ParticleAuthPlugin {
         }
         
         var serializedMessage = ""
-        switch ParticleNetwork.getChainInfo().chain {
+        switch ParticleNetwork.getChainInfo().chainType {
         case .solana:
             serializedMessage = Base58.encode(message.data(using: .utf8)!)
         default:
@@ -331,7 +331,7 @@ public extension ParticleAuthPlugin {
         }
         
         var serializedMessage = ""
-        switch ParticleNetwork.getChainInfo().chain {
+        switch ParticleNetwork.getChainInfo().chainType {
         case .solana:
             serializedMessage = Base58.encode(message.data(using: .utf8)!)
         default:
