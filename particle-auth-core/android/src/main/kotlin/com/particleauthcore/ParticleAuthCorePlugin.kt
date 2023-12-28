@@ -109,6 +109,14 @@ class ParticleAuthCorePlugin : FlutterPlugin, MethodCallHandler, ActivityAware {
             "solanaSignAndSendTransaction" -> {
                 AuthCoreBridge.solanaSignAndSendTransaction(call.arguments as String, result)
             }
+
+            "setBlindEnable" -> {
+                AuthCoreBridge.setBlindEnable(call.arguments as Boolean, result)
+            }
+
+            "getBlindEnable" -> {
+                AuthCoreBridge.getBlindEnable(result)
+            }
             else -> result.notImplemented()
         }
     }
