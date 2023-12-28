@@ -22,6 +22,7 @@ import com.particle.base.iaa.FeeModeGasless
 import com.particle.base.iaa.FeeModeNative
 import com.particle.base.iaa.FeeModeToken
 import com.particle.base.iaa.MessageSigner
+import com.particle.base.model.LoginPrompt
 import com.particle.base.model.LoginType
 import com.particle.base.model.ResultCallback
 import com.particle.base.model.SecurityAccountConfig

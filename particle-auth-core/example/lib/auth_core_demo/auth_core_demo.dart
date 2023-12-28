@@ -1,3 +1,5 @@
+import 'dart:ui';
+
 import 'package:flutter/material.dart';
 import 'package:particle_auth/particle_auth.dart';
 import 'package:particle_auth_core_example/auth_core_demo/auth_core_logic.dart';
@@ -13,6 +15,18 @@ class AuthDemoPage extends StatefulWidget {
 }
 
 class AuthDemoPageState extends State<AuthDemoPage> {
+  TextEditingController accountCtrl = TextEditingController();
+  List<LoginType> socialLoginTypes = LoginType.values.where((type) {
+    return type != LoginType.email && type != LoginType.phone && type != LoginType.jwt;
+  }).toList();
+
+  LoginType loginType = LoginType.phone;
+  Map<LoginType, bool> selectedLoginTypes = {
+    for (var item in LoginType.values.where((type) => type != LoginType.jwt)) item: false
+  };
+  bool selectedLoginTypesShow = false;
+  bool blindEnable = false;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -22,474 +36,195 @@ class AuthDemoPageState extends State<AuthDemoPage> {
       body: SingleChildScrollView(
         child: Column(
           children: <Widget>[
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: SizedBox(
-                width: double.infinity,
-                height: 50,
-                child: ElevatedButton(
-                    onPressed: () => {AuthCoreLogic.init(Env.dev)},
-                    child: const Text(
-                      "Init",
-                      style: TextStyle(fontSize: 18),
-                    )),
-              ),
-            ),
-            Padding(
-              padding: const EdgeInsets.only(
-                  left: 8.0, top: 16.0, right: 8.0, bottom: 8.0),
-              child: SizedBox(
-                width: double.infinity,
-                height: 50,
-                child: ElevatedButton(
-                    onPressed: () => {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => const SelectChainPage()),
-                          )
-                        },
-                    child: const Text(
-                      "SelectChain",
-                      style: TextStyle(fontSize: 18),
-                    )),
-              ),
-            ),
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: SizedBox(
-                width: double.infinity,
-                height: 50,
-                child: ElevatedButton(
-                    onPressed: () => {AuthCoreLogic.connect()},
-                    child: const Text(
-                      "Connect",
-                      style: TextStyle(fontSize: 18),
-                    )),
-              ),
-            ),
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: SizedBox(
-                width: double.infinity,
-                height: 50,
-                child: ElevatedButton(
-                    onPressed: () => {AuthCoreLogic.getUserInfo()},
-                    child: const Text(
-                      "Get user info",
-                      style: TextStyle(fontSize: 18),
-                    )),
-              ),
-            ),
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: SizedBox(
-                width: double.infinity,
-                height: 50,
-                child: ElevatedButton(
-                    onPressed: () => {AuthCoreLogic.disconnect()},
-                    child: const Text(
-                      "Disconnect",
-                      style: TextStyle(fontSize: 18),
-                    )),
-              ),
-            ),
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: SizedBox(
-                width: double.infinity,
-                height: 50,
-                child: ElevatedButton(
-                    onPressed: () => {AuthCoreLogic.isConnected()},
-                    child: const Text(
-                      "IsConnected",
-                      style: TextStyle(fontSize: 18),
-                    )),
-              ),
-            ),
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: SizedBox(
-                width: double.infinity,
-                height: 50,
-                child: ElevatedButton(
-                    onPressed: () => {AuthCoreLogic.swicthChain()},
-                    child: const Text(
-                      "Switch chain",
-                      style: TextStyle(fontSize: 18),
-                    )),
-              ),
-            ),
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: SizedBox(
-                width: double.infinity,
-                height: 50,
-                child: ElevatedButton(
-                    onPressed: () => {AuthCoreLogic.evmGetAddress()},
-                    child: const Text(
-                      "Evm get address",
-                      style: TextStyle(fontSize: 18),
-                    )),
-              ),
-            ),
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: SizedBox(
-                width: double.infinity,
-                height: 50,
-                child: ElevatedButton(
-                    onPressed: () => {AuthCoreLogic.evmPersonalSign()},
-                    child: const Text(
-                      "Evm personal sign",
-                      style: TextStyle(fontSize: 18),
-                    )),
-              ),
-            ),
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: SizedBox(
-                width: double.infinity,
-                height: 50,
-                child: ElevatedButton(
-                    onPressed: () => {AuthCoreLogic.evmPersonalSignUnique()},
-                    child: const Text(
-                      "Evm personal sign unique",
-                      style: TextStyle(fontSize: 18),
-                    )),
-              ),
-            ),
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: SizedBox(
-                width: double.infinity,
-                height: 50,
-                child: ElevatedButton(
-                    onPressed: () => {AuthCoreLogic.evmSignTypedData()},
-                    child: const Text(
-                      "Evm sign typed data",
-                      style: TextStyle(fontSize: 18),
-                    )),
-              ),
-            ),
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: SizedBox(
-                width: double.infinity,
-                height: 50,
-                child: ElevatedButton(
-                    onPressed: () => {AuthCoreLogic.evmSignTypedDataUnique()},
-                    child: const Text(
-                      "Evm sign typed data unique",
-                      style: TextStyle(fontSize: 18),
-                    )),
-              ),
-            ),
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: SizedBox(
-                width: double.infinity,
-                height: 50,
-                child: ElevatedButton(
-                    onPressed: () => {AuthCoreLogic.evmSendTransaction()},
-                    child: const Text(
-                      "Evm send transaction",
-                      style: TextStyle(fontSize: 18),
-                    )),
-              ),
-            ),
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: SizedBox(
-                width: double.infinity,
-                height: 50,
-                child: ElevatedButton(
-                    onPressed: () => {AuthCoreLogic.solanaGetAddress()},
-                    child: const Text(
-                      "Solana get address",
-                      style: TextStyle(fontSize: 18),
-                    )),
-              ),
-            ),
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: SizedBox(
-                width: double.infinity,
-                height: 50,
-                child: ElevatedButton(
-                    onPressed: () => {AuthCoreLogic.solanaSignMessage()},
-                    child: const Text(
-                      "Solana sign message",
-                      style: TextStyle(fontSize: 18),
-                    )),
-              ),
-            ),
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: SizedBox(
-                width: double.infinity,
-                height: 50,
-                child: ElevatedButton(
-                    onPressed: () => {AuthCoreLogic.solanaSignTransaction()},
-                    child: const Text(
-                      "Solana sign transation",
-                      style: TextStyle(fontSize: 18),
-                    )),
-              ),
-            ),
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: SizedBox(
-                width: double.infinity,
-                height: 50,
-                child: ElevatedButton(
-                    onPressed: () =>
-                        {AuthCoreLogic.solanaSignAllTransactions()},
-                    child: const Text(
-                      "Solana sign all transactions",
-                      style: TextStyle(fontSize: 18),
-                    )),
-              ),
-            ),
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: SizedBox(
-                width: double.infinity,
-                height: 50,
-                child: ElevatedButton(
-                    onPressed: () =>
-                        {AuthCoreLogic.solanaSignAndSendTransaction()},
-                    child: const Text(
-                      "Solana sign and send transaction",
-                      style: TextStyle(fontSize: 18),
-                    )),
-              ),
-            ),
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: SizedBox(
-                width: double.infinity,
-                height: 50,
-                child: ElevatedButton(
-                    onPressed: () => {AuthCoreLogic.openAccountAndSecurity()},
-                    child: const Text(
-                      "Open account and security",
-                      style: TextStyle(fontSize: 18),
-                    )),
-              ),
-            ),
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: SizedBox(
-                width: double.infinity,
-                height: 50,
-                child: ElevatedButton(
-                    onPressed: () => {AuthCoreLogic.changeMasterPassword()},
-                    child: const Text(
-                      "Change master password",
-                      style: TextStyle(fontSize: 18),
-                    )),
-              ),
-            ),
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: SizedBox(
-                width: double.infinity,
-                height: 50,
-                child: ElevatedButton(
-                    onPressed: () => {AuthCoreLogic.readContract()},
-                    child: const Text(
-                      "Read contract",
-                      style: TextStyle(fontSize: 18),
-                    )),
-              ),
-            ),
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: SizedBox(
-                width: double.infinity,
-                height: 50,
-                child: ElevatedButton(
-                    onPressed: () => {AuthCoreLogic.writeContract()},
-                    child: const Text(
-                      "Write contract",
-                      style: TextStyle(fontSize: 18),
-                    )),
-              ),
-            ),
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: SizedBox(
-                width: double.infinity,
-                height: 50,
-                child: ElevatedButton(
-                    onPressed: () =>
-                        {AuthCoreLogic.writeContractThenSendTransaction()},
-                    child: const Text(
-                      "Write contract then send ",
-                      style: TextStyle(fontSize: 18),
-                    )),
-              ),
-            ),
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: SizedBox(
-                width: double.infinity,
-                height: 50,
-                child: ElevatedButton(
-                    onPressed: () => {AuthCoreLogic.sendEvmNative()},
-                    child: const Text(
-                      "Send evm native",
-                      style: TextStyle(fontSize: 18),
-                    )),
-              ),
-            ),
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: SizedBox(
-                width: double.infinity,
-                height: 50,
-                child: ElevatedButton(
-                    onPressed: () => {AuthCoreLogic.sendEvmToken()},
-                    child: const Text(
-                      "Send evm token",
-                      style: TextStyle(fontSize: 18),
-                    )),
-              ),
-            ),
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: SizedBox(
-                width: double.infinity,
-                height: 50,
-                child: ElevatedButton(
-                    onPressed: () => {AuthCoreLogic.sendEvmNFT721()},
-                    child: const Text(
-                      "Send evm nft 721",
-                      style: TextStyle(fontSize: 18),
-                    )),
-              ),
-            ),
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: SizedBox(
-                width: double.infinity,
-                height: 50,
-                child: ElevatedButton(
-                    onPressed: () => {AuthCoreLogic.sendEvmNFT1155()},
-                    child: const Text(
-                      "Send evm nft 1155",
-                      style: TextStyle(fontSize: 18),
-                    )),
-              ),
-            ),
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: SizedBox(
-                width: double.infinity,
-                height: 50,
-                child: ElevatedButton(
-                    onPressed: () => {AuthCoreLogic.hasMasterPassword()},
-                    child: const Text(
-                      "Has master password",
-                      style: TextStyle(fontSize: 18),
-                    )),
-              ),
-            ),
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: SizedBox(
-                width: double.infinity,
-                height: 50,
-                child: ElevatedButton(
-                    onPressed: () => {AuthCoreLogic.hasPaymentPassword()},
-                    child: const Text(
-                      "Has payment password",
-                      style: TextStyle(fontSize: 18),
-                    )),
-              ),
-            ),
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: SizedBox(
-                width: double.infinity,
-                height: 50,
-                child: ElevatedButton(
-                    onPressed: () => {AuthCoreLogic.getTokensAndNFTs()},
-                    child: const Text(
-                      "getTokensAndNFTs",
-                      style: TextStyle(fontSize: 18),
-                    )),
-              ),
-            ),
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: SizedBox(
-                width: double.infinity,
-                height: 50,
-                child: ElevatedButton(
-                    onPressed: () => {AuthCoreLogic.getTokens()},
-                    child: const Text(
-                      "getTokens",
-                      style: TextStyle(fontSize: 18),
-                    )),
-              ),
-            ),
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: SizedBox(
-                width: double.infinity,
-                height: 50,
-                child: ElevatedButton(
-                    onPressed: () => {AuthCoreLogic.getNFTs()},
-                    child: const Text(
-                      "getNFTs",
-                      style: TextStyle(fontSize: 18),
-                    )),
-              ),
-            ),
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: SizedBox(
-                width: double.infinity,
-                height: 50,
-                child: ElevatedButton(
-                    onPressed: () => {AuthCoreLogic.getTransactionsByAddress()},
-                    child: const Text(
-                      "getTransactionsByAddress",
-                      style: TextStyle(fontSize: 18),
-                    )),
-              ),
-            ),
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: SizedBox(
-                width: double.infinity,
-                height: 50,
-                child: ElevatedButton(
-                    onPressed: () => {AuthCoreLogic.getTokenByTokenAddresses()},
-                    child: const Text(
-                      "getTokenByTokenAddresses",
-                      style: TextStyle(fontSize: 18),
-                    )),
-              ),
-            ),
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: SizedBox(
-                width: double.infinity,
-                height: 50,
-                child: ElevatedButton(
-                    onPressed: () => {AuthCoreLogic.getPrice()},
-                    child: const Text(
-                      "getPrice",
-                      style: TextStyle(fontSize: 18),
-                    )),
-              ),
-            ),
+            BtnItem("Init", () => {AuthCoreLogic.init(Env.dev)}),
+            BtnItem(
+                "SelectChain",
+                () => {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (context) => const SelectChainPage()),
+                      )
+                    }),
+            BtnItem("Connect With JWT", () => {AuthCoreLogic.connectWithJWT()}),
+            connectWithParams(),
+            BtnItem("Get user info", () => {AuthCoreLogic.getUserInfo()}),
+            BtnItem("Disconnect", () => {AuthCoreLogic.disconnect()}),
+            BtnItem("IsConnected", () => {AuthCoreLogic.isConnected()}),
+            BtnItem("Switch chain", () => {AuthCoreLogic.swicthChain()}),
+            BtnItem("Evm get address", () => {AuthCoreLogic.evmGetAddress()}),
+            BlindStatus(),
+            BtnItem("Evm personal sign", () => {AuthCoreLogic.evmPersonalSign()}),
+            BtnItem("Evm personal sign unique", () => {AuthCoreLogic.evmPersonalSignUnique()}),
+            BtnItem("Evm sign typed data", () => {AuthCoreLogic.evmSignTypedData()}),
+            BtnItem("Evm sign typed data unique", () => {AuthCoreLogic.evmSignTypedDataUnique()}),
+            BtnItem("Evm send transaction", () => {AuthCoreLogic.evmSendTransaction()}),
+            BtnItem("Solana get address", () => {AuthCoreLogic.solanaGetAddress()}),
+            BtnItem("Solana sign message", () => {AuthCoreLogic.solanaSignMessage()}),
+            BtnItem("Solana sign transation", () => {AuthCoreLogic.solanaSignTransaction()}),
+            BtnItem("Solana sign all transactions", () => {AuthCoreLogic.solanaSignAllTransactions()}),
+            BtnItem("Solana sign and send transaction", () => {AuthCoreLogic.solanaSignAndSendTransaction()}),
+            BtnItem("Open account and security", () => {AuthCoreLogic.openAccountAndSecurity()}),
+            BtnItem("Change master password", () => {AuthCoreLogic.changeMasterPassword()}),
+            BtnItem("Read contract", () => {AuthCoreLogic.readContract()}),
+            BtnItem("Write contract", () => {AuthCoreLogic.writeContract()}),
+            BtnItem("Write contract then send", () => {AuthCoreLogic.writeContractThenSendTransaction()}),
+            BtnItem("Send evm native", () => {AuthCoreLogic.sendEvmNative()}),
+            BtnItem("Send evm token", () => {AuthCoreLogic.sendEvmToken()}),
+            BtnItem("Send evm nft 721", () => {AuthCoreLogic.sendEvmNFT721()}),
+            BtnItem("Send evm nft 1155", () => {AuthCoreLogic.sendEvmNFT1155()}),
+            BtnItem("Has master password", () => {AuthCoreLogic.hasMasterPassword()}),
+            BtnItem("Has payment password", () => {AuthCoreLogic.hasPaymentPassword()}),
+            BtnItem("getTokensAndNFTs", () => {AuthCoreLogic.getTokensAndNFTs()}),
+            BtnItem("getTokens", () => {AuthCoreLogic.getTokens()}),
+            BtnItem("getNFTs", () => {AuthCoreLogic.getNFTs()}),
+            BtnItem("getTransactionsByAddress", () => {AuthCoreLogic.getTransactionsByAddress()}),
+            BtnItem("getTokenByTokenAddresses", () => {AuthCoreLogic.getTokenByTokenAddresses()}),
+            BtnItem("getPrice", () => {AuthCoreLogic.getPrice()}),
           ],
         ),
       ),
     );
+  }
+
+  Card connectWithParams() {
+    return Card(
+      elevation: 5,
+      child: Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: Column(
+          children: [
+            Text(
+              "Connect with Particle AuthCore",
+              style: TextStyle(fontSize: 18),
+            ),
+            Row(
+              children: [
+                Text("LoginType"),
+                Spacer(),
+                DropdownButton<LoginType>(
+                  value: loginType,
+                  onChanged: (LoginType? newValue) {
+                    setState(() {
+                      loginType = newValue!;
+                    });
+                  },
+                  items: LoginType.values.map((LoginType type) {
+                    return DropdownMenuItem<LoginType>(
+                      value: type,
+                      child: Text(type.toString()),
+                    );
+                  }).toList(),
+                ),
+              ],
+            ),
+            Row(children: [
+              Text("Account"),
+              Spacer(),
+              SizedBox(
+                width: 200,
+                height: 50,
+                child: TextField(
+                    textAlign: TextAlign.end,
+                    controller: accountCtrl,
+                    decoration: const InputDecoration(
+                      hintText: "Phone/Email/JWT",
+                    )),
+              )
+            ]),
+            SizedBox(
+              width: double.infinity,
+              child: InkWell(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      "SupportLoginTypes： ",
+                      style: TextStyle(fontSize: 16),
+                    ),
+                    Text(selectedLoginTypes.entries
+                        .where((entry) => entry.value)
+                        .map((entry) => entry.key.toString().split('.').last)
+                        .join(', ')),
+                  ],
+                ),
+                onTap: () => {
+                  setState(() {
+                    selectedLoginTypesShow = !selectedLoginTypesShow;
+                  })
+                },
+              ),
+            ),
+            Visibility(
+              visible: selectedLoginTypesShow,
+              child: Column(
+                children: selectedLoginTypes.keys.map((loginType) {
+                  return CheckboxListTile(
+                    title: Text(loginType.toString().split('.').last),
+                    value: selectedLoginTypes[loginType],
+                    onChanged: (bool? value) {
+                      // Update the state of the main widget
+                      setState(() {
+                        selectedLoginTypes[loginType] = value!;
+                      });
+                    },
+                  );
+                }).toList(),
+                // Add an action button if needed
+              ),
+            ),
+            BtnItem(
+                "Connect",
+                () => {
+                      AuthCoreLogic.connect(loginType, accountCtrl.text,
+                          selectedLoginTypes.entries.where((e) => e.value).map((e) => e.key).toList())
+                    }),
+          ],
+        ),
+      ),
+    );
+  }
+
+  void _showDialog() {}
+
+  Widget BtnItem(String text, Function() onPressed) {
+    return Padding(
+      padding: const EdgeInsets.all(8.0),
+      child: SizedBox(
+        width: double.infinity,
+        height: 50,
+        child: ElevatedButton(
+            onPressed: () => onPressed(),
+            child: Text(
+              text,
+              style: TextStyle(fontSize: 18),
+            )),
+      ),
+    );
+  }
+
+  Widget BlindStatus() {
+    return Padding(
+        padding: EdgeInsets.all(8.0),
+        child: SizedBox(
+          width: double.infinity,
+          height: 50,
+          child: Row(
+            children: [
+              Text(
+                "BlindStatus",
+                style: TextStyle(fontSize: 16),
+              ),
+              Spacer(),
+              Switch(
+                  value: blindEnable,
+                  onChanged: (value) => {
+                        AuthCoreLogic.setBlindEnable(value),
+                        setState(() {
+                          blindEnable = value;
+                        })
+                      }),
+            ],
+          ),
+        ));
   }
 }

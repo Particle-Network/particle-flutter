@@ -47,3 +47,22 @@ class LoginAuthorization {
         'uniq': uniq,
       };
 }
+
+
+class LoginPageConfig {
+  String? imagePath;
+  String? projectName;
+  String? description;
+
+  LoginPageConfig({
+    this.imagePath,
+    this.projectName,
+    this.description,
+  });
+
+  Map<String, dynamic> toJson() => {
+    'imagePath': imagePath,
+    'projectName': projectName,
+    'description': description,
+  };
+}

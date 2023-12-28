@@ -11,9 +11,13 @@ import com.particle.auth.data.MasterPwdServiceCallback
 import com.particle.base.data.ErrorInfo
 import com.particle.base.data.SignAllOutput
 import com.particle.base.data.SignOutput
+import com.particle.base.model.LoginPageConfig
+import com.particle.base.model.LoginType
 import com.particle.base.model.ResultCallback
+import com.particle.base.model.SupportLoginType
 import com.particle.base.model.UserInfo
 import com.particleauthcore.module.ChainData
+import com.particleauthcore.module.ConnectData
 import com.particleauthcore.utils.ChainUtils
 import com.particleauthcore.utils.MessageProcess
 import io.flutter.plugin.common.MethodChannel
@@ -22,21 +26,37 @@ import network.particle.auth_flutter.bridge.model.FlutterCallBack
 
 object AuthCoreBridge {
 
-    private val failed = ErrorInfo("failed",100000)
-    fun connect(jwt: String, result: MethodChannel.Result) {
-        AuthCore.connect(jwt, object : AuthCoreServiceCallback<UserInfo> {
-            override fun success(output: UserInfo) {
-                try {
-                    result.success(FlutterCallBack.success(output).toGson())
-                }catch (_:Exception){
+    private val failed = ErrorInfo("failed", 100000)
+    fun connect(loginJson: String, result: MethodChannel.Result) {
+        LogUtils.d("connect", loginJson)
+        val loginData = GsonUtils.fromJson(loginJson, ConnectData::class.java);
+        val loginType = LoginType.valueOf(loginData.loginType.uppercase())
+        val account = loginData.account ?: ""
+        val prompt = loginData.prompt
+        val loginPageConfig = loginData.loginPageConfig
+        val supportLoginTypes: List<SupportLoginType> = loginData.supportLoginTypes?.map {
+            SupportLoginType.valueOf(it.uppercase())
+        } ?: emptyList()
+        LogUtils.d("connect", loginType, account, supportLoginTypes, prompt, loginPageConfig)
+        AuthCore.connect(
+            loginType,
+            account,
+            supportLoginTypes,
+            prompt,
+            loginPageConfig = loginPageConfig,
+            object : AuthCoreServiceCallback<UserInfo> {
+                override fun success(output: UserInfo) {
+                    try {
+                        result.success(FlutterCallBack.success(output).toGson())
+                    } catch (_: Exception) {
 
+                    }
                 }
-            }
 
-            override fun failure(errMsg: ErrorInfo) {
-                result.success(FlutterCallBack.failed(errMsg).toGson())
-            }
-        })
+                override fun failure(errMsg: ErrorInfo) {
+                    result.success(FlutterCallBack.failed(errMsg).toGson())
+                }
+            })
     }
 
 
@@ -264,6 +284,14 @@ object AuthCoreBridge {
                     result.success(FlutterCallBack.success(output.signature).toGson())
                 }
             })
+    }
+
+    fun setBlindEnable(enable: Boolean, result: MethodChannel.Result) {
+        AuthCore.setBlindEnable(enable)
+    }
+
+    fun getBlindEnable(result: MethodChannel.Result) {
+        result.success(AuthCore.getBlindEnable())
     }
 
 }
