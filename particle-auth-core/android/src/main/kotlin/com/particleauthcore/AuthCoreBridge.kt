@@ -38,25 +38,30 @@ object AuthCoreBridge {
             SupportLoginType.valueOf(it.uppercase())
         } ?: emptyList()
         LogUtils.d("connect", loginType, account, supportLoginTypes, prompt, loginPageConfig)
-        AuthCore.connect(
-            loginType,
-            account,
-            supportLoginTypes,
-            prompt,
-            loginPageConfig = loginPageConfig,
-            object : AuthCoreServiceCallback<UserInfo> {
-                override fun success(output: UserInfo) {
-                    try {
-                        result.success(FlutterCallBack.success(output).toGson())
-                    } catch (_: Exception) {
+        try {
+            AuthCore.connect(
+                loginType,
+                account,
+                supportLoginTypes,
+                prompt,
+                loginPageConfig = loginPageConfig,
+                object : AuthCoreServiceCallback<UserInfo> {
+                    override fun success(output: UserInfo) {
+                        try {
+                            result.success(FlutterCallBack.success(output).toGson())
+                        } catch (_: Exception) {
 
+                        }
                     }
-                }
 
-                override fun failure(errMsg: ErrorInfo) {
-                    result.success(FlutterCallBack.failed(errMsg).toGson())
-                }
-            })
+                    override fun failure(errMsg: ErrorInfo) {
+                        result.success(FlutterCallBack.failed(errMsg).toGson())
+                    }
+                })
+        } catch (e: Exception) {
+            result.success(FlutterCallBack.failed(ErrorInfo(e.message ?: "", 100000)).toGson())
+        }
+
     }
 
 
