@@ -44,6 +44,8 @@ public class ParticleAuthCorePlugin: NSObject, FlutterPlugin {
         case hasPaymentPassword
         case hasMasterPassword
         case changeMasterPassword
+        case setBlindEnable
+        case getBlindEnable
     }
 
     public static func register(with registrar: FlutterPluginRegistrar) {
@@ -105,6 +107,10 @@ public class ParticleAuthCorePlugin: NSObject, FlutterPlugin {
             self.hasMasterPassword(result)
         case .changeMasterPassword:
             self.changeMasterPassword(result)
+        case .setBlindEnable:
+            self.setBlindEnable(json as? Bool ?? false)
+        case .getBlindEnable:
+            self.getBlindEnable(result)
         }
     }
 }
@@ -142,16 +148,83 @@ public extension ParticleAuthCorePlugin {
     }
 
     func connect(_ json: String?, callback: @escaping ParticleCallback) {
-        guard let jwt = json else {
+        guard let json = json else {
             callback(getErrorJson("json is nil"))
             return
+        }
+
+        let data = JSON(parseJSON: json)
+
+        let type = data["login_type"].stringValue.lowercased()
+        let account = data["account"].string
+        let supportAuthType = data["support_auth_type_values"].arrayValue
+
+        let socialLoginPromptString = data["social_login_prompt"].stringValue.lowercased()
+        let socialLoginPrompt: SocialLoginPrompt? = SocialLoginPrompt(rawValue: socialLoginPromptString)
+
+        let loginType = LoginType(rawValue: type) ?? .email
+        var supportAuthTypeArray: [SupportAuthType] = []
+
+        let array = supportAuthType.map {
+            $0.stringValue.lowercased()
+        }
+
+        if array.contains("all") {
+            supportAuthTypeArray = [.all]
+        } else {
+            array.forEach {
+                if $0 == "email" {
+                    supportAuthTypeArray.append(.email)
+                } else if $0 == "phone" {
+                    supportAuthTypeArray.append(.phone)
+                } else if $0 == "apple" {
+                    supportAuthTypeArray.append(.apple)
+                } else if $0 == "google" {
+                    supportAuthTypeArray.append(.google)
+                } else if $0 == "facebook" {
+                    supportAuthTypeArray.append(.facebook)
+                } else if $0 == "github" {
+                    supportAuthTypeArray.append(.github)
+                } else if $0 == "twitch" {
+                    supportAuthTypeArray.append(.twitch)
+                } else if $0 == "microsoft" {
+                    supportAuthTypeArray.append(.microsoft)
+                } else if $0 == "linkedin" {
+                    supportAuthTypeArray.append(.linkedin)
+                } else if $0 == "discord" {
+                    supportAuthTypeArray.append(.discord)
+                } else if $0 == "twitter" {
+                    supportAuthTypeArray.append(.twitter)
+                }
+            }
+        }
+
+        var acc = account
+        if acc != nil, acc!.isEmpty {
+            acc = nil
+        }
+
+        let config = data["login_page_config"]
+        var loginPageConfig: LoginPageConfig?
+        if config != JSON.null {
+            let projectName = config["projectName"].stringValue
+            let description = config["description"].stringValue
+            let data = config["imagePath"].stringValue
+            let imageType = config["imageType"].stringValue.lowercased()
+            var imagePath: ImagePath
+            if imageType == "base64" {
+                imagePath = ImagePath.data(data)
+            } else {
+                imagePath = ImagePath.url(data)
+            }
+            loginPageConfig = LoginPageConfig(imagePath: imagePath, projectName: projectName, description: description)
         }
 
         let observable = Single<String>.fromAsync { [weak self] in
             guard let self = self else {
                 throw ParticleNetwork.ResponseError(code: nil, message: "self is nil")
             }
-            return try await self.auth.connect(jwt: jwt)
+            return try await self.auth.presentLoginPage(type: loginType, account: account, supportAuthType: supportAuthTypeArray, socialLoginPrompt: socialLoginPrompt, config: loginPageConfig)
         }.map { userInfo in
             let userInfoJsonString = userInfo.jsonStringFullSnake()
             let newUserInfo = JSON(parseJSON: userInfoJsonString)
@@ -365,6 +438,15 @@ public extension ParticleAuthCorePlugin {
             }
             return try await self.auth.changeMasterPassword()
         }, callback: callback)
+    }
+
+    func setBlindEnable(_ enable: Bool) {
+        Auth.setBlindEnable(enable)
+    }
+
+    func getBlindEnable(_ callback: @escaping ParticleCallback) {
+        let enable = Auth.getBlindEnable()
+        callback(enable)
     }
 }
 

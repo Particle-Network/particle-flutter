@@ -28,8 +28,7 @@ class AAAuthLogic {
     }
 
     ParticleInfo.set(projectId, clientK);
-    ParticleAA.init(
-        AccountName.BICONOMY, VersionNumber.V1_0_0(), biconomyApiKeys);
+    ParticleAA.init(AccountName.BICONOMY_V1(), biconomyApiKeys);
   }
 
   static void loginParticle() async {
@@ -74,8 +73,8 @@ class AAAuthLogic {
   static void getSmartAccountAddress() async {
     try {
       final eoaAddress = await ParticleAuth.getAddress();
-      final smartAccountConfig = SmartAccountConfig(
-          AccountName.BICONOMY, VersionNumber.V1_0_0(), eoaAddress);
+      final smartAccountConfig = SmartAccountConfig.fromAccountName(
+          AccountName.BICONOMY_V1(), eoaAddress);
       List<dynamic> response = await EvmService.getSmartAccount(
           <SmartAccountConfig>[smartAccountConfig]);
       var smartAccountJson = response.firstOrNull;

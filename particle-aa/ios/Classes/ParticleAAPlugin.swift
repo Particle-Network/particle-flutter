@@ -80,11 +80,19 @@ public extension ParticleAAPlugin {
             }
         }
         
-        let accountName = AA.AccountName(rawValue: data["name"].stringValue.uppercased()) ?? .biconomy
+        let name = data["name"].stringValue.uppercased()
+        let version = data["version"].stringValue.lowercased()
+        let accountName = AA.AccountName(version: version, name: name)
+       
+        var finalAccountName: AA.AccountName
+        let all: [AA.AccountName] = [.biconomyV1, .biconomyV2, .simple, .cyberConnect]
+        if all.contains(accountName) {
+            finalAccountName = accountName
+        } else {
+            finalAccountName = .biconomyV1
+        }
         
-        let version = AA.VersionNumber(rawValue: data["version"].stringValue.uppercased()) ?? .v1_0_0
-        
-        AAService.initialize(name: accountName, version: version, biconomyApiKeys: biconomyAppKeys)
+        AAService.initialize(name: finalAccountName, biconomyApiKeys: biconomyAppKeys)
         ParticleNetwork.setAAService(aaService)
     }
     

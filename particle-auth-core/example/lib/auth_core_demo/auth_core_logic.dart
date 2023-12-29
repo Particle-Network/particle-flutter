@@ -10,8 +10,10 @@ class AuthCoreLogic {
 
   static void init(Env env) {
     // Get your project id and client key from dashboard, https://dashboard.particle.network
-    const projectId = "772f7499-1d2e-40f4-8e2c-7b6dd47db9de"; //772f7499-1d2e-40f4-8e2c-7b6dd47db9de
-    const clientK = "ctWeIc2UBA6sYTKJknT9cu9LBikF00fbk1vmQjsV"; //ctWeIc2UBA6sYTKJknT9cu9LBikF00fbk1vmQjsV
+    const projectId =
+        "772f7499-1d2e-40f4-8e2c-7b6dd47db9de"; //772f7499-1d2e-40f4-8e2c-7b6dd47db9de
+    const clientK =
+        "ctWeIc2UBA6sYTKJknT9cu9LBikF00fbk1vmQjsV"; //ctWeIc2UBA6sYTKJknT9cu9LBikF00fbk1vmQjsV
     if (projectId.isEmpty || clientK.isEmpty) {
       throw const FormatException(
           'You need set project info, get your project id and client key from dashboard, https://dashboard.particle.network');
@@ -22,18 +24,35 @@ class AuthCoreLogic {
     print("init");
   }
 
-  static void connect(LoginType loginType, String? account, List<LoginType> supportLoginTypes) async {
-    print("LoginType ${loginType.name} account:$account   supportLoginTypes$supportLoginTypes");
-    final userInfo = await ParticleAuthCore.connect(loginType, account: account, supportLoginTypes: supportLoginTypes);
-    print("connect: $userInfo");
-    showToast("connect: $userInfo");
+  static void connect(LoginType loginType, String? account,
+      List<SupportAuthType> supportAuthTypes) async {
+    try {
+      print(
+          "LoginType ${loginType.name} account:$account supportAuthTypes$supportAuthTypes");
+      final userInfo = await ParticleAuthCore.connect(loginType,
+          account: account,
+          supportAuthTypes: supportAuthTypes,
+          loginPageConfig: LoginPageConfig(
+              imagePath:
+                  "https://static.particle.network/wallet-icons/Particle-iOS.png",
+              projectName: "Flutter Example",
+              description: "Welcome to login",
+              imageType: "url"));
+      print("connect: $userInfo");
+      showToast("connect: $userInfo");
+    } catch (error) {
+      print("connect: $error");
+      showToast("connect: $error");
+    }
   }
 
   static void connectWithJWT() async {
     try {
       const jwt =
-          "eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCIsImtpZCI6IndVUE05RHNycml0Sy1jVHE2OWNKcCJ9.eyJlbWFpbCI6InBhbnRhb3ZheUBnbWFpbC5jb20iLCJlbWFpbF92ZXJpZmllZCI6ZmFsc2UsImlzcyI6Imh0dHBzOi8vZGV2LXFyNi01OWVlLnVzLmF1dGgwLmNvbS8iLCJhdWQiOiJFVmpLMVpaUFN0UWNkV3VoandQZGRBdGdSaXdwNTRWUSIsImlhdCI6MTcwMzc1NzgxNSwiZXhwIjoxNzAzNzkzODE1LCJzdWIiOiJhdXRoMHw2MzAzMjE0YjZmNjE1NjM2YWM5MTdmMWIiLCJzaWQiOiJZQ3Z5c2R3WWFRMXRlTlF0Ty1TYVp4ZVVURHJ4V0FCRSJ9.BuBJFTOJCCBhsu4r64M5pisFF-Hfr4QnNxD_hsI_fnZuuAIlBttgyHrAdp1QxmOcN7LEWgXoUAt9hY5iWU_FWER9u6JOTGja7vMFTlhLK-iYtk1-yhu8F2ivx8xHJ8mdbBOsVY_iXNhFQEwpDuJWqks7lAResgpMWQoN1DFvLcl_-vm2pscHXlsiqv-HEV2clJGvWlZg44Jx9Z3182tO05obmGc341zzw2Zb69GBTkQZR8L8C9RmsRhmG1QZlWH89fEG95dnRfzA3dcwtRLJ97eYimUbi8jIGXia-s4WXX8bvvc5uFuGqfUOocL68LIDkwI4-A37QAslSgnJt9LcFg"; // paste your jwt
-      final userInfo = await ParticleAuthCore.connect(LoginType.jwt, account: jwt);
+          "eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCIsImtpZCI6IndVUE05RHNycml0Sy1jVHE2OWNKcCJ9.eyJlbWFpbCI6InBhbnRhb3ZheUBnbWFpbC5jb20iLCJlbWFpbF92ZXJpZmllZCI6ZmFsc2UsImlzcyI6Imh0dHBzOi8vZGV2LXFyNi01OWVlLnVzLmF1dGgwLmNvbS8iLCJhdWQiOiJFVmpLMVpaUFN0UWNkV3VoandQZGRBdGdSaXdwNTRWUSIsImlhdCI6MTcwMjYyMTQ0NCwiZXhwIjoxNzAyNjU3NDQ0LCJzdWIiOiJhdXRoMHw2MzAzMjE0YjZmNjE1NjM2YWM5MTdmMWIiLCJzaWQiOiJTZnlfVElJeVVDUFJMcmlrd0sxZDRnMXVkN1ROaWRlUSJ9.HUE08zLrlIcNVW2y8m_8QBv2fW9nixnujoBesjWkVdxiXjCzmmdqUMsPWip6vevPFgEri2-O6MAIJQwSIvfXinv3kLiBCtToqtnaF_BgROo3w6hUhHU6kW6WIP9qww3BnvVNgPbmHzgjGKJmhPNYet6_i7UMrlbyx6ZRNrDg7UiPbkmpWGqqIj8506dCcScbD2PF3dUPfweI1L7J6yQfCBB_aPsrtGGll2J4K97FzNLFjabT--lG0xDDvYiFpkjv0agdV7kkX9IQsp53BfQF1FA2o6hUanLlwCR0v-ON6RYMn-Cj92LGhp8-ng6wwuGcx_JJ0ocgY6rbrKwWZa-gPw"; // paste your jwt
+      final userInfo =
+          await ParticleAuthCore.connect(LoginType.jwt, account: jwt);
+
       print("connect: $userInfo");
       showToast("connect: $userInfo");
     } catch (error) {
@@ -214,7 +233,8 @@ class AuthCoreLogic {
   }
 
   static void swicthChain() async {
-    bool isSuccess = await ParticleAuthCore.switchChain(ChainInfo.PolygonMumbai);
+    bool isSuccess =
+        await ParticleAuthCore.switchChain(ChainInfo.PolygonMumbai);
     print("switch chain: $isSuccess");
     showToast("switch chain: $isSuccess");
   }
@@ -242,7 +262,8 @@ class AuthCoreLogic {
       String methodName = "balanceOf";
       List<Object> parameters = <Object>[address];
       String abiJsonString = "";
-      final result = await EvmService.readContract(address, contractAddress, methodName, parameters, abiJsonString);
+      final result = await EvmService.readContract(
+          address, contractAddress, methodName, parameters, abiJsonString);
       print("result: $result");
       showToast("result: $result");
     } catch (error) {
@@ -256,7 +277,10 @@ class AuthCoreLogic {
       String address = await Evm.getAddress();
       String contractAddress = "0x326C977E6efc84E512bB9C30f76E30c160eD06FB";
       String methodName = "transfer";
-      List<Object> parameters = <Object>["0xa0869E99886e1b6737A4364F2cf9Bb454FD637E4", "100000000"];
+      List<Object> parameters = <Object>[
+        "0xa0869E99886e1b6737A4364F2cf9Bb454FD637E4",
+        "100000000"
+      ];
       String abiJsonString = "";
       final transaction = await EvmService.writeContract(
           address, contractAddress, methodName, parameters, abiJsonString,
@@ -444,13 +468,15 @@ class AuthCoreLogic {
         List<String> tokenAddresses = <String>[];
         tokenAddresses.add('Fh79BtbpPH7Kh8BrhqG7iwKA3xSkgGg2TrtQPgM2c2SY');
         tokenAddresses.add('GobzzzFQsFAHPvmwT42rLockfUCeV3iutEkK218BxT8K');
-        result = await SolanaService.getTokenByTokenAddresses(address, tokenAddresses);
+        result = await SolanaService.getTokenByTokenAddresses(
+            address, tokenAddresses);
       } else {
         final address = await Evm.getAddress();
         List<String> tokenAddresses = <String>[];
         tokenAddresses.add('0x001B3B4d0F3714Ca98ba10F6042DaEbF0B1B7b6F');
         tokenAddresses.add('0x326C977E6efc84E512bB9C30f76E30c160eD06FB');
-        result = await EvmService.getTokenByTokenAddresses(address, tokenAddresses);
+        result =
+            await EvmService.getTokenByTokenAddresses(address, tokenAddresses);
       }
 
       print("getTokenByTokenAddresses: $result");
@@ -506,5 +532,9 @@ class AuthCoreLogic {
     ParticleAuthCore.setBlindEnable(enable);
   }
 
-  static void getBlindEnable() async {}
+  static void getBlindEnable() async {
+    final result = ParticleAuthCore.getBlindEnable();
+    print("getBlindEnable: $result");
+    showToast("getBlindEnable: $result");
+  }
 }

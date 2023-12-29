@@ -38,8 +38,7 @@ class AAConnectLogic {
       80001: "hYZIwIsf2.e18c790b-cafb-4c4e-a438-0289fc25dba1"
     };
     ParticleAuth.init(ChainInfo.Polygon, Env.production);
-    ParticleAA.init(
-        AccountName.BICONOMY, VersionNumber.V1_0_0(), biconomyApiKeys);
+    ParticleAA.init(AccountName.BICONOMY_V1(), biconomyApiKeys);
   }
 
   static void loginMetamask() async {
@@ -65,8 +64,8 @@ class AAConnectLogic {
     }
     try {
       final eoaAddress = account!.publicAddress;
-      final smartAccountConfig = SmartAccountConfig(
-          AccountName.BICONOMY, VersionNumber.V1_0_0(), eoaAddress);
+      final smartAccountConfig =
+          SmartAccountConfig.fromAccountName(AccountName.BICONOMY_V1(), eoaAddress);
       List<dynamic> response = await EvmService.getSmartAccount(
           <SmartAccountConfig>[smartAccountConfig]);
       var smartAccountJson = response.firstOrNull;

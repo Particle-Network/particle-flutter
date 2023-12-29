@@ -13,7 +13,7 @@ class ParticleAA {
   /// Init particle-aa SDK
   ///
   /// [dappKeys] AA biconomy dapp keys
-  static init(AccountName name, VersionNumber version,
+  static init(AccountName accountName,
       Map<int, String> biconomyApiKeys) {
     // Convert integer keys to strings
     var stringKeyMap =
@@ -24,16 +24,16 @@ class ParticleAA {
           'initialize',
           jsonEncode({
             "biconomy_app_keys": stringKeyMap,
-            "name": name.name,
-            "version": version.version,
+            "name": accountName.name,
+            "version": accountName.version,
           }));
     } else {
       _channel.invokeMethod(
           'init',
           jsonEncode({
             "biconomy_app_keys": stringKeyMap,
-            "name": name.name,
-            "version": version.version,
+            "name": accountName.name,
+            "version": accountName.version,
           }));
     }
   }

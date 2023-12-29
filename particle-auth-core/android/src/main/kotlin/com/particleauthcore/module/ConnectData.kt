@@ -11,10 +11,10 @@ data class ConnectData(
     val loginType: String,
     @SerializedName("account")
     val account: String?,
-    @SerializedName("support_login_types")
+    @SerializedName("support_auth_type_values")
     val supportLoginTypes: List<String>? = null,
     @SerializedName("login_page_config")
     val loginPageConfig: LoginPageConfig? = null,
-    @SerializedName("prompt")
+    @SerializedName("social_login_prompt")
     val prompt: LoginPrompt? = null
 )

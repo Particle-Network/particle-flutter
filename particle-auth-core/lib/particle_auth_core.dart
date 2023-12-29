@@ -21,23 +21,27 @@ class ParticleAuthCore {
     }
   }
 
-
   static Future<UserInfo> connect(LoginType loginType,
       {String? account,
       SocialLoginPrompt? prompt,
       LoginPageConfig? loginPageConfig,
-      List<LoginType>? supportLoginTypes}) async {
-    final convertSupportLoginTypes = supportLoginTypes?.map((e) => e.name).toList();
+      List<SupportAuthType>? supportAuthTypes}) async {
+    final convertSupportLoginTypes = supportAuthTypes
+        ?.where((type) =>
+            type != SupportAuthType.none || type != SupportAuthType.all)
+        .map((e) => e.name)
+        .toList();
     final json = jsonEncode({
       "login_type": loginType.name,
       "account": account ?? "",
-      "support_login_types": convertSupportLoginTypes ?? [],
-      "prompt": prompt?.name ?? null,
-      "loginPageConfig": loginPageConfig
+      "support_auth_type_values": convertSupportLoginTypes ?? [],
+      "social_login_prompt": prompt?.name,
+      "login_page_config": loginPageConfig
     });
     print("connect json<< $json");
     final result = await _channel.invokeMethod('connect', json);
-    if (jsonDecode(result)["status"] == true || jsonDecode(result)["status"] == 1) {
+    if (jsonDecode(result)["status"] == true ||
+        jsonDecode(result)["status"] == 1) {
       final userInfo = UserInfo.fromJson(jsonDecode(result)["data"]);
       return userInfo;
     } else {
@@ -49,7 +53,8 @@ class ParticleAuthCore {
   static Future<String> disconnect() async {
     final result = await _channel.invokeMethod('disconnect');
 
-    if (jsonDecode(result)["status"] == true || jsonDecode(result)["status"] == 1) {
+    if (jsonDecode(result)["status"] == true ||
+        jsonDecode(result)["status"] == 1) {
       return jsonDecode(result)["data"] as String;
     } else {
       final error = RpcError.fromJson(jsonDecode(result)["data"]);
@@ -60,7 +65,8 @@ class ParticleAuthCore {
   static Future<bool> isConnected() async {
     final result = await _channel.invokeMethod('isConnected');
 
-    if (jsonDecode(result)["status"] == true || jsonDecode(result)["status"] == 1) {
+    if (jsonDecode(result)["status"] == true ||
+        jsonDecode(result)["status"] == 1) {
       return jsonDecode(result)["data"] as bool;
     } else {
       final error = RpcError.fromJson(jsonDecode(result)["data"]);
@@ -90,7 +96,8 @@ class ParticleAuthCore {
   static Future<bool> changeMasterPassword() async {
     final result = await _channel.invokeMethod('changeMasterPassword');
 
-    if (jsonDecode(result)["status"] == true || jsonDecode(result)["status"] == 1) {
+    if (jsonDecode(result)["status"] == true ||
+        jsonDecode(result)["status"] == 1) {
       return jsonDecode(result)["data"] as bool;
     } else {
       final error = RpcError.fromJson(jsonDecode(result)["data"]);
@@ -100,7 +107,8 @@ class ParticleAuthCore {
 
   static Future<bool> hasMasterPassword() async {
     final result = await _channel.invokeMethod('hasMasterPassword');
-    if (jsonDecode(result)["status"] == true || jsonDecode(result)["status"] == 1) {
+    if (jsonDecode(result)["status"] == true ||
+        jsonDecode(result)["status"] == 1) {
       return jsonDecode(result)["data"] as bool;
     } else {
       final error = RpcError.fromJson(jsonDecode(result)["data"]);
@@ -110,7 +118,8 @@ class ParticleAuthCore {
 
   static Future<bool> hasPaymentPassword() async {
     final result = await _channel.invokeMethod('hasPaymentPassword');
-    if (jsonDecode(result)["status"] == true || jsonDecode(result)["status"] == 1) {
+    if (jsonDecode(result)["status"] == true ||
+        jsonDecode(result)["status"] == 1) {
       return jsonDecode(result)["data"] as bool;
     } else {
       final error = RpcError.fromJson(jsonDecode(result)["data"]);
@@ -120,7 +129,8 @@ class ParticleAuthCore {
 
   static Future<String> openAccountAndSecurity() async {
     final result = await _channel.invokeMethod('openAccountAndSecurity');
-    if (jsonDecode(result)["status"] == true || jsonDecode(result)["status"] == 1) {
+    if (jsonDecode(result)["status"] == true ||
+        jsonDecode(result)["status"] == 1) {
       return "";
     } else {
       final error = RpcError.fromJson(jsonDecode(result)["data"]);

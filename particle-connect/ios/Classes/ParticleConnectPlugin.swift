@@ -345,14 +345,8 @@ extension ParticleConnectPlugin {
             return
         }
         
-        guard let vc = UIViewController.topMost else {
-            return
-        }
-        
         var observable: Single<Account?>
-        if walletType == .walletConnect {
-            observable = (adapter as! WalletConnectAdapter).connectWithQrCode(from: vc)
-        } else if walletType == .particle {
+        if walletType == .particle {
             observable = adapter.connect(connectConfig)
         } else {
             observable = adapter.connect(ConnectConfig.none)
@@ -579,7 +573,7 @@ extension ParticleConnectPlugin {
         var message = data["message"].stringValue
         
         // solana message should encoded in base58
-        if ConnectManager.getChainType() == .solana {
+        if ParticleNetwork.getChainInfo().chainType == .solana {
             message = Base58.encode(message.data(using: .utf8)!)
         }
         
@@ -775,7 +769,7 @@ extension ParticleConnectPlugin {
         let message = data["message"].stringValue
         var signature = data["signature"].stringValue
         
-        if ConnectManager.getChainType() == .solana {
+        if ParticleNetwork.getChainInfo().chainType == .solana {
             signature = Base58.encode(Data(base64Encoded: signature)!)
         }
         
@@ -871,8 +865,6 @@ extension ParticleConnectPlugin {
             print("adapter for \(walletTypeString) is not init")
             return
         }
-        
-        (adapter as? WalletConnectAdapter)?.reconnectIfNeeded(publicAddress: publicAddress)
     }
     
     func connectWalletConnect(callback: @escaping ParticleCallback) {

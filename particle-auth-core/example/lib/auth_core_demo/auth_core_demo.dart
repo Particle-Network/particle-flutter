@@ -21,8 +21,8 @@ class AuthDemoPageState extends State<AuthDemoPage> {
   }).toList();
 
   LoginType loginType = LoginType.phone;
-  Map<LoginType, bool> selectedLoginTypes = {
-    for (var item in LoginType.values.where((type) => type != LoginType.jwt)) item: false
+  Map<SupportAuthType, bool> selectedAuthTypes = {
+    for (var item in SupportAuthType.values.where((type) => type != SupportAuthType.none)) item: true
   };
   bool selectedLoginTypesShow = false;
   bool blindEnable = false;
@@ -141,7 +141,7 @@ class AuthDemoPageState extends State<AuthDemoPage> {
                       "SupportLoginTypes： ",
                       style: TextStyle(fontSize: 16),
                     ),
-                    Text(selectedLoginTypes.entries
+                    Text(selectedAuthTypes.entries
                         .where((entry) => entry.value)
                         .map((entry) => entry.key.toString().split('.').last)
                         .join(', ')),
@@ -157,14 +157,14 @@ class AuthDemoPageState extends State<AuthDemoPage> {
             Visibility(
               visible: selectedLoginTypesShow,
               child: Column(
-                children: selectedLoginTypes.keys.map((loginType) {
+                children: selectedAuthTypes.keys.map((loginType) {
                   return CheckboxListTile(
                     title: Text(loginType.toString().split('.').last),
-                    value: selectedLoginTypes[loginType],
+                    value: selectedAuthTypes[loginType],
                     onChanged: (bool? value) {
                       // Update the state of the main widget
                       setState(() {
-                        selectedLoginTypes[loginType] = value!;
+                        selectedAuthTypes[loginType] = value!;
                       });
                     },
                   );
@@ -176,7 +176,7 @@ class AuthDemoPageState extends State<AuthDemoPage> {
                 "Connect",
                 () => {
                       AuthCoreLogic.connect(loginType, accountCtrl.text,
-                          selectedLoginTypes.entries.where((e) => e.value).map((e) => e.key).toList())
+                          selectedAuthTypes.entries.where((e) => e.value).map((e) => e.key).toList())
                     }),
           ],
         ),

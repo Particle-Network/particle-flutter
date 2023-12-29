@@ -1,3 +1,5 @@
+## 1.4.1
+Sync Native SDK, add biconomy v2, auth core support social login.
 ## 1.4.0
 ## 1.3.6
 ## 1.3.4

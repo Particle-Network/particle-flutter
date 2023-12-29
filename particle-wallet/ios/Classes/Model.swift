@@ -26,6 +26,8 @@ extension NSObject {
         var walletType: WalletType?
         if str == "particle" {
             walletType = .particle
+        } else if str == "authcore" {
+            walletType = .authCore
         } else if str == "evmprivatekey" {
             walletType = .evmPrivateKey
         } else if str == "solanaprivatekey" {

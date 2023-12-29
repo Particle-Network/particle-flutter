@@ -53,16 +53,20 @@ class LoginPageConfig {
   String? imagePath;
   String? projectName;
   String? description;
+  // base64 or url
+  String? imageType;
 
   LoginPageConfig({
     this.imagePath,
     this.projectName,
     this.description,
+    this.imageType
   });
 
   Map<String, dynamic> toJson() => {
     'imagePath': imagePath,
     'projectName': projectName,
     'description': description,
+    'imageType': imageType
   };
 }
