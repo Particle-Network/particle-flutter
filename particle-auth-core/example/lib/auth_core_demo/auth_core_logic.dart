@@ -165,6 +165,7 @@ class AuthCoreLogic {
   static void evmPersonalSign() async {
     try {
       final messageHex = "0x${StringUtils.toHexString("Hello Particle")}";
+
       String signature = await Evm.personalSign(messageHex);
       debugPrint("evm personalSign: $signature");
       showToast("evm personalSign: $signature");

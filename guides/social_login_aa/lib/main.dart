@@ -55,8 +55,7 @@ class _MyHomePageState extends State<MyHomePage> {
   }
 
   void _initAA() {
-    ParticleAA.init(
-        AccountName.BICONOMY, VersionNumber.V1_0_0(), <int, String>{});
+    ParticleAA.init(AccountName.BICONOMY_V1(), <int, String>{});
     ParticleAA.enableAAMode();
   }
 
@@ -68,8 +67,8 @@ class _MyHomePageState extends State<MyHomePage> {
     try {
       List<dynamic> response =
           await EvmService.getSmartAccount(<SmartAccountConfig>[
-        SmartAccountConfig(AccountName.BICONOMY, VersionNumber.V1_0_0(),
-            account!.publicAddress)
+        SmartAccountConfig.fromAccountName(
+            AccountName.BICONOMY_V1(), account!.publicAddress)
       ]);
       var smartAccountJson = response.firstOrNull;
       if (smartAccountJson != null) {

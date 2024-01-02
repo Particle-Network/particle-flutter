@@ -103,7 +103,7 @@ class AuthLogic {
 
     try {
       final eoaAddress = await ParticleAuth.getAddress();
-      SmartAccountConfig config = SmartAccountConfig(AccountName.BICONOMY_V1(), eoaAddress);
+      SmartAccountConfig config = SmartAccountConfig.fromAccountName(AccountName.BICONOMY_V1(), eoaAddress);
       List<dynamic> response =
           await EvmService.getSmartAccount(<SmartAccountConfig>[config]);
 
