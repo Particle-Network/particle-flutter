@@ -34,14 +34,14 @@ object AABridge {
         LogUtils.d("init", initParams)
         val initData = GsonUtils.fromJson(initParams, BiconomyInitData::class.java)
         ParticleNetwork.initAAMode(initData.dAppKeys)
+        val providerName =initData.name
+        val providerVersion =initData.version
+        LogUtils.d("providerName", providerName)
         val aaService = ParticleNetwork.getRegisterAAServices().values.firstOrNull {
-            it.getIAAProvider().apiName.equals(
-                initData.name,
-                true
-            )
+            it.getIAAProvider().apiName.equals(providerName, true)&&it.getIAAProvider().version.equals(providerVersion, true)
         }
         aaService?.apply {
-            getIAAProvider().version = initData.version
+//            getIAAProvider().version = initData.version
             ParticleNetwork.setAAService(aaService)
         }
 

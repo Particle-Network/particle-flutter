@@ -5,6 +5,7 @@ import 'package:particle_auth/particle_auth.dart';
 
 class AAAuthLogic {
   static String? smartAccountAddress;
+  static AccountName accountName =AccountName.BICONOMY_V2();
   static void init() {
     // should call ParticleAuth init first.
     // ParticleAuth.init(ChainInfo.PolygonMumbai, Env.dev);
@@ -13,7 +14,7 @@ class AAAuthLogic {
       1: "", //your ethereum mainnet key
       5: "", //your ethereum goerli key
       137: "", //your polygon mainnet key
-      80001: "hYZIwIsf2.e18c790b-cafb-4c4e-a438-0289fc25dba1"
+      80001: ""
     };
     ParticleAuth.init(ChainInfo.Polygon, Env.production);
 
@@ -28,7 +29,7 @@ class AAAuthLogic {
     }
 
     ParticleInfo.set(projectId, clientK);
-    ParticleAA.init(AccountName.BICONOMY_V1(), biconomyApiKeys);
+    ParticleAA.init(accountName, biconomyApiKeys);
   }
 
   static void loginParticle() async {
@@ -73,8 +74,9 @@ class AAAuthLogic {
   static void getSmartAccountAddress() async {
     try {
       final eoaAddress = await ParticleAuth.getAddress();
+      print("getSmartAccountAddress eoaAddress: $eoaAddress");
       final smartAccountConfig = SmartAccountConfig.fromAccountName(
-          AccountName.BICONOMY_V1(), eoaAddress);
+          accountName, eoaAddress);
       List<dynamic> response = await EvmService.getSmartAccount(
           <SmartAccountConfig>[smartAccountConfig]);
       var smartAccountJson = response.firstOrNull;

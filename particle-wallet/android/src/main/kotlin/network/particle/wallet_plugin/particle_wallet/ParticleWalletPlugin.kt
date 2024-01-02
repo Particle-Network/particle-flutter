@@ -126,6 +126,9 @@ class ParticleWalletPlugin : FlutterPlugin, MethodCallHandler, ActivityAware {
             "setCustomWalletName" -> {
                 WalletBridge.setCustomWalletName(call.arguments as String)
             }
+            "navigatorDappBrowser" -> {
+                WalletBridge.navigatorDappBrowser(call.arguments as String)
+            }
 
             else -> result.notImplemented()
         }

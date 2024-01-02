@@ -375,4 +375,13 @@ object WalletBridge {
             e.printStackTrace()
         }
     }
+    fun navigatorDappBrowser(jsonParams: String) {
+        try {
+            val jsonObject = JSONObject(jsonParams);
+            val url = jsonObject.optString("url")
+            ParticleWallet.navigatorDAppBrowser(url)
+        } catch (e: Exception) {
+            e.printStackTrace()
+        }
+    }
 }
