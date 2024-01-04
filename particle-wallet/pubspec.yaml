@@ -1,6 +1,6 @@
 name: particle_wallet
 description: A flutter plugin project for particle wallet
-version: 1.4.2
+version: 1.4.3
 homepage: https://particle.network
 
 environment:
@@ -10,8 +10,8 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-  particle_connect: ^1.4.2
-  particle_auth: ^1.4.2
+  particle_connect: ^1.4.3
+  particle_auth: ^1.4.3
 
   # particle_connect:
   #   path: ../particle-connect/
