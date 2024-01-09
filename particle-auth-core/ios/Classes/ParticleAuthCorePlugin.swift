@@ -37,6 +37,7 @@ public class ParticleAuthCorePlugin: NSObject, FlutterPlugin {
         case evmSignTypedData
         case evmSignTypedDataUnique
         case evmSendTransaction
+        case evmBatchSendTransactions
         case solanaGetAddress
         case evmGetAddress
         case getUserInfo
@@ -93,6 +94,8 @@ public class ParticleAuthCorePlugin: NSObject, FlutterPlugin {
             self.evmSignTypedDataUnique(json as? String, callback: result)
         case .evmSendTransaction:
             self.evmSendTransaction(json as? String, callback: result)
+        case .evmBatchSendTransactions:
+            self.evmBatchSendTransactions(json as? String, callback: result)
         case .solanaGetAddress:
             self.solanaGetAddress(result)
         case .evmGetAddress:
@@ -260,7 +263,7 @@ public extension ParticleAuthCorePlugin {
         let serializedMessage = Base58.encode(message.data(using: .utf8)!)
 
         let chainInfo = ParticleNetwork.getChainInfo()
-        subscribeAndCallback(observable: Single<Bool>.fromAsync { [weak self] in
+        subscribeAndCallback(observable: Single<String>.fromAsync { [weak self] in
             guard let self = self else {
                 throw ParticleNetwork.ResponseError(code: nil, message: "self is nil")
             }
@@ -273,7 +276,7 @@ public extension ParticleAuthCorePlugin {
             return
         }
         let chainInfo = ParticleNetwork.getChainInfo()
-        subscribeAndCallback(observable: Single<Bool>.fromAsync { [weak self] in
+        subscribeAndCallback(observable: Single<String>.fromAsync { [weak self] in
             guard let self = self else {
                 throw ParticleNetwork.ResponseError(code: nil, message: "self is nil")
             }
@@ -287,7 +290,7 @@ public extension ParticleAuthCorePlugin {
         }
         let transactions = JSON(parseJSON: json).arrayValue.map { $0.stringValue }
         let chainInfo = ParticleNetwork.getChainInfo()
-        subscribeAndCallback(observable: Single<Bool>.fromAsync { [weak self] in
+        subscribeAndCallback(observable: Single<[String]>.fromAsync { [weak self] in
             guard let self = self else {
                 throw ParticleNetwork.ResponseError(code: nil, message: "self is nil")
             }
@@ -300,7 +303,7 @@ public extension ParticleAuthCorePlugin {
             return
         }
         let chainInfo = ParticleNetwork.getChainInfo()
-        subscribeAndCallback(observable: Single<Bool>.fromAsync { [weak self] in
+        subscribeAndCallback(observable: Single<String>.fromAsync { [weak self] in
             guard let self = self else {
                 throw ParticleNetwork.ResponseError(code: nil, message: "self is nil")
             }
@@ -313,7 +316,7 @@ public extension ParticleAuthCorePlugin {
             return
         }
         let chainInfo = ParticleNetwork.getChainInfo()
-        subscribeAndCallback(observable: Single<Bool>.fromAsync { [weak self] in
+        subscribeAndCallback(observable: Single<String>.fromAsync { [weak self] in
             guard let self = self else {
                 throw ParticleNetwork.ResponseError(code: nil, message: "self is nil")
             }
@@ -326,7 +329,7 @@ public extension ParticleAuthCorePlugin {
             return
         }
         let chainInfo = ParticleNetwork.getChainInfo()
-        subscribeAndCallback(observable: Single<Bool>.fromAsync { [weak self] in
+        subscribeAndCallback(observable: Single<String>.fromAsync { [weak self] in
             guard let self = self else {
                 throw ParticleNetwork.ResponseError(code: nil, message: "self is nil")
             }
@@ -340,7 +343,7 @@ public extension ParticleAuthCorePlugin {
             return
         }
         let chainInfo = ParticleNetwork.getChainInfo()
-        subscribeAndCallback(observable: Single<Bool>.fromAsync { [weak self] in
+        subscribeAndCallback(observable: Single<String>.fromAsync { [weak self] in
             guard let self = self else {
                 throw ParticleNetwork.ResponseError(code: nil, message: "self is nil")
             }
@@ -354,7 +357,7 @@ public extension ParticleAuthCorePlugin {
             return
         }
         let chainInfo = ParticleNetwork.getChainInfo()
-        subscribeAndCallback(observable: Single<Bool>.fromAsync { [weak self] in
+        subscribeAndCallback(observable: Single<String>.fromAsync { [weak self] in
             guard let self = self else {
                 throw ParticleNetwork.ResponseError(code: nil, message: "self is nil")
             }
@@ -362,17 +365,83 @@ public extension ParticleAuthCorePlugin {
         }, callback: callback)
     }
 
-    func evmSendTransaction(_ transaction: String?, callback: @escaping ParticleCallback) {
-        guard let transaction = transaction else { callback(getErrorJson("json is nil"))
+    func evmSendTransaction(_ json: String?, callback: @escaping ParticleCallback) {
+        guard let json = json else { callback(getErrorJson("json is nil"))
             return
         }
+        let data = JSON(parseJSON: json)
+        let transaction = data["transaction"].stringValue
+        let mode = data["fee_mode"]["option"].stringValue
+        var feeMode: AA.FeeMode = .native
+        if mode == "native" {
+            feeMode = .native
+        } else if mode == "gasless" {
+            feeMode = .gasless
+        } else if mode == "token" {
+            let feeQuoteJson = JSON(data["fee_mode"]["fee_quote"].dictionaryValue)
+            let tokenPaymasterAddress = data["fee_mode"]["token_paymaster_address"].stringValue
+            let feeQuote = AA.FeeQuote(json: feeQuoteJson, tokenPaymasterAddress: tokenPaymasterAddress)
+
+            feeMode = .token(feeQuote)
+        }
+
+        let wholeFeeQuoteData = (try? data["fee_mode"]["whole_fee_quote"].rawData()) ?? Data()
+        let wholeFeeQuote = try? JSONDecoder().decode(AA.WholeFeeQuote.self, from: wholeFeeQuoteData)
+
+        let aaService = ParticleNetwork.getAAService()
+        var sendObservable: Single<String>
         let chainInfo = ParticleNetwork.getChainInfo()
-        subscribeAndCallback(observable: Single<Bool>.fromAsync { [weak self] in
-            guard let self = self else {
-                throw ParticleNetwork.ResponseError(code: nil, message: "self is nil")
+        if aaService != nil, aaService!.isAAModeEnable() {
+            sendObservable = aaService!.quickSendTransactions([transaction], feeMode: feeMode, messageSigner: self, wholeFeeQuote: wholeFeeQuote, chainInfo: chainInfo)
+        } else {
+            sendObservable = Single<String>.fromAsync { [weak self] in
+                guard let self = self else { throw ParticleNetwork.ResponseError(code: nil, message: "self is nil") }
+                return try await self.auth.evm.sendTransaction(transaction, feeMode: feeMode, chainInfo: chainInfo)
             }
-            return try await self.auth.evm.sendTransaction(transaction, chainInfo: chainInfo)
-        }, callback: callback)
+        }
+
+        subscribeAndCallback(observable: sendObservable, callback: callback)
+    }
+    
+    func evmBatchSendTransactions(_ json: String?, callback: @escaping ParticleCallback) {
+        guard let json = json else { callback(getErrorJson("json is nil"))
+            return
+        }
+        let data = JSON(parseJSON: json)
+        let transactions = data["transactions"].arrayValue.map {
+            $0.stringValue
+        }
+        let mode = data["fee_mode"]["option"].stringValue
+        var feeMode: AA.FeeMode = .native
+        if mode == "native" {
+            feeMode = .native
+        } else if mode == "gasless" {
+            feeMode = .gasless
+        } else if mode == "token" {
+            let feeQuoteJson = JSON(data["fee_mode"]["fee_quote"].dictionaryValue)
+            let tokenPaymasterAddress = data["fee_mode"]["token_paymaster_address"].stringValue
+            let feeQuote = AA.FeeQuote(json: feeQuoteJson, tokenPaymasterAddress: tokenPaymasterAddress)
+
+            feeMode = .token(feeQuote)
+        }
+
+        let wholeFeeQuoteData = (try? data["fee_mode"]["whole_fee_quote"].rawData()) ?? Data()
+        let wholeFeeQuote = try? JSONDecoder().decode(AA.WholeFeeQuote.self, from: wholeFeeQuoteData)
+
+        guard let aaService = ParticleNetwork.getAAService() else {
+            print("aa service is not init")
+            return
+        }
+
+        guard aaService.isAAModeEnable() else {
+            print("aa service is not enable")
+            return
+        }
+
+        let chainInfo = ParticleNetwork.getChainInfo()
+        let sendObservable: Single<String> = aaService.quickSendTransactions(transactions, feeMode: feeMode, messageSigner: self, wholeFeeQuote: wholeFeeQuote, chainInfo: chainInfo)
+
+        subscribeAndCallback(observable: sendObservable, callback: callback)
     }
 
     func solanaGetAddress(_ callback: @escaping ParticleCallback) {
@@ -479,6 +548,21 @@ extension ParticleAuthCorePlugin {
                 callback(json)
             }
         }.disposed(by: self.bag)
+    }
+}
+
+extension ParticleAuthCorePlugin: MessageSigner {
+    public func signMessage(_ message: String, chainInfo: ParticleNetworkBase.ParticleNetwork.ChainInfo?) -> RxSwift.Single<String> {
+        return Single<String>.fromAsync { [weak self] in
+            guard let self = self else {
+                throw ParticleNetwork.ResponseError(code: nil, message: "self is nil")
+            }
+            return try await self.auth.evm.personalSign(message, chainInfo: chainInfo)
+        }
+    }
+
+    public func getEoaAddress() -> String {
+        return self.auth.evm.getAddress() ?? ""
     }
 }
 

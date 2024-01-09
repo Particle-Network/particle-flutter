@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:oktoast/oktoast.dart';
 import 'package:particle_aa_example/aa_demo/aa_demo_auth.dart';
+import 'package:particle_aa_example/aa_demo/aa_demo_auth_core.dart';
 import 'package:particle_aa_example/aa_demo/aa_demo_connect.dart';
 
 void main() {
@@ -18,7 +19,7 @@ class MyApp extends StatelessWidget {
       textStyle: const TextStyle(fontSize: 19.0, color: Colors.white),
       backgroundColor: Colors.black,
       animationCurve: Curves.easeIn,
-      animationBuilder: const OffsetAnimationBuilder(),
+      animationBuilder: const OffsetAnimationBuilder().call,
       animationDuration: const Duration(milliseconds: 200),
       duration: const Duration(seconds: 5),
       child: MaterialApp(
@@ -88,6 +89,26 @@ class _MyHomePageState extends State<MyHomePage> {
                     },
                     child: const Text(
                       "AA Connect",
+                      style: TextStyle(fontSize: 20),
+                    ),
+                  )),
+            ),
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: SizedBox(
+                  width: 200,
+                  height: 50,
+                  child: ElevatedButton(
+                    onPressed: () => {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => const AADemoAuthCorePage(),
+                        ),
+                      )
+                    },
+                    child: const Text(
+                      "AA Auth Core",
                       style: TextStyle(fontSize: 20),
                     ),
                   )),

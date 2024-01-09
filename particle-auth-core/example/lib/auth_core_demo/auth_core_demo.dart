@@ -17,12 +17,16 @@ class AuthDemoPage extends StatefulWidget {
 class AuthDemoPageState extends State<AuthDemoPage> {
   TextEditingController accountCtrl = TextEditingController();
   List<LoginType> socialLoginTypes = LoginType.values.where((type) {
-    return type != LoginType.email && type != LoginType.phone && type != LoginType.jwt;
+    return type != LoginType.email &&
+        type != LoginType.phone &&
+        type != LoginType.jwt;
   }).toList();
 
   LoginType loginType = LoginType.phone;
   Map<SupportAuthType, bool> selectedAuthTypes = {
-    for (var item in SupportAuthType.values.where((type) => type != SupportAuthType.none)) item: true
+    for (var item
+        in SupportAuthType.values.where((type) => type != SupportAuthType.none))
+      item: true
   };
   bool selectedLoginTypesShow = false;
   bool blindEnable = false;
@@ -36,50 +40,69 @@ class AuthDemoPageState extends State<AuthDemoPage> {
       body: SingleChildScrollView(
         child: Column(
           children: <Widget>[
-            BtnItem("Init", () => {AuthCoreLogic.init(Env.dev)}),
-            BtnItem(
+            ItemButton("Init", () => AuthCoreLogic.init(Env.dev)),
+            ItemButton(
                 "SelectChain",
-                () => {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(builder: (context) => const SelectChainPage()),
-                      )
-                    }),
-            BtnItem("Connect With JWT", () => {AuthCoreLogic.connectWithJWT()}),
+                () => Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => const SelectChainPage()),
+                    )),
+            ItemButton(
+                "Connect With JWT", () => AuthCoreLogic.connectWithJWT()),
             connectWithParams(),
-            BtnItem("Get user info", () => {AuthCoreLogic.getUserInfo()}),
-            BtnItem("Disconnect", () => {AuthCoreLogic.disconnect()}),
-            BtnItem("IsConnected", () => {AuthCoreLogic.isConnected()}),
-            BtnItem("Switch chain", () => {AuthCoreLogic.swicthChain()}),
-            BtnItem("Evm get address", () => {AuthCoreLogic.evmGetAddress()}),
-            BlindStatus(),
-            BtnItem("Evm personal sign", () => {AuthCoreLogic.evmPersonalSign()}),
-            BtnItem("Evm personal sign unique", () => {AuthCoreLogic.evmPersonalSignUnique()}),
-            BtnItem("Evm sign typed data", () => {AuthCoreLogic.evmSignTypedData()}),
-            BtnItem("Evm sign typed data unique", () => {AuthCoreLogic.evmSignTypedDataUnique()}),
-            BtnItem("Evm send transaction", () => {AuthCoreLogic.evmSendTransaction()}),
-            BtnItem("Solana get address", () => {AuthCoreLogic.solanaGetAddress()}),
-            BtnItem("Solana sign message", () => {AuthCoreLogic.solanaSignMessage()}),
-            BtnItem("Solana sign transation", () => {AuthCoreLogic.solanaSignTransaction()}),
-            BtnItem("Solana sign all transactions", () => {AuthCoreLogic.solanaSignAllTransactions()}),
-            BtnItem("Solana sign and send transaction", () => {AuthCoreLogic.solanaSignAndSendTransaction()}),
-            BtnItem("Open account and security", () => {AuthCoreLogic.openAccountAndSecurity()}),
-            BtnItem("Change master password", () => {AuthCoreLogic.changeMasterPassword()}),
-            BtnItem("Read contract", () => {AuthCoreLogic.readContract()}),
-            BtnItem("Write contract", () => {AuthCoreLogic.writeContract()}),
-            BtnItem("Write contract then send", () => {AuthCoreLogic.writeContractThenSendTransaction()}),
-            BtnItem("Send evm native", () => {AuthCoreLogic.sendEvmNative()}),
-            BtnItem("Send evm token", () => {AuthCoreLogic.sendEvmToken()}),
-            BtnItem("Send evm nft 721", () => {AuthCoreLogic.sendEvmNFT721()}),
-            BtnItem("Send evm nft 1155", () => {AuthCoreLogic.sendEvmNFT1155()}),
-            BtnItem("Has master password", () => {AuthCoreLogic.hasMasterPassword()}),
-            BtnItem("Has payment password", () => {AuthCoreLogic.hasPaymentPassword()}),
-            BtnItem("getTokensAndNFTs", () => {AuthCoreLogic.getTokensAndNFTs()}),
-            BtnItem("getTokens", () => {AuthCoreLogic.getTokens()}),
-            BtnItem("getNFTs", () => {AuthCoreLogic.getNFTs()}),
-            BtnItem("getTransactionsByAddress", () => {AuthCoreLogic.getTransactionsByAddress()}),
-            BtnItem("getTokenByTokenAddresses", () => {AuthCoreLogic.getTokenByTokenAddresses()}),
-            BtnItem("getPrice", () => {AuthCoreLogic.getPrice()}),
+            ItemButton("Get user info", () => AuthCoreLogic.getUserInfo()),
+            ItemButton("Disconnect", () => AuthCoreLogic.disconnect()),
+            ItemButton("IsConnected", () => AuthCoreLogic.isConnected()),
+            ItemButton("Switch chain", () => AuthCoreLogic.swicthChain()),
+            ItemButton("Evm get address", () => AuthCoreLogic.evmGetAddress()),
+            blindStatus(),
+            ItemButton(
+                "Evm personal sign", () => AuthCoreLogic.evmPersonalSign()),
+            ItemButton("Evm personal sign unique",
+                () => AuthCoreLogic.evmPersonalSignUnique()),
+            ItemButton(
+                "Evm sign typed data", () => AuthCoreLogic.evmSignTypedData()),
+            ItemButton("Evm sign typed data unique",
+                () => AuthCoreLogic.evmSignTypedDataUnique()),
+            ItemButton("Evm send transaction",
+                () => AuthCoreLogic.evmSendTransaction()),
+            ItemButton(
+                "Solana get address", () => AuthCoreLogic.solanaGetAddress()),
+            ItemButton(
+                "Solana sign message", () => AuthCoreLogic.solanaSignMessage()),
+            ItemButton("Solana sign transation",
+                () => AuthCoreLogic.solanaSignTransaction()),
+            ItemButton("Solana sign all transactions",
+                () => AuthCoreLogic.solanaSignAllTransactions()),
+            ItemButton("Solana sign and send transaction",
+                () => AuthCoreLogic.solanaSignAndSendTransaction()),
+            ItemButton("Open account and security",
+                () => AuthCoreLogic.openAccountAndSecurity()),
+            ItemButton("Change master password",
+                () => AuthCoreLogic.changeMasterPassword()),
+            ItemButton("Read contract", () => AuthCoreLogic.readContract()),
+            ItemButton("Write contract", () => AuthCoreLogic.writeContract()),
+            ItemButton("Write contract then send",
+                () => AuthCoreLogic.writeContractThenSendTransaction()),
+            ItemButton("Send evm native", () => AuthCoreLogic.sendEvmNative()),
+            ItemButton("Send evm token", () => AuthCoreLogic.sendEvmToken()),
+            ItemButton("Send evm nft 721", () => AuthCoreLogic.sendEvmNFT721()),
+            ItemButton(
+                "Send evm nft 1155", () => AuthCoreLogic.sendEvmNFT1155()),
+            ItemButton(
+                "Has master password", () => AuthCoreLogic.hasMasterPassword()),
+            ItemButton("Has payment password",
+                () => AuthCoreLogic.hasPaymentPassword()),
+            ItemButton(
+                "getTokensAndNFTs", () => AuthCoreLogic.getTokensAndNFTs()),
+            ItemButton("getTokens", () => AuthCoreLogic.getTokens()),
+            ItemButton("getNFTs", () => AuthCoreLogic.getNFTs()),
+            ItemButton("getTransactionsByAddress",
+                () => AuthCoreLogic.getTransactionsByAddress()),
+            ItemButton("getTokenByTokenAddresses",
+                () => AuthCoreLogic.getTokenByTokenAddresses()),
+            ItemButton("getPrice", () => AuthCoreLogic.getPrice()),
           ],
         ),
       ),
@@ -93,14 +116,14 @@ class AuthDemoPageState extends State<AuthDemoPage> {
         padding: const EdgeInsets.all(8.0),
         child: Column(
           children: [
-            Text(
+            const Text(
               "Connect with Particle AuthCore",
               style: TextStyle(fontSize: 18),
             ),
             Row(
               children: [
-                Text("LoginType"),
-                Spacer(),
+                const Text("LoginType"),
+                const Spacer(),
                 DropdownButton<LoginType>(
                   value: loginType,
                   onChanged: (LoginType? newValue) {
@@ -118,8 +141,8 @@ class AuthDemoPageState extends State<AuthDemoPage> {
               ],
             ),
             Row(children: [
-              Text("Account"),
-              Spacer(),
+              const Text("Account"),
+              const Spacer(),
               SizedBox(
                 width: 200,
                 height: 50,
@@ -137,8 +160,8 @@ class AuthDemoPageState extends State<AuthDemoPage> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text(
-                      "SupportLoginTypes： ",
+                    const Text(
+                      "SupportLoginTypes: ",
                       style: TextStyle(fontSize: 16),
                     ),
                     Text(selectedAuthTypes.entries
@@ -172,49 +195,34 @@ class AuthDemoPageState extends State<AuthDemoPage> {
                 // Add an action button if needed
               ),
             ),
-            BtnItem(
+            ItemButton(
                 "Connect",
-                () => {
-                      AuthCoreLogic.connect(loginType, accountCtrl.text,
-                          selectedAuthTypes.entries.where((e) => e.value).map((e) => e.key).toList())
-                    }),
+                () => AuthCoreLogic.connect(
+                    loginType,
+                    accountCtrl.text,
+                    selectedAuthTypes.entries
+                        .where((e) => e.value)
+                        .map((e) => e.key)
+                        .toList())),
           ],
         ),
       ),
     );
   }
 
-  void _showDialog() {}
-
-  Widget BtnItem(String text, Function() onPressed) {
+  Widget blindStatus() {
     return Padding(
-      padding: const EdgeInsets.all(8.0),
-      child: SizedBox(
-        width: double.infinity,
-        height: 50,
-        child: ElevatedButton(
-            onPressed: () => onPressed(),
-            child: Text(
-              text,
-              style: TextStyle(fontSize: 18),
-            )),
-      ),
-    );
-  }
-
-  Widget BlindStatus() {
-    return Padding(
-        padding: EdgeInsets.all(8.0),
+        padding: const EdgeInsets.all(8.0),
         child: SizedBox(
           width: double.infinity,
           height: 50,
           child: Row(
             children: [
-              Text(
+              const Text(
                 "BlindStatus",
                 style: TextStyle(fontSize: 16),
               ),
-              Spacer(),
+              const Spacer(),
               Switch(
                   value: blindEnable,
                   onChanged: (value) => {
@@ -226,5 +234,28 @@ class AuthDemoPageState extends State<AuthDemoPage> {
             ],
           ),
         ));
+  }
+}
+
+class ItemButton extends StatelessWidget {
+  final String text;
+  final VoidCallback onPressed;
+  const ItemButton(this.text, this.onPressed, {super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.all(8.0),
+      child: SizedBox(
+        width: double.infinity,
+        height: 50,
+        child: ElevatedButton(
+            onPressed: () => onPressed(),
+            child: Text(
+              text,
+              style: const TextStyle(fontSize: 18),
+            )),
+      ),
+    );
   }
 }

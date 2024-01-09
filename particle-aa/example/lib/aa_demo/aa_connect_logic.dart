@@ -32,10 +32,10 @@ class AAConnectLogic {
     ParticleConnect.init(ChainInfo.PolygonMumbai, dappInfo, Env.dev);
 
     Map<int, String> biconomyApiKeys = {
-      1: "your ethereum mainnet key",
-      5: "your ethereum goerli key",
-      137: "your polygon mainnet key",
-      80001: "hYZIwIsf2.e18c790b-cafb-4c4e-a438-0289fc25dba1"
+      1: "", // your ethereum mainnet key
+      5: "", // your ethereum goerli key
+      137: "", // your polygon mainnet key
+      80001: "", // your polygon mumbai key
     };
     ParticleAuth.init(ChainInfo.Polygon, Env.production);
     ParticleAA.init(AccountName.BICONOMY_V1(), biconomyApiKeys);
@@ -57,6 +57,23 @@ class AAConnectLogic {
     ParticleAA.enableAAMode();
   }
 
+  static void isDeploy() async {
+    if (account == null) {
+      print("not connect");
+      return;
+    }
+    try {
+      final eoaAddress = account!.publicAddress;
+      var isDeploy = await ParticleAA.isDeploy(eoaAddress);
+
+      print("isDeploy: $isDeploy");
+      showToast("isDeploy: $isDeploy");
+    } catch (error) {
+      print("isDeploy: $error");
+      showToast("isDeploy: $error");
+    }
+  }
+
   static void getSmartAccountAddress() async {
     if (account == null) {
       print("not connect");
@@ -64,8 +81,8 @@ class AAConnectLogic {
     }
     try {
       final eoaAddress = account!.publicAddress;
-      final smartAccountConfig =
-          SmartAccountConfig.fromAccountName(AccountName.BICONOMY_V1(), eoaAddress);
+      final smartAccountConfig = SmartAccountConfig.fromAccountName(
+          AccountName.BICONOMY_V1(), eoaAddress);
       List<dynamic> response = await EvmService.getSmartAccount(
           <SmartAccountConfig>[smartAccountConfig]);
       var smartAccountJson = response.firstOrNull;

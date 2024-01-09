@@ -12,7 +12,7 @@ class ParticleAuthCore {
 
   static const MethodChannel _channel = MethodChannel('auth_core_bridge');
 
-  /// Init particle-auth_core SDK
+  /// Init particle auth core SDK
   static Future<void> init() async {
     if (Platform.isIOS) {
       await _channel.invokeMethod('initialize');
@@ -21,6 +21,20 @@ class ParticleAuthCore {
     }
   }
 
+  /// Connect
+  /// 
+  /// [loginType], for example email, google and so on.
+  ///
+  /// [account] when login type is email, phone, you could pass email address,
+  /// phone number, when login type is jwt, you must pass the json web token.
+  ///
+  /// [supportAuthTypes] set support auth types, they will show in the web page.
+  ///
+  ///
+  /// [prompt] optional, social login prompt.
+  ///
+  /// [loginPageConfig] optional, custom login page.
+  /// Return userinfo or error
   static Future<UserInfo> connect(LoginType loginType,
       {String? account,
       SocialLoginPrompt? prompt,
@@ -38,7 +52,9 @@ class ParticleAuthCore {
       "social_login_prompt": prompt?.name,
       "login_page_config": loginPageConfig
     });
+
     print("connect json<< $json");
+
     final result = await _channel.invokeMethod('connect', json);
     if (jsonDecode(result)["status"] == true ||
         jsonDecode(result)["status"] == 1) {
@@ -50,6 +66,7 @@ class ParticleAuthCore {
     }
   }
 
+  /// Disconnect
   static Future<String> disconnect() async {
     final result = await _channel.invokeMethod('disconnect');
 
@@ -62,6 +79,7 @@ class ParticleAuthCore {
     }
   }
 
+  /// Is connected
   static Future<bool> isConnected() async {
     final result = await _channel.invokeMethod('isConnected');
 
@@ -74,6 +92,7 @@ class ParticleAuthCore {
     }
   }
 
+  /// Get userInfo
   static Future<UserInfo?> getUserInfo() async {
     final result = await _channel.invokeMethod('getUserInfo');
     try {
@@ -84,6 +103,7 @@ class ParticleAuthCore {
     }
   }
 
+  /// Switch chain
   static Future<bool> switchChain(ChainInfo chainInfo) async {
     return await _channel.invokeMethod(
         'switchChain',
@@ -93,6 +113,7 @@ class ParticleAuthCore {
         }));
   }
 
+  /// Change master password
   static Future<bool> changeMasterPassword() async {
     final result = await _channel.invokeMethod('changeMasterPassword');
 
@@ -105,6 +126,7 @@ class ParticleAuthCore {
     }
   }
 
+  /// Has master password
   static Future<bool> hasMasterPassword() async {
     final result = await _channel.invokeMethod('hasMasterPassword');
     if (jsonDecode(result)["status"] == true ||
@@ -116,6 +138,7 @@ class ParticleAuthCore {
     }
   }
 
+  /// Has payment password
   static Future<bool> hasPaymentPassword() async {
     final result = await _channel.invokeMethod('hasPaymentPassword');
     if (jsonDecode(result)["status"] == true ||
@@ -127,6 +150,7 @@ class ParticleAuthCore {
     }
   }
 
+  /// Open account and security page
   static Future<String> openAccountAndSecurity() async {
     final result = await _channel.invokeMethod('openAccountAndSecurity');
     if (jsonDecode(result)["status"] == true ||
@@ -138,10 +162,12 @@ class ParticleAuthCore {
     }
   }
 
+  /// Set blind enbale
   static Future<void> setBlindEnable(bool enable) async {
     await _channel.invokeMethod('setBlindEnable', enable);
   }
 
+  /// Get blind enable
   static Future<bool> getBlindEnable() async {
     return await _channel.invokeMethod('getBlindEnable');
   }

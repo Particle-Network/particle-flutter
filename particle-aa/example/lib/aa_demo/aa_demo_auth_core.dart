@@ -1,35 +1,35 @@
 import 'package:flutter/material.dart';
-import 'package:particle_aa_example/aa_demo/aa_connect_logic.dart';
+import 'package:particle_aa_example/aa_demo/aa_auth_core_logic.dart';
 import 'package:particle_aa_example/aa_demo/item_button.dart';
 import 'package:particle_aa_example/aa_demo/select_chain_page.dart';
 
-class AADemoConnectPage extends StatefulWidget {
-  const AADemoConnectPage({super.key});
+class AADemoAuthCorePage extends StatefulWidget {
+  const AADemoAuthCorePage({super.key});
 
   @override
   State<StatefulWidget> createState() {
-    return AADemoConnectPageState();
+    return AADemoAuthCorePageState();
   }
 }
 
-class AADemoConnectPageState extends State<AADemoConnectPage> {
+class AADemoAuthCorePageState extends State<AADemoAuthCorePage> {
   final List<MethodItem> data = [
-    MethodItem("Init", () => AAConnectLogic.init()),
+    MethodItem("Init", () => AAAuthCoreLogic.init()),
     MethodItem("SelectChain", () {}),
-    MethodItem("Login metamask", () => AAConnectLogic.loginMetamask()),
-    MethodItem("Enable", () => AAConnectLogic.enableAAMode()),
-    MethodItem("Is deploy", () => AAConnectLogic.isDeploy()),
+    MethodItem("Connect google", () => AAAuthCoreLogic.connectGoogle()),
+    MethodItem("Enable", () => AAAuthCoreLogic.enableAAMode()),
+    MethodItem("Is deploy", () => AAAuthCoreLogic.isDeploy()),
     MethodItem("Get smart account address",
-        () => AAConnectLogic.getSmartAccountAddress()),
-    MethodItem("Rpc get fee quotes", () => AAConnectLogic.rpcGetFeeQuotes()),
+        () => AAAuthCoreLogic.getSmartAccountAddress()),
+    MethodItem("Rpc get fee quotes", () => AAAuthCoreLogic.rpcGetFeeQuotes()),
     MethodItem("Send transaction paid with native",
-        () => AAConnectLogic.signAndSendTransactionWithNative()),
+        () => AAAuthCoreLogic.signAndSendTransactionWithNative()),
     MethodItem("Send transaction paid gasless",
-        () => AAConnectLogic.signAndSendTransactionWithGasless()),
+        () => AAAuthCoreLogic.signAndSendTransactionWithGasless()),
     MethodItem("Send transaction paid with token",
-        () => AAConnectLogic.signAndSendTransactionWithToken()),
+        () => AAAuthCoreLogic.signAndSendTransactionWithToken()),
     MethodItem("Batch send transactions",
-        () => AAConnectLogic.batchSendTransactions()),
+        () => AAAuthCoreLogic.batchSendTransactions()),
   ];
 
   @override

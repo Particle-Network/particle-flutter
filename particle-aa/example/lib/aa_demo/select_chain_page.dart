@@ -28,7 +28,6 @@ class SelectChainPageState extends State<SelectChainPage> {
                 ParticleAuth.setChainInfo(chainInfo);
                 showToast(
                     "set chain info: ${chainList[index].name}  ${chainList[index].id}");
-                // ConnectLogic.currChainInfo = chainInfo;
                 Navigator.pop(context);
               },
               child: Text("${chainList[index].name}  ${chainList[index].id}"),

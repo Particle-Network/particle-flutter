@@ -13,6 +13,7 @@ class Solana {
   }
 
   /// Sign message
+  /// 
   /// [message] message you want to sign, requires human readable message.
   static Future<String> signMessage(String message) async {
     final result = await _channel.invokeMethod('solanaSignMessage', message);
@@ -26,6 +27,9 @@ class Solana {
     }
   }
 
+  /// Sign transaction
+  /// 
+  /// [transaction] transaction you want to sign, requires base58 string.
   static Future<String> signTransaction(String transaction) async {
     final result =
         await _channel.invokeMethod('solanaSignTransaction', transaction);
@@ -39,6 +43,9 @@ class Solana {
     }
   }
 
+  /// Sign all transactions
+  /// 
+  /// [transactions] transactions you want to sign, requires base58 string array.
   static Future<List<String>> signAllTransactions(List<String> transactions) async {
     final result = await _channel.invokeMethod(
         'solanaSignAllTransactions', jsonEncode(transactions));
@@ -53,6 +60,9 @@ class Solana {
     }
   }
 
+  /// Sign and send transaction
+  /// 
+  /// [transaction] transaction you want to sign and send, requires base58 string.
   static Future<String> signAndSendTransaction(String transaction) async {
     final result = await _channel.invokeMethod(
         'solanaSignAndSendTransaction', transaction);

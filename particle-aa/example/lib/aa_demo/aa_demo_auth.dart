@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:particle_aa_example/aa_demo/aa_auth_logic.dart';
+import 'package:particle_aa_example/aa_demo/item_button.dart';
 import 'package:particle_aa_example/aa_demo/select_chain_page.dart';
 import 'package:particle_auth/particle_auth.dart';
 
 class AADemoAuthPage extends StatefulWidget {
-  const AADemoAuthPage({Key? key}) : super(key: key);
+  const AADemoAuthPage({super.key});
 
   @override
   State<StatefulWidget> createState() {
@@ -29,210 +30,50 @@ String webConfig = '''
         ''';
 
 class AADemoAuthPageState extends State<AADemoAuthPage> {
+  final List<MethodItem> data = [
+    MethodItem("Init", () => AAAuthLogic.init()),
+    MethodItem("SelectChain", () {}),
+    MethodItem("Login particle", () => AAAuthLogic.loginParticle()),
+    MethodItem("Is enable", () => AAAuthLogic.isAAModeEnable()),
+    MethodItem("Enable", () => AAAuthLogic.enableAAMode()),
+    MethodItem("Is deploy", () => AAAuthLogic.isDeploy()),
+    MethodItem("Get smart account address",
+        () => AAAuthLogic.getSmartAccountAddress()),
+    MethodItem("Rpc get fee quotes", () => AAAuthLogic.rpcGetFeeQuotes()),
+    MethodItem("Send transaction paid with native",
+        () => AAAuthLogic.signAndSendTransactionWithNative()),
+    MethodItem("Send transaction paid gasless",
+        () => AAAuthLogic.signAndSendTransactionWithGasless()),
+    MethodItem("Send transaction paid with token",
+        () => AAAuthLogic.signAndSendTransactionWithToken()),
+    MethodItem(
+        "Batch send transactions", () => AAAuthLogic.batchSendTransactions()),
+    MethodItem("Open webWallet", () => ParticleAuth.openWebWallet(webConfig)),
+  ];
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title: const Text("AA Demo Auth"),
       ),
-      body: SingleChildScrollView(
-        child: Column(
-          children: <Widget>[
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: SizedBox(
-                width: double.infinity,
-                height: 50,
-                child: ElevatedButton(
-                    onPressed: () => {AAAuthLogic.init()},
-                    child: const Text(
-                      "Init",
-                      style: TextStyle(fontSize: 18),
-                    )),
-              ),
-            ),
-            Padding(
-              padding: const EdgeInsets.only(
-                  left: 8.0, top: 16.0, right: 8.0, bottom: 8.0),
-              child: SizedBox(
-                width: double.infinity,
-                height: 50,
-                child: ElevatedButton(
-                    onPressed: () => {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => const SelectChainPage()),
-                          )
-                        },
-                    child: const Text(
-                      "SelectChain",
-                      style: TextStyle(fontSize: 18),
-                    )),
-              ),
-            ),
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: SizedBox(
-                width: double.infinity,
-                height: 50,
-                child: ElevatedButton(
-                    onPressed: () => {AAAuthLogic.loginParticle()},
-                    child: const Text(
-                      "Login particle",
-                      style: TextStyle(fontSize: 18),
-                    )),
-              ),
-            ),
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: SizedBox(
-                width: double.infinity,
-                height: 50,
-                child: ElevatedButton(
-                    onPressed: () => {AAAuthLogic.isAAModeEnable()},
-                    child: const Text(
-                      "Is enable",
-                      style: TextStyle(fontSize: 18),
-                    )),
-              ),
-            ),
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: SizedBox(
-                width: double.infinity,
-                height: 50,
-                child: ElevatedButton(
-                    onPressed: () => {AAAuthLogic.enableAAMode()},
-                    child: const Text(
-                      "Enable",
-                      style: TextStyle(fontSize: 18),
-                    )),
-              ),
-            ),
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: SizedBox(
-                width: double.infinity,
-                height: 50,
-                child: ElevatedButton(
-                    onPressed: () => {AAAuthLogic.disableAAMode()},
-                    child: const Text(
-                      "Disable",
-                      style: TextStyle(fontSize: 18),
-                    )),
-              ),
-            ),
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: SizedBox(
-                width: double.infinity,
-                height: 50,
-                child: ElevatedButton(
-                    onPressed: () => {AAAuthLogic.isDeploy()},
-                    child: const Text(
-                      "Is deploy",
-                      style: TextStyle(fontSize: 18),
-                    )),
-              ),
-            ),
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: SizedBox(
-                width: double.infinity,
-                height: 50,
-                child: ElevatedButton(
-                    onPressed: () => {AAAuthLogic.getSmartAccountAddress()},
-                    child: const Text(
-                      "Get smart account address",
-                      style: TextStyle(fontSize: 18),
-                    )),
-              ),
-            ),
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: SizedBox(
-                width: double.infinity,
-                height: 50,
-                child: ElevatedButton(
-                    onPressed: () => {AAAuthLogic.rpcGetFeeQuotes()},
-                    child: const Text(
-                      "Rpc get fee quotes",
-                      style: TextStyle(fontSize: 18),
-                    )),
-              ),
-            ),
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: SizedBox(
-                width: double.infinity,
-                height: 50,
-                child: ElevatedButton(
-                    onPressed: () =>
-                        {AAAuthLogic.signAndSendTransactionWithNative()},
-                    child: const Text(
-                      "send transaction paid with native",
-                      style: TextStyle(fontSize: 18),
-                    )),
-              ),
-            ),
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: SizedBox(
-                width: double.infinity,
-                height: 50,
-                child: ElevatedButton(
-                    onPressed: () =>
-                        {AAAuthLogic.signAndSendTransactionWithGasless()},
-                    child: const Text(
-                      "send transaction paid gasless",
-                      style: TextStyle(fontSize: 18),
-                    )),
-              ),
-            ),
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: SizedBox(
-                width: double.infinity,
-                height: 50,
-                child: ElevatedButton(
-                    onPressed: () =>
-                        {AAAuthLogic.signAndSendTransactionWithToken()},
-                    child: const Text(
-                      "send transaction paid with token",
-                      style: TextStyle(fontSize: 18),
-                    )),
-              ),
-            ),
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: SizedBox(
-                width: double.infinity,
-                height: 50,
-                child: ElevatedButton(
-                    onPressed: () => {AAAuthLogic.batchSendTransactions()},
-                    child: const Text(
-                      "batch send transactions",
-                      style: TextStyle(fontSize: 18),
-                    )),
-              ),
-            ),
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: SizedBox(
-                width: double.infinity,
-                height: 50,
-                child: ElevatedButton(
-                    onPressed: () => {ParticleAuth.openWebWallet(webConfig)},
-                    child: const Text(
-                      "open WebWallet",
-                      style: TextStyle(fontSize: 18),
-                    )),
-              ),
-            ),
-          ],
-        ),
-      ),
+      body: ListView.builder(
+          itemCount: data.length,
+          itemBuilder: (context, index) {
+            final text = data[index].text;
+            final onPressed = data[index].onPressed;
+            if (text == "SelectChain") {
+              return ItemButton(
+                  "SelectChain",
+                  () => Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => const SelectChainPage()),
+                      ));
+            } else {
+              return ItemButton(text, onPressed);
+            }
+          }),
     );
   }
 }
