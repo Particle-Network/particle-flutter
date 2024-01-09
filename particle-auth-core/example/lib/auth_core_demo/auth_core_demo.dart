@@ -6,7 +6,7 @@ import 'package:particle_auth_core_example/auth_core_demo/auth_core_logic.dart';
 import 'package:particle_auth_core_example/auth_core_demo/select_chain_page.dart';
 
 class AuthDemoPage extends StatefulWidget {
-  const AuthDemoPage({Key? key}) : super(key: key);
+  const AuthDemoPage({super.key});
 
   @override
   State<StatefulWidget> createState() {
@@ -22,10 +22,9 @@ class AuthDemoPageState extends State<AuthDemoPage> {
         type != LoginType.jwt;
   }).toList();
 
-  LoginType loginType = LoginType.phone;
+  LoginType loginType = LoginType.email;
   Map<SupportAuthType, bool> selectedAuthTypes = {
-    for (var item in SupportAuthType.values)
-      item: true
+    for (var item in SupportAuthType.values) item: true
   };
   bool selectedLoginTypesShow = false;
   bool blindEnable = false;

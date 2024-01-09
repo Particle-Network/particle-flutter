@@ -72,7 +72,7 @@ class ConnectLogic {
     final authorization = LoginAuthorization(messageHex, true);
 
     final config = ParticleConnectConfig(LoginType.email, "",
-        [SupportAuthType.all], SocialLoginPrompt.select_account,
+        SupportAuthType.values, SocialLoginPrompt.select_account,
         authorization: authorization);
     try {
       final account =

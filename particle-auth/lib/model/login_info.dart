@@ -14,7 +14,6 @@ enum LoginType {
 }
 
 enum SupportAuthType {
-  none,
   email,
   phone,
   apple,
@@ -26,7 +25,6 @@ enum SupportAuthType {
   microsoft,
   linkedin,
   twitter,
-  all,
 }
 
 enum SocialLoginPrompt {

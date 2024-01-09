@@ -24,10 +24,7 @@ class AuthLogic {
   static String? solPubAddress;
 
   static void login() async {
-    List<SupportAuthType> supportAuthType = <SupportAuthType>[];
-    supportAuthType.add(SupportAuthType.google);
-    supportAuthType.add(SupportAuthType.email);
-
+    List<SupportAuthType> supportAuthType = SupportAuthType.values;
     try {
       final userInfo = await ParticleAuth.login(
           LoginType.phone, "", supportAuthType,

@@ -1,3 +1,5 @@
+## 1.4.4
+Update particle-auth-core, support batch send.
 ## 1.4.3
 ## 1.4.2
 ## 1.4.1
