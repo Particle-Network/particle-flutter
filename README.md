@@ -4,11 +4,13 @@
 
 Particle Auth is a simple self-custodial auth infra for Web3 apps and wallets.
 
+Particle Auth Core combine MPC signature capability and Wallet through Auth Core. In this way, you can control almost all the UI/UX. To simplify this, we also provide out-of-box UI/UX for Custom Auth signing.
+
 Particle Connect is the best way to onboard any user for your dApp.
 
 Particle Wallet is not an independent wallet—it is a wallet infrastructure plugged into apps or wallets.
 
-Particle Biconomy support Account Abstraction
+Particle AA support Account Abstraction
 
 ## iOS Cocoapods requires
 
@@ -56,12 +58,20 @@ flutter pub add particle_wallet
 import 'package:particle_wallet/particle_wallet.dart';
 ```
 
-[Biconomy Doc]([https://docs.particle.network/developers/wallet-service/sdks/flutter](https://docs.particle.network/developers/account-abstraction/flutter))
+[AA Doc]([https://docs.particle.network/developers/wallet-service/sdks/flutter](https://docs.particle.network/developers/account-abstraction/flutter))
 ```
-flutter pub add particle_biconomy
+flutter pub add particle_aa
 ```
 ```
-import 'package:particle_biconomy/particle_biconomy.dart';
+import 'package:particle_aa/particle_aa.dart';
+```
+
+[Auth Core Doc]([https://docs.particle.network/developers/auth-service/core/flutter](https://docs.particle.network/developers/auth-service/core/flutter))
+```
+flutter pub add particle_auth_core
+```
+```
+import 'package:particle_auth_core/particle_auth_core.dart';
 ```
 
 ### Structure Transaction
