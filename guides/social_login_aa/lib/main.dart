@@ -89,7 +89,7 @@ class _MyHomePageState extends State<MyHomePage> {
   void _connectParticle() async {
     try {
       final config = ParticleConnectConfig(
-          LoginType.google, "", [SupportAuthType.all], SocialLoginPrompt.none);
+          LoginType.google, "", SupportAuthType.values, SocialLoginPrompt.select_account);
       final account =
           await ParticleConnect.connect(WalletType.particle, config: config);
       this.account = account;

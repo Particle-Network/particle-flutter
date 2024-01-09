@@ -54,13 +54,14 @@ class _MyHomePageState extends State<MyHomePage> {
 
   void _connectParticle() async {
     try {
-      final config = ParticleConnectConfig(LoginType.google, "",
-          [SupportAuthType.all], SocialLoginPrompt.none);
+      final config = ParticleConnectConfig(
+          LoginType.google, "", SupportAuthType.values, SocialLoginPrompt.none);
       final account =
           await ParticleConnect.connect(WalletType.particle, config: config);
       this.account = account;
       print("connect particle $account");
       final userInfo = ParticleAuth.getUserInfo();
+      print("userInfo $userInfo");
     } catch (error) {
       print("connect particle $error");
     }
