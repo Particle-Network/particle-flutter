@@ -85,6 +85,7 @@ class Evm {
   static Future<String> sendTransaction(String transaction,
       {AAFeeMode? feeMode}) async {
     final json = jsonEncode({"transaction": transaction, "fee_mode": feeMode});
+    print("sendTransaction json<< $json");
     final result =
         await _channel.invokeMethod('evmSendTransaction', json);
     if (jsonDecode(result)["status"] == true ||

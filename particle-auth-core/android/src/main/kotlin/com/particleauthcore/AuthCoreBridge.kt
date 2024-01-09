@@ -8,9 +8,16 @@ import com.particle.auth.AuthCore
 import com.particle.auth.data.AuthCoreServiceCallback
 import com.particle.auth.data.AuthCoreSignCallback
 import com.particle.auth.data.MasterPwdServiceCallback
+import com.particle.base.ParticleNetwork
 import com.particle.base.data.ErrorInfo
 import com.particle.base.data.SignAllOutput
 import com.particle.base.data.SignOutput
+import com.particle.base.data.WebServiceCallback
+import com.particle.base.iaa.FeeMode
+import com.particle.base.iaa.FeeModeGasless
+import com.particle.base.iaa.FeeModeNative
+import com.particle.base.iaa.FeeModeToken
+import com.particle.base.iaa.MessageSigner
 import com.particle.base.model.LoginPageConfig
 import com.particle.base.model.LoginType
 import com.particle.base.model.ResultCallback
@@ -21,8 +28,12 @@ import com.particleauthcore.module.ConnectData
 import com.particleauthcore.utils.ChainUtils
 import com.particleauthcore.utils.MessageProcess
 import io.flutter.plugin.common.MethodChannel
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import network.particle.auth_flutter.bridge.model.FlutterCallBack
-
+import network.particle.auth_flutter.bridge.model.TransactionParams
+import network.particle.auth_flutter.bridge.model.TransactionsParams
 
 object AuthCoreBridge {
 
@@ -213,17 +224,7 @@ object AuthCoreBridge {
     }
 
 
-    fun sendTransaction(transaction: String, result: MethodChannel.Result) {
-        AuthCore.evm.sendTransaction(transaction, object : AuthCoreSignCallback<SignOutput> {
-            override fun failure(errMsg: ErrorInfo) {
-                result.success(FlutterCallBack.failed(errMsg).toGson())
-            }
 
-            override fun success(output: SignOutput) {
-                result.success(FlutterCallBack.success(output.signature).toGson())
-            }
-        })
-    }
     //solana
 
 
@@ -298,5 +299,118 @@ object AuthCoreBridge {
     fun getBlindEnable(result: MethodChannel.Result) {
         result.success(AuthCore.getBlindEnable())
     }
+
+    fun sendTransaction(transactionParams: String, result: MethodChannel.Result) {
+        LogUtils.d("signAndSendTransaction", transactionParams)
+        val transParams =
+            GsonUtils.fromJson<TransactionParams>(transactionParams, TransactionParams::class.java)
+        var feeMode: FeeMode = FeeModeNative()
+        if (transParams.feeMode != null) {
+            val option = transParams!!.feeMode!!.option
+            if (option == "token") {
+                val tokenPaymasterAddress = transParams!!.feeMode!!.tokenPaymasterAddress
+                val feeQuote = transParams.feeMode!!.feeQuote!!
+                feeMode = FeeModeToken(feeQuote, tokenPaymasterAddress!!)
+            } else if (option == "gasless") {
+                val verifyingPaymasterGasless =
+                    transParams.feeMode!!.wholeFeeQuote.verifyingPaymasterGasless
+                feeMode = FeeModeGasless(verifyingPaymasterGasless)
+            } else if (option == "native") {
+                val verifyingPaymasterNative =
+                    transParams.feeMode!!.wholeFeeQuote.verifyingPaymasterNative
+                feeMode = FeeModeNative(verifyingPaymasterNative)
+            }
+        }
+        try {
+            AuthCore.evm.sendTransaction(
+                transParams.transaction,
+                object : AuthCoreSignCallback<SignOutput> {
+
+                    override fun success(output: SignOutput) {
+                        result.success(FlutterCallBack.success(output.signature).toGson())
+                    }
+
+                    override fun failure(errMsg: ErrorInfo) {
+                        result.success(FlutterCallBack.failed(errMsg).toGson())
+                    }
+
+                },
+                feeMode
+            )
+        } catch (e: Exception) {
+            result.success(FlutterCallBack.failed(e.message).toGson())
+        }
+    }
+
+    fun batchSendTransactions(transactions: String, result: MethodChannel.Result) {
+        LogUtils.d("batchSendTransactions", transactions)
+        val transParams =
+            GsonUtils.fromJson<TransactionsParams>(transactions, TransactionsParams::class.java)
+        var feeMode: FeeMode = FeeModeNative()
+        if (transParams.feeMode != null && ParticleNetwork.isAAModeEnable()) {
+            when (transParams.feeMode!!.option) {
+                "token" -> {
+                    val tokenPaymasterAddress = transParams.feeMode!!.tokenPaymasterAddress
+                    val feeQuote = transParams.feeMode!!.feeQuote!!
+                    feeMode = FeeModeToken(feeQuote, tokenPaymasterAddress!!)
+                }
+                "gasless" -> {
+                    val verifyingPaymasterGasless =
+                        transParams.feeMode!!.wholeFeeQuote.verifyingPaymasterGasless
+                    feeMode = FeeModeGasless(verifyingPaymasterGasless)
+                }
+                "native" -> {
+                    val verifyingPaymasterNative =
+                        transParams.feeMode!!.wholeFeeQuote.verifyingPaymasterNative
+                    feeMode = FeeModeNative(verifyingPaymasterNative)
+                }
+            }
+        }
+        CoroutineScope(Dispatchers.IO).launch {
+            try {
+                ParticleNetwork.getAAService().quickSendTransaction(
+                    transParams.transactions,
+                    feeMode,
+                    object : MessageSigner {
+                        override fun signMessage(
+                            message: String,
+                            callback: WebServiceCallback<SignOutput>,
+                            chainId: Long?
+                        ) {
+                            AuthCore.evm.personalSign(
+                                message,
+                                object : AuthCoreSignCallback<SignOutput> {
+                                    override fun success(output: SignOutput) {
+                                        callback.success(output)
+                                    }
+
+                                    override fun failure(errMsg: ErrorInfo) {
+                                        callback.failure(errMsg)
+                                    }
+                                })
+                        }
+
+                        override fun eoaAddress(): String {
+                            return AuthCore.evm.getAddress()!!
+                        }
+
+                    },
+                    object : WebServiceCallback<SignOutput> {
+                        override fun success(output: SignOutput) {
+                            result.success(FlutterCallBack.success(output.signature!!).toGson())
+                        }
+
+                        override fun failure(errMsg: ErrorInfo) {
+                            result.success(FlutterCallBack.failed(errMsg).toGson())
+                        }
+
+                    })
+            } catch (e: Exception) {
+                e.printStackTrace()
+                result.success(FlutterCallBack.failed("failed").toGson())
+            }
+        }
+    }
+
 
 }

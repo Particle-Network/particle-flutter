@@ -46,6 +46,9 @@ android {
         minSdkVersion 23
         consumerProguardFiles("consumer-rules.pro")
     }
+    dataBinding {
+        enabled = true
+    }
 }
 
 dependencies {

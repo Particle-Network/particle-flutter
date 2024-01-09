@@ -19,10 +19,8 @@ class AAAuthLogic {
     ParticleAuth.init(ChainInfo.Polygon, Env.production);
 
     // Get your project id and client from dashboard, https://dashboard.particle.network
-    const projectId =
-        "772f7499-1d2e-40f4-8e2c-7b6dd47db9de"; //772f7499-1d2e-40f4-8e2c-7b6dd47db9de
-    const clientK =
-        "ctWeIc2UBA6sYTKJknT9cu9LBikF00fbk1vmQjsV"; //ctWeIc2UBA6sYTKJknT9cu9LBikF00fbk1vmQjsV
+    const projectId = "772f7499-1d2e-40f4-8e2c-7b6dd47db9de"; //772f7499-1d2e-40f4-8e2c-7b6dd47db9de
+    const clientK = "ctWeIc2UBA6sYTKJknT9cu9LBikF00fbk1vmQjsV"; //ctWeIc2UBA6sYTKJknT9cu9LBikF00fbk1vmQjsV
     if (projectId.isEmpty || clientK.isEmpty) {
       throw const FormatException(
           'You need set project info, get your project id and client key from dashboard, https://dashboard.particle.network');
@@ -34,8 +32,7 @@ class AAAuthLogic {
 
   static void loginParticle() async {
     try {
-      final userInfo =
-          await ParticleAuth.login(LoginType.email, "", [SupportAuthType.all]);
+      final userInfo = await ParticleAuth.login(LoginType.email, "", SupportAuthType.values);
       print("login particle: $userInfo");
       showToast("login particle: $userInfo");
     } catch (error) {
@@ -75,16 +72,13 @@ class AAAuthLogic {
     try {
       final eoaAddress = await ParticleAuth.getAddress();
       print("getSmartAccountAddress eoaAddress: $eoaAddress");
-      final smartAccountConfig = SmartAccountConfig.fromAccountName(
-          accountName, eoaAddress);
-      List<dynamic> response = await EvmService.getSmartAccount(
-          <SmartAccountConfig>[smartAccountConfig]);
+      final smartAccountConfig = SmartAccountConfig.fromAccountName(accountName, eoaAddress);
+      List<dynamic> response = await EvmService.getSmartAccount(<SmartAccountConfig>[smartAccountConfig]);
       var smartAccountJson = response.firstOrNull;
       if (smartAccountJson != null) {
         final smartAccount = smartAccountJson as Map<String, dynamic>;
 
-        final smartAccountAddress =
-            smartAccount["smartAccountAddress"] as String;
+        final smartAccountAddress = smartAccount["smartAccountAddress"] as String;
         AAAuthLogic.smartAccountAddress = smartAccountAddress;
         print("getSmartAccount: $smartAccountAddress");
         showToast("getSmartAccount: $smartAccountAddress");
@@ -103,12 +97,10 @@ class AAAuthLogic {
       return;
     }
     try {
-      final transaction =
-          await TransactionMock.mockEvmSendNative(smartAccountAddress!);
+      final transaction = await TransactionMock.mockEvmSendNative(smartAccountAddress!);
       print("transaction: $transaction");
       List<String> transactions = <String>[transaction];
-      var result =
-          await ParticleAA.rpcGetFeeQuotes(smartAccountAddress!, transactions);
+      var result = await ParticleAA.rpcGetFeeQuotes(smartAccountAddress!, transactions);
       print("rpcGetFeeQuotes: $result");
       showToast("rpcGetFeeQuotes: $result");
     } catch (error) {
@@ -123,8 +115,7 @@ class AAAuthLogic {
       return;
     }
     try {
-      final transaction =
-          await TransactionMock.mockEvmSendNative(smartAccountAddress!);
+      final transaction = await TransactionMock.mockEvmSendNative(smartAccountAddress!);
       final eoaAddress = await ParticleAuth.getAddress();
       // check if enough native for gas fee
       var result = await ParticleAA.rpcGetFeeQuotes(eoaAddress, [transaction]);
@@ -139,8 +130,7 @@ class AAAuthLogic {
       }
 
       // pass result from rpcGetFeeQuotes to send pay with native
-      final signature = await ParticleAuth.signAndSendTransaction(transaction,
-          feeMode: AAFeeMode.native(result));
+      final signature = await ParticleAuth.signAndSendTransaction(transaction, feeMode: AAFeeMode.native(result));
       print("signature $signature");
       showToast("signature $signature");
     } catch (error) {
@@ -155,8 +145,7 @@ class AAAuthLogic {
       return;
     }
     try {
-      final transaction =
-          await TransactionMock.mockEvmSendNative(smartAccountAddress!);
+      final transaction = await TransactionMock.mockEvmSendNative(smartAccountAddress!);
       final eoaAddress = await ParticleAuth.getAddress();
       // check if gasless available
       var result = await ParticleAA.rpcGetFeeQuotes(eoaAddress, [transaction]);
@@ -167,8 +156,7 @@ class AAAuthLogic {
       }
 
       // pass result from rpcGetFeeQuotes to send gasless
-      final signature = await ParticleAuth.signAndSendTransaction(transaction,
-          feeMode: AAFeeMode.gasless(result));
+      final signature = await ParticleAuth.signAndSendTransaction(transaction, feeMode: AAFeeMode.gasless(result));
       print("signature $signature");
       showToast("signature $signature");
     } catch (error) {
@@ -183,8 +171,7 @@ class AAAuthLogic {
       return;
     }
     try {
-      final transaction =
-          await TransactionMock.mockEvmSendNative(smartAccountAddress!);
+      final transaction = await TransactionMock.mockEvmSendNative(smartAccountAddress!);
       final eoaAddress = await ParticleAuth.getAddress();
       List<String> transactions = <String>[transaction];
 
@@ -204,8 +191,7 @@ class AAAuthLogic {
       }
 
       var feeQuote = overFeeQuotes[0];
-      var tokenPaymasterAddress =
-          result["tokenPaymaster"]["tokenPaymasterAddress"];
+      var tokenPaymasterAddress = result["tokenPaymaster"]["tokenPaymasterAddress"];
 
       print("feeQuote $feeQuote");
       print("tokenPaymasterAddress $tokenPaymasterAddress");
@@ -226,8 +212,7 @@ class AAAuthLogic {
       return;
     }
     try {
-      final transaction =
-          await TransactionMock.mockEvmSendNative(smartAccountAddress!);
+      final transaction = await TransactionMock.mockEvmSendNative(smartAccountAddress!);
       List<String> transactions = <String>[transaction, transaction];
       final eoaAddress = await ParticleAuth.getAddress();
       // check if enough native for gas fee
@@ -242,8 +227,7 @@ class AAAuthLogic {
         return;
       }
 
-      final signature = await ParticleAuth.batchSendTransactions(transactions,
-          feeMode: AAFeeMode.native(result));
+      final signature = await ParticleAuth.batchSendTransactions(transactions, feeMode: AAFeeMode.native(result));
       print("signature $signature");
       showToast("signature $signature");
     } catch (error) {

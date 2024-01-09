@@ -41,9 +41,7 @@ class ParticleAuthCore {
       LoginPageConfig? loginPageConfig,
       List<SupportAuthType>? supportAuthTypes}) async {
     final convertSupportLoginTypes = supportAuthTypes
-        ?.where((type) =>
-            type != SupportAuthType.none || type != SupportAuthType.all)
-        .map((e) => e.name)
+        ?.map((e) => e.name)
         .toList();
     final json = jsonEncode({
       "login_type": loginType.name,

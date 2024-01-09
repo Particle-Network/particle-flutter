@@ -24,8 +24,7 @@ class AuthDemoPageState extends State<AuthDemoPage> {
 
   LoginType loginType = LoginType.phone;
   Map<SupportAuthType, bool> selectedAuthTypes = {
-    for (var item
-        in SupportAuthType.values.where((type) => type != SupportAuthType.none))
+    for (var item in SupportAuthType.values)
       item: true
   };
   bool selectedLoginTypesShow = false;

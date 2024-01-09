@@ -12,7 +12,6 @@ import io.flutter.embedding.engine.plugins.activity.ActivityPluginBinding
 import io.flutter.plugin.common.MethodCall
 import io.flutter.plugin.common.MethodChannel
 import io.flutter.plugin.common.MethodChannel.MethodCallHandler
-import network.particle.auth_flutter.bridge.module.AuthBridge
 
 
 /** ParticleAuthCorePlugin */
@@ -93,6 +92,9 @@ class ParticleAuthCorePlugin : FlutterPlugin, MethodCallHandler, ActivityAware {
             }
             "evmSendTransaction" -> {
                 AuthCoreBridge.sendTransaction(call.arguments as String, result)
+            }
+            "evmBatchSendTransactions" -> {
+                AuthCoreBridge.batchSendTransactions(call.arguments as String, result)
             }
             "solanaGetAddress" -> {
                 AuthCoreBridge.solanaGetAddress(result)
