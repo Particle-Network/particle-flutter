@@ -1,4 +1,3 @@
-
 class AccountName {
   final String name;
   final String version;
@@ -22,6 +21,11 @@ class AccountName {
   AccountName.CYBERCONNECT()
       : name = 'CYBERCONNECT',
         version = '1.0.0';
+
+  // ignore: non_constant_identifier_names
+  AccountName.LIGHT()
+      : name = 'LIGHT',
+        version = '1.0.2';
 
   // toJson
   Map<String, dynamic> toJson() => {'name': name, 'version': version};

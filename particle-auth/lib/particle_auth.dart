@@ -16,6 +16,7 @@ import '../model/typeddata_version.dart';
 import '../model/user_interface_style.dart';
 import '../model/account_name.dart';
 import '../model/smart_account_config.dart';
+import '../model/env.dart';
 
 export '../model/aa_fee_mode.dart';
 export '../model/chain_info.dart';
@@ -34,6 +35,7 @@ export '../network/net/particle_rpc.dart';
 export '../network/net/request_body_entity.dart';
 export '../model/account_name.dart';
 export '../model/smart_account_config.dart';
+export '../model/env.dart';
 
 /// A utility class for string operations.
 class StringUtils {

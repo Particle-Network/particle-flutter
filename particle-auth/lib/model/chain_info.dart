@@ -1,5 +1,3 @@
-enum Env { dev, staging, production }
-
 class ChainInfoNativeCurrency {
   late String name;
   late String symbol;
@@ -29,19 +27,19 @@ class ChainInfo {
   late List<ChainInfoFeature> features;
 
   ChainInfo(
-      this.id,
-      this.name,
-      this.chainType,
-      this.icon,
-      this.fullname,
-      this.network,
-      this.website,
-      this.nativeCurrency,
-      this.rpcUrl,
-      this.faucetUrl,
-      this.blockExplorerUrl,
-      this.features,
-      );
+    this.id,
+    this.name,
+    this.chainType,
+    this.icon,
+    this.fullname,
+    this.network,
+    this.website,
+    this.nativeCurrency,
+    this.rpcUrl,
+    this.faucetUrl,
+    this.blockExplorerUrl,
+    this.features,
+  );
 
   // template code start
   static ChainInfo Ethereum = ChainInfo(
@@ -344,18 +342,18 @@ class ChainInfo {
     [ChainInfoFeature('EIP1559')],
   );
 
-  static ChainInfo OKBCTestnet = ChainInfo(
+  static ChainInfo X1Testnet = ChainInfo(
     195,
     'OKBC',
     'evm',
     'https://static.particle.network/token-list/okc/native.png',
-    'OKBC Testnet',
+    'X1 Testnet',
     'Testnet',
     'https://www.okx.com/okbc/docs/dev/quick-start/introduction/introduction-to-okbchain',
     ChainInfoNativeCurrency('OKB', 'OKB', 18),
-    'https://okbtestrpc.okbchain.org',
+    'https://testrpc.x1.tech',
     'https://www.okx.com/cn/okbc/faucet',
-    'https://www.oklink.com/cn/okbc-test',
+    'https://www.oklink.com/x1-test',
     [],
   );
 
@@ -794,6 +792,21 @@ class ChainInfo {
     [ChainInfoFeature('EIP1559')],
   );
 
+  static ChainInfo Combo = ChainInfo(
+    9980,
+    'Combo',
+    'evm',
+    'https://static.particle.network/token-list/combo/native.png',
+    'Combo Mainnet',
+    'Mainnet',
+    'https://docs.combonetwork.io',
+    ChainInfoNativeCurrency('BNB', 'BNB', 18),
+    'https://rpc.combonetwork.io',
+    '',
+    'https://combotrace.nodereal.io',
+    [ChainInfoFeature('EIP1559')],
+  );
+
   static ChainInfo GnosisTestnet = ChainInfo(
     10200,
     'Gnosis',
@@ -882,6 +895,21 @@ class ChainInfo {
     '',
     'https://mapscan.io',
     [ChainInfoFeature('EIP1559')],
+  );
+
+  static ChainInfo LumiBitTestnet = ChainInfo(
+    28206,
+    'lumibit',
+    'evm',
+    'https://static.particle.network/token-list/lumibit/native.png',
+    'LumiBit Testnet',
+    'Testnet',
+    '',
+    ChainInfoNativeCurrency('BTC', 'BTC', 18),
+    'https://test-rpc.lumibit.org',
+    '',
+    'https://test-scan.lumibit.org',
+    [],
   );
 
   static ChainInfo ArbitrumOne = ChainInfo(
@@ -1091,7 +1119,7 @@ class ChainInfo {
     'https://test-rpc.combonetwork.io',
     '',
     'https://combotrace-testnet.nodereal.io',
-    [],
+    [ChainInfoFeature('EIP1559')],
   );
 
   static ChainInfo TaikoJolnir = ChainInfo(
@@ -1169,6 +1197,21 @@ class ChainInfo {
     [],
   );
 
+  static ChainInfo MerlinTestnet = ChainInfo(
+    686868,
+    'Merlin',
+    'evm',
+    'https://static.particle.network/token-list/merlin/native.png',
+    'Merlin Testnet',
+    'Testnet',
+    '',
+    ChainInfoNativeCurrency('BTC', 'BTC', 18),
+    'https://testnet-rpc.merlinchain.io',
+    '',
+    'https://testnet-scan.merlinchain.io/',
+    [],
+  );
+
   static ChainInfo AstarzkEVMTestnet = ChainInfo(
     1261120,
     'AstarZkEVM',
@@ -1241,6 +1284,21 @@ class ChainInfo {
     'https://eth-sepolia.g.alchemy.com/v2/demo',
     'https://faucet.quicknode.com/drip',
     'https://sepolia.etherscan.io',
+    [ChainInfoFeature('EIP1559')],
+  );
+
+  static ChainInfo Ancient8Testnet = ChainInfo(
+    28122024,
+    'ancient8',
+    'evm',
+    'https://static.particle.network/token-list/ancient8/native.png',
+    'Ancient8 Testnet',
+    'Testnet',
+    'https://ancient8.gg',
+    ChainInfoNativeCurrency('ETH', 'ETH', 18),
+    'https://rpcv2-testnet.ancient8.gg',
+    '',
+    'https://scanv2-testnet.ancient8.gg',
     [ChainInfoFeature('EIP1559')],
   );
 
@@ -1385,7 +1443,7 @@ class ChainInfo {
     'heco-128': ChainInfo.Heco,
     'polygon-137': ChainInfo.Polygon,
     'manta-169': ChainInfo.Manta,
-    'okbc-195': ChainInfo.OKBCTestnet,
+    'okbc-195': ChainInfo.X1Testnet,
     'opbnb-204': ChainInfo.opBNB,
     'mapprotocol-212': ChainInfo.MAPProtocolTestnet,
     'fantom-250': ChainInfo.Fantom,
@@ -1415,12 +1473,14 @@ class ChainInfo {
     'zetachain-7001': ChainInfo.ZetaChainTestnet,
     'klaytn-8217': ChainInfo.Klaytn,
     'base-8453': ChainInfo.Base,
+    'combo-9980': ChainInfo.Combo,
     'gnosis-10200': ChainInfo.GnosisTestnet,
     'lumoz-12008': ChainInfo.LumozzkEVMTestnet,
     'readon-12015': ChainInfo.ReadONTestnet,
     'eosevm-15557': ChainInfo.EOSEVMTestnet,
     'eosevm-17777': ChainInfo.EOSEVM,
     'mapprotocol-22776': ChainInfo.MAPProtocol,
+    'lumibit-28206': ChainInfo.LumiBitTestnet,
     'arbitrum-42161': ChainInfo.ArbitrumOne,
     'arbitrum-42170': ChainInfo.ArbitrumNova,
     'celo-42220': ChainInfo.Celo,
@@ -1440,11 +1500,13 @@ class ChainInfo {
     'arbitrum-421613': ChainInfo.ArbitrumGoerli,
     'scroll-534351': ChainInfo.ScrollSepolia,
     'scroll-534352': ChainInfo.Scroll,
+    'merlin-686868': ChainInfo.MerlinTestnet,
     'astarzkevm-1261120': ChainInfo.AstarzkEVMTestnet,
     'platon-2206132': ChainInfo.PlatONTestnet,
     'manta-3441005': ChainInfo.MantaTestnet,
     'zora-7777777': ChainInfo.Zora,
     'ethereum-11155111': ChainInfo.EthereumSepolia,
+    'ancient8-28122024': ChainInfo.Ancient8Testnet,
     'tron-728126428': ChainInfo.Tron,
     'aurora-1313161554': ChainInfo.Aurora,
     'aurora-1313161555': ChainInfo.AuroraTestnet,
@@ -1528,7 +1590,7 @@ class ChainInfo {
   static ChainInfo? getEvmChain(int chainId) {
     try {
       return ParticleChains.values.firstWhere(
-              (element) => element.chainType == 'evm' && element.id == chainId);
+          (element) => element.chainType == 'evm' && element.id == chainId);
     } catch (e) {
       return null;
     }
@@ -1537,7 +1599,7 @@ class ChainInfo {
   static ChainInfo? getSolanaChain(int chainId) {
     try {
       return ParticleChains.values.firstWhere(
-              (element) => element.chainType == 'solana' && element.id == chainId);
+          (element) => element.chainType == 'solana' && element.id == chainId);
     } catch (e) {
       return null;
     }
