@@ -67,6 +67,9 @@ import 'package:particle_aa/particle_aa.dart';
 ```
 
 [Auth Core Doc](https://docs.particle.network/developers/auth-service/core/flutter)
+
+Please note that the `particle_auth_core` supports ios-arm64 (iOS devices). We currently do not support simulators. To perform testing, you will require an actual iPhone device.
+
 ```
 flutter pub add particle_auth_core
 ```
