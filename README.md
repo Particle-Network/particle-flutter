@@ -58,7 +58,7 @@ flutter pub add particle_wallet
 import 'package:particle_wallet/particle_wallet.dart';
 ```
 
-[AA Doc]([https://docs.particle.network/developers/wallet-service/sdks/flutter](https://docs.particle.network/developers/account-abstraction/flutter))
+[AA Doc](https://docs.particle.network/developers/account-abstraction/flutter)
 ```
 flutter pub add particle_aa
 ```
@@ -66,7 +66,7 @@ flutter pub add particle_aa
 import 'package:particle_aa/particle_aa.dart';
 ```
 
-[Auth Core Doc]([https://docs.particle.network/developers/auth-service/core/flutter](https://docs.particle.network/developers/auth-service/core/flutter))
+[Auth Core Doc](https://docs.particle.network/developers/auth-service/core/flutter)
 ```
 flutter pub add particle_auth_core
 ```
