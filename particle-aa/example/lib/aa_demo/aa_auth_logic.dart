@@ -68,7 +68,7 @@ class AAAuthLogic {
     ParticleAA.disableAAMode();
   }
 
-  static void getSmartAccountAddress() async {
+  static void  getSmartAccountAddress() async {
     try {
       final eoaAddress = await ParticleAuth.getAddress();
       print("getSmartAccountAddress eoaAddress: $eoaAddress");

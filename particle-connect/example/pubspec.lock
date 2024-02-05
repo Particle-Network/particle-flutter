@@ -255,17 +255,17 @@ packages:
     dependency: transitive
     description:
       name: particle_auth
-      sha256: "8d5552e7a99f8f72c3ff63c2e6dc1cce784173e98abcbf97c040c7fb6633bd23"
+      sha256: "690c38804d70c33f786a2b498253f53796881644b6891c44e1b22106d20aedcb"
       url: "https://pub.dev"
     source: hosted
-    version: "1.4.4"
+    version: "1.4.5"
   particle_connect:
     dependency: "direct main"
     description:
       path: ".."
       relative: true
     source: path
-    version: "1.4.3"
+    version: "1.4.4"
   path:
     dependency: transitive
     description:
