@@ -68,3 +68,5 @@ class LoginPageConfig {
     'imageType': imageType
   };
 }
+
+enum Env { dev, staging, production }

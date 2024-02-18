@@ -3,12 +3,12 @@ PODS:
   - Base58.swift (1.0.2):
     - BigInt
   - BigInt (5.2.0)
-  - CryptoSwift (1.8.0)
+  - CryptoSwift (1.8.1)
   - Flutter (1.0.0)
   - particle_auth (0.0.1):
     - Flutter
     - ParticleAuthService
-  - ParticleAuthService (1.3.9):
+  - ParticleAuthService (1.3.12):
     - CryptoSwift
     - ParticleNetworkBase
     - RxAlamofire (~> 6.1.1)
@@ -16,7 +16,7 @@ PODS:
     - RxSwift (= 6.6.0)
     - SwiftyJSON (~> 5.0)
     - SwiftyUserDefaults (~> 5.3.0)
-  - ParticleNetworkBase (1.3.9):
+  - ParticleNetworkBase (1.3.12):
     - Base58.swift
     - BigInt (~> 5.2.0)
     - CryptoSwift
@@ -42,8 +42,8 @@ PODS:
 DEPENDENCIES:
   - Flutter (from `Flutter`)
   - particle_auth (from `.symlinks/plugins/particle_auth/ios`)
-  - ParticleAuthService (= 1.3.9)
-  - ParticleNetworkBase (= 1.3.9)
+  - ParticleAuthService (= 1.3.12)
+  - ParticleNetworkBase (= 1.3.12)
 
 SPEC REPOS:
   https://github.com/CocoaPods/Specs.git:
@@ -70,11 +70,11 @@ SPEC CHECKSUMS:
   Alamofire: 3ca42e259043ee0dc5c0cdd76c4bc568b8e42af7
   Base58.swift: e0e16655f9db843b8cd367593ed6f7d90d136b7f
   BigInt: f668a80089607f521586bbe29513d708491ef2f7
-  CryptoSwift: 52aaf3fce7337552863b1d952e408085f0e65030
+  CryptoSwift: b9c701d6f5011df23794dbf7f2e480a77835d83d
   Flutter: f04841e97a9d0b0a8025694d0796dd46242b2854
   particle_auth: f63e17b5dc9b5f7b3ad4d5c13fbfc03d3739b3ab
-  ParticleAuthService: d4334014f930c1f11203691889bbaf63132daaa9
-  ParticleNetworkBase: 83698ab6c04fe1dc2bfa370388d9123f37cf8130
+  ParticleAuthService: 19fdf36d324eeef8aa4672ea971bd5a58a54300b
+  ParticleNetworkBase: 464ff21feb77bdb7aaa115fc2a30d96e30bb1ad1
   RxAlamofire: beb75a1c452d0de225651db4903f5d29d034a620
   RxCocoa: 44a80de90e25b739b5aeaae3c8c371a32e3343cc
   RxRelay: 45eaa5db8ee4fb50e5ebd57deec0159e97fa51e6
@@ -82,6 +82,6 @@ SPEC CHECKSUMS:
   SwiftyJSON: 2f33a42c6fbc52764d96f13368585094bfd8aa5e
   SwiftyUserDefaults: 63f80248cf5bfb3458825d9a78f2eb7e1293a040
 
-PODFILE CHECKSUM: 5b42bfe2f8790e907331a3e81808bd3e81649983
+PODFILE CHECKSUM: 7bf5fc09c3d7a7d54fa2929f9bc039d14e13ef49
 
 COCOAPODS: 1.14.3
