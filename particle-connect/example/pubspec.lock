@@ -254,11 +254,10 @@ packages:
   particle_auth:
     dependency: transitive
     description:
-      name: particle_auth
-      sha256: "690c38804d70c33f786a2b498253f53796881644b6891c44e1b22106d20aedcb"
-      url: "https://pub.dev"
-    source: hosted
-    version: "1.4.5"
+      path: "../../particle-auth"
+      relative: true
+    source: path
+    version: "1.4.4"
   particle_connect:
     dependency: "direct main"
     description:
