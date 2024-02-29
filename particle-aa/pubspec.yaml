@@ -1,6 +1,6 @@
 name: particle_aa
 description: A flutter plugin project for particle aa
-version: 1.4.8
+version: 1.4.10
 homepage: https://particle.network
 
 environment:
@@ -8,11 +8,11 @@ environment:
     flutter: '>=3.10.6'
 
 dependencies:
-    flutter:
-        sdk: flutter
-    plugin_platform_interface: ^2.1.6
+  flutter:
+      sdk: flutter
+  plugin_platform_interface: ^2.1.6
 
-    particle_auth: ^1.4.8
+  particle_auth: ^1.4.10
 
 #    particle_auth:
 #        path: ../particle-auth/

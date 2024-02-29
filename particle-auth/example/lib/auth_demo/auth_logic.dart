@@ -377,7 +377,7 @@ class AuthLogic {
   }
 
   static void setWebAuthConfig() {
-    ParticleAuth.setWebAuthConfig(true, Appearance.light);
+    ParticleAuth.setWebAuthConfig(true, Appearance.dark);
   }
 
   static void readContract() async {
