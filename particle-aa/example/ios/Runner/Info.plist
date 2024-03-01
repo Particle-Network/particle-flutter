@@ -41,6 +41,8 @@
 	<array>
 		<string>_dartVmService._tcp</string>
 	</array>
+	<key>NSFaceIDUsageDescription</key>
+	<string>We use Face ID to secure your account, authenticate purchases, and provide a seamless user experience.</string>
 	<key>NSLocalNetworkUsageDescription</key>
 	<string></string>
 	<key>UIApplicationSupportsIndirectInputEvents</key>

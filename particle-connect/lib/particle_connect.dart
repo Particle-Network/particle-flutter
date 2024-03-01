@@ -2,7 +2,7 @@ import 'dart:convert';
 import 'dart:io' show Platform;
 
 import 'package:flutter/services.dart';
-import 'package:particle_auth/particle_auth.dart';
+import 'package:particle_base/particle_base.dart';
 import 'package:particle_connect/model/account.dart';
 import 'package:particle_connect/model/dapp_meta_data.dart';
 import 'package:particle_connect/model/particle_connect_config.dart';
@@ -10,7 +10,6 @@ import 'package:particle_connect/model/rpc_url_config.dart';
 import 'package:particle_connect/model/wallet_ready_state.dart';
 import 'package:particle_connect/model/wallet_type.dart';
 import 'package:particle_connect/model/sign_in_with_ethereum.dart';
-import 'package:particle_connect/model/account.dart';
 
 export 'package:particle_connect/model/dapp_meta_data.dart';
 export 'package:particle_connect/model/particle_connect_config.dart';
@@ -37,14 +36,8 @@ class ParticleConnect {
   /// [RpcUrlConfig] set custom solana and evm rpc url, default is null.
   static init(ChainInfo chainInfo, DappMetaData dappMetaData, Env env,
       {RpcUrlConfig? rpcUrlConfig}) {
-    String methodName;
-    if (Platform.isIOS) {
-      methodName = 'initialize';
-    } else {
-      methodName = 'init';
-    }
     _channel.invokeMethod(
-        methodName,
+        Platform.isIOS ? 'initialize' : 'init',
         jsonEncode({
           "chain_name": chainInfo.name,
           "chain_id": chainInfo.id,
@@ -500,16 +493,4 @@ class ParticleConnect {
     return WalletReadyState.values.byName(readyState);
   }
 
-  /// reconnect wallet connect wallet, only support iOS
-  /// Pass [walletType] and [publicAddress] to decide a wallet.
-  static reconnectIfNeeded(WalletType walletType, String publicAddress) {
-    if (Platform.isIOS) {
-      _channel.invokeMethod(
-          "reconnectIfNeeded",
-          jsonEncode({
-            "wallet_type": walletType.name,
-            "public_address": publicAddress,
-          }));
-    }
-  }
 }

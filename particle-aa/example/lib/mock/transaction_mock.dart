@@ -1,4 +1,4 @@
-import 'package:particle_auth/particle_auth.dart';
+import 'package:particle_base/particle_base.dart';
 import 'package:particle_aa_example/mock/test_account.dart';
 
 class TransactionMock {

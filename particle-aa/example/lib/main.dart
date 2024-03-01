@@ -68,7 +68,7 @@ class _MyHomePageState extends State<MyHomePage> {
                       )
                     },
                     child: const Text(
-                      "AA Auth",
+                      "AA + Auth",
                       style: TextStyle(fontSize: 20),
                     ),
                   )),
@@ -88,7 +88,7 @@ class _MyHomePageState extends State<MyHomePage> {
                       )
                     },
                     child: const Text(
-                      "AA Connect",
+                      "AA + Connect",
                       style: TextStyle(fontSize: 20),
                     ),
                   )),
@@ -108,7 +108,7 @@ class _MyHomePageState extends State<MyHomePage> {
                       )
                     },
                     child: const Text(
-                      "AA Auth Core",
+                      "AA + Auth Core",
                       style: TextStyle(fontSize: 20),
                     ),
                   )),

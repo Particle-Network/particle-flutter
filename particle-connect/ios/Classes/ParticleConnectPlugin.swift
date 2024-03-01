@@ -9,11 +9,18 @@ import Base58_swift
 import ConnectCommon
 import Flutter
 import Foundation
-import ParticleAuthAdapter
 import ParticleConnect
 import ParticleNetworkBase
 import RxSwift
 import SwiftyJSON
+
+#if canImport(AuthCoreAdapter)
+import AuthCoreAdapter
+#endif
+
+#if canImport(ParticleAuthAdapter)
+import ParticleAuthAdapter
+#endif
 
 #if canImport(ConnectEVMAdapter)
 import ConnectEVMAdapter
@@ -162,6 +169,7 @@ extension ParticleConnectPlugin {
         let dAppIconString = data["metadata"]["icon"].stringValue
         let dAppUrlString = data["metadata"]["url"].stringValue
         let dappDescription = data["metadata"]["description"].stringValue
+        let redirectUniversalLink = data["metedata"]["redirect"].string
         
         let walletConnectProjectId = data["metadata"]["walletConnectProjectId"].stringValue
         
@@ -169,9 +177,18 @@ extension ParticleConnectPlugin {
         
         let dAppUrl = URL(string: dAppUrlString) != nil ? URL(string: dAppUrlString)! : URL(string: "https://connect.particle.network")!
         
-        let dAppData = DAppMetaData(name: dAppName, icon: dAppIconUrl, url: dAppUrl, description: dappDescription)
+        let dAppData = DAppMetaData(name: dAppName, icon: dAppIconUrl, url: dAppUrl, description: dappDescription, redirectUniversalLink: redirectUniversalLink)
         
-        var adapters: [ConnectAdapter] = [ParticleAuthAdapter()]
+        var adapters: [ConnectAdapter] = []
+
+#if canImport(ParticleAuthAdapter)
+        adapters.append(ParticleAuthAdapter())
+#endif
+     
+#if canImport(AuthCoreAdapter)
+        adapters.append(AuthCoreAdapter())
+#endif
+        
 #if canImport(ConnectEVMAdapter)
         let evmRpcUrl = data["rpc_url"]["evm_url"].stringValue
         if evmRpcUrl.isEmpty {
@@ -274,7 +291,8 @@ extension ParticleConnectPlugin {
         let walletTypeString = data["wallet_type"].stringValue
         let configJson = data["particle_connect_config"]
         
-        var connectConfig: ParticleAuthConfig?
+        var authConfig: ParticleAuthConfig?
+        var authCoreConfig: ParticleAuthCoreConfig?
         
         if !configJson.isEmpty {
             let loginType = LoginType(rawValue: configJson["login_type"].stringValue.lowercased()) ?? .email
@@ -314,9 +332,13 @@ extension ParticleConnectPlugin {
             }
             
             var account = configJson["account"].string
-            
             if account != nil, account!.isEmpty {
                 account = nil
+            }
+            
+            var code = configJson["code"].string
+            if code != nil, code!.isEmpty {
+                code = nil
             }
             
             let socialLoginPromptString = configJson["social_login_prompt"].stringValue.lowercased()
@@ -331,7 +353,9 @@ extension ParticleConnectPlugin {
                 loginAuthorization = .init(message: message!, isUnique: isUnique)
             }
             
-            connectConfig = ParticleAuthConfig(loginType: loginType, supportAuthType: supportAuthTypeArray, phoneOrEmailAccount: account, socialLoginPrompt: socialLoginPrompt, authorization: loginAuthorization)
+            authConfig = ParticleAuthConfig(loginType: loginType, supportAuthType: supportAuthTypeArray, account: account, socialLoginPrompt: socialLoginPrompt, authorization: loginAuthorization)
+            
+            authCoreConfig = ParticleAuthCoreConfig(loginType: loginType, supportAuthType: supportAuthTypeArray, account: account, code: code, socialLoginPrompt: socialLoginPrompt)
         }
         
         guard let walletType = map2WalletType(from: walletTypeString) else {
@@ -347,7 +371,9 @@ extension ParticleConnectPlugin {
         
         var observable: Single<Account?>
         if walletType == .particle {
-            observable = adapter.connect(connectConfig)
+            observable = adapter.connect(authConfig)
+        } else if walletType == .authCore {
+            observable = adapter.connect(authCoreConfig)
         } else {
             observable = adapter.connect(ConnectConfig.none)
         }

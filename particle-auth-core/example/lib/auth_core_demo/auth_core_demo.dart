@@ -1,7 +1,7 @@
-import 'dart:ui';
 
 import 'package:flutter/material.dart';
-import 'package:particle_auth/particle_auth.dart';
+import 'package:particle_auth_core_example/auth_core_demo/item_button.dart';
+import 'package:particle_base/particle_base.dart';
 import 'package:particle_auth_core_example/auth_core_demo/auth_core_logic.dart';
 import 'package:particle_auth_core_example/auth_core_demo/select_chain_page.dart';
 
@@ -38,7 +38,8 @@ class AuthDemoPageState extends State<AuthDemoPage> {
       body: SingleChildScrollView(
         child: Column(
           children: <Widget>[
-            ItemButton("Init", () => AuthCoreLogic.init(Env.dev)),
+            // in particle_base package
+            ItemButton("Init", () => AuthCoreLogic.init()),
             ItemButton(
                 "SelectChain",
                 () => Navigator.push(
@@ -46,6 +47,10 @@ class AuthDemoPageState extends State<AuthDemoPage> {
                       MaterialPageRoute(
                           builder: (context) => const SelectChainPage()),
                     )),
+            ItemButton("SetChainInfo", () => AuthCoreLogic.setChainInfo()),
+            ItemButton("GetChainInfo", () => AuthCoreLogic.getChainInfo()),
+
+            // in particle_auth_core package
             ItemButton(
                 "Connect With JWT", () => AuthCoreLogic.connectWithJWT()),
             connectWithParams(),
@@ -54,6 +59,7 @@ class AuthDemoPageState extends State<AuthDemoPage> {
             ItemButton("IsConnected", () => AuthCoreLogic.isConnected()),
             ItemButton("Switch chain", () => AuthCoreLogic.swicthChain()),
             ItemButton("Evm get address", () => AuthCoreLogic.evmGetAddress()),
+            ItemButton("GetSmartAccount", () => AuthCoreLogic.getSmartAccount()),
             blindStatus(),
             ItemButton(
                 "Evm personal sign", () => AuthCoreLogic.evmPersonalSign()),
@@ -79,6 +85,8 @@ class AuthDemoPageState extends State<AuthDemoPage> {
                 () => AuthCoreLogic.openAccountAndSecurity()),
             ItemButton("Change master password",
                 () => AuthCoreLogic.changeMasterPassword()),
+
+            // in particle_base package, rpc reference
             ItemButton("Read contract", () => AuthCoreLogic.readContract()),
             ItemButton("Write contract", () => AuthCoreLogic.writeContract()),
             ItemButton("Write contract then send",
@@ -101,6 +109,13 @@ class AuthDemoPageState extends State<AuthDemoPage> {
             ItemButton("getTokenByTokenAddresses",
                 () => AuthCoreLogic.getTokenByTokenAddresses()),
             ItemButton("getPrice", () => AuthCoreLogic.getPrice()),
+
+            // in particle_base package
+            ItemButton("SetLanguage", () => AuthCoreLogic.setLanguage()),
+            ItemButton("SetSecurityAccountConfig",
+                () => AuthCoreLogic.setSecurityAccountConfig()),
+            ItemButton("SetAppearance", () => AuthCoreLogic.setAppearance()),
+            ItemButton("SetFiatCoin", () => AuthCoreLogic.setFiatCoin()),
           ],
         ),
       ),
@@ -235,25 +250,3 @@ class AuthDemoPageState extends State<AuthDemoPage> {
   }
 }
 
-class ItemButton extends StatelessWidget {
-  final String text;
-  final VoidCallback onPressed;
-  const ItemButton(this.text, this.onPressed, {super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.all(8.0),
-      child: SizedBox(
-        width: double.infinity,
-        height: 50,
-        child: ElevatedButton(
-            onPressed: () => onPressed(),
-            child: Text(
-              text,
-              style: const TextStyle(fontSize: 18),
-            )),
-      ),
-    );
-  }
-}

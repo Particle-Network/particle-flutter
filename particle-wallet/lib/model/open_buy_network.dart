@@ -8,5 +8,8 @@ enum OpenBuyNetwork {
   arbitrumOne,
   avalanche,
   celo,
-  zkSync
+  zkSync,
+  base,
+  linea,
+  mantle
 }

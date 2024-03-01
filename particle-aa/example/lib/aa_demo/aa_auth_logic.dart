@@ -2,6 +2,7 @@ import 'package:oktoast/oktoast.dart';
 import 'package:particle_aa/particle_aa.dart';
 import 'package:particle_aa_example/mock/transaction_mock.dart';
 import 'package:particle_auth/particle_auth.dart';
+import 'package:particle_base/particle_base.dart';
 
 class AAAuthLogic {
   static String? smartAccountAddress;
@@ -16,7 +17,7 @@ class AAAuthLogic {
       137: "", // your polygon mainnet key
       80001: "", // your polygon mumbai key
     };
-    ParticleAuth.init(ChainInfo.Polygon, Env.production);
+    ParticleBase.init(ChainInfo.Polygon, Env.production);
 
     // Get your project id and client from dashboard, https://dashboard.particle.network
     const projectId = "772f7499-1d2e-40f4-8e2c-7b6dd47db9de"; //772f7499-1d2e-40f4-8e2c-7b6dd47db9de

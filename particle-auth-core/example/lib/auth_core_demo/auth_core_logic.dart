@@ -1,14 +1,14 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/widgets.dart';
 import 'package:oktoast/oktoast.dart';
-import 'package:particle_auth/particle_auth.dart';
+import 'package:particle_base/particle_base.dart';
 import 'package:particle_auth_core/particle_auth_core.dart';
 import 'package:particle_auth_core_example/mock/transaction_mock.dart';
 
 class AuthCoreLogic {
   static ChainInfo currChainInfo = ChainInfo.Ethereum;
 
-  static void init(Env env) {
+  static void init() {
     // Get your project id and client key from dashboard, https://dashboard.particle.network
     const projectId =
         "772f7499-1d2e-40f4-8e2c-7b6dd47db9de"; //772f7499-1d2e-40f4-8e2c-7b6dd47db9de
@@ -19,9 +19,24 @@ class AuthCoreLogic {
           'You need set project info, get your project id and client key from dashboard, https://dashboard.particle.network');
     }
     ParticleInfo.set(projectId, clientK);
-    ParticleAuth.init(currChainInfo, env);
+    const env = Env.dev;
+    ParticleBase.init(currChainInfo, env);
     ParticleAuthCore.init();
     print("init");
+  }
+
+  static void setChainInfo() async {
+    bool isSuccess = await ParticleBase.setChainInfo(ChainInfo.PolygonMumbai);
+    print("setChainInfo: $isSuccess");
+  }
+
+  static void getChainInfo() async {
+    final chainInfo = await ParticleBase.getChainInfo();
+
+    print(
+        "getChainInfo chain id: ${chainInfo.id} chain name: ${chainInfo.name}");
+    showToast(
+        "getChainInfo chain id: ${chainInfo.id} chain name: ${chainInfo.name}");
   }
 
   static void connect(LoginType loginType, String? account,
@@ -48,8 +63,7 @@ class AuthCoreLogic {
 
   static void connectWithJWT() async {
     try {
-      const jwt =
-          "eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCIsImtpZCI6IndVUE05RHNycml0Sy1jVHE2OWNKcCJ9.eyJlbWFpbCI6InBhbnRhb3ZheUBnbWFpbC5jb20iLCJlbWFpbF92ZXJpZmllZCI6ZmFsc2UsImlzcyI6Imh0dHBzOi8vZGV2LXFyNi01OWVlLnVzLmF1dGgwLmNvbS8iLCJhdWQiOiJFVmpLMVpaUFN0UWNkV3VoandQZGRBdGdSaXdwNTRWUSIsImlhdCI6MTcwMjYyMTQ0NCwiZXhwIjoxNzAyNjU3NDQ0LCJzdWIiOiJhdXRoMHw2MzAzMjE0YjZmNjE1NjM2YWM5MTdmMWIiLCJzaWQiOiJTZnlfVElJeVVDUFJMcmlrd0sxZDRnMXVkN1ROaWRlUSJ9.HUE08zLrlIcNVW2y8m_8QBv2fW9nixnujoBesjWkVdxiXjCzmmdqUMsPWip6vevPFgEri2-O6MAIJQwSIvfXinv3kLiBCtToqtnaF_BgROo3w6hUhHU6kW6WIP9qww3BnvVNgPbmHzgjGKJmhPNYet6_i7UMrlbyx6ZRNrDg7UiPbkmpWGqqIj8506dCcScbD2PF3dUPfweI1L7J6yQfCBB_aPsrtGGll2J4K97FzNLFjabT--lG0xDDvYiFpkjv0agdV7kkX9IQsp53BfQF1FA2o6hUanLlwCR0v-ON6RYMn-Cj92LGhp8-ng6wwuGcx_JJ0ocgY6rbrKwWZa-gPw"; // paste your jwt
+      const jwt = ""; // paste your jwt
       final userInfo =
           await ParticleAuthCore.connect(LoginType.jwt, account: jwt);
 
@@ -159,6 +173,38 @@ class AuthCoreLogic {
     } catch (error) {
       print("evm getAddress: $error");
       showToast("evm getAddress: $error");
+    }
+  }
+
+  static void getSmartAccount() async {
+    if (currChainInfo.isSolanaChain()) {
+      showToast("only evm chain support!");
+      return;
+    }
+
+    try {
+      final eoaAddress = await Evm.getAddress();
+      SmartAccountConfig config = SmartAccountConfig.fromAccountName(
+          AccountName.BICONOMY_V1(), eoaAddress);
+      List<dynamic> response =
+          await EvmService.getSmartAccount(<SmartAccountConfig>[config]);
+
+      var smartAccountJson = response.firstOrNull;
+      if (smartAccountJson != null) {
+        print(smartAccountJson);
+        final smartAccount = smartAccountJson as Map<String, dynamic>;
+
+        final smartAccountAddress =
+            smartAccount["smartAccountAddress"] as String;
+
+        print("getSmartAccount: $smartAccountAddress");
+        showToast("getSmartAccount: $smartAccountAddress");
+      } else {
+        print('List is empty');
+      }
+    } catch (error) {
+      print("getSmartAccount: $error");
+      showToast("getSmartAccount: $error");
     }
   }
 
@@ -401,7 +447,7 @@ class AuthCoreLogic {
   }
 
   static Future<String> getTypedDataV4() async {
-    final chainId = await ParticleAuth.getChainId();
+    final chainId = await ParticleBase.getChainId();
     // This typed data is version 4
 
     String typedData = '''
@@ -537,5 +583,23 @@ class AuthCoreLogic {
     final result = ParticleAuthCore.getBlindEnable();
     print("getBlindEnable: $result");
     showToast("getBlindEnable: $result");
+  }
+
+  static void setLanguage() {
+    const language = Language.ja;
+    ParticleBase.setLanguage(language);
+  }
+
+  static void setAppearance() {
+    ParticleBase.setAppearance(Appearance.light);
+  }
+
+  static void setFiatCoin() {
+    ParticleBase.setFiatCoin(FiatCoin.KRW);
+  }
+
+  static void setSecurityAccountConfig() {
+    final config = SecurityAccountConfig(1, 2);
+    ParticleBase.setSecurityAccountConfig(config);
   }
 }

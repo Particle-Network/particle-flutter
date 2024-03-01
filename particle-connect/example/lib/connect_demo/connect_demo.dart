@@ -1,12 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:particle_connect_example/connect_demo/connect_logic.dart';
+import 'package:particle_connect_example/connect_demo/item_button.dart';
 import 'package:particle_connect_example/connect_demo/select_chain_page.dart';
 import 'package:particle_connect_example/connect_demo/select_wallet_type.dart';
 import 'package:qr_flutter/qr_flutter.dart';
 
 class ConnectDemoPage extends StatefulWidget {
-  const ConnectDemoPage({Key? key}) : super(key: key);
+  const ConnectDemoPage({super.key});
 
   @override
   State<ConnectDemoPage> createState() => _ConnectDemoPageState();
@@ -16,6 +17,35 @@ class _ConnectDemoPageState extends State<ConnectDemoPage> {
   static const EventChannel _walletConnectEventChannel =
       EventChannel('connect_event_bridge');
   var walletConnectUri = "";
+
+  final List<MethodItem> data = [
+    // in particle_base package
+    MethodItem("Init", () => ConnectLogic.init()),
+    MethodItem("SelectChain", () {}),
+    MethodItem("SelectWalletType", () {}),
+    MethodItem("SetChainInfo", () => ConnectLogic.setChainInfo()),
+    MethodItem("GetChainInfo", () => ConnectLogic.getChainInfo()),
+
+    MethodItem("Connect", () => ConnectLogic.connect()),
+    MethodItem("ConnectGoogle", () => ConnectLogic.connectGoogle()),
+    MethodItem("GetAccounts", () => ConnectLogic.getAccounts()),
+    MethodItem("Disconnect", () => ConnectLogic.disconnect()),
+    MethodItem("IsConnected", () => ConnectLogic.isConnected()),
+    MethodItem("SignMessage", () => ConnectLogic.signMessage()),
+    MethodItem("SignTypedData", () => ConnectLogic.signTypedData()),
+    MethodItem(
+        "SignAndSendTransaction", () => ConnectLogic.signAndSendTransaction()),
+    MethodItem("SignTransaction", () => ConnectLogic.signTransaction()),
+    MethodItem("SignAllTransactions", () => ConnectLogic.signAllTransactions()),
+    MethodItem("SignInWithEthereum", () => ConnectLogic.signInWithEthereum()),
+    MethodItem("Verify", () => ConnectLogic.verify()),
+    MethodItem("ImportMnemonic", () => ConnectLogic.importMnemonic()),
+    MethodItem("ImportPrivateKey", () => ConnectLogic.importPrivateKey()),
+    MethodItem("ExportPrivateKey", () => ConnectLogic.exportPrivateKey()),
+    MethodItem("WalletTypeState", () => ConnectLogic.walletTypeState()),
+    MethodItem(
+        "ConnectWalletConnect", () => ConnectLogic.connectWalletConnect()),
+  ];
 
   @override
   void initState() {
@@ -38,330 +68,40 @@ class _ConnectDemoPageState extends State<ConnectDemoPage> {
       appBar: AppBar(
         title: const Text("Connect Demo"),
       ),
-      body: SingleChildScrollView(
-        child: Column(
-          children: <Widget>[
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: SizedBox(
-                width: double.infinity,
-                height: 50,
-                child: ElevatedButton(
-                    onPressed: () => {ConnectLogic.init()},
-                    child: const Text(
-                      "Init",
-                      style: TextStyle(fontSize: 18),
-                    )),
-              ),
-            ),
-            Padding(
-              padding: const EdgeInsets.only(
-                  left: 8.0, top: 16.0, right: 8.0, bottom: 8.0),
-              child: SizedBox(
-                width: double.infinity,
-                height: 50,
-                child: ElevatedButton(
-                    onPressed: () => {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => const SelectChainPage()),
-                          )
-                        },
-                    child: const Text(
-                      "SelectChain",
-                      style: TextStyle(fontSize: 18),
-                    )),
-              ),
-            ),
-            Padding(
-              padding: const EdgeInsets.only(
-                  left: 8.0, top: 16.0, right: 8.0, bottom: 8.0),
-              child: SizedBox(
-                width: double.infinity,
-                height: 50,
-                child: ElevatedButton(
-                    onPressed: () => {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => const SelectWalletPage()),
-                          )
-                        },
-                    child: const Text(
-                      "SelectWallet",
-                      style: TextStyle(fontSize: 18),
-                    )),
-              ),
-            ),
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: SizedBox(
-                width: double.infinity,
-                height: 50,
-                child: ElevatedButton(
-                    onPressed: () => {ConnectLogic.setChainInfo()},
-                    child: const Text(
-                      "SetChainInfo",
-                      style: TextStyle(fontSize: 18),
-                    )),
-              ),
-            ),
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: SizedBox(
-                width: double.infinity,
-                height: 50,
-                child: ElevatedButton(
-                    onPressed: () => {ConnectLogic.getChainInfo()},
-                    child: const Text(
-                      "GetChainInfo",
-                      style: TextStyle(fontSize: 18),
-                    )),
-              ),
-            ),
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: SizedBox(
-                width: double.infinity,
-                height: 50,
-                child: ElevatedButton(
-                    onPressed: () => {ConnectLogic.connect()},
-                    child: const Text(
-                      "Connect",
-                      style: TextStyle(fontSize: 18),
-                    )),
-              ),
-            ),
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: SizedBox(
-                width: double.infinity,
-                height: 50,
-                child: ElevatedButton(
-                    onPressed: () => {ConnectLogic.connectParticle()},
-                    child: const Text(
-                      "Connect Particle",
-                      style: TextStyle(fontSize: 18),
-                    )),
-              ),
-            ),
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: SizedBox(
-                width: double.infinity,
-                height: 50,
-                child: ElevatedButton(
-                    onPressed: () => {ConnectLogic.connectWalletConnect()},
-                    child: const Text(
-                      "ConnectWalletConnect",
-                      style: TextStyle(fontSize: 18),
-                    )),
-              ),
-            ),
-            Offstage(
+      body: ListView.builder(
+          itemCount: data.length + 1,
+          itemBuilder: (context, index) {
+            if (index == data.length) {
+              return Offstage(
                 offstage: walletConnectUri.isEmpty ? true : false,
-                child: QrImageView(data: walletConnectUri, size: 200)),
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: SizedBox(
-                width: double.infinity,
-                height: 50,
-                child: ElevatedButton(
-                    onPressed: () => {ConnectLogic.disconnect()},
-                    child: const Text(
-                      "Disconnect",
-                      style: TextStyle(fontSize: 18),
-                    )),
-              ),
-            ),
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: SizedBox(
-                width: double.infinity,
-                height: 50,
-                child: ElevatedButton(
-                    onPressed: () => {ConnectLogic.signInWithEthereum()},
-                    child: const Text(
-                      "SignInWithEthereum",
-                      style: TextStyle(fontSize: 18),
-                    )),
-              ),
-            ),
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: SizedBox(
-                width: double.infinity,
-                height: 50,
-                child: ElevatedButton(
-                    onPressed: () => {ConnectLogic.verify()},
-                    child: const Text(
-                      "Verify",
-                      style: TextStyle(fontSize: 18),
-                    )),
-              ),
-            ),
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: SizedBox(
-                width: double.infinity,
-                height: 50,
-                child: ElevatedButton(
-                    onPressed: () => {ConnectLogic.signMessage()},
-                    child: const Text(
-                      "Sign Message",
-                      style: TextStyle(fontSize: 18),
-                    )),
-              ),
-            ),
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: SizedBox(
-                width: double.infinity,
-                height: 50,
-                child: ElevatedButton(
-                    onPressed: () => {ConnectLogic.signTransaction()},
-                    child: const Text(
-                      "Sign Transaction",
-                      style: TextStyle(fontSize: 18),
-                    )),
-              ),
-            ),
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: SizedBox(
-                width: double.infinity,
-                height: 50,
-                child: ElevatedButton(
-                    onPressed: () => {ConnectLogic.signAllTransactions()},
-                    child: const Text(
-                      "Sign All Transactions",
-                      style: TextStyle(fontSize: 18),
-                    )),
-              ),
-            ),
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: SizedBox(
-                width: double.infinity,
-                height: 50,
-                child: ElevatedButton(
-                    onPressed: () => {ConnectLogic.signAndSendTransaction()},
-                    child: const Text(
-                      "Sign And Send  Transaction",
-                      style: TextStyle(fontSize: 18),
-                    )),
-              ),
-            ),
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: SizedBox(
-                width: double.infinity,
-                height: 50,
-                child: ElevatedButton(
-                    onPressed: () => {ConnectLogic.signTypedData()},
-                    child: const Text(
-                      "Sign Typed Data",
-                      style: TextStyle(fontSize: 18),
-                    )),
-              ),
-            ),
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: SizedBox(
-                width: double.infinity,
-                height: 50,
-                child: ElevatedButton(
-                    onPressed: () => {ConnectLogic.importPrivateKey()},
-                    child: const Text(
-                      "Import Private Key",
-                      style: TextStyle(fontSize: 18),
-                    )),
-              ),
-            ),
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: SizedBox(
-                width: double.infinity,
-                height: 50,
-                child: ElevatedButton(
-                    onPressed: () => {ConnectLogic.importMnemonic()},
-                    child: const Text(
-                      "Import Mnemonic",
-                      style: TextStyle(fontSize: 18),
-                    )),
-              ),
-            ),
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: SizedBox(
-                width: double.infinity,
-                height: 50,
-                child: ElevatedButton(
-                    onPressed: () => {ConnectLogic.exportPrivateKey()},
-                    child: const Text(
-                      "Export Private Key",
-                      style: TextStyle(fontSize: 18),
-                    )),
-              ),
-            ),
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: SizedBox(
-                width: double.infinity,
-                height: 50,
-                child: ElevatedButton(
-                    onPressed: () => {ConnectLogic.isConnected()},
-                    child: const Text(
-                      "IsConnected",
-                      style: TextStyle(fontSize: 18),
-                    )),
-              ),
-            ),
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: SizedBox(
-                width: double.infinity,
-                height: 50,
-                child: ElevatedButton(
-                    onPressed: () => {ConnectLogic.getAccounts()},
-                    child: const Text(
-                      "getAccounts",
-                      style: TextStyle(fontSize: 18),
-                    )),
-              ),
-            ),
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: SizedBox(
-                width: double.infinity,
-                height: 50,
-                child: ElevatedButton(
-                    onPressed: () => {ConnectLogic.walletTypeState()},
-                    child: const Text(
-                      "Wallet ready state",
-                      style: TextStyle(fontSize: 18),
-                    )),
-              ),
-            ),
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: SizedBox(
-                width: double.infinity,
-                height: 50,
-                child: ElevatedButton(
-                    onPressed: () => {ConnectLogic.reconnectIfNeed()},
-                    child: const Text(
-                      "Reconnect wallet",
-                      style: TextStyle(fontSize: 18),
-                    )),
-              ),
-            ),
-            
-            
-          ],
-        ),
-      ),
+                child: Align(
+                    alignment: Alignment.center,
+                    child: QrImageView(data: walletConnectUri, size: 300)),
+              );
+            } else {
+              final text = data[index].text;
+              final onPressed = data[index].onPressed;
+              if (text == "SelectChain") {
+                return ItemButton(
+                    "SelectChain",
+                    () => Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => const SelectChainPage()),
+                        ));
+              } else if (text == "SelectWalletType") {
+                return ItemButton(
+                    "SelectWalletType",
+                    () => Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => const SelectWalletPage()),
+                        ));
+              } else {
+                return ItemButton(text, onPressed);
+              }
+            }
+          }),
     );
   }
 }

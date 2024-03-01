@@ -18,7 +18,7 @@ class MyApp extends StatelessWidget {
       textStyle: const TextStyle(fontSize: 19.0, color: Colors.white),
       backgroundColor: Colors.black,
       animationCurve: Curves.easeIn,
-      animationBuilder: const OffsetAnimationBuilder(),
+      animationBuilder: const OffsetAnimationBuilder().call,
       animationDuration: const Duration(milliseconds: 200),
       duration: const Duration(seconds: 5),
       child: MaterialApp(

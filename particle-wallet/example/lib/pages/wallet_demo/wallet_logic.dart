@@ -1,7 +1,7 @@
 import 'dart:io';
 
 import 'package:oktoast/oktoast.dart';
-import 'package:particle_auth/particle_auth.dart';
+import 'package:particle_base/particle_base.dart';
 import 'package:particle_connect/particle_connect.dart';
 import 'package:particle_wallet/particle_wallet.dart';
 
@@ -189,14 +189,14 @@ class WalletLogic {
 
   static void setCustomWalletName() {
     ParticleWallet.setCustomWalletName(
-        "Playbux", "https://static.particle.network/wallet-icons/Rainbow.png");
+        "Particle", "https://static.particle.network/wallet-icons/Particle.png");
   }
 
   static void setCustomLocalizable() {
     if (Platform.isIOS) {
       Map<String, String> enLocalizables = <String, String>{
         "network fee": "Service Fee",
-        "particle auth wallet": "Playbux"
+        "particle auth wallet": "Particle"
       };
 
       Map<Language, Map<String, String>> localizables =

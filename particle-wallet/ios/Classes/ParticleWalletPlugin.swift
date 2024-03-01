@@ -538,7 +538,7 @@ extension ParticleWalletPlugin {
 
         let walletUrl = URL(string: walletUrlString) != nil ? URL(string: walletUrlString)! : URL(string: "https://connect.particle.network")!
 
-        ParticleWalletConnect.initialize(.init(name: walletName, icon: walletIconUrl, url: walletUrl, description: walletDescription))
+        ParticleWalletConnect.initialize(.init(name: walletName, icon: walletIconUrl, url: walletUrl, description: walletDescription, redirectUniversalLink: nil))
     }
 
     func setWalletConnectV2ProjectId(_ json: String?) {

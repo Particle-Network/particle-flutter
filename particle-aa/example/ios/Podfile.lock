@@ -68,14 +68,17 @@ PODS:
     - ParticleAuthCore
     - ParticleMPCCore
     - Thresh
+  - particle_base (0.0.1):
+    - Flutter
+    - ParticleNetworkBase
   - particle_connect (0.0.1):
+    - AuthCoreAdapter
     - ConnectCommon
     - ConnectEVMAdapter
     - ConnectPhantomAdapter
     - ConnectSolanaAdapter
     - ConnectWalletConnectAdapter
     - Flutter
-    - ParticleAuthAdapter
     - ParticleConnect
   - ParticleAA (1.3.12):
     - ParticleNetworkBase
@@ -196,6 +199,7 @@ DEPENDENCIES:
   - particle_aa (from `.symlinks/plugins/particle_aa/ios`)
   - particle_auth (from `.symlinks/plugins/particle_auth/ios`)
   - particle_auth_core (from `.symlinks/plugins/particle_auth_core/ios`)
+  - particle_base (from `.symlinks/plugins/particle_base/ios`)
   - particle_connect (from `.symlinks/plugins/particle_connect/ios`)
   - ParticleAA (= 1.3.12)
   - ParticleAuthAdapter (= 0.2.17)
@@ -255,6 +259,8 @@ EXTERNAL SOURCES:
     :path: ".symlinks/plugins/particle_auth/ios"
   particle_auth_core:
     :path: ".symlinks/plugins/particle_auth_core/ios"
+  particle_base:
+    :path: ".symlinks/plugins/particle_base/ios"
   particle_connect:
     :path: ".symlinks/plugins/particle_connect/ios"
 
@@ -276,7 +282,8 @@ SPEC CHECKSUMS:
   particle_aa: 02d46a151c4e3b90851615d26e21a88960e752ec
   particle_auth: f63e17b5dc9b5f7b3ad4d5c13fbfc03d3739b3ab
   particle_auth_core: 08525d1c4253c4f49fbb6d1562a45d9187fa3f1b
-  particle_connect: 0192191b9fcae5c955c4752920acc5f05deb762a
+  particle_base: 419f26ea9085905253af64d8bd13ed9c640520cd
+  particle_connect: 121cc91603ef84ea6aa29d9ef1c5b945ea5736a2
   ParticleAA: de008dba780fc124d97a9d24e5e48f44a3844c70
   ParticleAuthAdapter: b84506d004058df8a2bbf83334ebadcf859cf194
   ParticleAuthCore: 476e62710b5f4f49caac15f521a372870f9ca246
@@ -302,6 +309,6 @@ SPEC CHECKSUMS:
   TweetNacl: 3abf4d1d2082b0114e7a67410e300892448951e6
   WalletConnectSwiftV2: 7927408d80bff4b00297b8018477a4492c9e52a4
 
-PODFILE CHECKSUM: 0c2b169ff910769a9d41e440277b9c96afbb4886
+PODFILE CHECKSUM: 371051a77f905e15c9a398bea1a4fb3a6a06fbb0
 
-COCOAPODS: 1.14.3
+COCOAPODS: 1.15.2

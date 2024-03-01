@@ -13,6 +13,7 @@ class SelectWalletPage extends StatefulWidget {
 
 class SelectWalletPageState extends State<SelectWalletPage> {
   List<WalletType> chainList = <WalletType>[
+    WalletType.authCore,
     WalletType.particle,
     WalletType.metaMask,
     WalletType.rainbow,
@@ -44,9 +45,17 @@ class SelectWalletPageState extends State<SelectWalletPage> {
                 ConnectLogic.walletType = walletType;
                 Navigator.pop(context);
               },
-              child: Text(chainList[index].name),
+              child: _getTextForButton(chainList[index].name),
             );
           },
         ));
+  }
+
+  Text _getTextForButton(String name) {
+    if (name == "particle") {
+      return const Text("partcile (deprecated)");
+    } else {
+      return Text(name);
+    }
   }
 }

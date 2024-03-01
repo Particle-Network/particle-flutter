@@ -251,14 +251,13 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "2.1.0"
-  particle_auth:
+  particle_base:
     dependency: transitive
     description:
-      name: particle_auth
-      sha256: "4d6478893e451abce118ff83bd75670e1093f8672402e174425e6393fc4e44ad"
-      url: "https://pub.dev"
-    source: hosted
-    version: "1.4.10"
+      path: "../../particle-base"
+      relative: true
+    source: path
+    version: "1.4.11"
   particle_connect:
     dependency: "direct main"
     description:

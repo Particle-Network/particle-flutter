@@ -17,7 +17,6 @@ A flutter plugin project for particle connect
   s.dependency 'Flutter'
   s.platform = :ios, '14.0'
 
-  # Flutter.framework does not contain a i386 slice.
   s.swift_version = '5.7'
 
   s.dependency 'ParticleConnect'
@@ -26,5 +25,6 @@ A flutter plugin project for particle connect
   s.dependency 'ConnectEVMAdapter'
   s.dependency 'ConnectPhantomAdapter'
   s.dependency 'ConnectCommon'
-  s.dependency 'ParticleAuthAdapter'
+  s.dependency 'AuthCoreAdapter'
+
 end

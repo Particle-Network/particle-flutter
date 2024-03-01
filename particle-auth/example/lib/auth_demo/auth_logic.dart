@@ -1,12 +1,13 @@
 import 'package:oktoast/oktoast.dart';
 import 'package:particle_auth/particle_auth.dart';
+import 'package:particle_base/particle_base.dart';
 import 'package:particle_auth_example/mock/token.dart';
 import 'package:particle_auth_example/mock/transaction_mock.dart';
 
 class AuthLogic {
   static ChainInfo currChainInfo = ChainInfo.Ethereum;
 
-  static void init(Env env) {
+  static void init() {
     // Get your project id and client key from dashboard, https://dashboard.particle.network
     const projectId =
         "772f7499-1d2e-40f4-8e2c-7b6dd47db9de"; //772f7499-1d2e-40f4-8e2c-7b6dd47db9de
@@ -17,7 +18,8 @@ class AuthLogic {
           'You need set project info, get your project id and client key from dashboard, https://dashboard.particle.network');
     }
     ParticleInfo.set(projectId, clientK);
-    ParticleAuth.init(currChainInfo, env);
+    const env = Env.dev;
+    ParticleBase.init(currChainInfo, env);
   }
 
   static String? evmPubAddress;
@@ -100,7 +102,8 @@ class AuthLogic {
 
     try {
       final eoaAddress = await ParticleAuth.getAddress();
-      SmartAccountConfig config = SmartAccountConfig.fromAccountName(AccountName.BICONOMY_V1(), eoaAddress);
+      SmartAccountConfig config = SmartAccountConfig.fromAccountName(
+          AccountName.BICONOMY_V1(), eoaAddress);
       List<dynamic> response =
           await EvmService.getSmartAccount(<SmartAccountConfig>[config]);
 
@@ -261,7 +264,7 @@ class AuthLogic {
       return;
     }
     try {
-      final chainId = await ParticleAuth.getChainId();
+      final chainId = await ParticleBase.getChainId();
       // This typed data is version 4
 
       String typedData = '''
@@ -289,7 +292,7 @@ class AuthLogic {
     }
     try {
       // This typed data is version 4
-      final chainId = await ParticleAuth.getChainId();
+      final chainId = await ParticleBase.getChainId();
 
       String typedData = '''
 {"types":{"OrderComponents":[{"name":"offerer","type":"address"},{"name":"zone","type":"address"},{"name":"offer","type":"OfferItem[]"},{"name":"consideration","type":"ConsiderationItem[]"},{"name":"orderType","type":"uint8"},{"name":"startTime","type":"uint256"},{"name":"endTime","type":"uint256"},{"name":"zoneHash","type":"bytes32"},{"name":"salt","type":"uint256"},{"name":"conduitKey","type":"bytes32"},{"name":"counter","type":"uint256"}],"OfferItem":[{"name":"itemType","type":"uint8"},{"name":"token","type":"address"},{"name":"identifierOrCriteria","type":"uint256"},{"name":"startAmount","type":"uint256"},{"name":"endAmount","type":"uint256"}],"ConsiderationItem":[{"name":"itemType","type":"uint8"},{"name":"token","type":"address"},{"name":"identifierOrCriteria","type":"uint256"},{"name":"startAmount","type":"uint256"},{"name":"endAmount","type":"uint256"},{"name":"recipient","type":"address"}],"EIP712Domain":[{"name":"name","type":"string"},{"name":"version","type":"string"},{"name":"chainId","type":"uint256"},{"name":"verifyingContract","type":"address"}]},"domain":{"name":"Seaport","version":"1.1","chainId":$chainId,"verifyingContract":"0x00000000006c3852cbef3e08e8df289169ede581"},"primaryType":"OrderComponents","message":{"offerer":"0x6fc702d32e6cb268f7dc68766e6b0fe94520499d","zone":"0x0000000000000000000000000000000000000000","offer":[{"itemType":"2","token":"0xd15b1210187f313ab692013a2544cb8b394e2291","identifierOrCriteria":"33","startAmount":"1","endAmount":"1"}],"consideration":[{"itemType":"0","token":"0x0000000000000000000000000000000000000000","identifierOrCriteria":"0","startAmount":"9750000000000000","endAmount":"9750000000000000","recipient":"0x6fc702d32e6cb268f7dc68766e6b0fe94520499d"},{"itemType":"0","token":"0x0000000000000000000000000000000000000000","identifierOrCriteria":"0","startAmount":"250000000000000","endAmount":"250000000000000","recipient":"0x66682e752d592cbb2f5a1b49dd1c700c9d6bfb32"}],"orderType":"0","startTime":"1669188008","endTime":"115792089237316195423570985008687907853269984665640564039457584007913129639935","zoneHash":"0x3000000000000000000000000000000000000000000000000000000000000000","salt":"48774942683212973027050485287938321229825134327779899253702941089107382707469","conduitKey":"0x0000000000000000000000000000000000000000000000000000000000000000","counter":"0"}}
@@ -310,18 +313,17 @@ class AuthLogic {
   }
 
   static void setChainInfo() async {
-    bool isSuccess = await ParticleAuth.setChainInfo(ChainInfo.PolygonMumbai);
+    bool isSuccess = await ParticleBase.setChainInfo(ChainInfo.PolygonMumbai);
     print("setChainInfo: $isSuccess");
   }
 
-  static void setChainInfoAsync() async {
-    bool isSuccess =
-        await ParticleAuth.setChainInfoAsync(ChainInfo.SolanaDevnet);
+  static void switchChainInfo() async {
+    bool isSuccess = await ParticleAuth.switchChainInfo(ChainInfo.SolanaDevnet);
     print("setChainInfoAsync: $isSuccess");
   }
 
   static void getChainInfo() async {
-    final chainInfo = await ParticleAuth.getChainInfo();
+    final chainInfo = await ParticleBase.getChainInfo();
 
     print(
         "getChainInfo chain id: ${chainInfo.id} chain name: ${chainInfo.name}");
@@ -349,12 +351,12 @@ class AuthLogic {
 
   static void setSecurityAccountConfig() {
     final config = SecurityAccountConfig(1, 2);
-    ParticleAuth.setSecurityAccountConfig(config);
+    ParticleBase.setSecurityAccountConfig(config);
   }
 
   static void setLanguage() {
     const language = Language.ja;
-    ParticleAuth.setLanguage(language);
+    ParticleBase.setLanguage(language);
   }
 
   static void openWebWallet() {
@@ -515,11 +517,11 @@ class AuthLogic {
   }
 
   static void setAppearance() {
-    ParticleAuth.setAppearance(Appearance.light);
+    ParticleBase.setAppearance(Appearance.light);
   }
 
   static void setFiatCoin() {
-    ParticleAuth.setFiatCoin(FiatCoin.KRW);
+    ParticleBase.setFiatCoin(FiatCoin.KRW);
   }
 
   static void getTokensAndNFTs() async {

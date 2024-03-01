@@ -1,419 +1,83 @@
 import 'package:flutter/material.dart';
+import 'package:particle_wallet_example/pages/item_button.dart';
 import 'package:particle_wallet_example/pages/wallet_demo/wallet_logic.dart';
 
 class WalletDemoPage extends StatefulWidget {
-  const WalletDemoPage({Key? key}) : super(key: key);
+  const WalletDemoPage({super.key});
 
   @override
   State<WalletDemoPage> createState() => _WalletDemoPageState();
 }
 
 class _WalletDemoPageState extends State<WalletDemoPage> {
+  final List<MethodItem> data = [
+    // in particle_base package
+    MethodItem("Init", () => WalletLogic.init()),
+    MethodItem("NavigatorWallet", () => WalletLogic.navigatorWallet()),
+    MethodItem(
+        "NavigatorTokenReceive", () => WalletLogic.navigatorTokenReceive()),
+
+    MethodItem("NavigatorTokenSend", () => WalletLogic.navigatorTokenSend()),
+    MethodItem("NavigatorTokenTransactionRecords",
+        () => WalletLogic.navigatorTokenTransactionRecords()),
+    MethodItem("NavigatorNFTSend", () => WalletLogic.navigatorNFTSend()),
+    MethodItem("NavigatorTokenTransactionRecords",
+        () => WalletLogic.navigatorTokenTransactionRecords()),
+    MethodItem("NavigatorNFTSend", () => WalletLogic.navigatorNFTSend()),
+
+    MethodItem("NavigatorNFTDetails", () => WalletLogic.navigatorNFTDetails()),
+    MethodItem("NavigatorBuyCrypto", () => WalletLogic.navigatorBuyCrypto()),
+
+    MethodItem("NavigatorSwap", () => WalletLogic.navigatorSwap()),
+    MethodItem(
+        "NavigatorDappBrowser", () => WalletLogic.navigatorDappBrowser()),
+    MethodItem("NavigatorLoginList", () => WalletLogic.navigatorLoginList()),
+    MethodItem("SetSwapDisabled", () => WalletLogic.setSwapDisabled()),
+    MethodItem("SetPayDisabled", () => WalletLogic.setPayDisabled()),
+    MethodItem("GetSwapDisabled", () => WalletLogic.getSwapDisabled()),
+    MethodItem("GetSwapDisabled", () => WalletLogic.getSwapDisabled()),
+    MethodItem("SwitchWallet", () => WalletLogic.switchWallet()),
+    MethodItem("SetSupportChain", () => WalletLogic.setSupportChain()),
+    MethodItem("SetShowTestNetwork", () => WalletLogic.setShowTestNetwork()),
+
+    MethodItem("SetShowSmartAccountSetting",
+        () => WalletLogic.setShowSmartAccountSetting()),
+    MethodItem("SetShowManageWallet", () => WalletLogic.setShowManageWallet()),
+    MethodItem(
+        "SetShowLanguageSetting", () => WalletLogic.setShowLanguageSetting()),
+    MethodItem("SetShowAppearanceSetting",
+        () => WalletLogic.setShowAppearanceSetting()),
+    MethodItem("SetSupportAddToken", () => WalletLogic.setSupportAddToken()),
+    MethodItem("SetDisplayTokenAddresses",
+        () => WalletLogic.setDisplayTokenAddresses()),
+
+    MethodItem("SetPriorityTokenAddresses",
+        () => WalletLogic.setPriorityTokenAddresses()),
+    MethodItem("SetDisplayNFTContractAddresses",
+        () => WalletLogic.setDisplayNFTContractAddresses()),
+    MethodItem("SetPriorityNFTContractAddresses",
+        () => WalletLogic.setPriorityNFTContractAddresses()),
+    MethodItem(
+        "LoadCustomUIJsonString", () => WalletLogic.loadCustomUIJsonString()),
+    MethodItem("SetCustomWalletName", () => WalletLogic.setCustomWalletName()),
+
+    MethodItem(
+        "SetCustomLocalizable", () => WalletLogic.setCustomLocalizable()),
+  ];
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title: const Text("Wallet Demo"),
       ),
-      body: SingleChildScrollView(
-        child: Column(
-          children: <Widget>[
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: SizedBox(
-                width: double.infinity,
-                height: 50,
-                child: ElevatedButton(
-                    onPressed: () => {WalletLogic.init()},
-                    child: const Text(
-                      "Init",
-                      style: TextStyle(fontSize: 18),
-                    )),
-              ),
-            ),
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: SizedBox(
-                width: double.infinity,
-                height: 50,
-                child: ElevatedButton(
-                    onPressed: () => {WalletLogic.navigatorWallet()},
-                    child: const Text(
-                      "Navigator Wallet",
-                      style: TextStyle(fontSize: 18),
-                    )),
-              ),
-            ),
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: SizedBox(
-                width: double.infinity,
-                height: 50,
-                child: ElevatedButton(
-                    onPressed: () => {WalletLogic.navigatorTokenReceive()},
-                    child: const Text(
-                      "Navigator Token Receive",
-                      style: TextStyle(fontSize: 18),
-                    )),
-              ),
-            ),
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: SizedBox(
-                width: double.infinity,
-                height: 50,
-                child: ElevatedButton(
-                    onPressed: () => {WalletLogic.navigatorTokenSend()},
-                    child: const Text(
-                      "Navigator Token Send",
-                      style: TextStyle(fontSize: 18),
-                    )),
-              ),
-            ),
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: SizedBox(
-                width: double.infinity,
-                height: 50,
-                child: ElevatedButton(
-                    onPressed: () =>
-                        {WalletLogic.navigatorTokenTransactionRecords()},
-                    child: const Text(
-                      "Navigator Token Transaction Records",
-                      style: TextStyle(fontSize: 18),
-                    )),
-              ),
-            ),
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: SizedBox(
-                width: double.infinity,
-                height: 50,
-                child: ElevatedButton(
-                    onPressed: () => {WalletLogic.navigatorNFTSend()},
-                    child: const Text(
-                      "Navigator NFT Send",
-                      style: TextStyle(fontSize: 18),
-                    )),
-              ),
-            ),
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: SizedBox(
-                width: double.infinity,
-                height: 50,
-                child: ElevatedButton(
-                    onPressed: () => {WalletLogic.navigatorNFTDetails()},
-                    child: const Text(
-                      "Navigator NFT Details",
-                      style: TextStyle(fontSize: 18),
-                    )),
-              ),
-            ),
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: SizedBox(
-                width: double.infinity,
-                height: 50,
-                child: ElevatedButton(
-                    onPressed: () => {WalletLogic.navigatorBuyCrypto()},
-                    child: const Text(
-                      "Navigator buy crypto",
-                      style: TextStyle(fontSize: 18),
-                    )),
-              ),
-            ),
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: SizedBox(
-                width: double.infinity,
-                height: 50,
-                child: ElevatedButton(
-                    onPressed: () => {WalletLogic.navigatorSwap()},
-                    child: const Text(
-                      "Navigator Swap",
-                      style: TextStyle(fontSize: 18),
-                    )),
-              ),
-            ),
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: SizedBox(
-                width: double.infinity,
-                height: 50,
-                child: ElevatedButton(
-                    onPressed: () => {WalletLogic.navigatorDappBrowser()},
-                    child: const Text(
-                      "Navigator Dapp browser",
-                      style: TextStyle(fontSize: 18),
-                    )),
-              ),
-            ),
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: SizedBox(
-                width: double.infinity,
-                height: 50,
-                child: ElevatedButton(
-                    onPressed: () => {WalletLogic.navigatorLoginList()},
-                    child: const Text(
-                      "Navigator Login List",
-                      style: TextStyle(fontSize: 18),
-                    )),
-              ),
-            ),
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: SizedBox(
-                width: double.infinity,
-                height: 50,
-                child: ElevatedButton(
-                    onPressed: () => {WalletLogic.setSwapDisabled()},
-                    child: const Text(
-                      "Set Swap Disabled",
-                      style: TextStyle(fontSize: 18),
-                    )),
-              ),
-            ),
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: SizedBox(
-                width: double.infinity,
-                height: 50,
-                child: ElevatedButton(
-                    onPressed: () => {WalletLogic.setPayDisabled()},
-                    child: const Text(
-                      "Set Pay Disabled",
-                      style: TextStyle(fontSize: 18),
-                    )),
-              ),
-            ),
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: SizedBox(
-                width: double.infinity,
-                height: 50,
-                child: ElevatedButton(
-                    onPressed: () => {WalletLogic.getSwapDisabled()},
-                    child: const Text(
-                      "Get Disable Swap",
-                      style: TextStyle(fontSize: 18),
-                    )),
-              ),
-            ),
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: SizedBox(
-                width: double.infinity,
-                height: 50,
-                child: ElevatedButton(
-                    onPressed: () => {WalletLogic.getPayDisabled()},
-                    child: const Text(
-                      "Get Disable Pay",
-                      style: TextStyle(fontSize: 18),
-                    )),
-              ),
-            ),
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: SizedBox(
-                width: double.infinity,
-                height: 50,
-                child: ElevatedButton(
-                    onPressed: () => {WalletLogic.switchWallet()},
-                    child: const Text(
-                      "Switch Wallet",
-                      style: TextStyle(fontSize: 18),
-                    )),
-              ),
-            ),
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: SizedBox(
-                width: double.infinity,
-                height: 50,
-                child: ElevatedButton(
-                    onPressed: () => {WalletLogic.setSupportChain()},
-                    child: const Text(
-                      "Set Support Chain",
-                      style: TextStyle(fontSize: 18),
-                    )),
-              ),
-            ),
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: SizedBox(
-                width: double.infinity,
-                height: 50,
-                child: ElevatedButton(
-                    onPressed: () => {WalletLogic.setShowTestNetwork()},
-                    child: const Text(
-                      "Set Show Test Network",
-                      style: TextStyle(fontSize: 18),
-                    )),
-              ),
-            ),
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: SizedBox(
-                width: double.infinity,
-                height: 50,
-                child: ElevatedButton(
-                    onPressed: () => {WalletLogic.setShowSmartAccountSetting()},
-                    child: const Text(
-                      "Set Show Smart Account Setting",
-                      style: TextStyle(fontSize: 18),
-                    )),
-              ),
-            ),
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: SizedBox(
-                width: double.infinity,
-                height: 50,
-                child: ElevatedButton(
-                    onPressed: () => {WalletLogic.setShowManageWallet()},
-                    child: const Text(
-                      "Set Show Manage Wallet",
-                      style: TextStyle(fontSize: 18),
-                    )),
-              ),
-            ),
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: SizedBox(
-                width: double.infinity,
-                height: 50,
-                child: ElevatedButton(
-                    onPressed: () => {WalletLogic.setShowLanguageSetting()},
-                    child: const Text(
-                      "Set show language setting",
-                      style: TextStyle(fontSize: 18),
-                    )),
-              ),
-            ),
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: SizedBox(
-                width: double.infinity,
-                height: 50,
-                child: ElevatedButton(
-                    onPressed: () => {WalletLogic.setShowAppearanceSetting()},
-                    child: const Text(
-                      "Set Show Appearance Setting",
-                      style: TextStyle(fontSize: 18),
-                    )),
-              ),
-            ),
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: SizedBox(
-                width: double.infinity,
-                height: 50,
-                child: ElevatedButton(
-                    onPressed: () => {WalletLogic.setSupportAddToken()},
-                    child: const Text(
-                      "Set support add token",
-                      style: TextStyle(fontSize: 18),
-                    )),
-              ),
-            ),
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: SizedBox(
-                width: double.infinity,
-                height: 50,
-                child: ElevatedButton(
-                    onPressed: () => {WalletLogic.setDisplayTokenAddresses()},
-                    child: const Text(
-                      "Set display token addresses",
-                      style: TextStyle(fontSize: 18),
-                    )),
-              ),
-            ),
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: SizedBox(
-                width: double.infinity,
-                height: 50,
-                child: ElevatedButton(
-                    onPressed: () => {WalletLogic.setPriorityTokenAddresses()},
-                    child: const Text(
-                      "Set priority token addresses",
-                      style: TextStyle(fontSize: 18),
-                    )),
-              ),
-            ),
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: SizedBox(
-                width: double.infinity,
-                height: 50,
-                child: ElevatedButton(
-                    onPressed: () =>
-                        {WalletLogic.setDisplayNFTContractAddresses()},
-                    child: const Text(
-                      "Set display nft contract addresses",
-                      style: TextStyle(fontSize: 18),
-                    )),
-              ),
-            ),
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: SizedBox(
-                width: double.infinity,
-                height: 50,
-                child: ElevatedButton(
-                    onPressed: () =>
-                        {WalletLogic.setPriorityNFTContractAddresses()},
-                    child: const Text(
-                      "Set Priority nft contract addresses",
-                      style: TextStyle(fontSize: 18),
-                    )),
-              ),
-            ),
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: SizedBox(
-                width: double.infinity,
-                height: 50,
-                child: ElevatedButton(
-                    onPressed: () => {WalletLogic.loadCustomUIJsonString()},
-                    child: const Text(
-                      "load custom ui json string",
-                      style: TextStyle(fontSize: 18),
-                    )),
-              ),
-            ),
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: SizedBox(
-                width: double.infinity,
-                height: 50,
-                child: ElevatedButton(
-                    onPressed: () => {WalletLogic.setCustomWalletName()},
-                    child: const Text(
-                      "set custom wallet name",
-                      style: TextStyle(fontSize: 18),
-                    )),
-              ),
-            ),
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: SizedBox(
-                width: double.infinity,
-                height: 50,
-                child: ElevatedButton(
-                    onPressed: () => {WalletLogic.setCustomLocalizable()},
-                    child: const Text(
-                      "set custom localizable",
-                      style: TextStyle(fontSize: 18),
-                    )),
-              ),
-            ),
-          ],
-        ),
-      ),
+      body: ListView.builder(
+          itemCount: data.length,
+          itemBuilder: (context, index) {
+            final text = data[index].text;
+            final onPressed = data[index].onPressed;
+
+            return ItemButton(text, onPressed);
+          }),
     );
   }
 }
