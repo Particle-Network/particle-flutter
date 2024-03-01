@@ -546,7 +546,7 @@ class ChainInfo {
     'Testnet',
     'https://www.mode.network',
     ChainInfoNativeCurrency('ETH', 'ETH', 18),
-    'https://rpc.test.btcs.network',
+    'https://sepolia.mode.network',
     '',
     'https://sepolia.explorer.mode.network',
     [ChainInfoFeature('EIP1559')],
@@ -1332,6 +1332,21 @@ class ChainInfo {
     [],
   );
 
+  static ChainInfo Blast = ChainInfo(
+    81457,
+    'Blast',
+    'evm',
+    'https://static.particle.network/token-list/blast/native.png',
+    'Blast Mainnet',
+    'Mainnet',
+    'https://blastblockchain.com',
+    ChainInfoNativeCurrency('Blast Ether', 'ETH', 18),
+    'https://rpc.blast.io',
+    '',
+    'https://blastscan.io',
+    [ChainInfoFeature('EIP1559')],
+  );
+
   static ChainInfo BaseGoerli = ChainInfo(
     84531,
     'Base',
@@ -1599,7 +1614,7 @@ class ChainInfo {
     'https://sepolia.blast.io',
     '',
     'https://testnet.blastscan.io',
-    [],
+    [ChainInfoFeature('EIP1559')],
   );
 
   static ChainInfo Tron = ChainInfo(
@@ -1809,6 +1824,7 @@ class ChainInfo {
     'linea-59144': ChainInfo.Linea,
     'polygon-80001': ChainInfo.PolygonMumbai,
     'berachain-80085': ChainInfo.BerachainArtio,
+    'blast-81457': ChainInfo.Blast,
     'base-84531': ChainInfo.BaseGoerli,
     'base-84532': ChainInfo.BaseSepolia,
     'combo-91715': ChainInfo.ComboTestnet,
