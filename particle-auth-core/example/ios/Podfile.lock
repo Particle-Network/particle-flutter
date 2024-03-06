@@ -1,5 +1,5 @@
 PODS:
-  - Alamofire (5.8.1)
+  - Alamofire (5.9.0)
   - AuthCoreAdapter (1.3.8):
     - ConnectCommon
     - ParticleAuthCore
@@ -9,7 +9,7 @@ PODS:
   - Base58.swift (1.0.2):
     - BigInt
   - BigInt (5.2.0)
-  - ConnectCommon (0.2.16):
+  - ConnectCommon (0.2.17):
     - BigInt (~> 5.2.0)
     - ParticleNetworkBase
     - RxAlamofire (~> 6.1.1)
@@ -104,7 +104,7 @@ PODS:
 
 DEPENDENCIES:
   - AuthCoreAdapter (= 1.3.8)
-  - ConnectCommon (= 0.2.16)
+  - ConnectCommon (= 0.2.17)
   - Flutter (from `Flutter`)
   - integration_test (from `.symlinks/plugins/integration_test/ios`)
   - particle_auth (from `.symlinks/plugins/particle_auth/ios`)
@@ -157,13 +157,13 @@ EXTERNAL SOURCES:
     :path: ".symlinks/plugins/particle_auth_core/ios"
 
 SPEC CHECKSUMS:
-  Alamofire: 3ca42e259043ee0dc5c0cdd76c4bc568b8e42af7
+  Alamofire: 02b772c9910e8eba1a079227c32fbd9e46c90a24
   AuthCoreAdapter: 60c089981d8bbb4179db5f99ddf2f2684608d89d
   AWSCore: 3c1a3dad47fcf9db8bebc633f296f10b690328c6
   AWSKMS: e9d434e3d9566c5cb885f0d4a2f9ed7bf13b6515
   Base58.swift: e0e16655f9db843b8cd367593ed6f7d90d136b7f
   BigInt: f668a80089607f521586bbe29513d708491ef2f7
-  ConnectCommon: 5b8b15f4334c5b6bed6226c733b3757c4ce0c480
+  ConnectCommon: 90813ac3aba3124c9bd0c7956b32b508da0fc1a0
   CryptoSwift: b9c701d6f5011df23794dbf7f2e480a77835d83d
   Flutter: f04841e97a9d0b0a8025694d0796dd46242b2854
   integration_test: 13825b8a9334a850581300559b8839134b124670
@@ -190,6 +190,6 @@ SPEC CHECKSUMS:
   Thresh: 5d80e1584cdff43a001b9b1b99fb82d89a1e5c39
   TweetNacl: 3abf4d1d2082b0114e7a67410e300892448951e6
 
-PODFILE CHECKSUM: b08f2b3f06fbf1c4f6ed8679ca47e8c665c5e2af
+PODFILE CHECKSUM: d868b24b64c3826074dc4ac5e3ba5c04084d597f
 
-COCOAPODS: 1.14.3
+COCOAPODS: 1.15.2

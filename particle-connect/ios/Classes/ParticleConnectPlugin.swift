@@ -162,14 +162,14 @@ extension ParticleConnectPlugin {
         let dAppIconString = data["metadata"]["icon"].stringValue
         let dAppUrlString = data["metadata"]["url"].stringValue
         let dappDescription = data["metadata"]["description"].stringValue
-        
+        let redirectUniversalLink = data["metadata"]["redirect"].string
         let walletConnectProjectId = data["metadata"]["walletConnectProjectId"].stringValue
         
         let dAppIconUrl = URL(string: dAppIconString) != nil ? URL(string: dAppIconString)! : URL(string: "https://connect.particle.network/icons/512.png")!
         
         let dAppUrl = URL(string: dAppUrlString) != nil ? URL(string: dAppUrlString)! : URL(string: "https://connect.particle.network")!
         
-        let dAppData = DAppMetaData(name: dAppName, icon: dAppIconUrl, url: dAppUrl, description: dappDescription)
+        let dAppData = DAppMetaData(name: dAppName, icon: dAppIconUrl, url: dAppUrl, description: dappDescription, redirectUniversalLink: redirectUniversalLink)
         
         var adapters: [ConnectAdapter] = [ParticleAuthAdapter()]
 #if canImport(ConnectEVMAdapter)
@@ -331,7 +331,7 @@ extension ParticleConnectPlugin {
                 loginAuthorization = .init(message: message!, isUnique: isUnique)
             }
             
-            connectConfig = ParticleAuthConfig(loginType: loginType, supportAuthType: supportAuthTypeArray, phoneOrEmailAccount: account, socialLoginPrompt: socialLoginPrompt, authorization: loginAuthorization)
+            connectConfig = ParticleAuthConfig(loginType: loginType, supportAuthType: supportAuthTypeArray, account: account, socialLoginPrompt: socialLoginPrompt, authorization: loginAuthorization)
         }
         
         guard let walletType = map2WalletType(from: walletTypeString) else {

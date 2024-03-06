@@ -1,3 +1,5 @@
+## 1.4.11
+Fix bug in particle_connect iOS part.
 ## 1.4.10
 
 ## 1.4.9
