@@ -1,3 +1,5 @@
+## 1.4.12
+Sync iOS pods
 ## 1.4.11
 Fix bug in particle_connect iOS part.
 ## 1.4.10

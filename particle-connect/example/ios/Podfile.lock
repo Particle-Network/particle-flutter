@@ -65,7 +65,7 @@ PODS:
   - ParticleAuthAdapter (0.2.17):
     - ConnectCommon
     - ParticleAuthService
-  - ParticleAuthService (1.3.12):
+  - ParticleAuthService (1.3.20):
     - CryptoSwift
     - ParticleNetworkBase
     - RxAlamofire (~> 6.1.1)
@@ -75,7 +75,7 @@ PODS:
     - SwiftyUserDefaults (~> 5.3.0)
   - ParticleConnect (0.2.17):
     - ConnectCommon
-  - ParticleNetworkBase (1.3.12):
+  - ParticleNetworkBase (1.3.20):
     - Base58.swift
     - BigInt (~> 5.2.0)
     - CryptoSwift
@@ -160,9 +160,9 @@ DEPENDENCIES:
   - particle_auth (from `.symlinks/plugins/particle_auth/ios`)
   - particle_connect (from `.symlinks/plugins/particle_connect/ios`)
   - ParticleAuthAdapter (= 0.2.17)
-  - ParticleAuthService (= 1.3.12)
+  - ParticleAuthService (= 1.3.20)
   - ParticleConnect (= 0.2.17)
-  - ParticleNetworkBase (= 1.3.12)
+  - ParticleNetworkBase (= 1.3.20)
 
 SPEC REPOS:
   https://github.com/CocoaPods/Specs.git:
@@ -218,9 +218,9 @@ SPEC CHECKSUMS:
   particle_auth: f63e17b5dc9b5f7b3ad4d5c13fbfc03d3739b3ab
   particle_connect: 0192191b9fcae5c955c4752920acc5f05deb762a
   ParticleAuthAdapter: b84506d004058df8a2bbf83334ebadcf859cf194
-  ParticleAuthService: 19fdf36d324eeef8aa4672ea971bd5a58a54300b
+  ParticleAuthService: 48f4efd33ce301a8b8b5f014fe8fd02f60e31545
   ParticleConnect: ae033273f0bf2e2466eb2ff9799dcb1cbe36daf4
-  ParticleNetworkBase: 464ff21feb77bdb7aaa115fc2a30d96e30bb1ad1
+  ParticleNetworkBase: 0ea66ee82ef3c8d0b05cbf2b851771cdc9e27348
   RxAlamofire: beb75a1c452d0de225651db4903f5d29d034a620
   RxCocoa: 44a80de90e25b739b5aeaae3c8c371a32e3343cc
   RxRelay: 45eaa5db8ee4fb50e5ebd57deec0159e97fa51e6
@@ -236,6 +236,6 @@ SPEC CHECKSUMS:
   TweetNacl: 3abf4d1d2082b0114e7a67410e300892448951e6
   WalletConnectSwiftV2: 7927408d80bff4b00297b8018477a4492c9e52a4
 
-PODFILE CHECKSUM: 46b891dbf6dac89853f3a834517c99390b1be064
+PODFILE CHECKSUM: d90271f0e49a5725946ddbace7ada3b231e5c062
 
 COCOAPODS: 1.15.2

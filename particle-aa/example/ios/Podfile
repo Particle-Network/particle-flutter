@@ -31,14 +31,14 @@ flutter_ios_podfile_setup
 target 'Runner' do
   use_frameworks! :linkage => :static
   
-  pod "Thresh", '1.3.8'
-  pod "ParticleMPCCore", '1.3.8'
-  pod "ParticleAuthCore", '1.3.8'
-  pod "AuthCoreAdapter", '1.3.8'
+  pod "Thresh", '1.3.9'
+  pod "ParticleMPCCore", '1.3.9'
+  pod "ParticleAuthCore", '1.3.9'
+  pod "AuthCoreAdapter", '1.3.9'
 
-  pod 'ParticleNetworkBase', '1.3.12'
-  pod 'ParticleAuthService', '1.3.12'
-  pod 'ParticleAA', '1.3.12'
+  pod 'ParticleNetworkBase', '1.3.20'
+  pod 'ParticleAuthService', '1.3.20'
+  pod 'ParticleAA', '1.3.20'
   
   pod 'ParticleConnect', '0.2.17'
   pod 'ConnectWalletConnectAdapter', '0.2.17'

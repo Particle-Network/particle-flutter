@@ -38,8 +38,8 @@ target 'Runner' do
   pod 'ConnectPhantomAdapter', '0.2.17'
   pod 'ParticleAuthAdapter', '0.2.17'
   
-  pod 'ParticleNetworkBase', '1.3.12'
-  pod 'ParticleAuthService', '1.3.12'
+  pod 'ParticleNetworkBase', '1.3.20'
+  pod 'ParticleAuthService', '1.3.20'
 
   flutter_install_all_ios_pods File.dirname(File.realpath(__FILE__))
 end
