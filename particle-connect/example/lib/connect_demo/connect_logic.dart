@@ -19,12 +19,11 @@ class ConnectLogic {
 
   static void init() {
     // Get your project id and client key from dashboard, https://dashboard.particle.network
-    const projectId =
-        "772f7499-1d2e-40f4-8e2c-7b6dd47db9de"; //772f7499-1d2e-40f4-8e2c-7b6dd47db9de
-    const clientK =
-        "ctWeIc2UBA6sYTKJknT9cu9LBikF00fbk1vmQjsV"; //ctWeIc2UBA6sYTKJknT9cu9LBikF00fbk1vmQjsV
+    const projectId = "772f7499-1d2e-40f4-8e2c-7b6dd47db9de"; //772f7499-1d2e-40f4-8e2c-7b6dd47db9de
+    const clientK = "ctWeIc2UBA6sYTKJknT9cu9LBikF00fbk1vmQjsV"; //ctWeIc2UBA6sYTKJknT9cu9LBikF00fbk1vmQjsV
     ParticleInfo.set(projectId, clientK);
 
+    ///get walletConnectProjectId from https://cloud.walletconnect.com/
     final dappInfo = DappMetaData(
         "75ac08814504606fc06126541ace9df6",
         "Particle Connect",
@@ -38,9 +37,7 @@ class ConnectLogic {
     //   ChainInfo.Ethereum,
     //   ChainInfo.Polygon
     // ];
-    List<ChainInfo> chainInfos = <ChainInfo>[
-      ChainInfo.Ethereum
-    ];
+    List<ChainInfo> chainInfos = <ChainInfo>[ChainInfo.Ethereum];
     //metamask only supported one chain
     ParticleConnect.setWalletConnectV2SupportChainInfos(chainInfos);
   }
@@ -52,10 +49,8 @@ class ConnectLogic {
 
   static void getChainInfo() async {
     ChainInfo chainInfo = await ParticleAuth.getChainInfo();
-    print(
-        "getChainInfo chain id: ${chainInfo.id} chain name: ${chainInfo.name}");
-    showToast(
-        "getChainInfo chain id: ${chainInfo.id} chain name: ${chainInfo.name}");
+    print("getChainInfo chain id: ${chainInfo.id} chain name: ${chainInfo.name}");
+    showToast("getChainInfo chain id: ${chainInfo.id} chain name: ${chainInfo.name}");
   }
 
   static void connect() async {
@@ -75,12 +70,10 @@ class ConnectLogic {
     // authorization is an optional parameter, used to login and sign a message.
     final authorization = LoginAuthorization(messageHex, true);
 
-    final config = ParticleConnectConfig(LoginType.email, "",
-        SupportAuthType.values, SocialLoginPrompt.select_account,
+    final config = ParticleConnectConfig(LoginType.email, "", SupportAuthType.values, SocialLoginPrompt.select_account,
         authorization: authorization);
     try {
-      final account =
-          await ParticleConnect.connect(WalletType.particle, config: config);
+      final account = await ParticleConnect.connect(WalletType.particle, config: config);
       showToast('connectParticle: $account');
       print("connectParticle: $account");
       ConnectLogic.account = account;
@@ -104,8 +97,7 @@ class ConnectLogic {
 
   static void isConnected() async {
     try {
-      bool isConnected =
-          await ParticleConnect.isConnected(walletType, getPublicAddress());
+      bool isConnected = await ParticleConnect.isConnected(walletType, getPublicAddress());
       showToast("isConnected: $isConnected");
       print("isConnected: $isConnected");
     } catch (error) {
@@ -127,8 +119,7 @@ class ConnectLogic {
 
   static void disconnect() async {
     try {
-      String result =
-          await ParticleConnect.disconnect(walletType, getPublicAddress());
+      String result = await ParticleConnect.disconnect(walletType, getPublicAddress());
       print("disconnect: $result");
       showToast("disconnect: $result");
     } catch (error) {
@@ -141,12 +132,9 @@ class ConnectLogic {
     try {
       const domain = "particle.network";
       const uri = "https://docs.particle.network/";
-      ConnectLogic.siwe = await ParticleConnect.signInWithEthereum(
-          walletType, getPublicAddress(), domain, uri);
-      print(
-          "signInWithEthereum message:${ConnectLogic.siwe.message}}  signature:${ConnectLogic.siwe.signature}");
-      showToast(
-          "signInWithEthereum message:${ConnectLogic.siwe.message}}  signature:${ConnectLogic.siwe.signature}");
+      ConnectLogic.siwe = await ParticleConnect.signInWithEthereum(walletType, getPublicAddress(), domain, uri);
+      print("signInWithEthereum message:${ConnectLogic.siwe.message}}  signature:${ConnectLogic.siwe.signature}");
+      showToast("signInWithEthereum message:${ConnectLogic.siwe.message}}  signature:${ConnectLogic.siwe.signature}");
     } catch (error) {
       print("signInWithEthereum: $error");
       showToast("signInWithEthereum: $error");
@@ -155,8 +143,8 @@ class ConnectLogic {
 
   static void verify() async {
     try {
-      bool result = await ParticleConnect.verify(walletType, getPublicAddress(),
-          ConnectLogic.siwe.message, ConnectLogic.siwe.signature);
+      bool result = await ParticleConnect.verify(
+          walletType, getPublicAddress(), ConnectLogic.siwe.message, ConnectLogic.siwe.signature);
       print("verify: $result");
       showToast("verify: $result");
     } catch (error) {
@@ -168,8 +156,7 @@ class ConnectLogic {
   static void signMessage() async {
     final messageHex = "0x${StringUtils.toHexString("Hello Particle")}";
     try {
-      String signature = await ParticleConnect.signMessage(
-          walletType, getPublicAddress(), messageHex);
+      String signature = await ParticleConnect.signMessage(walletType, getPublicAddress(), messageHex);
       print("signMessage: $signature");
       showToast("signMessage: $signature");
     } catch (error) {
@@ -181,10 +168,8 @@ class ConnectLogic {
   static void signTransaction() async {
     if (currChainInfo.isSolanaChain()) {
       try {
-        final transaction =
-            await TransactionMock.mockSolanaTransaction(getPublicAddress());
-        String signature = await ParticleConnect.signTransaction(
-            walletType, getPublicAddress(), transaction);
+        final transaction = await TransactionMock.mockSolanaTransaction(getPublicAddress());
+        String signature = await ParticleConnect.signTransaction(walletType, getPublicAddress(), transaction);
         print("signTransaction: $signature");
         showToast("signTransaction: $signature");
       } catch (error) {
@@ -199,16 +184,13 @@ class ConnectLogic {
   static void signAllTransactions() async {
     if (currChainInfo.isSolanaChain()) {
       try {
-        final transacton1 =
-            await TransactionMock.mockSolanaTransaction(getPublicAddress());
-        final transacton2 =
-            await TransactionMock.mockSolanaTransaction(getPublicAddress());
+        final transacton1 = await TransactionMock.mockSolanaTransaction(getPublicAddress());
+        final transacton2 = await TransactionMock.mockSolanaTransaction(getPublicAddress());
         List<String> transactions = <String>[];
         transactions.add(transacton1);
         transactions.add(transacton2);
 
-        String signature = await ParticleConnect.signAllTransactions(
-            walletType, getPublicAddress(), transactions);
+        String signature = await ParticleConnect.signAllTransactions(walletType, getPublicAddress(), transactions);
         print("signAllTransaction: $signature");
         showToast("signAllTransaction: $signature");
       } catch (error) {
@@ -224,15 +206,12 @@ class ConnectLogic {
     try {
       String transaction;
       if (currChainInfo.isSolanaChain()) {
-        transaction =
-            await TransactionMock.mockSolanaTransaction(getPublicAddress());
+        transaction = await TransactionMock.mockSolanaTransaction(getPublicAddress());
       } else {
-        transaction =
-            await TransactionMock.mockEvmSendNative(getPublicAddress());
+        transaction = await TransactionMock.mockEvmSendNative(getPublicAddress());
       }
 
-      String signature = await ParticleConnect.signAndSendTransaction(
-          walletType, getPublicAddress(), transaction);
+      String signature = await ParticleConnect.signAndSendTransaction(walletType, getPublicAddress(), transaction);
       print("signAndSendTransaction: $signature");
       showToast("signAndSendTransaction: $signature");
     } catch (error) {
@@ -255,8 +234,7 @@ class ConnectLogic {
 
       String typedDataHex = "0x${StringUtils.toHexString(typedData)}";
 
-      String signature = await ParticleConnect.signTypedData(
-          walletType, getPublicAddress(), typedDataHex);
+      String signature = await ParticleConnect.signTypedData(walletType, getPublicAddress(), typedDataHex);
       print("signTypedData: $signature");
       showToast("signTypedData: $signature");
     } catch (error) {
@@ -274,8 +252,7 @@ class ConnectLogic {
     }
 
     try {
-      final account =
-          await ParticleConnect.importPrivateKey(walletType, privateKey);
+      final account = await ParticleConnect.importPrivateKey(walletType, privateKey);
       showToast('importPrivateKey: $account');
       print("importPrivateKey: $account");
       ConnectLogic.account = account;
@@ -294,8 +271,7 @@ class ConnectLogic {
     }
 
     try {
-      final account =
-          await ParticleConnect.importMnemonic(walletType, mnemonic);
+      final account = await ParticleConnect.importMnemonic(walletType, mnemonic);
       showToast('importMnemonic: $account');
       print("importMnemonic: $account");
       ConnectLogic.account = account;
@@ -307,8 +283,7 @@ class ConnectLogic {
 
   static void exportPrivateKey() async {
     try {
-      String privateKey = await ParticleConnect.exportPrivateKey(
-          walletType, getPublicAddress());
+      String privateKey = await ParticleConnect.exportPrivateKey(walletType, getPublicAddress());
       showToast('exportPrivateKey: $privateKey');
       print("exportPrivateKey: $privateKey");
     } catch (error) {
