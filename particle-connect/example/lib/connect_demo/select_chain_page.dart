@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:oktoast/oktoast.dart';
 import 'package:particle_auth/particle_auth.dart';
+import 'package:particle_connect/particle_connect.dart';
 
 import 'connect_logic.dart';
 
@@ -27,7 +28,7 @@ class SelectChainPageState extends State<SelectChainPage> {
               onPressed: () {
                 print('Clicked: ${chainList[index]}');
                 final chainInfo = chainList[index];
-                ParticleAuth.setChainInfo(chainInfo);
+                ParticleConnect.setChainInfo(chainInfo);
                 showToast(
                     "set chain info: ${chainList[index].name}  ${chainList[index].id}");
                 ConnectLogic.currChainInfo = chainInfo;

@@ -97,6 +97,25 @@ class ParticleConnect {
     }
   }
 
+  /// Set chain info, update chain info to SDK.
+  /// Call this method before login.
+  ///
+  /// [chainInfo] Chain info, for example EthereumChain, BscChain.
+  static Future<bool>  setChainInfo(ChainInfo chainInfo) async {
+    if (Platform.isIOS) {
+      return  ParticleAuth.setChainInfo(chainInfo);
+    } else {
+      return await _channel.invokeMethod(
+          'setChainInfo',
+          jsonEncode({
+            "chain_name": chainInfo.name,
+            "chain_id": chainInfo.id,
+          }));
+    }
+
+  }
+
+
   /// Before call this method, add a event 'connect_event_bridge', to receive uri string
   ///
   /// Result account or error.

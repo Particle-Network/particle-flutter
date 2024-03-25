@@ -43,7 +43,7 @@ class ConnectLogic {
   }
 
   static void setChainInfo() async {
-    bool isSuccess = await ParticleAuth.setChainInfo(currChainInfo);
+    bool isSuccess = await ParticleConnect.setChainInfo(currChainInfo);
     print("setChainInfo: $isSuccess");
   }
 
@@ -155,8 +155,9 @@ class ConnectLogic {
 
   static void signMessage() async {
     final messageHex = "0x${StringUtils.toHexString("Hello Particle")}";
+    final base58Msg ="JxF12TrwUP45BMd";
     try {
-      String signature = await ParticleConnect.signMessage(walletType, getPublicAddress(), messageHex);
+      String signature = await ParticleConnect.signMessage(walletType, getPublicAddress(), base58Msg);
       print("signMessage: $signature");
       showToast("signMessage: $signature");
     } catch (error) {
