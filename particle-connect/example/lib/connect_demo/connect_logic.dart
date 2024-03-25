@@ -38,6 +38,7 @@ class ConnectLogic {
     //   ChainInfo.Polygon
     // ];
     List<ChainInfo> chainInfos = <ChainInfo>[ChainInfo.Ethereum];
+
     //metamask only supported one chain
     ParticleConnect.setWalletConnectV2SupportChainInfos(chainInfos);
   }
@@ -154,10 +155,9 @@ class ConnectLogic {
   }
 
   static void signMessage() async {
-    final messageHex = "0x${StringUtils.toHexString("Hello Particle")}";
-    final base58Msg ="JxF12TrwUP45BMd";
+    final message = "Hello Particle";
     try {
-      String signature = await ParticleConnect.signMessage(walletType, getPublicAddress(), base58Msg);
+      String signature = await ParticleConnect.signMessage(walletType, getPublicAddress(), message);
       print("signMessage: $signature");
       showToast("signMessage: $signature");
     } catch (error) {

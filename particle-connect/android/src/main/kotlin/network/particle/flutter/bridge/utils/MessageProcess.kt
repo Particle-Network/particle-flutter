@@ -12,7 +12,7 @@ object MessageProcess {
                 EncodeUtils.encode(message)
             }
         } else {
-            message
+            com.particle.base.utils.Base58Utils.encode(message.toByteArray(Charsets.UTF_8))
         }
 
     }
