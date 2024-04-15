@@ -310,7 +310,7 @@ class AuthLogic {
   }
 
   static void setChainInfo() async {
-    bool isSuccess = await ParticleAuth.setChainInfo(ChainInfo.PolygonMumbai);
+    bool isSuccess = await ParticleAuth.setChainInfo(ChainInfo.ArbitrumSepolia);
     print("setChainInfo: $isSuccess");
   }
 

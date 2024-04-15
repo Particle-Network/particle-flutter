@@ -29,7 +29,7 @@ class AAConnectLogic {
         "https://connect.particle.network",
         "desc");
 
-    ParticleConnect.init(ChainInfo.PolygonMumbai, dappInfo, Env.dev);
+    ParticleConnect.init(ChainInfo.ArbitrumSepolia, dappInfo, Env.dev);
 
     Map<int, String> biconomyApiKeys = {
       1: "", // your ethereum mainnet key

@@ -235,7 +235,7 @@ class AuthCoreLogic {
 
   static void swicthChain() async {
     bool isSuccess =
-        await ParticleAuthCore.switchChain(ChainInfo.PolygonMumbai);
+        await ParticleAuthCore.switchChain(ChainInfo.ArbitrumSepolia);
     print("switch chain: $isSuccess");
     showToast("switch chain: $isSuccess");
   }

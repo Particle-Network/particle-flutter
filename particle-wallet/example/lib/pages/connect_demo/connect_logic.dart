@@ -36,7 +36,7 @@ class ConnectLogic {
     ParticleConnect.init(currChainInfo, dappInfo, Env.dev);
 
     ParticleConnect.setWalletConnectV2SupportChainInfos(
-        <ChainInfo>[ChainInfo.PolygonMumbai]);
+        <ChainInfo>[ChainInfo.ArbitrumSepolia]);
   }
 
   static void connect() async {

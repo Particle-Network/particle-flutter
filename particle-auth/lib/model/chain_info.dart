@@ -57,21 +57,6 @@ class ChainInfo {
     [ChainInfoFeature('EIP1559')],
   );
 
-  static ChainInfo EthereumGoerli = ChainInfo(
-    5,
-    'Ethereum',
-    'evm',
-    'https://static.particle.network/token-list/ethereum/native.png',
-    'Ethereum Goerli',
-    'Goerli',
-    'https://goerli.net/#about',
-    ChainInfoNativeCurrency('Ether', 'ETH', 18),
-    'https://ethereum-goerli.publicnode.com',
-    'https://goerlifaucet.com',
-    'https://goerli.etherscan.io',
-    [ChainInfoFeature('EIP1559')],
-  );
-
   static ChainInfo Optimism = ChainInfo(
     10,
     'Optimism',
@@ -297,6 +282,21 @@ class ChainInfo {
     [],
   );
 
+  static ChainInfo BOBTestnet = ChainInfo(
+    111,
+    'bob',
+    'evm',
+    'https://static.particle.network/token-list/bob/native.png',
+    'BOB Testnet',
+    'Testnet',
+    'https://www.gobob.xyz',
+    ChainInfoNativeCurrency('ETH', 'ETH', 18),
+    'https://testnet.rpc.gobob.xyz',
+    '',
+    'https://testnet-explorer.gobob.xyz',
+    [ChainInfoFeature('EIP1559')],
+  );
+
   static ChainInfo Heco = ChainInfo(
     128,
     'Heco',
@@ -402,21 +402,6 @@ class ChainInfo {
     [],
   );
 
-  static ChainInfo zkSyncEraTestnet = ChainInfo(
-    280,
-    'zkSync',
-    'evm',
-    'https://static.particle.network/token-list/zksync/native.png',
-    'zkSync Era Testnet',
-    'Testnet',
-    'https://era.zksync.io/docs',
-    ChainInfoNativeCurrency('zkSync', 'ETH', 18),
-    'https://zksync2-testnet.zksync.dev',
-    'https://portal.zksync.io/faucet',
-    'https://goerli.explorer.zksync.io',
-    [ChainInfoFeature('EIP1559')],
-  );
-
   static ChainInfo zkSyncEraSepolia = ChainInfo(
     300,
     'zkSync',
@@ -492,21 +477,6 @@ class ChainInfo {
     [ChainInfoFeature('EIP1559')],
   );
 
-  static ChainInfo OptimismGoerli = ChainInfo(
-    420,
-    'Optimism',
-    'evm',
-    'https://static.particle.network/token-list/optimism/native.png',
-    'Optimism Goerli',
-    'Testnet',
-    'https://optimism.io',
-    ChainInfoNativeCurrency('Ether', 'ETH', 18),
-    'https://goerli.optimism.io',
-    'https://faucet.triangleplatform.com/optimism/goerli',
-    'https://goerli-optimism.etherscan.io',
-    [ChainInfoFeature('EIP1559')],
-  );
-
   static ChainInfo PGN = ChainInfo(
     424,
     'PGN',
@@ -522,21 +492,6 @@ class ChainInfo {
     [ChainInfoFeature('EIP1559')],
   );
 
-  static ChainInfo MetisGoerli = ChainInfo(
-    599,
-    'Metis',
-    'evm',
-    'https://static.particle.network/token-list/metis/native.png',
-    'Metis Goerli',
-    'Goerli',
-    'https://www.metis.io',
-    ChainInfoNativeCurrency('Metis', 'METIS', 18),
-    'https://goerli.gateway.metisdevops.link',
-    'https://goerli.faucet.metisdevops.link',
-    'https://goerli.explorer.metisdevops.link',
-    [],
-  );
-
   static ChainInfo ModeTestnet = ChainInfo(
     919,
     'Mode',
@@ -549,21 +504,6 @@ class ChainInfo {
     'https://sepolia.mode.network',
     '',
     'https://sepolia.explorer.mode.network',
-    [ChainInfoFeature('EIP1559')],
-  );
-
-  static ChainInfo ZoraGoerli = ChainInfo(
-    999,
-    'Zora',
-    'evm',
-    'https://static.particle.network/token-list/zora/native.png',
-    'Zora Goerli',
-    'Goerli',
-    'https://testnet.wanscan.org',
-    ChainInfoNativeCurrency('ETH', 'ETH', 18),
-    'https://testnet.rpc.zora.energy',
-    '',
-    'https://testnet.explorer.zora.energy',
     [ChainInfoFeature('EIP1559')],
   );
 
@@ -627,21 +567,6 @@ class ChainInfo {
     [],
   );
 
-  static ChainInfo BSquaredTestnet = ChainInfo(
-    1102,
-    'BSquared',
-    'evm',
-    'https://static.particle.network/token-list/bsquared/native.png',
-    'B² Network Testnet',
-    'Testnet',
-    'https://www.bsquared.network',
-    ChainInfoNativeCurrency('BTC', 'BTC', 18),
-    'https://haven-rpc.bsquared.network',
-    '',
-    'https://haven-explorer.bsquared.network',
-    [],
-  );
-
   static ChainInfo CoreTestnet = ChainInfo(
     1115,
     'Core',
@@ -669,6 +594,21 @@ class ChainInfo {
     'https://rpc.coredao.org',
     '',
     'https://scan.coredao.org',
+    [],
+  );
+
+  static ChainInfo BSquaredTestnet = ChainInfo(
+    1123,
+    'BSquared',
+    'evm',
+    'https://static.particle.network/token-list/bsquared/native.png',
+    'B² Network Testnet',
+    'Testnet',
+    'https://www.bsquared.network',
+    ChainInfoNativeCurrency('BTC', 'BTC', 18),
+    'https://b2-testnet.alt.technology',
+    '',
+    'https://testnet-explorer.bsquared.network',
     [],
   );
 
@@ -715,21 +655,6 @@ class ChainInfo {
     'https://apps.moonbeam.network/moonbase-alpha/faucet',
     'https://moonbase.moonscan.io',
     [ChainInfoFeature('EIP1559')],
-  );
-
-  static ChainInfo PolygonzkEVMTestnet = ChainInfo(
-    1442,
-    'PolygonZkEVM',
-    'evm',
-    'https://static.particle.network/token-list/polygonzkevm/native.png',
-    'Polygon zkEVM Testnet',
-    'Testnet',
-    'https://polygon.technology/solutions/polygon-zkevm',
-    ChainInfoNativeCurrency('ETH', 'ETH', 18),
-    'https://rpc.public.zkevm-test.net',
-    'https://public.zkevm-test.net',
-    'https://testnet-zkevm.polygonscan.com',
-    [],
   );
 
   static ChainInfo BEVMCanary = ChainInfo(
@@ -792,6 +717,21 @@ class ChainInfo {
     [],
   );
 
+  static ChainInfo PeaqKrest = ChainInfo(
+    2241,
+    'peaq',
+    'evm',
+    'https://static.particle.network/token-list/peaq/native.png',
+    'Peaq Krest Mainnet',
+    'Mainnet',
+    'https://www.peaq.network',
+    ChainInfoNativeCurrency('KRST', 'KRST', 18),
+    'https://erpc-krest.peaq.network',
+    '',
+    'https://krest.subscan.io',
+    [ChainInfoFeature('EIP1559')],
+  );
+
   static ChainInfo PolygonzkEVMCardona = ChainInfo(
     2442,
     'PolygonZkEVM',
@@ -804,6 +744,21 @@ class ChainInfo {
     'https://rpc.cardona.zkevm-rpc.com',
     '',
     'https://cardona-zkevm.polygonscan.com',
+    [],
+  );
+
+  static ChainInfo AINNTestnet = ChainInfo(
+    2648,
+    'ainn',
+    'evm',
+    'https://static.particle.network/token-list/ainn/native.png',
+    'AINN Testnet',
+    'Testnet',
+    'https://anvm.io',
+    ChainInfoNativeCurrency('BTC', 'BTC', 18),
+    'https://rpc.anvm.io',
+    '',
+    'https://explorer.anvm.io',
     [],
   );
 
@@ -834,6 +789,21 @@ class ChainInfo {
     'https://node.botanixlabs.dev',
     '',
     'https://blockscout.botanixlabs.dev',
+    [],
+  );
+
+  static ChainInfo AstarzkEVMMainet = ChainInfo(
+    3776,
+    'AstarZkEVM',
+    'evm',
+    'https://static.particle.network/token-list/astarzkevm/native.png',
+    'Astar zkEVM Mainet',
+    'Mainet',
+    'https://astar.network',
+    ChainInfoNativeCurrency('Sepolia Ether', 'ETH', 18),
+    'https://rpc.startale.com/astar-zkevm',
+    '',
+    'https://astar-zkevm.explorer.startale.com',
     [],
   );
 
@@ -882,18 +852,18 @@ class ChainInfo {
     [],
   );
 
-  static ChainInfo MantleTestnet = ChainInfo(
-    5001,
+  static ChainInfo MantleSepoliaTestnet = ChainInfo(
+    5003,
     'Mantle',
     'evm',
     'https://static.particle.network/token-list/mantle/native.png',
-    'Mantle Testnet',
+    'Mantle Sepolia Testnet',
     'Testnet',
     'https://mantle.xyz',
     ChainInfoNativeCurrency('MNT', 'MNT', 18),
-    'https://rpc.testnet.mantle.xyz',
-    'https://faucet.testnet.mantle.xyz',
-    'https://explorer.testnet.mantle.xyz',
+    'https://rpc.sepolia.mantle.xyz',
+    'https://faucet.sepolia.mantle.xyz',
+    'https://explorer.sepolia.mantle.xyz',
     [],
   );
 
@@ -987,6 +957,21 @@ class ChainInfo {
     [ChainInfoFeature('EIP1559')],
   );
 
+  static ChainInfo PeaqAgungTestnet = ChainInfo(
+    9990,
+    'peaq',
+    'evm',
+    'https://static.particle.network/token-list/peaq/native.png',
+    'Peaq Agung Testnet',
+    'Testnet',
+    'https://www.peaq.network',
+    ChainInfoNativeCurrency('AGUNG', 'AGUNG', 18),
+    'https://rpcpc1-qa.agung.peaq.network',
+    '',
+    'https://agung-testnet.subscan.io',
+    [ChainInfoFeature('EIP1559')],
+  );
+
   static ChainInfo GnosisTestnet = ChainInfo(
     10200,
     'Gnosis',
@@ -1017,21 +1002,6 @@ class ChainInfo {
     [],
   );
 
-  static ChainInfo LumozzkEVMTestnet = ChainInfo(
-    12008,
-    'Lumoz',
-    'evm',
-    'https://static.particle.network/token-list/opside/native.png',
-    'Lumoz zkEVM Testnet',
-    'Testnet',
-    'https://lumoz.org',
-    ChainInfoNativeCurrency('Lumoz', 'MOZ', 18),
-    'https://alpha-zkrollup-rpc.lumoz.org/public',
-    '',
-    'https://public.zkevm.lumoz.info',
-    [],
-  );
-
   static ChainInfo ReadONTestnet = ChainInfo(
     12015,
     'ReadON',
@@ -1045,6 +1015,21 @@ class ChainInfo {
     '',
     'https://readon-content-test-chain.zkevm.opside.info',
     [],
+  );
+
+  static ChainInfo ImmutablezkEVMTestnet = ChainInfo(
+    13473,
+    'Immutable',
+    'evm',
+    'https://static.particle.network/token-list/immutable/native.png',
+    'Immutable zkEVM Testnet',
+    'Testnet',
+    'https://www.immutable.com',
+    ChainInfoNativeCurrency('IMX', 'IMX', 18),
+    'https://rpc.testnet.immutable.com',
+    '',
+    'https://explorer.testnet.immutable.com',
+    [ChainInfoFeature('EIP1559')],
   );
 
   static ChainInfo EOSEVMTestnet = ChainInfo(
@@ -1302,21 +1287,6 @@ class ChainInfo {
     [ChainInfoFeature('EIP1559')],
   );
 
-  static ChainInfo LineaGoerli = ChainInfo(
-    59140,
-    'Linea',
-    'evm',
-    'https://static.particle.network/token-list/linea/native.png',
-    'Linea Goerli',
-    'Goerli',
-    'https://linea.build',
-    ChainInfoNativeCurrency('ETH', 'ETH', 18),
-    'https://rpc.goerli.linea.build',
-    'https://faucet.goerli.linea.build',
-    'https://goerli.lineascan.build',
-    [ChainInfoFeature('EIP1559')],
-  );
-
   static ChainInfo Linea = ChainInfo(
     59144,
     'Linea',
@@ -1332,18 +1302,18 @@ class ChainInfo {
     [ChainInfoFeature('EIP1559')],
   );
 
-  static ChainInfo PolygonMumbai = ChainInfo(
-    80001,
+  static ChainInfo PolygonAmoy = ChainInfo(
+    80002,
     'Polygon',
     'evm',
     'https://static.particle.network/token-list/polygon/native.png',
-    'Polygon Mumbai',
-    'Mumbai',
+    'Polygon Amoy',
+    'Amoy',
     'https://polygon.technology',
     ChainInfoNativeCurrency('MATIC', 'MATIC', 18),
-    'https://polygon-mumbai.gateway.tenderly.co',
-    'https://faucet.polygon.technology',
-    'https://mumbai.polygonscan.com',
+    'https://rpc-amoy.polygon.technology',
+    '',
+    'https://www.oklink.com/amoy',
     [ChainInfoFeature('EIP1559')],
   );
 
@@ -1377,21 +1347,6 @@ class ChainInfo {
     [ChainInfoFeature('EIP1559')],
   );
 
-  static ChainInfo BaseGoerli = ChainInfo(
-    84531,
-    'Base',
-    'evm',
-    'https://static.particle.network/token-list/base/native.png',
-    'Base Goerli',
-    'Goerli',
-    'https://base.org',
-    ChainInfoNativeCurrency('ETH', 'ETH', 18),
-    'https://base-goerli.public.blastapi.io',
-    'https://bridge.base.org/deposit',
-    'https://goerli.basescan.org',
-    [ChainInfoFeature('EIP1559')],
-  );
-
   static ChainInfo BaseSepolia = ChainInfo(
     84532,
     'Base',
@@ -1419,6 +1374,21 @@ class ChainInfo {
     'https://test-rpc.combonetwork.io',
     '',
     'https://combotrace-testnet.nodereal.io',
+    [ChainInfoFeature('EIP1559')],
+  );
+
+  static ChainInfo Xterio = ChainInfo(
+    112358,
+    'xterio',
+    'evm',
+    'https://static.particle.network/token-list/xterio/native.png',
+    'Xterio Mainnet',
+    'Mainnet',
+    'https://xter.io',
+    ChainInfoNativeCurrency('BNB', 'BNB', 18),
+    'https://xterio.alt.technology',
+    '',
+    'https://xterscan.io',
     [ChainInfoFeature('EIP1559')],
   );
 
@@ -1465,21 +1435,6 @@ class ChainInfo {
     '',
     'https://scan.platon.network',
     [],
-  );
-
-  static ChainInfo ArbitrumGoerli = ChainInfo(
-    421613,
-    'Arbitrum',
-    'evm',
-    'https://static.particle.network/token-list/arbitrum/native.png',
-    'Arbitrum Goerli',
-    'Goerli',
-    'https://arbitrum.io',
-    ChainInfoNativeCurrency('Arbitrum Gorli Ether', 'AGOR', 18),
-    'https://goerli-rollup.arbitrum.io/rpc',
-    'https://faucet.triangleplatform.com/arbitrum/goerli',
-    'https://goerli.arbiscan.io',
-    [ChainInfoFeature('EIP1559')],
   );
 
   static ChainInfo ArbitrumSepolia = ChainInfo(
@@ -1542,19 +1497,34 @@ class ChainInfo {
     [],
   );
 
-  static ChainInfo AstarzkEVMTestnet = ChainInfo(
-    1261120,
-    'AstarZkEVM',
+  static ChainInfo zkLinkNova = ChainInfo(
+    810180,
+    'zkLink',
     'evm',
-    'https://static.particle.network/token-list/astarzkevm/native.png',
-    'Astar zkEVM Testnet',
-    'Testnet',
-    'https://astar.network',
-    ChainInfoNativeCurrency('Sepolia Ether', 'ETH', 18),
-    'https://rpc.zkatana.gelato.digital',
+    'https://static.particle.network/token-list/zklink/native.png',
+    'zkLink Nova Mainnet',
+    'Mainnet',
+    'https://zklink.io',
+    ChainInfoNativeCurrency('ETH', 'ETH', 18),
+    'https://rpc.zklink.io',
     '',
-    'https://zkatana.blockscout.com',
+    'https://explorer.zklink.io',
     [],
+  );
+
+  static ChainInfo XterioTestnet = ChainInfo(
+    1637450,
+    'xterio',
+    'evm',
+    'https://static.particle.network/token-list/xterio/native.png',
+    'Xterio Testnet',
+    'Testnet',
+    'https://xter.io',
+    ChainInfoNativeCurrency('BNB', 'BNB', 18),
+    'https://xterio-testnet.alt.technology',
+    '',
+    'https://testnet.xterscan.io',
+    [ChainInfoFeature('EIP1559')],
   );
 
   static ChainInfo PlatONTestnet = ChainInfo(
@@ -1585,6 +1555,21 @@ class ChainInfo {
     'https://pacific-info.manta.network',
     'https://pacific-explorer.testnet.manta.network',
     [ChainInfoFeature('EIP1559')],
+  );
+
+  static ChainInfo AstarzkEVMTestnet = ChainInfo(
+    6038361,
+    'AstarZkEVM',
+    'evm',
+    'https://static.particle.network/token-list/astarzkevm/native.png',
+    'Astar zkEVM Testnet',
+    'Testnet',
+    'https://astar.network',
+    ChainInfoNativeCurrency('Sepolia Ether', 'ETH', 18),
+    'https://rpc.startale.com/zkyoto',
+    '',
+    'https://zkyoto.explorer.startale.com',
+    [],
   );
 
   static ChainInfo Zora = ChainInfo(
@@ -1675,6 +1660,21 @@ class ChainInfo {
     '',
     'https://tronscan.io',
     [],
+  );
+
+  static ChainInfo Ancient8 = ChainInfo(
+    888888888,
+    'ancient8',
+    'evm',
+    'https://static.particle.network/token-list/ancient8/native.png',
+    'Ancient8 Mainnet',
+    'Mainnet',
+    'https://ancient8.gg',
+    ChainInfoNativeCurrency('ETH', 'ETH', 18),
+    'https://rpc.ancient8.gg',
+    '',
+    'https://scan.ancient8.gg',
+    [ChainInfoFeature('EIP1559')],
   );
 
   static ChainInfo Aurora = ChainInfo(
@@ -1782,9 +1782,23 @@ class ChainInfo {
     [],
   );
 
+  static ChainInfo GMNetworkTestnet = ChainInfo(
+    202402181627,
+    'GMNetwork',
+    'evm',
+    'https://static.particle.network/token-list/gmnetwork/native.png',
+    'GMNetwork Testnet',
+    'Testnet',
+    'https://gmnetwork.ai',
+    ChainInfoNativeCurrency('Ether', 'ETH', 18),
+    'https://gmnetwork-testnet.alt.technology',
+    '',
+    'https://gmnetwork-testnet-explorer.alt.technology',
+    [ChainInfoFeature('EIP1559')],
+  );
+
   static Map<String, ChainInfo> ParticleChains = {
     'ethereum-1': ChainInfo.Ethereum,
-    'ethereum-5': ChainInfo.EthereumGoerli,
     'optimism-10': ChainInfo.Optimism,
     'thundercore-18': ChainInfo.ThunderCoreTestnet,
     'cronos-25': ChainInfo.Cronos,
@@ -1800,6 +1814,7 @@ class ChainInfo {
     'solana-102': ChainInfo.SolanaTestnet,
     'solana-103': ChainInfo.SolanaDevnet,
     'thundercore-108': ChainInfo.ThunderCore,
+    'bob-111': ChainInfo.BOBTestnet,
     'heco-128': ChainInfo.Heco,
     'polygon-137': ChainInfo.Polygon,
     'manta-169': ChainInfo.Manta,
@@ -1807,49 +1822,48 @@ class ChainInfo {
     'opbnb-204': ChainInfo.opBNB,
     'mapprotocol-212': ChainInfo.MAPProtocolTestnet,
     'fantom-250': ChainInfo.Fantom,
-    'zksync-280': ChainInfo.zkSyncEraTestnet,
     'zksync-300': ChainInfo.zkSyncEraSepolia,
     'kcc-321': ChainInfo.KCC,
     'kcc-322': ChainInfo.KCCTestnet,
     'zksync-324': ChainInfo.zkSyncEra,
     'cronos-338': ChainInfo.CronosTestnet,
-    'optimism-420': ChainInfo.OptimismGoerli,
     'pgn-424': ChainInfo.PGN,
-    'metis-599': ChainInfo.MetisGoerli,
     'mode-919': ChainInfo.ModeTestnet,
-    'zora-999': ChainInfo.ZoraGoerli,
     'klaytn-1001': ChainInfo.KlaytnTestnet,
     'confluxespace-1030': ChainInfo.ConfluxeSpace,
     'metis-1088': ChainInfo.Metis,
     'polygonzkevm-1101': ChainInfo.PolygonzkEVM,
-    'bsquared-1102': ChainInfo.BSquaredTestnet,
     'core-1115': ChainInfo.CoreTestnet,
     'core-1116': ChainInfo.Core,
+    'bsquared-1123': ChainInfo.BSquaredTestnet,
     'moonbeam-1284': ChainInfo.Moonbeam,
     'moonriver-1285': ChainInfo.Moonriver,
     'moonbeam-1287': ChainInfo.MoonbeamTestnet,
-    'polygonzkevm-1442': ChainInfo.PolygonzkEVMTestnet,
     'bevm-1501': ChainInfo.BEVMCanary,
     'bevm-1502': ChainInfo.BEVMCanaryTestnet,
     'kava-2221': ChainInfo.KavaTestnet,
     'kava-2222': ChainInfo.Kava,
+    'peaq-2241': ChainInfo.PeaqKrest,
     'polygonzkevm-2442': ChainInfo.PolygonzkEVMCardona,
+    'ainn-2648': ChainInfo.AINNTestnet,
     'satoshivm-3110': ChainInfo.SatoshiVMTestnet,
     'botanix-3636': ChainInfo.BotanixTestnet,
+    'astarzkevm-3776': ChainInfo.AstarzkEVMMainet,
     'fantom-4002': ChainInfo.FantomTestnet,
     'merlin-4200': ChainInfo.Merlin,
     'mantle-5000': ChainInfo.Mantle,
-    'mantle-5001': ChainInfo.MantleTestnet,
+    'mantle-5003': ChainInfo.MantleSepoliaTestnet,
     'opbnb-5611': ChainInfo.opBNBTestnet,
     'zetachain-7000': ChainInfo.ZetaChain,
     'zetachain-7001': ChainInfo.ZetaChainTestnet,
     'klaytn-8217': ChainInfo.Klaytn,
     'base-8453': ChainInfo.Base,
     'combo-9980': ChainInfo.Combo,
+    'peaq-9990': ChainInfo.PeaqAgungTestnet,
     'gnosis-10200': ChainInfo.GnosisTestnet,
     'bevm-11503': ChainInfo.BEVMTestnet,
-    'lumoz-12008': ChainInfo.LumozzkEVMTestnet,
     'readon-12015': ChainInfo.ReadONTestnet,
+    'immutable-13473': ChainInfo.ImmutablezkEVMTestnet,
     'eosevm-15557': ChainInfo.EOSEVMTestnet,
     'ethereum-17000': ChainInfo.EthereumHolesky,
     'eosevm-17777': ChainInfo.EOSEVM,
@@ -1867,38 +1881,40 @@ class ChainInfo {
     'zkfair-43851': ChainInfo.ZKFairTestnet,
     'celo-44787': ChainInfo.CeloTestnet,
     'pgn-58008': ChainInfo.PGNSepolia,
-    'linea-59140': ChainInfo.LineaGoerli,
     'linea-59144': ChainInfo.Linea,
-    'polygon-80001': ChainInfo.PolygonMumbai,
+    'polygon-80002': ChainInfo.PolygonAmoy,
     'berachain-80085': ChainInfo.BerachainArtio,
     'blast-81457': ChainInfo.Blast,
-    'base-84531': ChainInfo.BaseGoerli,
     'base-84532': ChainInfo.BaseSepolia,
     'combo-91715': ChainInfo.ComboTestnet,
+    'xterio-112358': ChainInfo.Xterio,
     'taiko-167008': ChainInfo.TaikoKatla,
     'bitlayer-200810': ChainInfo.BitlayerTestnet,
     'platon-210425': ChainInfo.PlatON,
-    'arbitrum-421613': ChainInfo.ArbitrumGoerli,
     'arbitrum-421614': ChainInfo.ArbitrumSepolia,
     'scroll-534351': ChainInfo.ScrollSepolia,
     'scroll-534352': ChainInfo.Scroll,
     'merlin-686868': ChainInfo.MerlinTestnet,
-    'astarzkevm-1261120': ChainInfo.AstarzkEVMTestnet,
+    'zklink-810180': ChainInfo.zkLinkNova,
+    'xterio-1637450': ChainInfo.XterioTestnet,
     'platon-2206132': ChainInfo.PlatONTestnet,
     'manta-3441005': ChainInfo.MantaTestnet,
+    'astarzkevm-6038361': ChainInfo.AstarzkEVMTestnet,
     'zora-7777777': ChainInfo.Zora,
     'ethereum-11155111': ChainInfo.EthereumSepolia,
     'optimism-11155420': ChainInfo.OptimismSepolia,
     'ancient8-28122024': ChainInfo.Ancient8Testnet,
     'blast-168587773': ChainInfo.BlastSepolia,
     'tron-728126428': ChainInfo.Tron,
+    'ancient8-888888888': ChainInfo.Ancient8,
     'aurora-1313161554': ChainInfo.Aurora,
     'aurora-1313161555': ChainInfo.AuroraTestnet,
     'nebula-1482601649': ChainInfo.SKALENebula,
     'harmony-1666600000': ChainInfo.Harmony,
     'harmony-1666700000': ChainInfo.HarmonyTestnet,
     'tron-2494104990': ChainInfo.TronShasta,
-    'tron-3448148188': ChainInfo.TronNile
+    'tron-3448148188': ChainInfo.TronNile,
+    'gmnetwork-202402181627': ChainInfo.GMNetworkTestnet
   };
   // template code end
 

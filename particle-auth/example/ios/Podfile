@@ -32,8 +32,10 @@ target 'Runner' do
   use_frameworks! :linkage => :static
   # use_modular_headers!
   
-  pod 'ParticleNetworkBase', '1.3.21'
-  pod 'ParticleAuthService', '1.3.21'
+  pod 'ParticleNetworkBase', '1.4.0'
+  pod 'ParticleAuthService', '1.4.0'
+
+  pod 'SwiftyUserDefaults', :git => 'https://github.com/SunZhiC/SwiftyUserDefaults.git', :branch => 'master'
   
   flutter_install_all_ios_pods File.dirname(File.realpath(__FILE__))
 end
