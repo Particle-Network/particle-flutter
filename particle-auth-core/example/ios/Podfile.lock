@@ -106,6 +106,7 @@ DEPENDENCIES:
   - ParticleAuthService (= 1.4.0)
   - ParticleMPCCore (= 1.4.0)
   - ParticleNetworkBase (= 1.4.0)
+  - SkeletonView (from `https://github.com/SunZhiC/SkeletonView.git`, branch `main`)
   - SwiftyUserDefaults (from `https://github.com/SunZhiC/SwiftyUserDefaults.git`, branch `master`)
   - Thresh (= 1.4.0)
 
@@ -131,7 +132,6 @@ SPEC REPOS:
     - SDWebImage
     - SDWebImageWebPCoder
     - secp256k1.swift
-    - SkeletonView
     - SnapKit
     - SwiftMessages
     - SwiftyJSON
@@ -148,11 +148,17 @@ EXTERNAL SOURCES:
     :path: ".symlinks/plugins/particle_auth/ios"
   particle_auth_core:
     :path: ".symlinks/plugins/particle_auth_core/ios"
+  SkeletonView:
+    :branch: main
+    :git: https://github.com/SunZhiC/SkeletonView.git
   SwiftyUserDefaults:
     :branch: master
     :git: https://github.com/SunZhiC/SwiftyUserDefaults.git
 
 CHECKOUT OPTIONS:
+  SkeletonView:
+    :commit: 00aebbf16bb1d00fbd2ee85b9200a23432cb88aa
+    :git: https://github.com/SunZhiC/SkeletonView.git
   SwiftyUserDefaults:
     :commit: 4b59143af80ebdc7e9811de521afcc33084c3e4e
     :git: https://github.com/SunZhiC/SwiftyUserDefaults.git
@@ -182,7 +188,7 @@ SPEC CHECKSUMS:
   SDWebImage: 40b0b4053e36c660a764958bff99eed16610acbb
   SDWebImageWebPCoder: c94f09adbca681822edad9e532ac752db713eabf
   secp256k1.swift: a7e7a214f6db6ce5db32cc6b2b45e5c4dd633634
-  SkeletonView: 5a050f6411e697abd4cda0a8d767013399dccd69
+  SkeletonView: 735bba714f75a451d998bf6f4aef5bfe9d1c803e
   SnapKit: d612e99e678a2d3b95bf60b0705ed0a35c03484a
   SwiftMessages: d3540f0f981dfbac25bd2ae9a662effa48f76f92
   SwiftyJSON: f5b1bf1cd8dd53cd25887ac0eabcfd92301c6a5a
@@ -191,6 +197,6 @@ SPEC CHECKSUMS:
   Thresh: e951f6974fbf66cbc9683ca7d19e3e9d79774c35
   TweetNacl: 3abf4d1d2082b0114e7a67410e300892448951e6
 
-PODFILE CHECKSUM: b69d9265e6d125985c88fac654883355b74448ee
+PODFILE CHECKSUM: af2c8692c3fbb3920eb2c0847a8af05dcf80606c
 
 COCOAPODS: 1.15.2

@@ -49,7 +49,7 @@ class _MyHomePageState extends State<MyHomePage> {
         "https://connect.particle.network",
         "Particle Connect Flutter Demo");
 
-    ParticleConnect.init(ChainInfo.PolygonMumbai, dappInfo, Env.dev);
+    ParticleConnect.init(ChainInfo.ArbitrumSepolia, dappInfo, Env.dev);
   }
 
   void _connectParticle() async {
