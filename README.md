@@ -2,6 +2,9 @@
 
 ![](https://img.shields.io/pub/v/particle_auth?color=blue&style=round) 
 
+### Note For iOS
+Please note that the SDK `particle_auth_core` only supports ios-arm64 (iOS devices), does not support simulators, to perform testing, you will require an actual iPhone device.
+
 Particle Auth is a simple self-custodial auth infra for Web3 apps and wallets.
 
 Particle Auth Core combine MPC signature capability and Wallet through Auth Core. In this way, you can control almost all the UI/UX. To simplify this, we also provide out-of-box UI/UX for Custom Auth signing.
