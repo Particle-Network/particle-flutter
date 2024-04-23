@@ -79,12 +79,12 @@ class ParticleAuth(ParticleBase):
 
     def publish(self):
         self.prepare()
-        self.flutter_publish() 
+        self.flutter_publish()
         self.close()
 
     def publish_dry_run(self):
         self.prepare()
-        self.flutter_publish_dry_run() 
+        self.flutter_publish_dry_run()
         self.close()
 
 
@@ -100,7 +100,7 @@ class ParticleConnect(ParticleBase):
         self.prepare()
         self.self_prepare()
         self.flutter_get()
-        self.flutter_publish() 
+        self.flutter_publish()
         self.close()
 
 
@@ -116,7 +116,7 @@ class ParticleAuthCore(ParticleBase):
         self.prepare()
         self.self_prepare()
         self.flutter_get()
-        self.flutter_publish() 
+        self.flutter_publish()
         self.close()
 
 
@@ -136,7 +136,7 @@ class ParticleAA(ParticleBase):
         self.self_prepare()
 
         self.flutter_get()
-        self.flutter_publish() 
+        self.flutter_publish()
         self.close()
 
 
@@ -153,12 +153,12 @@ class ParticleWallet(ParticleBase):
         self.self_prepare()
 
         self.flutter_get()
-        self.flutter_publish() 
+        self.flutter_publish()
         self.close()
 
 
 if __name__ == "__main__":
-    version = '1.4.17'
+    version = '1.4.19'
 
     print("Auth Start")
     ParticleAuth(version).publish()
