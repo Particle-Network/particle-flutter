@@ -9,7 +9,7 @@ part of 'rpc_error.dart';
 RpcError _$RpcErrorFromJson(Map<String, dynamic> json) => RpcError()
   ..code = json['code'] as int?
   ..message = json['message'] as String?
-  ..data = json['data'] as dynamic;
+  ..data = json['data'];
 
 Map<String, dynamic> _$RpcErrorToJson(RpcError instance) => <String, dynamic>{
       'code': instance.code,

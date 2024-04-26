@@ -125,7 +125,7 @@ class ConnectLogic {
     if (currChainInfo.isSolanaChain()) {
       try {
         final transaction =
-            await TransactionMock.mockSolanaTransaction(getPublicAddress());
+            await TransactionMock.mockSOLTransaction(getPublicAddress());
         String signature = await ParticleConnect.signTransaction(
             walletType, getPublicAddress(), transaction);
         print("signTransaction: $signature");
@@ -143,9 +143,9 @@ class ConnectLogic {
     if (currChainInfo.isSolanaChain()) {
       try {
         final transacton1 =
-            await TransactionMock.mockSolanaTransaction(getPublicAddress());
+            await TransactionMock.mockSOLTransaction(getPublicAddress());
         final transacton2 =
-            await TransactionMock.mockSolanaTransaction(getPublicAddress());
+            await TransactionMock.mockSOLTransaction(getPublicAddress());
         List<String> trans = <String>[];
         trans.add(transacton1);
         trans.add(transacton2);
@@ -168,7 +168,7 @@ class ConnectLogic {
       String transaction;
       if (currChainInfo.isSolanaChain()) {
         transaction =
-            await TransactionMock.mockSolanaTransaction(getPublicAddress());
+            await TransactionMock.mockSOLTransaction(getPublicAddress());
       } else {
         transaction =
             await TransactionMock.mockEvmSendNative(getPublicAddress());

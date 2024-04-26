@@ -109,17 +109,20 @@ object AuthBridge {
         var prompt: LoginPrompt? = null
         try {
 
-            if (loginData.prompt != null){
+            if (loginData.prompt != null) {
                 val promptStr = when (loginData.prompt) {
                     "none" -> {
                         "None"
                     }
+
                     "consent" -> {
                         "ConSent"
                     }
+
                     "select_account" -> {
                         "SelectAccount"
                     }
+
                     else -> {
                         "None"
                     }
@@ -246,11 +249,13 @@ object AuthBridge {
                     val feeQuote = transParams.feeMode.feeQuote!!
                     feeMode = FeeModeToken(feeQuote, tokenPaymasterAddress!!)
                 }
+
                 "gasless" -> {
                     val verifyingPaymasterGasless =
                         transParams.feeMode.wholeFeeQuote.verifyingPaymasterGasless
                     feeMode = FeeModeGasless(verifyingPaymasterGasless)
                 }
+
                 "native" -> {
                     val verifyingPaymasterNative =
                         transParams.feeMode.wholeFeeQuote.verifyingPaymasterNative
@@ -279,7 +284,8 @@ object AuthBridge {
                                     override fun failure(errMsg: ErrorInfo) {
                                         callback.failure(errMsg)
                                     }
-                                },chainId)
+                                }, chainId
+                            )
                         }
 
                         override fun eoaAddress(): String {
@@ -411,6 +417,21 @@ object AuthBridge {
     fun getUserInfo(result: MethodChannel.Result) {
         val address = ParticleNetwork.getUserInfo()
         result.success(Gson().toJson(address))
+    }
+
+    fun getLanguage(result: MethodChannel.Result) {
+        val language = ParticleNetwork.getLanguage()
+        if (language == LanguageEnum.ZH_CN) {
+            result.success("zh_hans")
+        } else if (language == LanguageEnum.ZH_TW) {
+            result.success("zh_hant")
+        } else if (language == LanguageEnum.JA) {
+            result.success("ja")
+        } else if (language == LanguageEnum.KO) {
+            result.success("ko")
+        } else {
+            result.success("en")
+        }
     }
 
     fun getChainInfo(result: MethodChannel.Result) {

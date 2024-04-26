@@ -1,12 +1,15 @@
+import 'package:flutter/material.dart';
 import 'package:oktoast/oktoast.dart';
 import 'package:particle_auth/particle_auth.dart';
 import 'package:particle_auth_example/mock/token.dart';
 import 'package:particle_auth_example/mock/transaction_mock.dart';
+import 'package:particle_auth_example/auth_demo/custom_bottom_sheet.dart';
 
 class AuthLogic {
   static ChainInfo currChainInfo = ChainInfo.Ethereum;
 
-  static void init(Env env) {
+  static void init() {
+    const env = Env.dev;
     // Get your project id and client key from dashboard, https://dashboard.particle.network
     const projectId =
         "772f7499-1d2e-40f4-8e2c-7b6dd47db9de"; //772f7499-1d2e-40f4-8e2c-7b6dd47db9de
@@ -20,8 +23,8 @@ class AuthLogic {
     ParticleAuth.init(currChainInfo, env);
   }
 
-  static String? evmPubAddress;
-  static String? solPubAddress;
+  static String? evmpublicAddress;
+  static String? solpublicAddress;
 
   static void login() async {
     List<SupportAuthType> supportAuthType = SupportAuthType.values;
@@ -31,9 +34,9 @@ class AuthLogic {
           socialLoginPrompt: SocialLoginPrompt.select_account);
       for (var element in userInfo.wallets) {
         if (element.chainName == "solana") {
-          solPubAddress = element.publicAddress;
+          solpublicAddress = element.publicAddress;
         } else if (element.chainName == "evm_chain") {
-          evmPubAddress = element.publicAddress;
+          evmpublicAddress = element.publicAddress;
         }
       }
       print("login: $userInfo");
@@ -62,9 +65,9 @@ class AuthLogic {
           authorization: authorization);
       for (var element in userInfo.wallets) {
         if (element.chainName == "solana") {
-          solPubAddress = element.publicAddress;
+          solpublicAddress = element.publicAddress;
         } else if (element.chainName == "evm_chain") {
-          evmPubAddress = element.publicAddress;
+          evmpublicAddress = element.publicAddress;
         }
       }
       print("login: $userInfo");
@@ -100,7 +103,8 @@ class AuthLogic {
 
     try {
       final eoaAddress = await ParticleAuth.getAddress();
-      SmartAccountConfig config = SmartAccountConfig.fromAccountName(AccountName.BICONOMY_V1(), eoaAddress);
+      SmartAccountConfig config = SmartAccountConfig.fromAccountName(
+          AccountName.BICONOMY_V1(), eoaAddress);
       List<dynamic> response =
           await EvmService.getSmartAccount(<SmartAccountConfig>[config]);
 
@@ -194,9 +198,9 @@ class AuthLogic {
   static void signTransaction() async {
     if (currChainInfo.isSolanaChain()) {
       try {
-        String pubAddress = await ParticleAuth.getAddress();
+        String publicAddress = await ParticleAuth.getAddress();
         final transaction =
-            await TransactionMock.mockSolanaTransaction(pubAddress);
+            await TransactionMock.mockSOLTransaction(publicAddress);
         print(transaction);
         String signature = await ParticleAuth.signTransaction(transaction);
         print("signTransaction: $signature");
@@ -213,11 +217,11 @@ class AuthLogic {
   static void signAllTransactions() async {
     if (currChainInfo.isSolanaChain()) {
       try {
-        String pubAddress = await ParticleAuth.getAddress();
+        String publicAddress = await ParticleAuth.getAddress();
         final transaction1 =
-            await TransactionMock.mockSolanaTransaction(pubAddress);
+            await TransactionMock.mockSOLTransaction(publicAddress);
         final transaction2 =
-            await TransactionMock.mockSolanaTransaction(pubAddress);
+            await TransactionMock.mockSOLTransaction(publicAddress);
 
         List<String> transactions = <String>[];
         transactions.add(transaction1);
@@ -238,15 +242,36 @@ class AuthLogic {
 
   static void signAndSendTransaction() async {
     try {
-      String? pubAddress = await ParticleAuth.getAddress();
-      final transction;
+      String? publicAddress = await ParticleAuth.getAddress();
+      dynamic transaction;
       if (currChainInfo.isSolanaChain()) {
-        transction = await TransactionMock.mockSolanaTransaction(pubAddress);
+        transaction = await TransactionMock.mockSOLTransaction(publicAddress);
       } else {
-        transction = await TransactionMock.mockEvmSendToken(pubAddress);
+        transaction = await TransactionMock.mockEvmSendToken(publicAddress);
       }
 
-      String signature = await ParticleAuth.signAndSendTransaction(transction);
+      String signature = await ParticleAuth.signAndSendTransaction(transaction);
+      print("signAndSendTransaction: $signature");
+      showToast("signAndSendTransaction: $signature");
+    } catch (error) {
+      print("signAndSendTransaction: $error");
+      showToast("signAndSendTransaction: $error");
+    }
+  }
+
+  static void sendSplTokenTransacion() async {
+    try {
+      String? publicAddress = await ParticleAuth.getAddress();
+      dynamic transaction;
+      if (currChainInfo.isSolanaChain()) {
+        transaction =
+            await TransactionMock.mockSplTokenTransaction(publicAddress);
+      } else {
+        print("not support in evm");
+        return;
+      }
+
+      String signature = await ParticleAuth.signAndSendTransaction(transaction);
       print("signAndSendTransaction: $signature");
       showToast("signAndSendTransaction: $signature");
     } catch (error) {
@@ -352,9 +377,19 @@ class AuthLogic {
     ParticleAuth.setSecurityAccountConfig(config);
   }
 
-  static void setLanguage() {
-    const language = Language.ja;
+  static void setLanguage(Language language) {
     ParticleAuth.setLanguage(language);
+  }
+
+  static void getLanguage() async {
+    try {
+      final language = await ParticleAuth.getLanguage();
+      print("getLanguage: $language");
+      showToast("getLanguage: $language");
+    } catch (error) {
+      print("getLanguage: $error");
+      showToast("getLanguage: $error");
+    }
   }
 
   static void openWebWallet() {
@@ -647,5 +682,27 @@ class AuthLogic {
       print("getPrice: $error");
       showToast("getPrice: $error");
     }
+  }
+
+  void showBottomSheet(BuildContext context) {
+    List<String> options = [
+      'Option 1',
+      'Option 2',
+      'Option 3',
+      'Option 4',
+      'Option 5'
+    ];
+    showModalBottomSheet(
+      context: context,
+      builder: (BuildContext context) {
+        return CustomBottomSheet(
+          options: options,
+          onSelect: (int selectedIndex) {
+            // Handle the selected index
+            print('Selected index: $selectedIndex');
+          },
+        );
+      },
+    );
   }
 }

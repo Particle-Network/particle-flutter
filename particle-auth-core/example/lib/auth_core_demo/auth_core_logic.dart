@@ -109,7 +109,7 @@ class AuthCoreLogic {
   static void solanaSignTransaction() async {
     final address = await Solana.getAddress();
     try {
-      final transaction = await TransactionMock.mockSolanaTransaction(address);
+      final transaction = await TransactionMock.mockSOLTransaction(address);
       final signature = await Solana.signTransaction(transaction);
       print("solana signTransaction: $signature");
       showToast("solana signTransaction: $signature");
@@ -122,8 +122,8 @@ class AuthCoreLogic {
   static void solanaSignAllTransactions() async {
     final address = await Solana.getAddress();
     try {
-      final transaction1 = await TransactionMock.mockSolanaTransaction(address);
-      final transaction2 = await TransactionMock.mockSolanaTransaction(address);
+      final transaction1 = await TransactionMock.mockSOLTransaction(address);
+      final transaction2 = await TransactionMock.mockSOLTransaction(address);
 
       List<String> transactions = <String>[];
       transactions.add(transaction1);
@@ -141,7 +141,7 @@ class AuthCoreLogic {
   static void solanaSignAndSendTransaction() async {
     final address = await Solana.getAddress();
     try {
-      final transaction = await TransactionMock.mockSolanaTransaction(address);
+      final transaction = await TransactionMock.mockSOLTransaction(address);
       final signature = await Solana.signAndSendTransaction(transaction);
       print("solana signAndSendTransaction: $signature");
       showToast("solana signAndSendTransaction: $signature");

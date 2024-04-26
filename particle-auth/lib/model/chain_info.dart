@@ -342,18 +342,33 @@ class ChainInfo {
     [ChainInfoFeature('EIP1559')],
   );
 
-  static ChainInfo X1Testnet = ChainInfo(
+  static ChainInfo XLayerTestnet = ChainInfo(
     195,
     'OKBC',
     'evm',
     'https://static.particle.network/token-list/okc/native.png',
-    'X1 Testnet',
+    'X Layer Testnet',
     'Testnet',
-    'https://www.okx.com/okbc/docs/dev/quick-start/introduction/introduction-to-okbchain',
+    'https://www.okx.com',
     ChainInfoNativeCurrency('OKB', 'OKB', 18),
-    'https://testrpc.x1.tech',
-    'https://www.okx.com/cn/okbc/faucet',
-    'https://www.oklink.com/x1-test',
+    'https://testrpc.xlayer.tech',
+    '',
+    'https://www.okx.com/explorer/xlayer-test',
+    [],
+  );
+
+  static ChainInfo XLayer = ChainInfo(
+    196,
+    'OKBC',
+    'evm',
+    'https://static.particle.network/token-list/okc/native.png',
+    'X Layer Mainnet',
+    'Mainnet',
+    'https://www.okx.com',
+    ChainInfoNativeCurrency('OKB', 'OKB', 18),
+    'https://rpc.xlayer.tech',
+    '',
+    'https://www.okx.com/zh-hans/explorer/xlayer',
     [],
   );
 
@@ -385,6 +400,21 @@ class ChainInfo {
     'https://faucet.mapprotocol.io',
     'https://testnet.mapscan.io',
     [ChainInfoFeature('EIP1559')],
+  );
+
+  static ChainInfo BSquared = ChainInfo(
+    223,
+    'BSquared',
+    'evm',
+    'https://static.particle.network/token-list/bsquared/native.png',
+    'B² Network Mainnet',
+    'Mainnet',
+    'https://www.bsquared.network',
+    ChainInfoNativeCurrency('BTC', 'BTC', 18),
+    'https://rpc.bsquared.network',
+    '',
+    'https://explorer.bsquared.network',
+    [],
   );
 
   static ChainInfo Fantom = ChainInfo(
@@ -1422,6 +1452,21 @@ class ChainInfo {
     [],
   );
 
+  static ChainInfo Bitlayer = ChainInfo(
+    200901,
+    'Bitlayer',
+    'evm',
+    'https://static.particle.network/token-list/bitlayer/native.png',
+    'Bitlayer Mainnet',
+    'Mainnet',
+    'https://www.bitlayer.org',
+    ChainInfoNativeCurrency('BTC', 'BTC', 18),
+    'https://rpc.bitlayer.org',
+    '',
+    'https://www.btrscan.com',
+    [],
+  );
+
   static ChainInfo PlatON = ChainInfo(
     210425,
     'PlatON',
@@ -1596,7 +1641,7 @@ class ChainInfo {
     'Sepolia',
     'https://sepolia.otterscan.io',
     ChainInfoNativeCurrency('Ether', 'ETH', 18),
-    'https://eth-sepolia.g.alchemy.com/v2/demo',
+    'https://rpc.sepolia.org',
     'https://faucet.quicknode.com/drip',
     'https://sepolia.etherscan.io',
     [ChainInfoFeature('EIP1559')],
@@ -1818,9 +1863,11 @@ class ChainInfo {
     'heco-128': ChainInfo.Heco,
     'polygon-137': ChainInfo.Polygon,
     'manta-169': ChainInfo.Manta,
-    'okbc-195': ChainInfo.X1Testnet,
+    'okbc-195': ChainInfo.XLayerTestnet,
+    'okbc-196': ChainInfo.XLayer,
     'opbnb-204': ChainInfo.opBNB,
     'mapprotocol-212': ChainInfo.MAPProtocolTestnet,
+    'bsquared-223': ChainInfo.BSquared,
     'fantom-250': ChainInfo.Fantom,
     'zksync-300': ChainInfo.zkSyncEraSepolia,
     'kcc-321': ChainInfo.KCC,
@@ -1890,6 +1937,7 @@ class ChainInfo {
     'xterio-112358': ChainInfo.Xterio,
     'taiko-167008': ChainInfo.TaikoKatla,
     'bitlayer-200810': ChainInfo.BitlayerTestnet,
+    'bitlayer-200901': ChainInfo.Bitlayer,
     'platon-210425': ChainInfo.PlatON,
     'arbitrum-421614': ChainInfo.ArbitrumSepolia,
     'scroll-534351': ChainInfo.ScrollSepolia,

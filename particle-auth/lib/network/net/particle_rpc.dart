@@ -423,13 +423,33 @@ class SolanaService {
     return await SolanaService.rpc(method, params);
   }
 
-  /// Serialize transaction
-  static Future<dynamic> serializeTransaction(
-      SerializeSOLTransReqEntity reqEntity) async {
+  /// Seralize SOL transaction
+  /// [transaction] is a SerializeSOLTransaction object
+  static Future<dynamic> serializeSolTransaction(
+      SerializeSOLTransaction transaction) async {
     const method = "enhancedSerializeTransaction";
-    final params = ["transfer-sol", reqEntity];
+    final params = ["transfer-sol", transaction];
     return await SolanaService.rpc(method, params);
   }
+
+  /// Seralize Spl token transaction
+  /// [transaction] is a SerializeSplTokenTransaction object
+  static Future<dynamic> serializeSplTokenTransaction(
+      SerializeSplTokenTransaction transaction) async {
+    const method = "enhancedSerializeTransaction";
+    final params = ["transfer-token", transaction];
+    return await SolanaService.rpc(method, params);
+  }
+
+  /// Seralize unwrap SOL transaction
+  /// [transaction] is a SerializeWSOLTransaction object
+  static Future<dynamic> serializeWSolTokenTransaction(
+      SerializeWSOLTransaction transaction) async {
+    const method = "enhancedSerializeTransaction";
+    final params = ["unwrap-sol", transaction];
+    return await SolanaService.rpc(method, params);
+  }
+
 
   /// Get token price,
   ///

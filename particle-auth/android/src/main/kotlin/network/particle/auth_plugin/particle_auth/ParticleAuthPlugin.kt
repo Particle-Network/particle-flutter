@@ -106,6 +106,9 @@ class ParticleAuthPlugin : FlutterPlugin, MethodCallHandler, ActivityAware {
 
             "setLanguage" -> {
                 AuthBridge.setLanguage(call.arguments as String)
+            }  
+            "getLanguage" -> {
+                AuthBridge.getLanguage(result)
             }
 
             "setAppearance" -> {
