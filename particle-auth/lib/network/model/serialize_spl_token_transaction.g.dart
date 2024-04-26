@@ -1,22 +1,24 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'serialize_sol_transreqentity.dart';
+part of 'serialize_spl_token_transaction.dart';
 
 // **************************************************************************
 // JsonSerializableGenerator
 // **************************************************************************
 
-SerializeSOLTransReqEntity _$SerializeSOLTransReqEntityFromJson(
+SerializeSplTokenTransaction _$SerializeSplTokenTransactionFromJson(
         Map<String, dynamic> json) =>
-    SerializeSOLTransReqEntity()
+    SerializeSplTokenTransaction()
       ..sender = json['sender'] as String
       ..receiver = json['receiver'] as String
-      ..lamports = json['lamports'] as int;
+      ..mint = json['mint'] as String
+      ..amount = json['amount'] as int;
 
-Map<String, dynamic> _$SerializeSOLTransReqEntityToJson(
-        SerializeSOLTransReqEntity instance) =>
+Map<String, dynamic> _$SerializeSplTokenTransactionToJson(
+        SerializeSplTokenTransaction instance) =>
     <String, dynamic>{
       'sender': instance.sender,
       'receiver': instance.receiver,
-      'lamports': instance.lamports,
+      'mint': instance.mint,
+      'amount': instance.amount,
     };

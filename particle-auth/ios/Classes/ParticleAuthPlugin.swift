@@ -42,6 +42,7 @@ public class ParticleAuthPlugin: NSObject, FlutterPlugin {
         case openAccountAndSecurity
         case setSecurityAccountConfig
         case setLanguage
+        case getLanguage
         case fastLogout
         case batchSendTransactions
         case setCustomStyle
@@ -115,6 +116,8 @@ public class ParticleAuthPlugin: NSObject, FlutterPlugin {
             self.openAccountAndSecurity(result)
         case .setLanguage:
             self.setLanguage(json as? String)
+        case .getLanguage:
+            self.getLanguage(result)
         case .fastLogout:
             self.fastLogout(result)
         case .batchSendTransactions:
@@ -468,7 +471,7 @@ public extension ParticleAuthPlugin {
     func getAddress(_ callback: @escaping ParticleCallback) {
         callback(ParticleAuthService.getAddress())
     }
-    
+
     func getUserInfo(_ callback: @escaping ParticleCallback) {
         guard let userInfo = ParticleAuthService.getUserInfo() else {
             callback(getErrorJson("user is not login"))
@@ -589,6 +592,27 @@ public extension ParticleAuthPlugin {
         } else if json.lowercased() == "ko" {
             ParticleNetwork.setLanguage(.ko)
         }
+    }
+    
+    func getLanguage(_ callback: @escaping ParticleCallback) {
+        var language = ""
+        
+        switch ParticleNetwork.getLanguage() {
+        case .en:
+            language = "en"
+        case .zh_Hans:
+            language = "zh_hans"
+        case .zh_Hant:
+            language = "zh_hant"
+        case .ja:
+            language = "ja"
+        case .ko:
+            language = "ko"
+        default:
+            language = "en"
+        }
+        
+        callback(language)
     }
     
     func setFiatCoin(_ json: String?) {

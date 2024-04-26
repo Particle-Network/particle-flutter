@@ -39,6 +39,7 @@ DEPENDENCIES:
   - particle_auth (from `.symlinks/plugins/particle_auth/ios`)
   - ParticleAuthService (= 1.4.0)
   - ParticleNetworkBase (= 1.4.0)
+  - SwiftyUserDefaults (from `https://github.com/SunZhiC/SwiftyUserDefaults.git`, branch `master`)
 
 SPEC REPOS:
   https://github.com/CocoaPods/Specs.git:
@@ -53,13 +54,20 @@ SPEC REPOS:
     - RxRelay
     - RxSwift
     - SwiftyJSON
-    - SwiftyUserDefaults
 
 EXTERNAL SOURCES:
   Flutter:
     :path: Flutter
   particle_auth:
     :path: ".symlinks/plugins/particle_auth/ios"
+  SwiftyUserDefaults:
+    :branch: master
+    :git: https://github.com/SunZhiC/SwiftyUserDefaults.git
+
+CHECKOUT OPTIONS:
+  SwiftyUserDefaults:
+    :commit: 4b59143af80ebdc7e9811de521afcc33084c3e4e
+    :git: https://github.com/SunZhiC/SwiftyUserDefaults.git
 
 SPEC CHECKSUMS:
   Alamofire: f36a35757af4587d8e4f4bfa223ad10be2422b8c
@@ -75,7 +83,7 @@ SPEC CHECKSUMS:
   RxRelay: 45eaa5db8ee4fb50e5ebd57deec0159e97fa51e6
   RxSwift: a4b44f7d24599f674deebd1818eab82e58410632
   SwiftyJSON: f5b1bf1cd8dd53cd25887ac0eabcfd92301c6a5a
-  SwiftyUserDefaults: 63f80248cf5bfb3458825d9a78f2eb7e1293a040
+  SwiftyUserDefaults: dd5dce66fb01565a82c3618b835f0546987eb683
 
 PODFILE CHECKSUM: eecc29273290e3b73944cf3a6f41632af647f299
 

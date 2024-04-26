@@ -35,7 +35,7 @@ class TestAccount {
   /// This is a solana test account with some test token, you can use this account do all test cases.
   static TestAccount solana = TestAccount(
       "Cnbvi3bjBkYbWPVHG4dp6GAZD3qUp8nj9YsVt2PEgH77",
-      "5fBYPZdP5nqH5DSAjgjMi4aSf113m5PuavakojZ7C9svt1i8vyq26pXpEf1Suivg91TUAp7TX1pqK49rgXQfAAjT",
+"5fBYPZdP5nqH5DSAjgjMi4aSf113m5PuavakojZ7C9svt1i8vyq26pXpEf1Suivg91TUAp7TX1pqK49rgXQfAAjT",
       "vacant focus country eye wine where lady doll boat sort ticket grab",
       "GobzzzFQsFAHPvmwT42rLockfUCeV3iutEkK218BxT8K",
       BigInt.from(10000000),

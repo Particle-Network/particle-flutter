@@ -29,7 +29,9 @@ export '../model/security_account_config.dart';
 export '../model/typeddata_version.dart';
 export '../model/user_interface_style.dart';
 export '../network/model/rpc_error.dart';
-export '../network/model/serialize_sol_transreqentity.dart';
+export '../network/model/serialize_sol_transaction.dart';
+export '../network/model/serialize_wsol_transaction.dart';
+export '../network/model/serialize_spl_token_transaction.dart';
 export '../network/net/particle_rpc.dart';
 export '../network/net/request_body_entity.dart';
 export '../model/account_name.dart';
@@ -408,7 +410,21 @@ class ParticleAuth {
 
   /// Set language, default value is Language.en.
   static setLanguage(Language language) {
-    _channel.invokeListMethod("setLanguage", language.name);
+    _channel.invokeMethod("setLanguage", language.name);
+  }
+
+  /// Get language
+  static Future<Language> getLanguage() async {
+    final language = await _channel.invokeMethod("getLanguage");
+    
+    Map<String, Language> languageMap = {
+      'en': Language.en,
+      'zh_hans': Language.zh_hans,
+      'zh_hant': Language.zh_hant,
+      'ja': Language.ja,
+      'ko': Language.ko,
+    };
+    return languageMap[language.toString()] ?? Language.en;
   }
 
   /// Has master password, get value from local user info.

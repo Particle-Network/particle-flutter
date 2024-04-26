@@ -2,14 +2,37 @@ import 'package:particle_auth/particle_auth.dart';
 import 'package:particle_aa_example/mock/test_account.dart';
 
 class TransactionMock {
-  static Future<String> mockSolanaTransaction(String publicAddress) async {
-    final req = SerializeSOLTransReqEntity();
-    req.lamports = TestAccount.solana.amount.toInt();
-    req.receiver = TestAccount.solana.publicAddress;
-    req.sender = publicAddress;
+  static Future<String> mockSOLTransaction(String publicAddress) async {
+    final transaction = SerializeSOLTransaction();
+    transaction.lamports = TestAccount.solana.amount.toInt();
+    transaction.receiver = TestAccount.solana.publicAddress;
+    transaction.sender = publicAddress;
 
-    final result = await SolanaService.serializeTransaction(req);
-    return result["transaction"]["serialized"];
+    final result = await SolanaService.serializeSolTransaction(transaction);
+    final serializedTransaction = result["transaction"]["serialized"];
+    return serializedTransaction;
+  }
+
+  static Future<String> mockSplTokenTransaction(String publicAddress) async {
+    final transaction = SerializeSplTokenTransaction();
+    transaction.amount = TestAccount.solana.amount.toInt();
+    transaction.receiver = TestAccount.solana.publicAddress;
+    transaction.mint = TestAccount.solana.tokenContractAddress;
+    transaction.sender = publicAddress;
+    final result =
+        await SolanaService.serializeSplTokenTransaction(transaction);
+    final serializedTransaction = result["transaction"]["serialized"];
+    return serializedTransaction;
+  }
+
+  static Future<String> mockUnwrapWSOLTransaction(String publicAddress) async {
+    final transaction = SerializeWSOLTransaction();
+    transaction.address = publicAddress;
+
+    final result =
+        await SolanaService.serializeWSolTokenTransaction(transaction);
+    final serializedTransaction = result["transaction"]["serialized"];
+    return serializedTransaction;
   }
 
   /// Mock a transaction
