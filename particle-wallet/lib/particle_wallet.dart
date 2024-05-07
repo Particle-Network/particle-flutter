@@ -295,7 +295,11 @@ class ParticleWallet {
 
   /// load custom ui config json
   static loadCustomUIJsonString(String json) {
-    _channel.invokeMethod("loadCustomUIJsonString", json);
+    if (Platform.isIOS) {
+       _channel.invokeMethod("loadCustomUIJsonString", json);
+    } else {
+
+    }
   }
 
   /// Set support wallet connect as a wallet, default is true
