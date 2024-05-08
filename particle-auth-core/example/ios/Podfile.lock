@@ -50,13 +50,13 @@ PODS:
     - SnapKit (~> 5.7.1)
     - SwiftMessages
     - Then
-  - ParticleAuthService (1.4.0):
+  - ParticleAuthService (1.4.1):
     - ParticleNetworkBase
   - ParticleMPCCore (1.4.0):
     - Base58.swift
     - CryptoSwift (~> 1.8.1)
     - Thresh
-  - ParticleNetworkBase (1.4.0):
+  - ParticleNetworkBase (1.4.1):
     - Alamofire (~> 5.9.0)
     - Base58.swift
     - BigInt (~> 5.2.0)
@@ -103,9 +103,9 @@ DEPENDENCIES:
   - particle_auth (from `.symlinks/plugins/particle_auth/ios`)
   - particle_auth_core (from `.symlinks/plugins/particle_auth_core/ios`)
   - ParticleAuthCore (= 1.4.0)
-  - ParticleAuthService (= 1.4.0)
+  - ParticleAuthService (= 1.4.1)
   - ParticleMPCCore (= 1.4.0)
-  - ParticleNetworkBase (= 1.4.0)
+  - ParticleNetworkBase (= 1.4.1)
   - SkeletonView (from `https://github.com/SunZhiC/SkeletonView.git`, branch `main`)
   - SwiftyUserDefaults (from `https://github.com/SunZhiC/SwiftyUserDefaults.git`, branch `master`)
   - Thresh (= 1.4.0)
@@ -178,9 +178,9 @@ SPEC CHECKSUMS:
   particle_auth: f63e17b5dc9b5f7b3ad4d5c13fbfc03d3739b3ab
   particle_auth_core: 08525d1c4253c4f49fbb6d1562a45d9187fa3f1b
   ParticleAuthCore: cb1bb0980834efb86f3c91426f47ea35656a9548
-  ParticleAuthService: 5c36532334205b8f8b159244072792f4d92a95d3
+  ParticleAuthService: a8b0c2f559874ade8d64009022b178273cfbf179
   ParticleMPCCore: 1206a198d7e368e358fc4315515f1b5f2ef3d79b
-  ParticleNetworkBase: a00b47404eba201dc27aaf28969c7e31a57587ce
+  ParticleNetworkBase: bda74560734051eb7eeed39ad69f38fb517f405e
   RxAlamofire: beb75a1c452d0de225651db4903f5d29d034a620
   RxCocoa: 44a80de90e25b739b5aeaae3c8c371a32e3343cc
   RxRelay: 45eaa5db8ee4fb50e5ebd57deec0159e97fa51e6
@@ -197,6 +197,6 @@ SPEC CHECKSUMS:
   Thresh: e951f6974fbf66cbc9683ca7d19e3e9d79774c35
   TweetNacl: 3abf4d1d2082b0114e7a67410e300892448951e6
 
-PODFILE CHECKSUM: af2c8692c3fbb3920eb2c0847a8af05dcf80606c
+PODFILE CHECKSUM: a0ea1f08b359dbcecbed04d395f7501889101272
 
 COCOAPODS: 1.15.2
