@@ -690,6 +690,7 @@ object ConnectBridge {
             TrustConnectAdapter(),
             ImTokenConnectAdapter(),
             BitKeepConnectAdapter(),
+            OKXConnectAdapter(),
             WalletConnectAdapter(),
             PhantomConnectAdapter(),
         )

@@ -37,7 +37,7 @@ class ConnectLogic {
     //   ChainInfo.Ethereum,
     //   ChainInfo.Polygon
     // ];
-    List<ChainInfo> chainInfos = <ChainInfo>[ChainInfo.Ethereum];
+    List<ChainInfo> chainInfos = <ChainInfo>[currChainInfo];
 
     //metamask only supported one chain
     ParticleConnect.setWalletConnectV2SupportChainInfos(chainInfos);
