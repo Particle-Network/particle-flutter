@@ -189,14 +189,14 @@ class WalletLogic {
 
   static void setCustomWalletName() {
     ParticleWallet.setCustomWalletName(
-        "Playbux", "https://static.particle.network/wallet-icons/Rainbow.png");
+        "Playbux Wallet", "https://static.particle.network/wallet-icons/Rainbow.png");
   }
 
   static void setCustomLocalizable() {
     if (Platform.isIOS) {
       Map<String, String> enLocalizables = <String, String>{
         "network fee": "Service Fee",
-        "particle auth wallet": "Playbux"
+        "particle auth wallet": "Playbux Wallet"
       };
 
       Map<Language, Map<String, String>> localizables =
