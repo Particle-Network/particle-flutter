@@ -255,25 +255,25 @@ packages:
     dependency: transitive
     description:
       name: particle_auth
-      sha256: f8c67123e9bce23faef3a90599b60352a043b7a8dc6d0f22ced22a13e05a7ade
+      sha256: "652e910a9f2cf9229d64903c321c30a884ed39f43f35a6e5e51d987c63e629aa"
       url: "https://pub.dev"
     source: hosted
-    version: "1.4.24"
+    version: "1.4.25"
   particle_connect:
     dependency: transitive
     description:
       name: particle_connect
-      sha256: ac570e8e171243e8f6a20ede0a8685ce3d2d4e651d97e958fa6235d54b4a0916
+      sha256: "2d9b8fbeac755c4552059b1158c736d3162aef81d33af95ae96aa73a9bb87d13"
       url: "https://pub.dev"
     source: hosted
-    version: "1.4.24"
+    version: "1.4.25"
   particle_wallet:
     dependency: "direct main"
     description:
       path: ".."
       relative: true
     source: path
-    version: "1.4.24"
+    version: "1.4.25"
   path:
     dependency: transitive
     description:
