@@ -509,6 +509,7 @@ extension ParticleWalletPlugin {
         let icon = data["icon"].stringValue
 
         ConnectManager.setCustomWalletName(walletType: .particle, name: .init(name: name, icon: icon))
+        ConnectManager.setCustomWalletName(walletType: .authCore, name: .init(name: name, icon: icon))
     }
 
     func setCustomLocalizable(_ json: String?) {
