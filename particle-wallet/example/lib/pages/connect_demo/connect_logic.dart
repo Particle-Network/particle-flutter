@@ -48,6 +48,7 @@ class ConnectLogic {
       showToast('connect: $account');
 
       ParticleWallet.setWallet(walletType, account.publicAddress, "Custom WalletName");
+      ParticleWallet.setCustomWalletName("","https://xraders.xyz/wp-content/uploads/2022/03/Group-349.png");
 
       print("connect: $account");
     } catch (error) {
