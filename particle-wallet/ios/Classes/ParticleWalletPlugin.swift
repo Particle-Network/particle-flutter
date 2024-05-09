@@ -52,7 +52,6 @@ public class ParticleWalletPlugin: NSObject, FlutterPlugin {
 
         // WalletConnectV2
         case setSupportWalletConnect
-        case setWalletConnectV2ProjectId
         case initializeWalletMetaData
 
         case setCustomWalletName
@@ -136,8 +135,6 @@ public class ParticleWalletPlugin: NSObject, FlutterPlugin {
             self.setPriorityNFTContractAddresses(json as? String)
         case .loadCustomUIJsonString:
             self.loadCustomUIJsonString(json as? String)
-        case .setWalletConnectV2ProjectId:
-            self.setWalletConnectV2ProjectId(json as? String)
         case .initializeWalletMetaData:
             self.initializeWalletMetaData(json as? String)
 
@@ -484,18 +481,14 @@ extension ParticleWalletPlugin {
         let walletUrlString = data["url"].stringValue
         let walletDescription = data["description"].stringValue
 
+        let walletConnectV2ProjectId = data["walletConnectProjectId"].stringValue
+
         let walletIconUrl = URL(string: walletIconString) != nil ? URL(string: walletIconString)! : URL(string: "https://connect.particle.network/icons/512.png")!
 
         let walletUrl = URL(string: walletUrlString) != nil ? URL(string: walletUrlString)! : URL(string: "https://connect.particle.network")!
 
         ParticleWalletConnect.initialize(.init(name: walletName, icon: walletIconUrl, url: walletUrl, description: walletDescription, redirectUniversalLink: nil))
-    }
-
-    func setWalletConnectV2ProjectId(_ json: String?) {
-        guard let json = json else {
-            return
-        }
-        ParticleWalletConnect.setWalletConnectV2ProjectId(json)
+        ParticleWalletConnect.setWalletConnectV2ProjectId(walletConnectV2ProjectId)
     }
 
     func setCustomWalletName(_ json: String?) {

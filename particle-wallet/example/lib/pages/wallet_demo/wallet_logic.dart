@@ -7,15 +7,14 @@ import 'package:particle_wallet/particle_wallet.dart';
 
 class WalletLogic {
   static void init() {
-    // Set wallet connect v2 project id to ParticleWalletService, used as a wallet
-    ParticleWallet.setWalletConnectV2ProjectId(
-        "75ac08814504606fc06126541ace9df6");
-
+    // Set wallet meta data when using walletconnect to scan other websites
+    // It's required by WalletConnect, get it from https://walletconnect.com/
     ParticleWallet.init(WalletMetaData(
         "Particle Connect",
         "https://connect.particle.network/icons/512.png",
         "https://connect.particle.network",
-        "Particle Connect Flutter Demo"));
+        "Particle Connect Flutter Demo",
+        "75ac08814504606fc06126541ace9df6"));
   }
 
   static void navigatorWallet() {

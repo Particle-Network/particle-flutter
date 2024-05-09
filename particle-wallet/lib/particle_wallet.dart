@@ -311,14 +311,6 @@ class ParticleWallet {
     }
   }
 
-  /// Set Wallet conenct v2 project id, used when scan qrcode connect as a wallet.
-  static setWalletConnectV2ProjectId(String walletConnectV2ProjectId) {
-    if (Platform.isIOS) {
-      _channel.invokeListMethod(
-          "setWalletConnectV2ProjectId", walletConnectV2ProjectId);
-    }
-  }
-
   /// Set custom wallet name and icon, should call before login/connect, only support particle wallet.
   static setCustomWalletName(String name, String icon) {
     if (Platform.isIOS) {
