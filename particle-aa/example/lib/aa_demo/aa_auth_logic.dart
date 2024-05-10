@@ -12,9 +12,7 @@ class AAAuthLogic {
 
     Map<int, String> biconomyApiKeys = {
       1: "", // your ethereum mainnet key
-      5: "", // your ethereum goerli key
       137: "", // your polygon mainnet key
-      80001: "", // your polygon mumbai key
     };
     ParticleAuth.init(ChainInfo.Polygon, Env.production);
 
