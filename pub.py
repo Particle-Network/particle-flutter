@@ -158,7 +158,7 @@ class ParticleWallet(ParticleBase):
 
 
 if __name__ == "__main__":
-    version = '1.4.25'
+    version = '1.4.26'
 
     print("Auth Start")
     ParticleAuth(version).publish()

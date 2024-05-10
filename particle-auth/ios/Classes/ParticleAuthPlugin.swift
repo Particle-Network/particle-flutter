@@ -293,7 +293,7 @@ public extension ParticleAuthPlugin {
     }
     
     func fastLogout(_ callback: @escaping ParticleCallback) {
-        subscribeAndCallback(observable: ParticleAuthService.logout(), callback: callback)
+        subscribeAndCallback(observable: ParticleAuthService.fastLogout(), callback: callback)
     }
     
     func isLogin(_ callback: @escaping ParticleCallback) {
