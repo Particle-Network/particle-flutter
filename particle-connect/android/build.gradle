@@ -50,13 +50,14 @@ android {
 dependencies {
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
 
-    def sdkVersion = "1.4.18"
+    def sdkVersion = "1.4.29"
     api("network.particle:base-service:$sdkVersion")
     api("network.particle:auth-service:$sdkVersion")
 
     api("network.particle:connect-common:$sdkVersion")
     api("network.particle:connect:$sdkVersion")
     api("network.particle:connect-auth-adapter:$sdkVersion")
+    compileOnly("network.particle:connect-auth-core-adapter:$sdkVersion")
     api("network.particle:connect-evm-adapter:$sdkVersion")
     api("network.particle:connect-solana-adapter:$sdkVersion")
     api("network.particle:connect-phantom-adapter:$sdkVersion")

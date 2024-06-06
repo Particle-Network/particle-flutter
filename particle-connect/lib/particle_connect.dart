@@ -80,8 +80,8 @@ class ParticleConnect {
     final result = await _channel.invokeMethod(
         'connect',
         jsonEncode({
-          "wallet_type": walletType.name,
-          "particle_connect_config": config,
+          "walletType": walletType.name,
+          "particleConnectConfig": config,
         }));
     if (jsonDecode(result)["status"] == true ||
         jsonDecode(result)["status"] == 1) {

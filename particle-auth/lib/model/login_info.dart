@@ -46,27 +46,22 @@ class LoginAuthorization {
       };
 }
 
-
 class LoginPageConfig {
-  String? imagePath;
-  String? projectName;
-  String? description;
-  // base64 or url
-  String? imageType;
+  String imagePath;
+  String projectName;
+  String description;
 
-  LoginPageConfig({
+  LoginPageConfig(
     this.imagePath,
     this.projectName,
     this.description,
-    this.imageType
-  });
+  );
 
   Map<String, dynamic> toJson() => {
-    'imagePath': imagePath,
-    'projectName': projectName,
-    'description': description,
-    'imageType': imageType
-  };
+        'imagePath': imagePath,
+        'projectName': projectName,
+        'description': description,
+      };
 }
 
 enum Env { dev, staging, production }

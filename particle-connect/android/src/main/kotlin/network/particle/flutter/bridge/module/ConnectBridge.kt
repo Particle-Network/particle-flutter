@@ -2,6 +2,11 @@ package network.particle.flutter.bridge.module
 
 import android.app.Activity
 import android.text.TextUtils
+import auth.core.adapter.AuthCoreAdapter
+import auth.core.adapter.ConnectConfigEmail
+import auth.core.adapter.ConnectConfigJWT
+import auth.core.adapter.ConnectConfigPhone
+import auth.core.adapter.ConnectConfigSocialLogin
 import com.blankj.utilcode.util.GsonUtils
 import com.blankj.utilcode.util.LogUtils
 import com.google.gson.Gson
@@ -25,7 +30,11 @@ import com.particle.base.model.ChainType
 import com.particle.base.model.LoginPrompt
 import com.particle.base.model.LoginType
 import com.particle.base.model.MobileWCWallet
+import com.particle.base.model.MobileWCWalletName
+import com.particle.base.model.SocialLoginType
 import com.particle.base.model.SupportAuthType
+import com.particle.base.model.SupportLoginType
+import com.particle.base.utils.PnModuleUtils
 import com.particle.connect.ParticleConnect
 import com.particle.connect.ParticleConnect.setChain
 import com.particle.connect.model.AdapterAccount
@@ -37,6 +46,7 @@ import io.flutter.plugin.common.MethodChannel
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import network.particle.auth_flutter.bridge.module.AuthBridge
 import network.particle.auth_flutter.bridge.utils.ChainUtils
 import network.particle.chains.ChainInfo
 import network.particle.flutter.bridge.model.*
@@ -47,6 +57,7 @@ import org.json.JSONObject
 import particle.auth.adapter.ParticleConnectAdapter
 import particle.auth.adapter.ParticleConnectConfig
 import java.lang.RuntimeException
+import java.util.Locale
 
 object ConnectBridge {
     /**
@@ -95,56 +106,95 @@ object ConnectBridge {
     }
 
     fun connect(
-        connectJson: String,
-        result: MethodChannel.Result,
-        events: EventChannel.EventSink?
+        connectJson: String, result: MethodChannel.Result, events: EventChannel.EventSink?
     ) {
         LogUtils.d("connectJson", connectJson)
         val connectData: ConnectData = GsonUtils.fromJson(
             connectJson, ConnectData::class.java
         )
-        val pnConfig = connectData.particleConnectConfig
-        var particleConnectConfig: ParticleConnectConfig? = null
-        if (pnConfig != null) {
-            val account: String = if (TextUtils.isEmpty(pnConfig.account)) {
-                ""
-            } else {
-                pnConfig.account
-            }
-            var supportAuthType = SupportAuthType.NONE.value
-            for (i in 0 until pnConfig.supportAuthTypeValues.size) {
-                try {
-                    val supportType: String = pnConfig.supportAuthTypeValues.get(i).uppercase()
-                    val authType = SupportAuthType.valueOf(supportType)
-                    supportAuthType = supportAuthType or authType.value
-                } catch (e: Exception) {
-                    e.printStackTrace()
+        val walletType = connectData.walletType
+        val particleConnectData = connectData.particleConnectData
+        var config: ConnectConfig? = null
+
+        try {
+            if (particleConnectData != null) {
+                val account: String = particleConnectData.account ?: ""
+                if (walletType.equals(MobileWCWalletName.Particle.name, true)) {
+                    var supportAuthType = SupportAuthType.NONE.value
+                    for (i in particleConnectData.supportAuthTypeValues.indices) {
+                        try {
+                            val supportType =
+                                particleConnectData.supportAuthTypeValues[i].uppercase(Locale.getDefault())
+                            val authType = SupportAuthType.valueOf(supportType)
+                            supportAuthType = supportAuthType or authType.value
+                        } catch (e: Exception) {
+                            e.printStackTrace()
+                        }
+                    }
+                    config = ParticleConnectConfig(
+                        LoginType.valueOf(
+                            particleConnectData.loginType.uppercase(
+                                Locale.getDefault()
+                            )
+                        ), supportAuthType, account, null
+                    )
+                    val configJson = Gson().toJson(config)
+                    LogUtils.d("Connect connect config", configJson)
+                } else if (walletType.equals(MobileWCWalletName.AuthCore.name, true)) {
+                    val loginType =
+                        LoginType.valueOf(particleConnectData.loginType.uppercase(Locale.ENGLISH))
+                    if (loginType == LoginType.JWT) {
+                        config = ConnectConfigJWT(account)
+                    } else if (loginType == LoginType.PHONE) {
+                        val supportLoginTypes: List<SupportLoginType> =
+                            particleConnectData.supportAuthTypeValues.map {
+                                SupportLoginType.valueOf(it.uppercase())
+                            }
+                        val prompt = LoginPrompt.parse(particleConnectData.prompt)
+                        config = ConnectConfigPhone(
+                            account,
+                            particleConnectData.code ?: "",
+                            supportLoginTypes,
+                            prompt,
+                            particleConnectData.loginPageConfig
+                        )
+                    } else if (loginType == LoginType.EMAIL) {
+                        val supportLoginTypes: List<SupportLoginType> =
+                            particleConnectData.supportAuthTypeValues.map {
+                                SupportLoginType.valueOf(it.uppercase())
+                            }
+                        val prompt = LoginPrompt.parse(particleConnectData.prompt)
+                        config = ConnectConfigEmail(
+                            account,
+                            particleConnectData.code ?: "",
+                            supportLoginTypes,
+                            prompt,
+                            particleConnectData.loginPageConfig
+                        )
+
+                    } else {
+                        val socialLoginType = SocialLoginType.valueOf(
+                            particleConnectData.loginType.uppercase(
+                                Locale.ENGLISH
+                            )
+                        )
+                        val prompt = LoginPrompt.parse(particleConnectData.prompt)
+                        config = ConnectConfigSocialLogin(socialLoginType, prompt)
+                    }
                 }
             }
-
-            var prompt: LoginPrompt? = null
-            try {
-                if (pnConfig.prompt != null) if ("none".equals(
-                        pnConfig.prompt,
-                        ignoreCase = true
-                    )
-                ) prompt = LoginPrompt.None
-                else if ("consent".equals(pnConfig.prompt, ignoreCase = true)) prompt =
-                    LoginPrompt.ConSent
-                else if ("select_account".equals(pnConfig.prompt, ignoreCase = true)) prompt =
-                    LoginPrompt.SelectAccount
-            } catch (e: Exception) {
-                e.printStackTrace()
-            }
-            particleConnectConfig = ParticleConnectConfig(
-                LoginType.valueOf(pnConfig.loginType.uppercase()), supportAuthType, account, prompt
-            )
+        } catch (e: Exception) {
+            e.printStackTrace()
         }
-
-        val connectAdapter =
-            ParticleConnect.getAdapters().first { it.name.equals(connectData.walletType, true) }
-
-        connectAdapter.connect<ConnectConfig>(particleConnectConfig, object : ConnectCallback {
+        var connectAdapter: IConnectAdapter? = null
+        val adapters = ParticleConnect.getAdapters()
+        for (adapter in adapters) {
+            if (adapter.name.equals(walletType, ignoreCase = true)) {
+                connectAdapter = adapter
+                break
+            }
+        }
+        connectAdapter!!.connect<ConnectConfig>(config, object : ConnectCallback {
             override fun onConnected(account: Account) {
                 LogUtils.d("onConnected", account.toString())
                 try {
@@ -157,7 +207,13 @@ object ConnectBridge {
             override fun onError(connectError: ConnectError) {
                 LogUtils.d("onError", connectError.toString())
                 try {
-                    result.success(FlutterCallBack.failed(FlutterErrorMessage.parseConnectError(connectError)).toGson())
+                    result.success(
+                        FlutterCallBack.failed(
+                            FlutterErrorMessage.parseConnectError(
+                                connectError
+                            )
+                        ).toGson()
+                    )
                 } catch (_: Exception) {
 
                 }
@@ -179,7 +235,10 @@ object ConnectBridge {
 
             override fun onError(connectError: ConnectError) {
                 LogUtils.d("onError", connectError.toString())
-                result.success(FlutterCallBack.failed(FlutterErrorMessage.parseConnectError(connectError)).toGson())
+                result.success(
+                    FlutterCallBack.failed(FlutterErrorMessage.parseConnectError(connectError))
+                        .toGson()
+                )
             }
         })
         events?.success(connectAdapter.qrCodeUri())
@@ -300,7 +359,7 @@ object ConnectBridge {
 
         if (ParticleNetwork.isAAModeEnable()) {
             var feeMode: FeeMode = FeeModeNative()
-            if (transParams.feeMode != null ) {
+            if (transParams.feeMode != null) {
                 val option = transParams.feeMode.option
                 if (option == "token") {
                     val tokenPaymasterAddress = transParams.feeMode.tokenPaymasterAddress
@@ -316,8 +375,7 @@ object ConnectBridge {
                     feeMode = FeeModeNative(verifyingPaymasterNative)
                 }
             }
-            connectAdapter.signAndSendTransaction(
-                transParams.publicAddress,
+            connectAdapter.signAndSendTransaction(transParams.publicAddress,
                 transaction,
                 feeMode,
                 object : TransactionCallback {
@@ -335,8 +393,7 @@ object ConnectBridge {
                     }
                 })
         } else {
-            connectAdapter.signAndSendTransaction(
-                transParams.publicAddress,
+            connectAdapter.signAndSendTransaction(transParams.publicAddress,
                 transaction,
                 object : TransactionCallback {
                     override fun onError(error: ConnectError) {
@@ -402,8 +459,7 @@ object ConnectBridge {
             )
             return
         }
-        connectAdapter.signAllTransactions(
-            signData.publicAddress,
+        connectAdapter.signAllTransactions(signData.publicAddress,
             signData.transactions.toTypedArray(),
             object : SignAllCallback {
 
@@ -613,7 +669,6 @@ object ConnectBridge {
             MobileWCWallet.BitKeep,
             MobileWCWallet.MathWallet,
             MobileWCWallet.TokenPocket,
-            MobileWCWallet.Omni,
             MobileWCWallet.Zerion,
             MobileWCWallet.Coin98,
             MobileWCWallet.Bitpie,
@@ -705,6 +760,9 @@ object ConnectBridge {
         } else {
             adapters.add(SolanaConnectAdapter())
         }
+        if (PnModuleUtils.isAuthCoreAdapterImplementation()) {
+            adapters.add(AuthCoreAdapter())
+        }
         return adapters;
     }
 
@@ -717,8 +775,7 @@ object ConnectBridge {
     }
 
     fun setWalletConnectV2SupportChainInfos(
-        chainsString: String?,
-        result: MethodChannel.Result
+        chainsString: String?, result: MethodChannel.Result
     ) {
         LogUtils.d("setWalletConnectV2SupportChainInfos", chainsString)
         val initData: List<InitData> =
@@ -766,53 +823,49 @@ object ConnectBridge {
         }
         CoroutineScope(Dispatchers.IO).launch {
             try {
-                ParticleNetwork.getAAService()
-                    .quickSendTransaction(
-                        transParams.transactions,
-                        feeMode,
-                        object : MessageSigner {
-                            override fun signMessage(
-                                message: String,
-                                callback: WebServiceCallback<SignOutput>,
-                                chainId: Long?
-                            ) {
-                                connectAdapter.signMessage(
-                                    transParams.publicAddress,
-                                    message,
-                                    object : SignCallback {
-                                        override fun onError(error: ConnectError) {
-                                            callback.failure(
-                                                ErrorInfo(
-                                                    error.message,
-                                                    error.code
-                                                )
+                ParticleNetwork.getAAService().quickSendTransaction(transParams.transactions,
+                    feeMode,
+                    object : MessageSigner {
+                        override fun signMessage(
+                            message: String,
+                            callback: WebServiceCallback<SignOutput>,
+                            chainId: Long?
+                        ) {
+                            connectAdapter.signMessage(transParams.publicAddress,
+                                message,
+                                object : SignCallback {
+                                    override fun onError(error: ConnectError) {
+                                        callback.failure(
+                                            ErrorInfo(
+                                                error.message, error.code
                                             )
-                                        }
+                                        )
+                                    }
 
-                                        override fun onSigned(signature: String) {
-                                            callback.success(SignOutput(signature))
-                                        }
+                                    override fun onSigned(signature: String) {
+                                        callback.success(SignOutput(signature))
+                                    }
 
-                                    })
+                                })
 
-                            }
+                        }
 
-                            override fun eoaAddress(): String {
-                                return connectAdapter.getAccounts()[0].publicAddress
-                            }
+                        override fun eoaAddress(): String {
+                            return connectAdapter.getAccounts()[0].publicAddress
+                        }
 
-                        },
-                        object : WebServiceCallback<SignOutput> {
-                            override fun success(output: SignOutput) {
-                                result.success(
-                                    FlutterCallBack.success(output.signature!!).toGson()
-                                )
-                            }
+                    },
+                    object : WebServiceCallback<SignOutput> {
+                        override fun success(output: SignOutput) {
+                            result.success(
+                                FlutterCallBack.success(output.signature!!).toGson()
+                            )
+                        }
 
-                            override fun failure(errMsg: ErrorInfo) {
-                                result.success(FlutterCallBack.failed(errMsg).toGson())
-                            }
-                        })
+                        override fun failure(errMsg: ErrorInfo) {
+                            result.success(FlutterCallBack.failed(errMsg).toGson())
+                        }
+                    })
             } catch (e: Exception) {
                 e.printStackTrace()
                 result.success(

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:oktoast/oktoast.dart';
 import 'package:particle_connect/particle_connect.dart';
+import 'package:provider/provider.dart';
 
 import 'connect_logic.dart';
 
@@ -13,6 +14,7 @@ class SelectWalletPage extends StatefulWidget {
 
 class SelectWalletPageState extends State<SelectWalletPage> {
   List<WalletType> chainList = <WalletType>[
+    WalletType.authCore,
     WalletType.particle,
     WalletType.metaMask,
     WalletType.rainbow,
@@ -28,6 +30,7 @@ class SelectWalletPageState extends State<SelectWalletPage> {
 
   @override
   Widget build(BuildContext context) {
+    final logic = Provider.of<ConnectLogic>(context);
     return Scaffold(
         appBar: AppBar(
           title: const Text("Select Chain Page"),
@@ -41,7 +44,7 @@ class SelectWalletPageState extends State<SelectWalletPage> {
                 final walletType = chainList[index];
 
                 showToast("set walletType: ${walletType.name}");
-                ConnectLogic.walletType = walletType;
+                logic.walletType = walletType;
                 Navigator.pop(context);
               },
               child: Text(chainList[index].name),

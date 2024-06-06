@@ -8,7 +8,7 @@ import java.util.List;
 
 import network.particle.auth_flutter.bridge.model.BiconomyFeeMode;
 
-
+@Keep
 public class ConnectSignData {
 
     @SerializedName("wallet_type")

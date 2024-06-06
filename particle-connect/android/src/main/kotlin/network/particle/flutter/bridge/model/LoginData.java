@@ -1,10 +1,12 @@
 package network.particle.flutter.bridge.model;
 
+import androidx.annotation.Keep;
+
 import com.google.gson.annotations.SerializedName;
 
 import java.util.List;
 
-
+@Keep
 public class LoginData {
 
     @SerializedName("login_type")

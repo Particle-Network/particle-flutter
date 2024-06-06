@@ -1,7 +1,9 @@
 package network.particle.flutter.bridge.model;
 
-import com.google.gson.annotations.SerializedName;
+import androidx.annotation.Keep;
 
+import com.google.gson.annotations.SerializedName;
+@Keep
 public class RpcUrl {
 
     @SerializedName("evm_url")

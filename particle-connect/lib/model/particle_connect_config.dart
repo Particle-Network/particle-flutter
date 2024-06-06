@@ -3,8 +3,10 @@ import 'package:particle_auth/model/login_info.dart';
 class ParticleConnectConfig {
   LoginType loginType;
   String account;
+  String? code ="";
   List<SupportAuthType> supportAuthTypes;
   SocialLoginPrompt? socialLoginPrompt;
+  LoginPageConfig? loginPageConfig;
   LoginAuthorization? authorization;
 
   /// Particle connect config, use for connect when wallet type is particle.
@@ -18,16 +20,16 @@ class ParticleConnectConfig {
   ///
   ///
   /// [socialLoginPrompt] set social login prompt, optional.
-  ParticleConnectConfig(this.loginType, this.account, this.supportAuthTypes,
-      this.socialLoginPrompt,
-      {this.authorization});
+  ParticleConnectConfig(this.loginType, this.account,  this.supportAuthTypes, this.socialLoginPrompt,
+      {this.code,this.authorization, this.loginPageConfig});
 
   Map<String, dynamic> toJson() => {
-        'login_type': loginType.name,
+        'loginType': loginType.name,
         'account': account,
-        'support_auth_type_values':
-            supportAuthTypes.map((e) => e.name).toList(),
-        "social_login_prompt": socialLoginPrompt?.name,
+        'code': code,
+        'supportAuthTypeValues': supportAuthTypes.map((e) => e.name).toList(),
+        "loginPageConfig": loginPageConfig,
+        "socialLoginPrompt": socialLoginPrompt?.name,
         "authorization": authorization
       };
 }

@@ -1,7 +1,9 @@
 package network.particle.flutter.bridge.model
 
+import androidx.annotation.Keep
 import com.google.gson.annotations.SerializedName
 
+@Keep
 data class AddSwitchChain(
     @SerializedName("chain_name") val chainName: String,
     @SerializedName("chain_id") val chainId: String,

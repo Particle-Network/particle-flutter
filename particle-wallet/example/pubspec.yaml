@@ -32,7 +32,11 @@ dependencies:
   # provider: ^6.1.1
   # auto_route: ^7.8.1
   oktoast: ^3.3.2+1
+  particle_auth:
+    path: ../../particle-auth/
 
+  particle_auth_core:
+    path: ../../particle-auth-core/
 
 dev_dependencies:
   flutter_test:
