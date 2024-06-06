@@ -13,6 +13,7 @@ class SelectWalletPage extends StatefulWidget {
 
 class SelectWalletPageState extends State<SelectWalletPage> {
   List<WalletType> chainList = <WalletType>[
+    WalletType.authCore,
     WalletType.particle,
     WalletType.metaMask,
     WalletType.rainbow,

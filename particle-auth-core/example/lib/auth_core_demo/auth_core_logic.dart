@@ -33,11 +33,9 @@ class AuthCoreLogic {
           account: account,
           supportAuthTypes: supportAuthTypes,
           loginPageConfig: LoginPageConfig(
-              imagePath:
                   "https://static.particle.network/wallet-icons/Particle-iOS.png",
-              projectName: "Flutter Example",
-              description: "Welcome to login",
-              imageType: "url"));
+               "Flutter Example",
+              "Welcome to login"));
       print("connect: $userInfo");
       showToast("connect: $userInfo");
     } catch (error) {
