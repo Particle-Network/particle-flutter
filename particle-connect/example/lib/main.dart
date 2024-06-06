@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:oktoast/oktoast.dart';
 import 'package:particle_connect_example/connect_demo/connect_demo.dart';
+import 'package:provider/provider.dart';
+
+import 'connect_demo/connect_logic.dart';
 
 void main() {
   runApp(const MyApp());
@@ -20,11 +23,14 @@ class MyApp extends StatelessWidget {
       animationBuilder: const OffsetAnimationBuilder(),
       animationDuration: const Duration(milliseconds: 200),
       duration: const Duration(seconds: 5),
-      child: MaterialApp(
-        theme: ThemeData(
-          primarySwatch: Colors.blue,
+      child: ChangeNotifierProvider(
+        create: (context) => ConnectLogic(),
+        child: MaterialApp(
+          theme: ThemeData(
+            primarySwatch: Colors.blue,
+          ),
+          home: const MyHomePage(title: 'Particle Network Flutter Demo '),
         ),
-        home: const MyHomePage(title: 'Particle Network Flutter Demo '),
       ),
     );
   }
