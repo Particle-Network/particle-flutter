@@ -322,3 +322,179 @@ class _ConnectDemoPageState extends State<ConnectDemoPage> {
                   child: SizedBox(
                     width: double.infinity,
                     height: 50,
+                    child: ElevatedButton(
+                        onPressed: () => {logic.isConnected()},
+                        child: const Text(
+                          "IsConnected",
+                          style: TextStyle(fontSize: 18),
+                        )),
+                  ),
+                ),
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: SizedBox(
+                    width: double.infinity,
+                    height: 50,
+                    child: ElevatedButton(
+                        onPressed: () => {logic.getAccounts()},
+                        child: const Text(
+                          "getAccounts",
+                          style: TextStyle(fontSize: 18),
+                        )),
+                  ),
+                ),
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: SizedBox(
+                    width: double.infinity,
+                    height: 50,
+                    child: ElevatedButton(
+                        onPressed: () => {logic.walletTypeState()},
+                        child: const Text(
+                          "Wallet ready state",
+                          style: TextStyle(fontSize: 18),
+                        )),
+                  ),
+                ),
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: SizedBox(
+                    width: double.infinity,
+                    height: 50,
+                    child: ElevatedButton(
+                        onPressed: () => {logic.reconnectIfNeed()},
+                        child: const Text(
+                          "Reconnect wallet",
+                          style: TextStyle(fontSize: 18),
+                        )),
+                  ),
+                ),
+              ],
+            ),
+          );
+        },
+      ),
+    );
+  }
+
+  Card connectWithParams() {
+    return Card(
+      elevation: 5,
+      child: Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: Column(
+          children: [
+            const Text(
+              "Connect with AuthCore Adapter",
+              style: TextStyle(fontSize: 18),
+            ),
+            Row(
+              children: [
+                const Text("LoginType"),
+                const Spacer(),
+                DropdownButton<LoginType>(
+                  value: loginType,
+                  onChanged: (LoginType? newValue) {
+                    setState(() {
+                      loginType = newValue!;
+                    });
+                  },
+                  items: LoginType.values.map((LoginType type) {
+                    return DropdownMenuItem<LoginType>(
+                      value: type,
+                      child: Text(type.toString()),
+                    );
+                  }).toList(),
+                ),
+              ],
+            ),
+            Row(children: [
+              const Text("Account"),
+              const Spacer(),
+              SizedBox(
+                width: 200,
+                height: 50,
+                child: TextField(
+                    textAlign: TextAlign.end,
+                    controller: accountCtrl,
+                    decoration: const InputDecoration(
+                      hintText: "Phone/Email/JWT",
+                    )),
+              )
+            ]),
+            SizedBox(
+              width: double.infinity,
+              child: InkWell(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    const Text(
+                      "SupportLoginTypes: ",
+                      style: TextStyle(fontSize: 16),
+                    ),
+                    Text(selectedAuthTypes.entries
+                        .where((entry) => entry.value)
+                        .map((entry) => entry.key.toString().split('.').last)
+                        .join(', ')),
+                  ],
+                ),
+                onTap: () => {
+                  setState(() {
+                    selectedLoginTypesShow = !selectedLoginTypesShow;
+                  })
+                },
+              ),
+            ),
+            Visibility(
+              visible: selectedLoginTypesShow,
+              child: Column(
+                children: selectedAuthTypes.keys.map((loginType) {
+                  return CheckboxListTile(
+                    title: Text(loginType.toString().split('.').last),
+                    value: selectedAuthTypes[loginType],
+                    onChanged: (bool? value) {
+                      // Update the state of the main widget
+                      setState(() {
+                        selectedAuthTypes[loginType] = value!;
+                      });
+                    },
+                  );
+                }).toList(),
+                // Add an action button if needed
+              ),
+            ),
+            ItemButton(
+                "Connect",
+                () => Provider.of<ConnectLogic>(context, listen: false).authCoreConnect(loginType, accountCtrl.text,
+                          selectedAuthTypes.entries.where((e) => e.value).map((e) => e.key).toList())
+                    ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+class ItemButton extends StatelessWidget {
+  final String text;
+  final VoidCallback onPressed;
+
+  const ItemButton(this.text, this.onPressed, {super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.all(8.0),
+      child: SizedBox(
+        width: double.infinity,
+        height: 50,
+        child: ElevatedButton(
+            onPressed: () => onPressed(),
+            child: Text(
+              text,
+              style: const TextStyle(fontSize: 18),
+            )),
+      ),
+    );
+  }
+}

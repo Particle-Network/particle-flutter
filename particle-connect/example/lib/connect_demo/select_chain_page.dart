@@ -36,4 +36,9 @@ class SelectChainPageState extends State<SelectChainPage> {
                 logic.currChainInfo = chainInfo;
                 Navigator.pop(context);
               },
-              child: Text("${chainLis
+              child: Text("${chainList[index].name}  ${chainList[index].id}"),
+            );
+          },
+        ));
+  }
+}
