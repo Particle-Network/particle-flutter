@@ -113,8 +113,7 @@ class WalletLogic {
   static void switchWallet() async {
     WalletType walletType = WalletType.particle;
     String publicAddress = "";
-    String result =
-        await ParticleWallet.switchWallet(walletType, publicAddress);
+    bool result = await ParticleWallet.switchWallet(walletType, publicAddress);
     print("result:$result");
     showToast("result: $result");
   }
@@ -187,8 +186,8 @@ class WalletLogic {
   }
 
   static void setCustomWalletName() {
-    ParticleWallet.setCustomWalletName(
-        "Playbux Wallet", "https://static.particle.network/wallet-icons/Rainbow.png");
+    ParticleWallet.setCustomWalletName("Playbux Wallet",
+        "https://static.particle.network/wallet-icons/Rainbow.png");
   }
 
   static void setCustomLocalizable() {

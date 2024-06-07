@@ -195,25 +195,20 @@ extension ParticleConnectPlugin {
 #endif
         
 #if canImport(ConnectWalletConnectAdapter)
-        adapters.append(MetaMaskConnectAdapter())
-        adapters.append(RainbowConnectAdapter())
-        adapters.append(BitkeepConnectAdapter())
-        adapters.append(ImtokenConnectAdapter())
-        adapters.append(TrustConnectAdapter())
-        adapters.append(WalletConnectAdapter())
-        
-        let moreAdapterClasses: [WalletConnectAdapter.Type] =
-            [ZerionConnectAdapter.self,
-             MathConnectAdapter.self,
-             OmniConnectAdapter.self,
-             Inch1ConnectAdapter.self,
-             ZengoConnectAdapter.self,
-             AlphaConnectAdapter.self,
-             OKXConnectAdapter.self]
-
-        adapters.append(contentsOf: moreAdapterClasses.map {
-            $0.init()
-        })
+        adapters.append(contentsOf: [
+            MetaMaskConnectAdapter(),
+            RainbowConnectAdapter(),
+            BitkeepConnectAdapter(),
+            ImtokenConnectAdapter(),
+            TrustConnectAdapter(),
+            WalletConnectAdapter(),
+            ZerionConnectAdapter(),
+            MathConnectAdapter(),
+            Inch1ConnectAdapter(),
+            ZengoConnectAdapter(),
+            AlphaConnectAdapter(),
+            OKXConnectAdapter()
+        ])
         
 #endif
         ParticleConnect.initialize(env: devEnv, chainInfo: chainInfo, dAppData: dAppData) {
@@ -269,70 +264,8 @@ extension ParticleConnectPlugin {
             return
         }
         
-        let data = JSON(parseJSON: json)
-        
-        let walletTypeString = data["wallet_type"].stringValue
-        let configJson = data["particle_connect_config"]
-        
-        var connectConfig: ParticleAuthConfig?
-        
-        if !configJson.isEmpty {
-            let loginType = LoginType(rawValue: configJson["login_type"].stringValue.lowercased()) ?? .email
-            var supportAuthTypeArray: [SupportAuthType] = []
-            
-            let array = configJson["support_auth_type_values"].arrayValue.map {
-                $0.stringValue.lowercased()
-            }
-            if array.contains("all") {
-                supportAuthTypeArray = [.all]
-            } else {
-                array.forEach {
-                    if $0 == "email" {
-                        supportAuthTypeArray.append(.email)
-                    } else if $0 == "phone" {
-                        supportAuthTypeArray.append(.phone)
-                    } else if $0 == "apple" {
-                        supportAuthTypeArray.append(.apple)
-                    } else if $0 == "google" {
-                        supportAuthTypeArray.append(.google)
-                    } else if $0 == "facebook" {
-                        supportAuthTypeArray.append(.facebook)
-                    } else if $0 == "github" {
-                        supportAuthTypeArray.append(.github)
-                    } else if $0 == "twitch" {
-                        supportAuthTypeArray.append(.twitch)
-                    } else if $0 == "microsoft" {
-                        supportAuthTypeArray.append(.microsoft)
-                    } else if $0 == "linkedin" {
-                        supportAuthTypeArray.append(.linkedin)
-                    } else if $0 == "discord" {
-                        supportAuthTypeArray.append(.discord)
-                    } else if $0 == "twitter" {
-                        supportAuthTypeArray.append(.twitter)
-                    }
-                }
-            }
-            
-            var account = configJson["account"].string
-            
-            if account != nil, account!.isEmpty {
-                account = nil
-            }
-            
-            let socialLoginPromptString = configJson["social_login_prompt"].stringValue.lowercased()
-            let socialLoginPrompt: SocialLoginPrompt? = SocialLoginPrompt(rawValue: socialLoginPromptString)
-            
-            let message: String? = configJson["authorization"]["message"].string
-            let isUnique: Bool = configJson["authorization"]["uniq"].bool ?? false
-            
-            var loginAuthorization: LoginAuthorization?
-            
-            if message != nil {
-                loginAuthorization = .init(message: message!, isUnique: isUnique)
-            }
-            
-            connectConfig = ParticleAuthConfig(loginType: loginType, supportAuthType: supportAuthTypeArray, account: account, socialLoginPrompt: socialLoginPrompt, authorization: loginAuthorization)
-        }
+        let walletTypeString = JSON(parseJSON: json)["walletType"].stringValue
+        let configJson = JSON(parseJSON: json)["particleConnectConfig"]
         
         guard let walletType = map2WalletType(from: walletTypeString) else {
             print("walletType \(walletTypeString) is not existed")
@@ -345,13 +278,106 @@ extension ParticleConnectPlugin {
             return
         }
         
+        var particleAuthConfig: ParticleAuthConfig?
+        var particleAuthCoreConfig: ParticleAuthCoreConfig?
+        
+        var loginType: LoginType
+        var supportAuthTypeArray: [SupportAuthType] = []
+        var account: String?
+        var code: String?
+        var socialLoginPrompt: SocialLoginPrompt?
+                
+        if configJson != JSON.null {
+            let data = configJson
+            loginType = LoginType(rawValue: data["loginType"].stringValue.lowercased()) ?? .email
+                        
+            let array = data["supportAuthTypeValues"].arrayValue.map {
+                $0.stringValue.lowercased()
+            }
+            if array.contains("all") {
+                supportAuthTypeArray = [.all]
+            } else {
+                array.forEach { if $0 == "email" {
+                    supportAuthTypeArray.append(.email)
+                } else if $0 == "phone" {
+                    supportAuthTypeArray.append(.phone)
+                } else if $0 == "apple" {
+                    supportAuthTypeArray.append(.apple)
+                } else if $0 == "google" {
+                    supportAuthTypeArray.append(.google)
+                } else if $0 == "facebook" {
+                    supportAuthTypeArray.append(.facebook)
+                } else if $0 == "github" {
+                    supportAuthTypeArray.append(.github)
+                } else if $0 == "twitch" {
+                    supportAuthTypeArray.append(.twitch)
+                } else if $0 == "microsoft" {
+                    supportAuthTypeArray.append(.microsoft)
+                } else if $0 == "linkedin" {
+                    supportAuthTypeArray.append(.linkedin)
+                } else if $0 == "discord" {
+                    supportAuthTypeArray.append(.discord)
+                } else if $0 == "twitter" {
+                    supportAuthTypeArray.append(.twitter)
+                }
+                }
+            }
+                        
+            account = data["account"].string
+                        
+            if account != nil, account!.isEmpty {
+                account = nil
+            }
+                    
+            code = data["code"].string
+            if code != nil, code!.isEmpty {
+                code = nil
+            }
+                        
+            let socialLoginPromptString = data["socialLoginPrompt"].stringValue.lowercased()
+            if socialLoginPromptString == "none" {
+                socialLoginPrompt = SocialLoginPrompt.none
+            } else if socialLoginPromptString == "consent" {
+                socialLoginPrompt = SocialLoginPrompt.consent
+            } else if socialLoginPromptString == "selectaccount" {
+                socialLoginPrompt = SocialLoginPrompt.selectAccount
+            }
+                        
+            let authorizationJson = data["authorization"]
+            var loginAuthorization: LoginAuthorization?
+                        
+            if authorizationJson == JSON.null {
+                loginAuthorization = nil
+            } else {
+                let message: String? = authorizationJson["message"].stringValue
+                let isUnique: Bool? = authorizationJson["uniq"].boolValue
+                            
+                loginAuthorization = .init(message: message, isUnique: isUnique)
+            }
+
+            particleAuthConfig = ParticleAuthConfig(loginType: loginType, supportAuthType: supportAuthTypeArray, account: account, socialLoginPrompt: socialLoginPrompt, authorization: loginAuthorization)
+                    
+            let config = data["loginPageConfig"]
+            var loginPageConfig: LoginPageConfig?
+            if config != JSON.null {
+                let projectName = config["projectName"].stringValue
+                let description = config["description"].stringValue
+                let path = config["imagePath"].stringValue
+                let imagePath = ImagePath.url(path)
+                loginPageConfig = LoginPageConfig(imagePath: imagePath, projectName: projectName, description: description)
+            }
+            
+            particleAuthCoreConfig = ParticleAuthCoreConfig(loginType: loginType, supportAuthType: supportAuthTypeArray, account: account, code: code, socialLoginPrompt: socialLoginPrompt, loginPageConfig: loginPageConfig)
+        }
+                
         var observable: Single<Account?>
         if walletType == .particle {
-            observable = adapter.connect(connectConfig)
+            observable = adapter.connect(particleAuthConfig)
+        } else if walletType == .authCore {
+            observable = adapter.connect(particleAuthCoreConfig)
         } else {
             observable = adapter.connect(ConnectConfig.none)
         }
-        
         subscribeAndCallback(observable: observable, callback: callback)
     }
     

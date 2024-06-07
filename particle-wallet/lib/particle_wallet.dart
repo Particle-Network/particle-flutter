@@ -203,37 +203,13 @@ class ParticleWallet {
     _channel.invokeMethod('setSupportChain', jsonEncode(allInfos));
   }
 
-  /// Switch wallet
-  ///
-  /// Pass [walletType] and [publicAddress] to decide a wallet to switch.
-  ///
-  /// Result true or false.
-  static Future<String> switchWallet(
-      WalletType walletType, String publicAddress) async {
-    if (Platform.isIOS) {
-      return await _channel.invokeMethod(
-          'switchWallet',
-          jsonEncode({
-            "wallet_type": walletType.name,
-            "public_address": publicAddress,
-          }));
-    } else {
-      return await _channel.invokeMethod(
-          'setWallet',
-          jsonEncode({
-            "wallet_type": walletType.name,
-            "public_address": publicAddress,
-          }));
-    }
-  }
-
-  /// Set wallet
+  /// Switch wallet 
   ///
   /// Pass [walletType] and [publicAddress] to decide a wallet to set.
   /// [pnWalletName] is optional, only support particleConnectAdapter Android supported.
   /// Return true or false.
-  static Future<bool> setWallet(WalletType walletType, String publicAddress,
-      [String? pnWalletName]) async {
+  static Future<bool> switchWallet(WalletType walletType, String publicAddress,
+      {String? pnWalletName}) async {
     if (Platform.isIOS) {
       return await _channel.invokeMethod(
           'switchWallet',

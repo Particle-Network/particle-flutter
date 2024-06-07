@@ -511,7 +511,7 @@ class ParticleConnect {
 
   /// get walletReadyState
   /// Pass [walletType] to decide a wallet.
-  /// android supported wallet:MetaMask,Rainbow,Trust,ImToken,BitKeep,MathWallet,TokenPocket,Omni,Zerion,Coin98,Bitpie,ZenGo,Alpha,TTWallet
+  /// android supported wallet:MetaMask,Rainbow,Trust,ImToken,BitKeep,MathWallet,TokenPocket,Zerion,Coin98,Bitpie,ZenGo,Alpha,TTWallet
   static Future<WalletReadyState> walletReadyState(
       WalletType walletType) async {
     String readyState = await _channel.invokeMethod(

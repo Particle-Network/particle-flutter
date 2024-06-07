@@ -682,6 +682,22 @@ class ChainInfo {
       );
     
 
+    static ChainInfo HybridTestnet = ChainInfo(
+        1224,
+        'Hybrid',
+        'evm',
+        'https://static.particle.network/token-list/hybrid/native.png',
+        'Hybrid Testnet',
+        'Testnet',
+        'https://buildonhybrid.com',
+        ChainInfoNativeCurrency('HYB', 'HYB', 18),
+        'https://testnet-rpc.buildonhybrid.com',
+        '',
+        'https://explorer.buildonhybrid.com',
+        [],
+      );
+    
+
     static ChainInfo Moonbeam = ChainInfo(
         1284,
         'Moonbeam',
@@ -759,6 +775,22 @@ class ChainInfo {
         '',
         'https://scan-canary-testnet.bevm.io',
         [],
+      );
+    
+
+    static ChainInfo ComboTestnet = ChainInfo(
+        1715,
+        'Combo',
+        'evm',
+        'https://static.particle.network/token-list/combo/native.png',
+        'Combo Testnet',
+        'Testnet',
+        'https://docs.combonetwork.io',
+        ChainInfoNativeCurrency('BNB', 'BNB', 18),
+        'https://test-rpc.combonetwork.io',
+        '',
+        'https://combotrace-testnet.nodereal.io',
+        [ChainInfoFeature('EIP1559')],
       );
     
 
@@ -1546,34 +1578,34 @@ class ChainInfo {
       );
     
 
-    static ChainInfo ComboTestnet = ChainInfo(
-        91715,
-        'Combo',
-        'evm',
-        'https://static.particle.network/token-list/combo/native.png',
-        'Combo Testnet',
-        'Testnet',
-        'https://docs.combonetwork.io',
-        ChainInfoNativeCurrency('BNB', 'BNB', 18),
-        'https://test-rpc.combonetwork.io',
-        '',
-        'https://combotrace-testnet.nodereal.io',
-        [ChainInfoFeature('EIP1559')],
-      );
-    
-
-    static ChainInfo Xterio = ChainInfo(
+    static ChainInfo XterioBNB = ChainInfo(
         112358,
         'xterio',
         'evm',
         'https://static.particle.network/token-list/xterio/native.png',
-        'Xterio Mainnet',
+        'Xterio(BNB) Mainnet',
         'Mainnet',
         'https://xter.io',
         ChainInfoNativeCurrency('BNB', 'BNB', 18),
         'https://xterio.alt.technology',
         '',
         'https://xterscan.io',
+        [ChainInfoFeature('EIP1559')],
+      );
+    
+
+    static ChainInfo Taiko = ChainInfo(
+        167000,
+        'Taiko',
+        'evm',
+        'https://static.particle.network/token-list/taiko/native.png',
+        'Taiko Mainnet',
+        'Mainnet',
+        'https://taiko.xyz',
+        ChainInfoNativeCurrency('Ether', 'ETH', 18),
+        'https://rpc.mainnet.taiko.xyz',
+        '',
+        'https://taikoscan.network',
         [ChainInfoFeature('EIP1559')],
       );
     
@@ -1738,18 +1770,34 @@ class ChainInfo {
       );
     
 
-    static ChainInfo XterioTestnet = ChainInfo(
+    static ChainInfo XterioBNBTestnet = ChainInfo(
         1637450,
         'xterio',
         'evm',
         'https://static.particle.network/token-list/xterio/native.png',
-        'Xterio Testnet',
+        'Xterio(BNB) Testnet',
         'Testnet',
         'https://xter.io',
         ChainInfoNativeCurrency('BNB', 'BNB', 18),
         'https://xterio-testnet.alt.technology',
         '',
         'https://testnet.xterscan.io',
+        [ChainInfoFeature('EIP1559')],
+      );
+    
+
+    static ChainInfo XterioETHTestnet = ChainInfo(
+        1637451,
+        'xterioeth',
+        'evm',
+        'https://static.particle.network/token-list/xterioeth/native.png',
+        'Xterio(ETH) Testnet',
+        'Testnet',
+        'https://xterscan.io',
+        ChainInfoNativeCurrency('Ether', 'ETH', 18),
+        'https://xterio-eth-testnet.alt.technology',
+        '',
+        'https://eth-testnet.xterscan.io',
         [ChainInfoFeature('EIP1559')],
       );
     
@@ -1767,6 +1815,22 @@ class ChainInfo {
         'https://devnet2faucet.platon.network/faucet',
         'https://devnet2scan.platon.network',
         [],
+      );
+    
+
+    static ChainInfo XterioETH = ChainInfo(
+        2702128,
+        'xterioeth',
+        'evm',
+        'https://static.particle.network/token-list/xterioeth/native.png',
+        'Xterio(ETH) Mainnet',
+        'Mainnet',
+        'https://xterscan.io',
+        ChainInfoNativeCurrency('Ether', 'ETH', 18),
+        'https://xterio-eth.alt.technology',
+        '',
+        'https://eth.xterscan.io',
+        [ChainInfoFeature('EIP1559')],
       );
     
 
@@ -2057,7 +2121,7 @@ class ChainInfo {
         [ChainInfoFeature('EIP1559')],
       );
 
-    static Map<String, ChainInfo> ParticleChains = {'ethereum-1':ChainInfo.Ethereum,'optimism-10':ChainInfo.Optimism,'thundercore-18':ChainInfo.ThunderCoreTestnet,'cronos-25':ChainInfo.Cronos,'bsc-56':ChainInfo.BNBChain,'okc-65':ChainInfo.OKTCTestnet,'okc-66':ChainInfo.OKTC,'confluxespace-71':ChainInfo.ConfluxeSpaceTestnet,'viction-88':ChainInfo.Viction,'viction-89':ChainInfo.VictionTestnet,'bsc-97':ChainInfo.BNBChainTestnet,'gnosis-100':ChainInfo.Gnosis,'solana-101':ChainInfo.Solana,'solana-102':ChainInfo.SolanaTestnet,'solana-103':ChainInfo.SolanaDevnet,'thundercore-108':ChainInfo.ThunderCore,'bob-111':ChainInfo.BOBTestnet,'heco-128':ChainInfo.Heco,'polygon-137':ChainInfo.Polygon,'manta-169':ChainInfo.Manta,'okbc-195':ChainInfo.XLayerTestnet,'okbc-196':ChainInfo.XLayer,'opbnb-204':ChainInfo.opBNB,'mapprotocol-212':ChainInfo.MAPProtocolTestnet,'bsquared-223':ChainInfo.BSquared,'fantom-250':ChainInfo.Fantom,'zksync-300':ChainInfo.zkSyncEraSepolia,'kcc-321':ChainInfo.KCC,'kcc-322':ChainInfo.KCCTestnet,'zksync-324':ChainInfo.zkSyncEra,'cronos-338':ChainInfo.CronosTestnet,'pgn-424':ChainInfo.PGN,'mode-919':ChainInfo.ModeTestnet,'klaytn-1001':ChainInfo.KlaytnTestnet,'confluxespace-1030':ChainInfo.ConfluxeSpace,'metis-1088':ChainInfo.Metis,'polygonzkevm-1101':ChainInfo.PolygonzkEVM,'core-1115':ChainInfo.CoreTestnet,'core-1116':ChainInfo.Core,'bsquared-1123':ChainInfo.BSquaredTestnet,'moonbeam-1284':ChainInfo.Moonbeam,'moonriver-1285':ChainInfo.Moonriver,'moonbeam-1287':ChainInfo.MoonbeamTestnet,'bevm-1501':ChainInfo.BEVMCanary,'bevm-1502':ChainInfo.BEVMCanaryTestnet,'kava-2221':ChainInfo.KavaTestnet,'kava-2222':ChainInfo.Kava,'peaq-2241':ChainInfo.PeaqKrest,'polygonzkevm-2442':ChainInfo.PolygonzkEVMCardona,'ainn-2648':ChainInfo.AINNTestnet,'satoshivm-3110':ChainInfo.SatoshiVMTestnet,'botanix-3636':ChainInfo.BotanixTestnet,'astarzkevm-3776':ChainInfo.AstarzkEVMMainet,'fantom-4002':ChainInfo.FantomTestnet,'merlin-4200':ChainInfo.Merlin,'mantle-5000':ChainInfo.Mantle,'mantle-5003':ChainInfo.MantleSepoliaTestnet,'opbnb-5611':ChainInfo.opBNBTestnet,'zetachain-7000':ChainInfo.ZetaChain,'zetachain-7001':ChainInfo.ZetaChainTestnet,'cyber-7560':ChainInfo.Cyber,'klaytn-8217':ChainInfo.Klaytn,'base-8453':ChainInfo.Base,'combo-9980':ChainInfo.Combo,'peaq-9990':ChainInfo.PeaqAgungTestnet,'gnosis-10200':ChainInfo.GnosisTestnet,'bevm-11503':ChainInfo.BEVMTestnet,'readon-12015':ChainInfo.ReadONTestnet,'immutable-13473':ChainInfo.ImmutablezkEVMTestnet,'eosevm-15557':ChainInfo.EOSEVMTestnet,'ethereum-17000':ChainInfo.EthereumHolesky,'eosevm-17777':ChainInfo.EOSEVM,'mapprotocol-22776':ChainInfo.MAPProtocol,'lumibit-28206':ChainInfo.LumiBitTestnet,'mode-34443':ChainInfo.Mode,'arbitrum-42161':ChainInfo.ArbitrumOne,'arbitrum-42170':ChainInfo.ArbitrumNova,'celo-42220':ChainInfo.Celo,'oasisemerald-42261':ChainInfo.OasisEmeraldTestnet,'oasisemerald-42262':ChainInfo.OasisEmerald,'zkfair-42766':ChainInfo.ZKFair,'avalanche-43113':ChainInfo.AvalancheTestnet,'avalanche-43114':ChainInfo.Avalanche,'zkfair-43851':ChainInfo.ZKFairTestnet,'celo-44787':ChainInfo.CeloTestnet,'pgn-58008':ChainInfo.PGNSepolia,'linea-59141':ChainInfo.LineaSepolia,'linea-59144':ChainInfo.Linea,'bob-60808':ChainInfo.BOB,'polygon-80002':ChainInfo.PolygonAmoy,'berachain-80085':ChainInfo.BerachainArtio,'blast-81457':ChainInfo.Blast,'base-84532':ChainInfo.BaseSepolia,'tuna-89682':ChainInfo.TUNATestnet,'combo-91715':ChainInfo.ComboTestnet,'xterio-112358':ChainInfo.Xterio,'taiko-167008':ChainInfo.TaikoKatla,'taiko-167009':ChainInfo.TaikoHekla,'bitlayer-200810':ChainInfo.BitlayerTestnet,'bitlayer-200901':ChainInfo.Bitlayer,'platon-210425':ChainInfo.PlatON,'arbitrum-421614':ChainInfo.ArbitrumSepolia,'scroll-534351':ChainInfo.ScrollSepolia,'scroll-534352':ChainInfo.Scroll,'merlin-686868':ChainInfo.MerlinTestnet,'zklink-810180':ChainInfo.zkLinkNova,'xterio-1637450':ChainInfo.XterioTestnet,'platon-2206132':ChainInfo.PlatONTestnet,'manta-3441005':ChainInfo.MantaTestnet,'astarzkevm-6038361':ChainInfo.AstarzkEVMTestnet,'zora-7777777':ChainInfo.Zora,'ethereum-11155111':ChainInfo.EthereumSepolia,'optimism-11155420':ChainInfo.OptimismSepolia,'ancient8-28122024':ChainInfo.Ancient8Testnet,'cyber-111557560':ChainInfo.CyberTestnet,'blast-168587773':ChainInfo.BlastSepolia,'tron-728126428':ChainInfo.Tron,'ancient8-888888888':ChainInfo.Ancient8,'aurora-1313161554':ChainInfo.Aurora,'aurora-1313161555':ChainInfo.AuroraTestnet,'nebula-1482601649':ChainInfo.SKALENebula,'harmony-1666600000':ChainInfo.Harmony,'harmony-1666700000':ChainInfo.HarmonyTestnet,'tron-2494104990':ChainInfo.TronShasta,'tron-3448148188':ChainInfo.TronNile,'gmnetwork-202402181627':ChainInfo.GMNetworkTestnet};
+    static Map<String, ChainInfo> ParticleChains = {'ethereum-1':ChainInfo.Ethereum,'optimism-10':ChainInfo.Optimism,'thundercore-18':ChainInfo.ThunderCoreTestnet,'cronos-25':ChainInfo.Cronos,'bsc-56':ChainInfo.BNBChain,'okc-65':ChainInfo.OKTCTestnet,'okc-66':ChainInfo.OKTC,'confluxespace-71':ChainInfo.ConfluxeSpaceTestnet,'viction-88':ChainInfo.Viction,'viction-89':ChainInfo.VictionTestnet,'bsc-97':ChainInfo.BNBChainTestnet,'gnosis-100':ChainInfo.Gnosis,'solana-101':ChainInfo.Solana,'solana-102':ChainInfo.SolanaTestnet,'solana-103':ChainInfo.SolanaDevnet,'thundercore-108':ChainInfo.ThunderCore,'bob-111':ChainInfo.BOBTestnet,'heco-128':ChainInfo.Heco,'polygon-137':ChainInfo.Polygon,'manta-169':ChainInfo.Manta,'okbc-195':ChainInfo.XLayerTestnet,'okbc-196':ChainInfo.XLayer,'opbnb-204':ChainInfo.opBNB,'mapprotocol-212':ChainInfo.MAPProtocolTestnet,'bsquared-223':ChainInfo.BSquared,'fantom-250':ChainInfo.Fantom,'zksync-300':ChainInfo.zkSyncEraSepolia,'kcc-321':ChainInfo.KCC,'kcc-322':ChainInfo.KCCTestnet,'zksync-324':ChainInfo.zkSyncEra,'cronos-338':ChainInfo.CronosTestnet,'pgn-424':ChainInfo.PGN,'mode-919':ChainInfo.ModeTestnet,'klaytn-1001':ChainInfo.KlaytnTestnet,'confluxespace-1030':ChainInfo.ConfluxeSpace,'metis-1088':ChainInfo.Metis,'polygonzkevm-1101':ChainInfo.PolygonzkEVM,'core-1115':ChainInfo.CoreTestnet,'core-1116':ChainInfo.Core,'bsquared-1123':ChainInfo.BSquaredTestnet,'hybrid-1224':ChainInfo.HybridTestnet,'moonbeam-1284':ChainInfo.Moonbeam,'moonriver-1285':ChainInfo.Moonriver,'moonbeam-1287':ChainInfo.MoonbeamTestnet,'bevm-1501':ChainInfo.BEVMCanary,'bevm-1502':ChainInfo.BEVMCanaryTestnet,'combo-1715':ChainInfo.ComboTestnet,'kava-2221':ChainInfo.KavaTestnet,'kava-2222':ChainInfo.Kava,'peaq-2241':ChainInfo.PeaqKrest,'polygonzkevm-2442':ChainInfo.PolygonzkEVMCardona,'ainn-2648':ChainInfo.AINNTestnet,'satoshivm-3110':ChainInfo.SatoshiVMTestnet,'botanix-3636':ChainInfo.BotanixTestnet,'astarzkevm-3776':ChainInfo.AstarzkEVMMainet,'fantom-4002':ChainInfo.FantomTestnet,'merlin-4200':ChainInfo.Merlin,'mantle-5000':ChainInfo.Mantle,'mantle-5003':ChainInfo.MantleSepoliaTestnet,'opbnb-5611':ChainInfo.opBNBTestnet,'zetachain-7000':ChainInfo.ZetaChain,'zetachain-7001':ChainInfo.ZetaChainTestnet,'cyber-7560':ChainInfo.Cyber,'klaytn-8217':ChainInfo.Klaytn,'base-8453':ChainInfo.Base,'combo-9980':ChainInfo.Combo,'peaq-9990':ChainInfo.PeaqAgungTestnet,'gnosis-10200':ChainInfo.GnosisTestnet,'bevm-11503':ChainInfo.BEVMTestnet,'readon-12015':ChainInfo.ReadONTestnet,'immutable-13473':ChainInfo.ImmutablezkEVMTestnet,'eosevm-15557':ChainInfo.EOSEVMTestnet,'ethereum-17000':ChainInfo.EthereumHolesky,'eosevm-17777':ChainInfo.EOSEVM,'mapprotocol-22776':ChainInfo.MAPProtocol,'lumibit-28206':ChainInfo.LumiBitTestnet,'mode-34443':ChainInfo.Mode,'arbitrum-42161':ChainInfo.ArbitrumOne,'arbitrum-42170':ChainInfo.ArbitrumNova,'celo-42220':ChainInfo.Celo,'oasisemerald-42261':ChainInfo.OasisEmeraldTestnet,'oasisemerald-42262':ChainInfo.OasisEmerald,'zkfair-42766':ChainInfo.ZKFair,'avalanche-43113':ChainInfo.AvalancheTestnet,'avalanche-43114':ChainInfo.Avalanche,'zkfair-43851':ChainInfo.ZKFairTestnet,'celo-44787':ChainInfo.CeloTestnet,'pgn-58008':ChainInfo.PGNSepolia,'linea-59141':ChainInfo.LineaSepolia,'linea-59144':ChainInfo.Linea,'bob-60808':ChainInfo.BOB,'polygon-80002':ChainInfo.PolygonAmoy,'berachain-80085':ChainInfo.BerachainArtio,'blast-81457':ChainInfo.Blast,'base-84532':ChainInfo.BaseSepolia,'tuna-89682':ChainInfo.TUNATestnet,'xterio-112358':ChainInfo.XterioBNB,'taiko-167000':ChainInfo.Taiko,'taiko-167008':ChainInfo.TaikoKatla,'taiko-167009':ChainInfo.TaikoHekla,'bitlayer-200810':ChainInfo.BitlayerTestnet,'bitlayer-200901':ChainInfo.Bitlayer,'platon-210425':ChainInfo.PlatON,'arbitrum-421614':ChainInfo.ArbitrumSepolia,'scroll-534351':ChainInfo.ScrollSepolia,'scroll-534352':ChainInfo.Scroll,'merlin-686868':ChainInfo.MerlinTestnet,'zklink-810180':ChainInfo.zkLinkNova,'xterio-1637450':ChainInfo.XterioBNBTestnet,'xterioeth-1637451':ChainInfo.XterioETHTestnet,'platon-2206132':ChainInfo.PlatONTestnet,'xterioeth-2702128':ChainInfo.XterioETH,'manta-3441005':ChainInfo.MantaTestnet,'astarzkevm-6038361':ChainInfo.AstarzkEVMTestnet,'zora-7777777':ChainInfo.Zora,'ethereum-11155111':ChainInfo.EthereumSepolia,'optimism-11155420':ChainInfo.OptimismSepolia,'ancient8-28122024':ChainInfo.Ancient8Testnet,'cyber-111557560':ChainInfo.CyberTestnet,'blast-168587773':ChainInfo.BlastSepolia,'tron-728126428':ChainInfo.Tron,'ancient8-888888888':ChainInfo.Ancient8,'aurora-1313161554':ChainInfo.Aurora,'aurora-1313161555':ChainInfo.AuroraTestnet,'nebula-1482601649':ChainInfo.SKALENebula,'harmony-1666600000':ChainInfo.Harmony,'harmony-1666700000':ChainInfo.HarmonyTestnet,'tron-2494104990':ChainInfo.TronShasta,'tron-3448148188':ChainInfo.TronNile,'gmnetwork-202402181627':ChainInfo.GMNetworkTestnet};
     // template code end
 
   static List<ChainInfo> getAllChains(

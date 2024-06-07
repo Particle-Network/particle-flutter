@@ -1,6 +1,6 @@
-
 import 'package:oktoast/oktoast.dart';
 import 'package:particle_auth/particle_auth.dart';
+import 'package:particle_auth_core/particle_auth_core.dart';
 import 'package:particle_connect/particle_connect.dart';
 import 'package:particle_wallet/particle_wallet.dart';
 import 'package:particle_wallet_example/mock/test_account.dart';
@@ -34,7 +34,7 @@ class ConnectLogic {
         "https://connect.particle.network",
         "Particle Connect Flutter Demo");
     ParticleConnect.init(currChainInfo, dappInfo, Env.dev);
-
+    ParticleAuthCore.init();
     ParticleConnect.setWalletConnectV2SupportChainInfos(
         <ChainInfo>[ChainInfo.ArbitrumSepolia]);
   }
@@ -47,8 +47,10 @@ class ConnectLogic {
       ConnectLogic.account = account;
       showToast('connect: $account');
 
-      ParticleWallet.setWallet(walletType, account.publicAddress, "Custom WalletName");
-      ParticleWallet.setCustomWalletName("","https://xraders.xyz/wp-content/uploads/2022/03/Group-349.png");
+      ParticleWallet.switchWallet(walletType, account.publicAddress,
+          pnWalletName: "Custom WalletName");
+      ParticleWallet.setCustomWalletName(
+          "", "https://xraders.xyz/wp-content/uploads/2022/03/Group-349.png");
 
       print("connect: $account");
     } catch (error) {

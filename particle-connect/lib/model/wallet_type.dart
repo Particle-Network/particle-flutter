@@ -12,7 +12,6 @@ enum WalletType {
   phantom,
   zerion,
   math,
-  omni,
   zengo,
   alpha,
   okx,

@@ -4,7 +4,7 @@ import 'package:particle_wallet_example/pages/connect_demo/select_chain_page.dar
 import 'package:particle_wallet_example/pages/connect_demo/select_wallet_type.dart';
 
 class ConnectDemoPage extends StatefulWidget {
-  const ConnectDemoPage({Key? key}) : super(key: key);
+  const ConnectDemoPage({super.key});
 
   @override
   State<ConnectDemoPage> createState() => _ConnectDemoPageState();

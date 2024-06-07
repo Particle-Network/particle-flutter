@@ -47,8 +47,11 @@ class LoginAuthorization {
 }
 
 class LoginPageConfig {
+  /// Support both icon url and base64 string.
   String imagePath;
+  /// Project name
   String projectName;
+  /// Project welcome description
   String description;
 
   LoginPageConfig(

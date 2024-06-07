@@ -28,7 +28,7 @@ dependencies:
     path: ../
 
   particle_auth:
-      path: ../../particle-auth/
+    path: ../../particle-auth/
 
   particle_auth_core:
     path: ../../particle-auth-core/

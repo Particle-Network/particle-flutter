@@ -212,14 +212,15 @@ public extension ParticleAuthCorePlugin {
         if config != JSON.null {
             let projectName = config["projectName"].stringValue
             let description = config["description"].stringValue
-            let data = config["imagePath"].stringValue
-            let imageType = config["imageType"].stringValue.lowercased()
+            let path = config["imagePath"].stringValue
             var imagePath: ImagePath
-            if imageType == "base64" {
-                imagePath = ImagePath.data(data)
+
+            if let data = Data(base64Encoded: path), let image = UIImage(data: data) {
+                imagePath = ImagePath.local(image)
             } else {
-                imagePath = ImagePath.url(data)
+                imagePath = ImagePath.url(path)
             }
+
             loginPageConfig = LoginPageConfig(imagePath: imagePath, projectName: projectName, description: description)
         }
 
@@ -402,7 +403,7 @@ public extension ParticleAuthCorePlugin {
 
         subscribeAndCallback(observable: sendObservable, callback: callback)
     }
-    
+
     func evmBatchSendTransactions(_ json: String?, callback: @escaping ParticleCallback) {
         guard let json = json else { callback(getErrorJson("json is nil"))
             return
