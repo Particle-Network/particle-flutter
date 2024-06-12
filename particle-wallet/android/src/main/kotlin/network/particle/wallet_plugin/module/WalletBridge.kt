@@ -73,7 +73,7 @@ object WalletBridge {
         val jsonObject = JSONObject(jsonParams);
         val walletType = jsonObject.getString("wallet_type");
         val publicKey = jsonObject.getString("public_address");
-        val walletName = jsonObject.optString("wallet_name");
+        val walletName = jsonObject.getString("wallet_name");
         val adapter = ParticleConnect.getAdapters().first { it.name.equals(walletType, true) }
         if (!TextUtils.isEmpty(walletName) && adapter is IParticleConnectAdapter) {
             WalletScope.launch {
@@ -83,7 +83,7 @@ object WalletBridge {
                     ParticleNetwork.chainInfo.id,
                     1,
                     walletName,
-                    MobileWCWalletName.Particle.name
+                    adapter.name
                 )
                 ParticleWallet.setWallet(wallet)
             }

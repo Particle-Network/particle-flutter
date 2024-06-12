@@ -244,7 +244,7 @@ class ParticleWallet {
         jsonEncode({
           "wallet_type": walletType.name,
           "public_address": publicAddress,
-          "wallet_name": pnWalletName,
+          "wallet_name": pnWalletName??"",
         }));
   }
 
