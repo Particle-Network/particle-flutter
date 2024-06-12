@@ -274,7 +274,6 @@ extension ParticleConnectPlugin {
             return
         }
         
-        var particleAuthConfig: ParticleAuthConfig?
         var particleAuthCoreConfig: ParticleAuthCoreConfig?
         
         var loginType: LoginType
@@ -338,21 +337,7 @@ extension ParticleConnectPlugin {
             } else if socialLoginPromptString == "selectaccount" {
                 socialLoginPrompt = SocialLoginPrompt.selectAccount
             }
-                        
-            let authorizationJson = data["authorization"]
-            var loginAuthorization: LoginAuthorization?
-                        
-            if authorizationJson == JSON.null {
-                loginAuthorization = nil
-            } else {
-                let message: String? = authorizationJson["message"].stringValue
-                let isUnique: Bool? = authorizationJson["uniq"].boolValue
                             
-                loginAuthorization = .init(message: message, isUnique: isUnique)
-            }
-
-            particleAuthConfig = ParticleAuthConfig(loginType: loginType, supportAuthType: supportAuthTypeArray, account: account, socialLoginPrompt: socialLoginPrompt, authorization: loginAuthorization)
-                    
             let config = data["loginPageConfig"]
             var loginPageConfig: LoginPageConfig?
             if config != JSON.null {
@@ -367,9 +352,7 @@ extension ParticleConnectPlugin {
         }
                 
         var observable: Single<Account?>
-        if walletType == .particle {
-            observable = adapter.connect(particleAuthConfig)
-        } else if walletType == .authCore {
+        if walletType == .authCore {
             observable = adapter.connect(particleAuthCoreConfig)
         } else {
             observable = adapter.connect(ConnectConfig.none)
@@ -868,7 +851,6 @@ extension ParticleConnectPlugin {
         
         callback(str)
     }
-    
     
     func connectWalletConnect(callback: @escaping ParticleCallback) {
         guard let adapter = map2ConnectAdapter(from: .walletConnect) else {
