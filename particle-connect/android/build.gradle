@@ -57,6 +57,7 @@ dependencies {
     api("network.particle:connect-common:$sdkVersion")
     api("network.particle:connect:$sdkVersion")
     api("network.particle:connect-auth-adapter:$sdkVersion")
+    api("network.particle:connect-auth-core-adapter:$sdkVersion")
     compileOnly("network.particle:connect-auth-core-adapter:$sdkVersion")
     api("network.particle:connect-evm-adapter:$sdkVersion")
     api("network.particle:connect-solana-adapter:$sdkVersion")

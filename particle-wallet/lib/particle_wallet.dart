@@ -238,6 +238,7 @@ class ParticleWallet {
             "public_address": publicAddress,
           }));
     }
+
     return await _channel.invokeMethod(
         'setWallet',
         jsonEncode({

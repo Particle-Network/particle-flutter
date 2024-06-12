@@ -1,9 +1,9 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="network.particle.wallet_plugin.particle_wallet">
+    package="network.particle.wallet_plugin">
 
     <application>
         <activity
-            android:name="network.particle.flutter.bridge.ui.FlutterLoginOptActivity"
+            android:name="network.particle.wallet_plugin.ui.FlutterLoginOptActivity"
             android:exported="false"
             android:theme="@style/PnThemeWallet.FullScreen" />
     </application>

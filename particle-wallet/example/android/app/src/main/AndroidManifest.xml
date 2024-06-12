@@ -1,6 +1,6 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    package="network.particle.wallet_plugin.particle_wallet_example">
+    package="network.particle.wallet_plugin.example">
 
     <application
         android:name="${applicationName}"
@@ -9,7 +9,7 @@
         android:label="particle_wallet_example"
         tools:replace="android:fullBackupContent">
         <activity
-            android:name=".MainActivity"
+            android:name="network.particle.wallet_plugin.example.MainActivity"
             android:configChanges="orientation|keyboardHidden|keyboard|screenSize|smallestScreenSize|locale|layoutDirection|fontScale|screenLayout|density|uiMode"
             android:exported="true"
             android:hardwareAccelerated="true"

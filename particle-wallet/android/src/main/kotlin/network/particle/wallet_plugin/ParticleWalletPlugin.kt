@@ -1,4 +1,4 @@
-package network.particle.wallet_plugin.particle_wallet
+package network.particle.wallet_plugin
 
 import android.app.Activity
 import com.blankj.utilcode.util.LogUtils
@@ -9,7 +9,7 @@ import io.flutter.embedding.engine.plugins.activity.ActivityPluginBinding
 import io.flutter.plugin.common.MethodCall
 import io.flutter.plugin.common.MethodChannel
 import io.flutter.plugin.common.MethodChannel.MethodCallHandler
-import network.particle.flutter.bridge.module.WalletBridge
+import network.particle.wallet_plugin.module.WalletBridge
 
 /** ParticleWalletPlugin */
 class ParticleWalletPlugin : FlutterPlugin, MethodCallHandler, ActivityAware {

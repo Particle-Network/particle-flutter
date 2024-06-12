@@ -1,4 +1,4 @@
-package network.particle.flutter.bridge.module
+package network.particle.wallet_plugin.module
 
 import android.app.Activity
 import android.content.Intent
@@ -7,11 +7,13 @@ import android.util.Log
 import com.blankj.utilcode.util.GsonUtils
 import com.blankj.utilcode.util.LogUtils
 import com.connect.common.IConnectAdapter
+import com.connect.common.IParticleConnectAdapter
 import com.google.gson.reflect.TypeToken
 import com.particle.api.infrastructure.db.table.WalletInfo
 import com.particle.api.service.DBService
 import com.particle.base.ParticleNetwork
 import com.particle.base.model.MobileWCWalletName
+import com.particle.base.utils.ChainUtils
 import com.particle.base.utils.PrefUtils
 import com.particle.connect.ParticleConnect
 import com.particle.gui.ParticleWallet
@@ -27,11 +29,10 @@ import com.particle.gui.utils.WalletUtils
 import com.particle.network.ParticleNetworkAuth.getAddress
 import io.flutter.plugin.common.MethodChannel
 import kotlinx.coroutines.launch
-import network.particle.auth_flutter.bridge.utils.ChainUtils
+import network.particle.connect_plugin.utils.BridgeScope
 import network.particle.chains.ChainInfo
-import network.particle.flutter.bridge.ui.FlutterLoginOptActivity
-import network.particle.flutter.bridge.utils.BridgeScope
-import network.particle.flutter.bridge.utils.WalletScope
+import network.particle.wallet_plugin.ui.FlutterLoginOptActivity
+import network.particle.wallet_plugin.utils.WalletScope
 import org.json.JSONObject
 import particle.auth.adapter.ParticleConnectAdapter
 import java.math.BigInteger
@@ -68,15 +69,16 @@ object WalletBridge {
     }
 
     fun setWallet(jsonParams: String) {
+        LogUtils.d("setWallet", jsonParams)
         val jsonObject = JSONObject(jsonParams);
         val walletType = jsonObject.getString("wallet_type");
         val publicKey = jsonObject.getString("public_address");
         val walletName = jsonObject.optString("wallet_name");
         val adapter = ParticleConnect.getAdapters().first { it.name.equals(walletType, true) }
-        if (!TextUtils.isEmpty(walletName) && adapter is ParticleConnectAdapter) {
-            BridgeScope.launch {
+        if (!TextUtils.isEmpty(walletName) && adapter is IParticleConnectAdapter) {
+            WalletScope.launch {
                 val wallet = WalletInfo.createWallet(
-                    ParticleNetwork.getAddress(),
+                    publicKey,
                     ParticleNetwork.chainInfo.name,
                     ParticleNetwork.chainInfo.id,
                     1,
@@ -86,7 +88,7 @@ object WalletBridge {
                 ParticleWallet.setWallet(wallet)
             }
         } else {
-            BridgeScope.launch {
+            WalletScope.launch {
                 val wallet = WalletUtils.createSelectedWallet(publicKey, adapter)
                 WalletUtils.setWalletChain(wallet)
             }

@@ -46,9 +46,7 @@ class ConnectLogic {
       final account = await ParticleConnect.connect(walletType, config: config);
       ConnectLogic.account = account;
       showToast('connect: $account');
-
-      ParticleWallet.switchWallet(walletType, account.publicAddress,
-          pnWalletName: "Custom WalletName");
+      ParticleWallet.switchWallet(walletType, account.publicAddress);
       ParticleWallet.setCustomWalletName(
           "", "https://xraders.xyz/wp-content/uploads/2022/03/Group-349.png");
 

@@ -1,4 +1,4 @@
-package network.particle.flutter.bridge.ui
+package network.particle.wallet_plugin.ui
 
 import android.app.Activity
 import android.content.Intent
@@ -31,9 +31,9 @@ import com.phantom.adapter.PhantomConnectAdapter
 import com.solana.adapter.SolanaConnectAdapter
 import com.wallet.connect.adapter.WalletConnectAdapter
 import kotlinx.coroutines.launch
-import network.particle.flutter.bridge.model.FlutterCallBack
-import network.particle.flutter.bridge.module.WalletBridge
-import network.particle.wallet_plugin.particle_wallet.R
+import network.particle.base_flutter.model.FlutterCallBack
+import network.particle.wallet_plugin.module.WalletBridge
+import network.particle.wallet_plugin.R
 import particle.auth.adapter.ParticleConnectConfig
 
 class FlutterLoginOptActivity : AppCompatActivity() {

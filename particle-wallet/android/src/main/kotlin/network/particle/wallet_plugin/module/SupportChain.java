@@ -1,4 +1,4 @@
-package network.particle.flutter.bridge.module;
+package network.particle.wallet_plugin.module;
 
 import com.google.gson.annotations.SerializedName;
 import com.particle.base.model.DAppMetadata;
