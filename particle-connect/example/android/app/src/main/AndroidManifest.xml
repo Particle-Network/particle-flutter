@@ -1,6 +1,6 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    package="network.particle.connect_plugin.particle_connect_example">
+    package="network.particle.connect_plugin.example">
    <application
         android:label="particle_connect_example"
        android:supportsRtl="true"
@@ -9,7 +9,7 @@
        android:usesCleartextTraffic="true"
         android:icon="@mipmap/ic_launcher">
         <activity
-            android:name=".MainActivity"
+            android:name="network.particle.connect_plugin.example.MainActivity"
             android:exported="true"
             android:launchMode="singleTop"
             android:theme="@style/LaunchTheme"

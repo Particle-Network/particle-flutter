@@ -1,12 +1,11 @@
-package network.particle.flutter.bridge.model;
-
+package network.particle.connect_plugin.model;
 import androidx.annotation.Keep;
 
 import com.google.gson.annotations.SerializedName;
 
 import java.util.List;
 
-import network.particle.auth_flutter.bridge.model.BiconomyFeeMode;
+import network.particle.base_flutter.model.BiconomyFeeMode;
 
 @Keep
 public class ConnectSignData {

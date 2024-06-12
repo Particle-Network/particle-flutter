@@ -1,7 +1,6 @@
-package network.particle.flutter.bridge.module
+package network.particle.connect_plugin.module;
 
 import android.app.Activity
-import android.text.TextUtils
 import auth.core.adapter.AuthCoreAdapter
 import auth.core.adapter.ConnectConfigEmail
 import auth.core.adapter.ConnectConfigJWT
@@ -34,6 +33,7 @@ import com.particle.base.model.MobileWCWalletName
 import com.particle.base.model.SocialLoginType
 import com.particle.base.model.SupportAuthType
 import com.particle.base.model.SupportLoginType
+import com.particle.base.utils.ChainUtils
 import com.particle.base.utils.PnModuleUtils
 import com.particle.connect.ParticleConnect
 import com.particle.connect.ParticleConnect.setChain
@@ -46,12 +46,16 @@ import io.flutter.plugin.common.MethodChannel
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import network.particle.auth_flutter.bridge.module.AuthBridge
-import network.particle.auth_flutter.bridge.utils.ChainUtils
+import network.particle.connect_plugin.model.InitData
+import network.particle.connect_plugin.model.RpcUrl
 import network.particle.chains.ChainInfo
-import network.particle.flutter.bridge.model.*
-import network.particle.flutter.bridge.utils.BridgeScope
-import network.particle.flutter.bridge.utils.MessageProcess
+import network.particle.connect_plugin.model.ChainData
+import network.particle.connect_plugin.model.ConnectData
+import network.particle.connect_plugin.model.ConnectSignData
+import network.particle.connect_plugin.model.FlutterCallBack
+import network.particle.connect_plugin.model.FlutterErrorMessage
+import network.particle.connect_plugin.utils.BridgeScope
+import network.particle.connect_plugin.utils.MessageProcess
 import org.json.JSONException
 import org.json.JSONObject
 import particle.auth.adapter.ParticleConnectAdapter
@@ -869,7 +873,7 @@ object ConnectBridge {
             } catch (e: Exception) {
                 e.printStackTrace()
                 result.success(
-                    network.particle.auth_flutter.bridge.model.FlutterCallBack.failed("failed")
+                    FlutterCallBack.failed("failed")
                         .toGson()
                 )
             }

@@ -1,4 +1,4 @@
-package network.particle.connect_plugin.particle_connect
+package network.particle.connect_plugin;
 
 import android.app.Activity
 import com.blankj.utilcode.util.LogUtils
@@ -11,8 +11,7 @@ import io.flutter.plugin.common.EventChannel.EventSink
 import io.flutter.plugin.common.MethodCall
 import io.flutter.plugin.common.MethodChannel
 import io.flutter.plugin.common.MethodChannel.MethodCallHandler
-import network.particle.auth_flutter.bridge.module.AuthBridge
-import network.particle.flutter.bridge.module.ConnectBridge
+import network.particle.connect_plugin.module.ConnectBridge
 
 /** ParticleConnectPlugin */
 class ParticleConnectPlugin : FlutterPlugin, MethodCallHandler, ActivityAware, EventChannel.StreamHandler {

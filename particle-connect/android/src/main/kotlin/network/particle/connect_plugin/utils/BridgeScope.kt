@@ -1,4 +1,4 @@
-package network.particle.flutter.bridge.utils
+package network.particle.connect_plugin.utils;
 
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers

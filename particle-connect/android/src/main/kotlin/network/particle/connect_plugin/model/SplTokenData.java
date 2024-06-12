@@ -1,4 +1,4 @@
-package network.particle.flutter.bridge.model;
+package network.particle.connect_plugin.model;
 
 import androidx.annotation.Keep;
 

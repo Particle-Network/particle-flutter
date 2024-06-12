@@ -41,7 +41,7 @@ flutter:
   plugin:
     platforms:
       android:
-        package: network.particle.connect_plugin.particle_connect
+        package: network.particle.connect_plugin
         pluginClass: ParticleConnectPlugin
       ios:
         pluginClass: ParticleConnectPlugin

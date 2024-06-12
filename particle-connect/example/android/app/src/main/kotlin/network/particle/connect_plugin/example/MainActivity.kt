@@ -1,4 +1,4 @@
-package network.particle.connect_plugin.particle_connect_example
+package network.particle.connect_plugin.example
 
 import io.flutter.embedding.android.FlutterActivity
 

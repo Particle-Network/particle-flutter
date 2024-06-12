@@ -1,4 +1,4 @@
-package network.particle.unity.utils
+package network.particle.connect_plugin.utils;
 
 import org.apache.commons.codec.DecoderException
 import org.apache.commons.codec.binary.Hex
