@@ -1,7 +1,9 @@
-package network.particle.auth_flutter.bridge.model
+package network.particle.base_flutter.model
 
+
+import androidx.annotation.Keep
 import com.google.gson.annotations.SerializedName
-
+@Keep
 class RpcUrl {
     @SerializedName("evm_url")
     var evmUrl: String? = null

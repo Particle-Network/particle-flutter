@@ -1,8 +1,10 @@
-package network.particle.auth_flutter.bridge.model
+package network.particle.base_flutter.model
 
+import androidx.annotation.Keep
 import com.google.gson.Gson
 import com.google.gson.annotations.SerializedName
 
+@Keep
 class FlutterCallBack<T>(status: FlutterCallBackStatus, t: T) {
     enum class FlutterCallBackStatus {
         Failed, Success
