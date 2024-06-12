@@ -1,4 +1,4 @@
-package com.particleauthcore.utils
+package network.particle.authcore_flutter.utils;
 
 import org.apache.commons.codec.DecoderException
 import org.apache.commons.codec.binary.Hex

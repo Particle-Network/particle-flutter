@@ -1,4 +1,4 @@
-package com.particleauthcore.module
+package network.particle.authcore_flutter.module
 
 import androidx.annotation.Keep
 import com.google.gson.annotations.SerializedName

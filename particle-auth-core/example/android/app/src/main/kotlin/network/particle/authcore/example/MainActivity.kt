@@ -1,4 +1,4 @@
-package network.particle.wallet_plugin.particle_wallet_example
+package network.particle.authcore.example
 
 import io.flutter.embedding.android.FlutterActivity
 

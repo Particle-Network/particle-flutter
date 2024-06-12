@@ -1,4 +1,4 @@
-package com.particleauthcore.utils
+package network.particle.authcore_flutter.utils;
 
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers

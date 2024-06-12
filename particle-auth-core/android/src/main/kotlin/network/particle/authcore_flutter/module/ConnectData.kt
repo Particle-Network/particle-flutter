@@ -1,4 +1,4 @@
-package com.particleauthcore.module
+package network.particle.authcore_flutter.module
 
 import androidx.annotation.Keep
 import com.google.gson.annotations.SerializedName
@@ -18,3 +18,5 @@ data class ConnectData(
     @SerializedName("social_login_prompt")
     val prompt: LoginPrompt? = null
 )
+
+

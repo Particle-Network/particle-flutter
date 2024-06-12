@@ -1,4 +1,4 @@
-package com.particleauthcore
+package network.particle.authcore_flutter;
 
 
 import android.app.Activity

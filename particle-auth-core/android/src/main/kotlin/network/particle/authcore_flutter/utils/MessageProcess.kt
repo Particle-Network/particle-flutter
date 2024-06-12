@@ -1,4 +1,4 @@
-package com.particleauthcore.utils
+package network.particle.authcore_flutter.utils;
 
 import com.particle.base.ParticleNetwork
 import com.particle.base.utils.Base58Utils

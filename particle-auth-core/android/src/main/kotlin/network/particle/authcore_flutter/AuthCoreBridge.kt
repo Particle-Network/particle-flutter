@@ -1,4 +1,4 @@
-package com.particleauthcore
+package network.particle.authcore_flutter;
 
 import android.app.Activity
 import com.blankj.utilcode.util.GsonUtils
@@ -23,18 +23,18 @@ import com.particle.base.model.LoginType
 import com.particle.base.model.ResultCallback
 import com.particle.base.model.SupportLoginType
 import com.particle.base.model.UserInfo
-import com.particleauthcore.module.ChainData
-import com.particleauthcore.module.ConnectData
-import com.particleauthcore.utils.ChainUtils
-import com.particleauthcore.utils.MessageProcess
+import com.particle.base.utils.ChainUtils
+import com.particle.base.utils.MessageProcess
+
 import io.flutter.plugin.common.MethodChannel
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import network.particle.auth_flutter.bridge.model.FlutterCallBack
-import network.particle.auth_flutter.bridge.model.TransactionParams
-import network.particle.auth_flutter.bridge.model.TransactionsParams
-
+import network.particle.base_flutter.model.ChainData
+import network.particle.authcore_flutter.module.ConnectData
+import network.particle.base_flutter.model.TransactionParams
+import network.particle.base_flutter.model.TransactionsParams
+import network.particle.base_flutter.model.FlutterCallBack
 object AuthCoreBridge {
 
     private val failed = ErrorInfo("failed", 100000)
@@ -303,7 +303,7 @@ object AuthCoreBridge {
     fun sendTransaction(transactionParams: String, result: MethodChannel.Result) {
         LogUtils.d("signAndSendTransaction", transactionParams)
         val transParams =
-            GsonUtils.fromJson<TransactionParams>(transactionParams, TransactionParams::class.java)
+            GsonUtils.fromJson<TransactionParams>(transactionParams, network.particle.base_flutter.model.TransactionParams::class.java)
         var feeMode: FeeMode = FeeModeNative()
         if (transParams.feeMode != null) {
             val option = transParams!!.feeMode!!.option

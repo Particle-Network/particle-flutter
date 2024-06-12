@@ -1,5 +1,4 @@
-package com.particleauthcore.utils;
-
+package network.particle.authcore_flutter.utils;
 import java.util.Arrays;
 
 /**

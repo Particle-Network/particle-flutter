@@ -1,21 +1,20 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    package="network.particle.wallet_plugin.particle_wallet_example">
+    package="network.particle.authcore.example">
 
     <application
         android:name="${applicationName}"
         android:fullBackupContent="@xml/pn_backup_rules"
         android:icon="@mipmap/ic_launcher"
-        android:label="particle_wallet_example"
-        android:theme="@style/PnThemeWallet"
+        android:label="particle_authcore_example"
         tools:replace="android:fullBackupContent">
         <activity
-            android:name=".MainActivity"
+            android:name="network.particle.authcore.example.MainActivity"
             android:configChanges="orientation|keyboardHidden|keyboard|screenSize|smallestScreenSize|locale|layoutDirection|fontScale|screenLayout|density|uiMode"
             android:exported="true"
             android:hardwareAccelerated="true"
             android:launchMode="singleTop"
-            android:theme="@style/LaunchTheme"
+            android:theme="@style/PnThemeWallet.FullScreen"
 
             android:windowSoftInputMode="adjustResize">
             <!-- Specifies an Android theme to apply to this Activity as soon as
