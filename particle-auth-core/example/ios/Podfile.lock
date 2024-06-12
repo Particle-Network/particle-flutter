@@ -9,7 +9,7 @@ PODS:
   - Base58.swift (1.0.2):
     - BigInt
   - BigInt (5.2.0)
-  - ConnectCommon (0.2.23):
+  - ConnectCommon (0.2.24):
     - BigInt (~> 5.2.0)
     - ParticleNetworkBase
     - RxAlamofire (~> 6.1.1)
@@ -31,15 +31,15 @@ PODS:
   - libwebp/sharpyuv (1.3.2)
   - libwebp/webp (1.3.2):
     - libwebp/sharpyuv
-  - particle_auth (0.0.1):
-    - Flutter
-    - ParticleAuthService
   - particle_auth_core (0.0.1):
     - AuthCoreAdapter
     - Flutter
     - ParticleAuthCore
     - ParticleMPCCore
     - Thresh
+  - particle_base (0.0.1):
+    - Flutter
+    - ParticleNetworkBase
   - ParticleAuthCore (1.4.7):
     - AWSKMS (~> 2.34.2)
     - ParticleMPCCore
@@ -50,8 +50,6 @@ PODS:
     - SnapKit (~> 5.7.1)
     - SwiftMessages
     - Then
-  - ParticleAuthService (1.4.6):
-    - ParticleNetworkBase
   - ParticleMPCCore (1.4.7):
     - Base58.swift
     - CryptoSwift (~> 1.8.1)
@@ -97,13 +95,12 @@ PODS:
 
 DEPENDENCIES:
   - AuthCoreAdapter (= 1.4.7)
-  - ConnectCommon (= 0.2.23)
+  - ConnectCommon (= 0.2.24)
   - Flutter (from `Flutter`)
   - integration_test (from `.symlinks/plugins/integration_test/ios`)
-  - particle_auth (from `.symlinks/plugins/particle_auth/ios`)
   - particle_auth_core (from `.symlinks/plugins/particle_auth_core/ios`)
+  - particle_base (from `.symlinks/plugins/particle_base/ios`)
   - ParticleAuthCore (= 1.4.7)
-  - ParticleAuthService (= 1.4.6)
   - ParticleMPCCore (= 1.4.7)
   - ParticleNetworkBase (= 1.4.6)
   - SkeletonView (from `https://github.com/SunZhiC/SkeletonView.git`, branch `main`)
@@ -122,7 +119,6 @@ SPEC REPOS:
     - CryptoSwift
     - libwebp
     - ParticleAuthCore
-    - ParticleAuthService
     - ParticleMPCCore
     - ParticleNetworkBase
     - RxAlamofire
@@ -144,10 +140,10 @@ EXTERNAL SOURCES:
     :path: Flutter
   integration_test:
     :path: ".symlinks/plugins/integration_test/ios"
-  particle_auth:
-    :path: ".symlinks/plugins/particle_auth/ios"
   particle_auth_core:
     :path: ".symlinks/plugins/particle_auth_core/ios"
+  particle_base:
+    :path: ".symlinks/plugins/particle_base/ios"
   SkeletonView:
     :branch: main
     :git: https://github.com/SunZhiC/SkeletonView.git
@@ -170,15 +166,14 @@ SPEC CHECKSUMS:
   AWSKMS: 311bb0cb71967273de5f4657875b9f2484ec13c2
   Base58.swift: e0e16655f9db843b8cd367593ed6f7d90d136b7f
   BigInt: f668a80089607f521586bbe29513d708491ef2f7
-  ConnectCommon: b6d6ccd9d1f35345e5e6ae358e26ae9ee372ab82
+  ConnectCommon: d968bccfa0d2e6087e07a82d9da603a46d6836e7
   CryptoSwift: c63a805d8bb5e5538e88af4e44bb537776af11ea
   Flutter: f04841e97a9d0b0a8025694d0796dd46242b2854
   integration_test: 13825b8a9334a850581300559b8839134b124670
   libwebp: 1786c9f4ff8a279e4dac1e8f385004d5fc253009
-  particle_auth: f63e17b5dc9b5f7b3ad4d5c13fbfc03d3739b3ab
   particle_auth_core: 08525d1c4253c4f49fbb6d1562a45d9187fa3f1b
+  particle_base: a43be9e2129ecdc02740f458cfc299759ae89985
   ParticleAuthCore: 7707d89194a2d1f13d7a6d6aa532f1951457e496
-  ParticleAuthService: e55aa570bd1bd1797485fcb7d97b264b1349aaf7
   ParticleMPCCore: 9974d8b8170e2e9aebc6a15fd0256697dd011ffe
   ParticleNetworkBase: b40363d077d8801747144e12fe9f7489a813d64b
   RxAlamofire: beb75a1c452d0de225651db4903f5d29d034a620
@@ -197,6 +192,6 @@ SPEC CHECKSUMS:
   Thresh: c4a6e9f8c177d9412159442cd2940ff7ecfdf2bf
   TweetNacl: 3abf4d1d2082b0114e7a67410e300892448951e6
 
-PODFILE CHECKSUM: 06ce059583a61e3f8dba605e6a6deff388259dcd
+PODFILE CHECKSUM: 802c0ab98740dbd5051bf1983f00a34f2e3d34ce
 
 COCOAPODS: 1.15.2

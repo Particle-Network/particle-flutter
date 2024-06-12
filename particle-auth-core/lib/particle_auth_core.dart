@@ -1,8 +1,8 @@
 import 'dart:convert';
 import 'dart:io' show Platform;
 import 'package:flutter/services.dart';
-import 'package:particle_auth/model/user_info.dart';
-import 'package:particle_auth/particle_auth.dart';
+import 'package:particle_base/model/user_info.dart';
+import 'package:particle_base/particle_base.dart';
 
 export 'evm.dart';
 export 'solana.dart';

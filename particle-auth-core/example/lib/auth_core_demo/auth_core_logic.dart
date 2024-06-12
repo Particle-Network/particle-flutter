@@ -1,7 +1,7 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/widgets.dart';
 import 'package:oktoast/oktoast.dart';
-import 'package:particle_auth/particle_auth.dart';
+import 'package:particle_base/particle_base.dart';
 import 'package:particle_auth_core/particle_auth_core.dart';
 import 'package:particle_auth_core_example/mock/transaction_mock.dart';
 
@@ -19,7 +19,7 @@ class AuthCoreLogic {
           'You need set project info, get your project id and client key from dashboard, https://dashboard.particle.network');
     }
     ParticleInfo.set(projectId, clientK);
-    ParticleAuth.init(currChainInfo, env);
+    ParticleBase.init(currChainInfo, env);
     ParticleAuthCore.init();
     print("init");
   }
@@ -399,7 +399,7 @@ class AuthCoreLogic {
   }
 
   static Future<String> getTypedDataV4() async {
-    final chainId = await ParticleAuth.getChainId();
+    final chainId = await ParticleBase.getChainId();
     // This typed data is version 4
 
     String typedData = '''
