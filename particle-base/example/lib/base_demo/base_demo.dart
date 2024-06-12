@@ -18,7 +18,6 @@ class BaseDemoPageState extends State<BaseDemoPage> {
   final List<MethodItem> data = [
     MethodItem("Init", () => BaseLogic.init()),
     MethodItem("SelectChain", () {}),
-    MethodItem("Set chainInfo", () => BaseLogic.setChainInfo()),
     MethodItem("Get chainInfo", () => BaseLogic.getChainInfo()),
     MethodItem("Set language", () {}),
     MethodItem("Get language", () => BaseLogic.getLanguage()),

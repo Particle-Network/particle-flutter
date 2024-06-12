@@ -45,7 +45,7 @@ flutter:
   plugin:
     platforms:
       android:
-        package: network.particle.auth_plugin.particle_base
+        package: network.particle.base_flutter
         pluginClass: ParticleBasePlugin
       ios:
         pluginClass: ParticleBasePlugin

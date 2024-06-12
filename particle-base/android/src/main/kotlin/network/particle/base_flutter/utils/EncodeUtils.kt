@@ -1,6 +1,7 @@
-package network.particle.auth_flutter.bridge.utils
+package network.particle.base_flutter.utils
 
 import com.particle.base.ParticleNetwork
+import network.particle.base_flutter.utils.Base58Utils
 
 object EncodeUtils {
     fun encode(message: String): String {

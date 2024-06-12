@@ -33,6 +33,9 @@ class _ConnectDemoPageState extends State<ConnectDemoPage> {
     _walletConnectEventChannel.receiveBroadcastStream().listen((event) {
       _onEvent(event);
     });
+
+    Provider.of<ConnectLogic>(context, listen: false).init();
+
   }
 
   void _onEvent(Object event) {
@@ -53,19 +56,7 @@ class _ConnectDemoPageState extends State<ConnectDemoPage> {
           return SingleChildScrollView(
             child: Column(
               children: <Widget>[
-                Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: SizedBox(
-                    width: double.infinity,
-                    height: 50,
-                    child: ElevatedButton(
-                        onPressed: () => {logic.init()},
-                        child: const Text(
-                          "Init",
-                          style: TextStyle(fontSize: 18),
-                        )),
-                  ),
-                ),
+
                 Padding(
                   padding: const EdgeInsets.only(left: 8.0, top: 16.0, right: 8.0, bottom: 8.0),
                   child: SizedBox(
@@ -291,32 +282,7 @@ class _ConnectDemoPageState extends State<ConnectDemoPage> {
                         )),
                   ),
                 ),
-                Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: SizedBox(
-                    width: double.infinity,
-                    height: 50,
-                    child: ElevatedButton(
-                        onPressed: () => {logic.importMnemonic()},
-                        child: const Text(
-                          "Import Mnemonic",
-                          style: TextStyle(fontSize: 18),
-                        )),
-                  ),
-                ),
-                Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: SizedBox(
-                    width: double.infinity,
-                    height: 50,
-                    child: ElevatedButton(
-                        onPressed: () => {logic.exportPrivateKey()},
-                        child: const Text(
-                          "Export Private Key",
-                          style: TextStyle(fontSize: 18),
-                        )),
-                  ),
-                ),
+
                 Padding(
                   padding: const EdgeInsets.all(8.0),
                   child: SizedBox(

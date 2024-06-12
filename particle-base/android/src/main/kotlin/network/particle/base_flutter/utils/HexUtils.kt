@@ -1,4 +1,4 @@
-package network.particle.auth_flutter.bridge.utils
+package network.particle.base_flutter.utils
 
 import org.apache.commons.codec.DecoderException
 import org.apache.commons.codec.binary.Hex

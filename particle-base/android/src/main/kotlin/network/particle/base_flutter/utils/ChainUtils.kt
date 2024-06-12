@@ -1,4 +1,4 @@
-package network.particle.auth_flutter.bridge.utils
+package network.particle.base_flutter.utils
 
 import network.particle.chains.ChainInfo
 
