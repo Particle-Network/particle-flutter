@@ -50,15 +50,15 @@ PODS:
   - libwebp/webp (1.3.2):
     - libwebp/sharpyuv
   - MJRefresh (3.7.9)
-  - particle_auth (0.0.1):
-    - Flutter
-    - ParticleAuthService
   - particle_auth_core (0.0.1):
     - AuthCoreAdapter
     - Flutter
     - ParticleAuthCore
     - ParticleMPCCore
     - Thresh
+  - particle_base (0.0.1):
+    - Flutter
+    - ParticleNetworkBase
   - particle_connect (0.0.1):
     - ConnectCommon
     - ConnectEVMAdapter
@@ -209,14 +209,13 @@ DEPENDENCIES:
   - ConnectSolanaAdapter (= 0.2.24)
   - ConnectWalletConnectAdapter (= 0.2.24)
   - Flutter (from `Flutter`)
-  - particle_auth (from `.symlinks/plugins/particle_auth/ios`)
   - particle_auth_core (from `.symlinks/plugins/particle_auth_core/ios`)
+  - particle_base (from `.symlinks/plugins/particle_base/ios`)
   - particle_connect (from `.symlinks/plugins/particle_connect/ios`)
   - particle_wallet (from `.symlinks/plugins/particle_wallet/ios`)
   - ParticleAA (= 1.4.6)
   - ParticleAuthAdapter (= 0.2.24)
   - ParticleAuthCore (= 1.4.7)
-  - ParticleAuthService (= 1.4.6)
   - ParticleConnect (= 0.2.24)
   - ParticleMPCCore (= 1.4.7)
   - ParticleNetworkBase (= 1.4.6)
@@ -277,10 +276,10 @@ SPEC REPOS:
 EXTERNAL SOURCES:
   Flutter:
     :path: Flutter
-  particle_auth:
-    :path: ".symlinks/plugins/particle_auth/ios"
   particle_auth_core:
     :path: ".symlinks/plugins/particle_auth_core/ios"
+  particle_base:
+    :path: ".symlinks/plugins/particle_base/ios"
   particle_connect:
     :path: ".symlinks/plugins/particle_connect/ios"
   particle_wallet:
@@ -326,8 +325,8 @@ SPEC CHECKSUMS:
   JXSegmentedView: 651b60fcf705258ba9395edd53876dbd2853fb68
   libwebp: 1786c9f4ff8a279e4dac1e8f385004d5fc253009
   MJRefresh: ff9e531227924c84ce459338414550a05d2aea78
-  particle_auth: f63e17b5dc9b5f7b3ad4d5c13fbfc03d3739b3ab
   particle_auth_core: 08525d1c4253c4f49fbb6d1562a45d9187fa3f1b
+  particle_base: a43be9e2129ecdc02740f458cfc299759ae89985
   particle_connect: 0192191b9fcae5c955c4752920acc5f05deb762a
   particle_wallet: f7e7dec6e3dc03937e492dd053375e460ba02825
   ParticleAA: 85eee267cdd3ea2d4d16f306ab1ff27ac794b422
@@ -359,6 +358,6 @@ SPEC CHECKSUMS:
   TweetNacl: 3abf4d1d2082b0114e7a67410e300892448951e6
   WalletConnectSwiftV2: a3e9870da851a1608e79d4583668e87ffea6a72d
 
-PODFILE CHECKSUM: faca0f3cab62918604a9919e10539a66d4d2ccf3
+PODFILE CHECKSUM: fd36e2c386057921f77f3fcfeff65f67b6959f59
 
 COCOAPODS: 1.15.2

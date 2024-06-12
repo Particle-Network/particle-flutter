@@ -1,4 +1,4 @@
-import 'package:particle_auth/particle_auth.dart';
+import 'package:particle_base/particle_base.dart';
 import 'package:particle_wallet/model/open_buy_network.dart';
 import 'package:particle_wallet/model/theme.dart';
 

@@ -14,9 +14,9 @@ dependencies:
   # particle_base: ^1.5.0
   # particle_auth_core: ^1.5.0
   particle_base: 
-    path: ../particle-base/
+   path: ../particle-base/
   particle_auth_core: 
-    path: ../particle-auth-core/
+   path: ../particle-auth-core/
 
 dev_dependencies:
   flutter_test:

@@ -2,7 +2,7 @@ import 'dart:convert';
 import 'dart:io' show Platform;
 
 import 'package:flutter/services.dart';
-import 'package:particle_auth/particle_auth.dart';
+import 'package:particle_base/particle_base.dart';
 import 'package:particle_connect/particle_connect.dart';
 import 'package:particle_wallet/model/buy_crypto_config.dart';
 import 'package:particle_wallet/model/wallet_display.dart';

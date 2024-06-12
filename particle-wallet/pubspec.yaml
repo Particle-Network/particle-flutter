@@ -10,13 +10,15 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-  particle_connect: ^1.4.27
-  particle_auth: ^1.4.27
-
   # particle_connect: ^1.4.27
-  #   path: ../particle-connect/
   # particle_auth: ^1.4.27
-  #   path: ../particle-auth/
+
+  particle_connect: 
+    path: ../particle-connect/
+  particle_base: 
+    path: ../particle-base/
+  particle_auth_core: 
+    path: ../particle-auth-core/
 
   plugin_platform_interface: ^2.1.6
 

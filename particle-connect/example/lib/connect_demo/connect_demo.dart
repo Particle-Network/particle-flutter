@@ -9,7 +9,7 @@ import 'package:provider/provider.dart';
 import 'package:qr_flutter/qr_flutter.dart';
 
 class ConnectDemoPage extends StatefulWidget {
-  const ConnectDemoPage({Key? key}) : super(key: key);
+  const ConnectDemoPage({super.key});
 
   @override
   State<ConnectDemoPage> createState() => _ConnectDemoPageState();
@@ -48,6 +48,7 @@ class _ConnectDemoPageState extends State<ConnectDemoPage> {
       walletConnectUri = event.toString();
     });
   }
+
 
   @override
   Widget build(BuildContext context) {
@@ -286,19 +287,6 @@ class _ConnectDemoPageState extends State<ConnectDemoPage> {
                     width: double.infinity,
                     height: 50,
                     child: ElevatedButton(
-                        onPressed: () => {logic.importPrivateKey()},
-                        child: const Text(
-                          "Import Private Key",
-                          style: TextStyle(fontSize: 18),
-                        )),
-                  ),
-                ),
-                Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: SizedBox(
-                    width: double.infinity,
-                    height: 50,
-                    child: ElevatedButton(
                         onPressed: () => {logic.isConnected()},
                         child: const Text(
                           "IsConnected",
@@ -328,19 +316,6 @@ class _ConnectDemoPageState extends State<ConnectDemoPage> {
                         onPressed: () => {logic.walletTypeState()},
                         child: const Text(
                           "Wallet ready state",
-                          style: TextStyle(fontSize: 18),
-                        )),
-                  ),
-                ),
-                Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: SizedBox(
-                    width: double.infinity,
-                    height: 50,
-                    child: ElevatedButton(
-                        onPressed: () => {logic.reconnectIfNeed()},
-                        child: const Text(
-                          "Reconnect wallet",
                           style: TextStyle(fontSize: 18),
                         )),
                   ),

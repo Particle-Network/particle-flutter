@@ -1,7 +1,7 @@
 import 'package:oktoast/oktoast.dart';
 import 'package:particle_aa/particle_aa.dart';
 import 'package:particle_aa_example/mock/transaction_mock.dart';
-import 'package:particle_auth/particle_auth.dart';
+import 'package:particle_base/particle_base.dart';
 import 'package:particle_connect/particle_connect.dart';
 
 class AAConnectLogic {
@@ -37,7 +37,7 @@ class AAConnectLogic {
       137: "", // your polygon mainnet key
       80001: "", // your polygon mumbai key
     };
-    ParticleAuth.init(ChainInfo.Polygon, Env.production);
+    ParticleBase.init(ChainInfo.Polygon, Env.production);
     ParticleAA.init(AccountName.BICONOMY_V1(), biconomyApiKeys);
   }
 

@@ -33,16 +33,16 @@ dependencies:
   # auto_route: ^7.8.1
   oktoast: ^3.3.2+1
 
-  particle_auth: ^1.4.26
-  particle_connect: ^1.4.26
-  particle_auth_core: ^1.4.26
+  # particle_auth: ^1.4.26
+  # particle_connect: ^1.4.26
+  # particle_auth_core: ^1.4.26
 
-  # particle_auth:
-  #   path: ../../particle-auth/
-  # particle_connect:
-  #   path: ../../particle-connect/
-  # particle_auth_core:
-  #   path: ../../particle-auth-core/
+  particle_base:
+    path: ../../particle-base/
+  particle_connect:
+    path: ../../particle-connect/
+  particle_auth_core:
+    path: ../../particle-auth-core/
 
 dev_dependencies:
   flutter_test:

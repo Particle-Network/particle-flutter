@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:oktoast/oktoast.dart';
-import 'package:particle_aa_example/aa_demo/aa_demo_auth.dart';
 import 'package:particle_aa_example/aa_demo/aa_demo_auth_core.dart';
 import 'package:particle_aa_example/aa_demo/aa_demo_connect.dart';
 
@@ -52,27 +51,6 @@ class _MyHomePageState extends State<MyHomePage> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
-            //add a button
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: SizedBox(
-                  width: 200,
-                  height: 50,
-                  child: ElevatedButton(
-                    onPressed: () => {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => const AADemoAuthPage(),
-                        ),
-                      )
-                    },
-                    child: const Text(
-                      "AA Auth",
-                      style: TextStyle(fontSize: 20),
-                    ),
-                  )),
-            ),
             Padding(
               padding: const EdgeInsets.all(8.0),
               child: SizedBox(

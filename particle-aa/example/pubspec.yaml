@@ -27,15 +27,15 @@ dependencies:
     # the parent directory to use the current plugin's version.
     path: ../
 
-  particle_connect: ^1.4.27
-  particle_auth: ^1.4.27
-  particle_auth_core: ^1.4.27
-  # particle_auth_core: ^1.4.27
-  #  path: ../../particle-auth-core/
-  # particle_connect: ^1.4.27
-  #  path: ../../particle-connect/
-  # particle_auth: ^1.4.27
-  #  path: ../../particle-auth/
+  # particle_connect: ^1.5.0
+  # particle_auth: ^1.5.0
+  # particle_auth_core: ^1.5.0
+  particle_auth_core: 
+   path: ../../particle-auth-core/
+  particle_connect: 
+   path: ../../particle-connect/
+  particle_base: 
+   path: ../../particle-base/
 
 
   #^0.13.7

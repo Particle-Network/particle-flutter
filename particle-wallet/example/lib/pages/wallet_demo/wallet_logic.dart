@@ -1,7 +1,7 @@
 import 'dart:io';
 
 import 'package:oktoast/oktoast.dart';
-import 'package:particle_auth/particle_auth.dart';
+import 'package:particle_base/particle_base.dart';
 import 'package:particle_connect/particle_connect.dart';
 import 'package:particle_wallet/particle_wallet.dart';
 
@@ -111,7 +111,7 @@ class WalletLogic {
   }
 
   static void switchWallet() async {
-    WalletType walletType = WalletType.particle;
+    WalletType walletType = WalletType.authCore;
     String publicAddress = "";
     bool result = await ParticleWallet.switchWallet(walletType, publicAddress);
     print("result:$result");

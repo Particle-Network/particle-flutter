@@ -24,9 +24,7 @@ extension NSObject {
     public func map2WalletType(from string: String) -> WalletType? {
         let str = string.lowercased()
         var walletType: WalletType?
-        if str == "particle" {
-            walletType = .particle
-        } else if str == "authcore" {
+        if str == "authcore" {
             walletType = .authCore
         } else if str == "evmprivatekey" {
             walletType = .evmPrivateKey
@@ -60,7 +58,7 @@ extension NSObject {
             walletType = .inch1
         } else {
             walletType = nil
-        } 
+        }
 
         return walletType
     }

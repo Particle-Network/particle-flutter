@@ -315,58 +315,6 @@ class ConnectLogic extends ChangeNotifier {
     }
   }
 
-  void importPrivateKey() async {
-    String privateKey;
-    if (currChainInfo.isSolanaChain()) {
-      privateKey = TestAccount.solana.privateKey;
-    } else {
-      privateKey = TestAccount.evm.privateKey;
-    }
-
-    try {
-      final account =
-          await ParticleConnect.importPrivateKey(walletType, privateKey);
-      showToast('importPrivateKey: $account');
-      print("importPrivateKey: $account");
-      this.account = account;
-    } catch (error) {
-      showToast('importPrivateKey: $error');
-      print("importPrivateKey: $error");
-    }
-  }
-
-  void importMnemonic() async {
-    String mnemonic;
-    if (currChainInfo.isSolanaChain()) {
-      mnemonic = TestAccount.solana.mnemonic;
-    } else {
-      mnemonic = TestAccount.evm.mnemonic;
-    }
-
-    try {
-      final account =
-          await ParticleConnect.importMnemonic(walletType, mnemonic);
-      showToast('importMnemonic: $account');
-      print("importMnemonic: $account");
-      this.account = account;
-    } catch (error) {
-      showToast('importMnemonic: $error');
-      print("importMnemonic: $error");
-    }
-  }
-
-  void exportPrivateKey() async {
-    try {
-      String privateKey = await ParticleConnect.exportPrivateKey(
-          walletType, getPublicAddress());
-      showToast('exportPrivateKey: $privateKey');
-      print("exportPrivateKey: $privateKey");
-    } catch (error) {
-      showToast('exportPrivateKey: $error');
-      print("exportPrivateKey: $error");
-    }
-  }
-
   void walletTypeState() async {
     print(await ParticleConnect.walletReadyState(WalletType.metaMask));
     print(await ParticleConnect.walletReadyState(WalletType.rainbow));
@@ -376,9 +324,5 @@ class ConnectLogic extends ChangeNotifier {
     print(await ParticleConnect.walletReadyState(WalletType.math));
     print(await ParticleConnect.walletReadyState(WalletType.zerion));
     print(await ParticleConnect.walletReadyState(WalletType.alpha));
-  }
-
-  void reconnectIfNeed() {
-    ParticleConnect.reconnectIfNeeded(walletType, getPublicAddress());
   }
 }

@@ -46,15 +46,15 @@ PODS:
   - particle_aa (0.0.1):
     - Flutter
     - ParticleAA
-  - particle_auth (0.0.1):
-    - Flutter
-    - ParticleAuthService
   - particle_auth_core (0.0.1):
     - AuthCoreAdapter
     - Flutter
     - ParticleAuthCore
     - ParticleMPCCore
     - Thresh
+  - particle_base (0.0.1):
+    - Flutter
+    - ParticleNetworkBase
   - particle_connect (0.0.1):
     - ConnectCommon
     - ConnectEVMAdapter
@@ -175,13 +175,12 @@ DEPENDENCIES:
   - ConnectWalletConnectAdapter (= 0.2.24)
   - Flutter (from `Flutter`)
   - particle_aa (from `.symlinks/plugins/particle_aa/ios`)
-  - particle_auth (from `.symlinks/plugins/particle_auth/ios`)
   - particle_auth_core (from `.symlinks/plugins/particle_auth_core/ios`)
+  - particle_base (from `.symlinks/plugins/particle_base/ios`)
   - particle_connect (from `.symlinks/plugins/particle_connect/ios`)
   - ParticleAA (= 1.4.6)
   - ParticleAuthAdapter (= 0.2.24)
   - ParticleAuthCore (= 1.4.7)
-  - ParticleAuthService (= 1.4.6)
   - ParticleConnect (= 0.2.24)
   - ParticleMPCCore (= 1.4.7)
   - ParticleNetworkBase (= 1.4.6)
@@ -232,10 +231,10 @@ EXTERNAL SOURCES:
     :path: Flutter
   particle_aa:
     :path: ".symlinks/plugins/particle_aa/ios"
-  particle_auth:
-    :path: ".symlinks/plugins/particle_auth/ios"
   particle_auth_core:
     :path: ".symlinks/plugins/particle_auth_core/ios"
+  particle_base:
+    :path: ".symlinks/plugins/particle_base/ios"
   particle_connect:
     :path: ".symlinks/plugins/particle_connect/ios"
   SkeletonView:
@@ -275,8 +274,8 @@ SPEC CHECKSUMS:
   Flutter: f04841e97a9d0b0a8025694d0796dd46242b2854
   libwebp: 1786c9f4ff8a279e4dac1e8f385004d5fc253009
   particle_aa: 02d46a151c4e3b90851615d26e21a88960e752ec
-  particle_auth: f63e17b5dc9b5f7b3ad4d5c13fbfc03d3739b3ab
   particle_auth_core: 08525d1c4253c4f49fbb6d1562a45d9187fa3f1b
+  particle_base: a43be9e2129ecdc02740f458cfc299759ae89985
   particle_connect: 0192191b9fcae5c955c4752920acc5f05deb762a
   ParticleAA: 85eee267cdd3ea2d4d16f306ab1ff27ac794b422
   ParticleAuthAdapter: 6ef287f4befb6b046bd4fb82e1b3594f9b679782
@@ -303,6 +302,6 @@ SPEC CHECKSUMS:
   TweetNacl: 3abf4d1d2082b0114e7a67410e300892448951e6
   WalletConnectSwiftV2: a3e9870da851a1608e79d4583668e87ffea6a72d
 
-PODFILE CHECKSUM: a9c573992dbea1a0c5dcd38abab00ac5b4509ea7
+PODFILE CHECKSUM: 80c95e96ebb50860e3eba79a516951be2c490036
 
 COCOAPODS: 1.15.2

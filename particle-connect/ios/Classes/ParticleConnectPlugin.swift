@@ -60,7 +60,6 @@ public class ParticleConnectPlugin: NSObject, FlutterPlugin {
         case importMnemonic
         case exportPrivateKey
         case walletReadyState
-        case reconnectIfNeeded
         case connectWalletConnect
         case batchSendTransactions
         case setWalletConnectV2SupportChainInfos
@@ -117,11 +116,8 @@ public class ParticleConnectPlugin: NSObject, FlutterPlugin {
             self.importMnemonic(json as? String, callback: result)
         case .exportPrivateKey:
             self.exportPrivateKey(json as? String, callback: result)
-        
         case .walletReadyState:
             self.walletReadyState(json as? String, callback: result)
-        case .reconnectIfNeeded:
-            self.reconnectIfNeeded(json as? String)
         case .connectWalletConnect:
             self.connectWalletConnect(callback: result)
         case .batchSendTransactions:
@@ -873,25 +869,6 @@ extension ParticleConnectPlugin {
         callback(str)
     }
     
-    func reconnectIfNeeded(_ json: String?) {
-        guard let json = json else {
-            return
-        }
-        
-        let data = JSON(parseJSON: json)
-        let walletTypeString = data["wallet_type"].stringValue
-        let publicAddress = data["public_address"].stringValue
-        
-        guard let walletType = map2WalletType(from: walletTypeString) else {
-            print("walletType \(walletTypeString) is not existed ")
-            return
-        }
-        
-        guard let adapter = map2ConnectAdapter(from: walletType) else {
-            print("adapter for \(walletTypeString) is not init")
-            return
-        }
-    }
     
     func connectWalletConnect(callback: @escaping ParticleCallback) {
         guard let adapter = map2ConnectAdapter(from: .walletConnect) else {

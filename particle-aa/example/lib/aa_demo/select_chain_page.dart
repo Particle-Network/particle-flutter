@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:oktoast/oktoast.dart';
-import 'package:particle_auth/particle_auth.dart';
+import 'package:particle_base/particle_base.dart';
 
 class SelectChainPage extends StatefulWidget {
   const SelectChainPage({super.key});
@@ -25,7 +25,7 @@ class SelectChainPageState extends State<SelectChainPage> {
               onPressed: () {
                 print('Clicked: ${chainList[index]}');
                 final chainInfo = chainList[index];
-                ParticleAuth.setChainInfo(chainInfo);
+                ParticleBase.setChainInfo(chainInfo);
                 showToast(
                     "set chain info: ${chainList[index].name}  ${chainList[index].id}");
                 Navigator.pop(context);
