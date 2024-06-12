@@ -78,7 +78,7 @@ class WalletLogic {
         cryptoCoin: "USDT",
         fiatCoin: "USD",
         fiatAmt: 1000,
-        network: OpenBuyNetwork.ethereum);
+        chainInfo: ChainInfo.Ethereum);
     ParticleWallet.navigatorBuyCrypto(config: config);
   }
 

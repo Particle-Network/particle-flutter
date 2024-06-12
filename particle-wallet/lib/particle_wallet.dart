@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'dart:io' show Platform;
 
+import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
 import 'package:particle_base/particle_base.dart';
 import 'package:particle_connect/particle_connect.dart';
@@ -9,7 +10,6 @@ import 'package:particle_wallet/model/wallet_display.dart';
 import 'package:particle_wallet/model/wallet_meta_data.dart';
 
 export 'package:particle_wallet/model/buy_crypto_config.dart';
-export 'package:particle_wallet/model/open_buy_network.dart';
 export 'package:particle_wallet/model/theme.dart';
 export 'package:particle_wallet/model/wallet_display.dart';
 export 'package:particle_wallet/model/wallet_meta_data.dart';
@@ -18,6 +18,22 @@ class ParticleWallet {
   ParticleWallet._();
 
   static const MethodChannel _channel = MethodChannel('wallet_bridge');
+
+  static final List<ChainInfo> supportBuyChainInfoList = <ChainInfo>[
+    ChainInfo.Ethereum,
+    ChainInfo.Solana,
+    ChainInfo.BNBChain,
+    ChainInfo.Optimism,
+    ChainInfo.Polygon,
+    ChainInfo.Tron,
+    ChainInfo.ArbitrumOne,
+    ChainInfo.Avalanche,
+    ChainInfo.Celo,
+    ChainInfo.zkSyncEra,
+    ChainInfo.Base,
+    ChainInfo.Linea,
+    ChainInfo.Manta
+  ];
 
   /// Init particle wallet SDK.
   static init(WalletMetaData metaData) {
@@ -126,7 +142,12 @@ class ParticleWallet {
   /// [config] is buy crypto parameters
   ///
   static navigatorBuyCrypto({BuyCryptoConfig? config}) {
-    _channel.invokeMethod('navigatorBuyCrypto', jsonEncode(config));
+    if (config?.chainInfo != null &&
+        supportBuyChainInfoList.contains(config?.chainInfo)) {
+      _channel.invokeMethod('navigatorBuyCrypto', jsonEncode(config));
+    } else {
+      debugPrint('not support chain info');
+    }
   }
 
   /// Navigator swap page.
@@ -171,7 +192,6 @@ class ParticleWallet {
       final error = RpcError.fromJson(jsonDecode(result)["data"]);
       return Future.error(error);
     }
-
   }
 
   /// Set show test network, default value is false.
@@ -203,7 +223,7 @@ class ParticleWallet {
     _channel.invokeMethod('setSupportChain', jsonEncode(allInfos));
   }
 
-  /// Switch wallet 
+  /// Switch wallet
   ///
   /// Pass [walletType] and [publicAddress] to decide a wallet to set.
   /// [pnWalletName] is optional, only support particleConnectAdapter Android supported.
@@ -272,10 +292,8 @@ class ParticleWallet {
   /// load custom ui config json
   static loadCustomUIJsonString(String json) {
     if (Platform.isIOS) {
-       _channel.invokeMethod("loadCustomUIJsonString", json);
-    } else {
-
-    }
+      _channel.invokeMethod("loadCustomUIJsonString", json);
+    } else {}
   }
 
   /// Set support wallet connect as a wallet, default is true

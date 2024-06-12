@@ -1,6 +1,7 @@
+import 'dart:convert';
+
 import 'package:particle_base/particle_base.dart';
-import 'package:particle_wallet/model/open_buy_network.dart';
-import 'package:particle_wallet/model/theme.dart';
+import 'package:particle_wallet/particle_wallet.dart';
 
 /// Buy crypto config.
 ///
@@ -12,7 +13,7 @@ import 'package:particle_wallet/model/theme.dart';
 ///
 /// [fiatAmt] is how much you want to pay.
 ///
-/// [network] choose a chain network to receive crypto.
+/// [chainInfo] choose a chain network to receive crypto.
 ///
 /// [fixFiatCoin] if fix fiat coin, default is false.
 ///
@@ -28,7 +29,7 @@ class BuyCryptoConfig {
   String? cryptoCoin;
   String? fiatCoin;
   int? fiatAmt;
-  OpenBuyNetwork? network;
+  ChainInfo? chainInfo;
   bool fixFiatCoin = false;
   bool fixFiatAmt = false;
   bool fixCryptoCoin = false;
@@ -40,26 +41,36 @@ class BuyCryptoConfig {
       this.cryptoCoin,
       this.fiatCoin,
       this.fiatAmt,
-      this.network});
+      this.chainInfo});
 
   BuyCryptoConfig.fromJson(Map<String, dynamic> json)
       : walletAddress = json['wallet_address'],
         cryptoCoin = json['crypto_coin'],
         fiatCoin = json['fiat_coin'],
         fiatAmt = json['fiat_amt'],
-        network = json['network'],
+        chainInfo = _processChainInfo(json['chain_info']),
         fixFiatCoin = json['fix_fiat_coin'],
         fixFiatAmt = json['fix_fiat_amt'],
         fixCryptoCoin = json['fix_crypto_coin'],
         theme = json['theme'],
         language = json['language'];
 
+  static ChainInfo? _processChainInfo(dynamic chainInfoJson) {
+    int chainId = chainInfoJson["chain_id"];
+    String chainName = chainInfoJson["chain_name"];
+    final chainInfo = ChainInfo.getChain(chainId, chainName);
+    return chainInfo;
+  }
+
   Map<String, dynamic> toJson() => {
         'wallet_address': walletAddress,
         'crypto_coin': cryptoCoin,
         'fiat_coin': fiatCoin,
         'fiat_amt': fiatAmt,
-        'network': network?.name,
+        'chain_info': {
+          'chain_name': chainInfo?.name,
+          'chain_id': chainInfo?.id,
+        },
         'fix_fiat_coin': fixFiatCoin,
         'fix_fiat_amt': fixFiatAmt,
         'fix_crypto_coin': fixCryptoCoin,

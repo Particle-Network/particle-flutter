@@ -214,9 +214,12 @@ extension ParticleWalletPlugin {
         guard let json = json else { return }
         let data = JSON(parseJSON: json)
         let walletAddress = data["wallet_address"].string
-        let networkString = data["network"].stringValue.lowercased()
-        let chainInfo = ParticleNetwork.getChainInfo()
-        
+        let chainId = data["chain_info"]["chain_id"].intValue
+        let chainName = data["chain_info"]["chain_name"].stringValue.lowercased()
+        let chainType: ChainType = chainName == "solana" ? .solana : .evm
+
+        let chainInfo = ParticleNetwork.searchChainInfo(by: chainId, chainType: chainType) ?? ParticleNetwork.getChainInfo()
+
         let fiatCoin = data["fiat_coin"].string
         let fiatAmt = data["fiat_amt"].int
         let cryptoCoin = data["crypto_coin"].string
