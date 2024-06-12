@@ -35,6 +35,7 @@ class BuyCryptoConfig {
   bool fixCryptoCoin = false;
   Theme? theme;
   Language? language;
+  IOSModalPresentStyle modalStyle = IOSModalPresentStyle.pageSheet;
 
   BuyCryptoConfig(
       {this.walletAddress,
@@ -75,6 +76,7 @@ class BuyCryptoConfig {
         'fix_fiat_amt': fixFiatAmt,
         'fix_crypto_coin': fixCryptoCoin,
         'theme': theme?.name,
-        'language': language?.name
+        'language': language?.name,
+        'modal_style': modalStyle.name
       };
 }
