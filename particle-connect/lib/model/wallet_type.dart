@@ -1,5 +1,4 @@
 enum WalletType {
-  particle,
   authCore,
   evmPrivateKey,
   solanaPrivateKey,

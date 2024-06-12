@@ -2,7 +2,7 @@ import 'dart:convert';
 import 'dart:io' show Platform;
 
 import 'package:flutter/services.dart';
-import 'package:particle_auth/particle_auth.dart';
+import 'package:particle_base/particle_base.dart';
 import 'package:particle_connect/model/account.dart';
 import 'package:particle_connect/model/dapp_meta_data.dart';
 import 'package:particle_connect/model/particle_connect_config.dart';
@@ -101,9 +101,9 @@ class ParticleConnect {
   /// Call this method before login.
   ///
   /// [chainInfo] Chain info, for example EthereumChain, BscChain.
-  static Future<bool>  setChainInfo(ChainInfo chainInfo) async {
+  static Future<bool> setChainInfo(ChainInfo chainInfo) async {
     if (Platform.isIOS) {
-      return  ParticleAuth.setChainInfo(chainInfo);
+      return ParticleBase.setChainInfo(chainInfo);
     } else {
       return await _channel.invokeMethod(
           'setChainInfo',
@@ -112,9 +112,7 @@ class ParticleConnect {
             "chain_id": chainInfo.id,
           }));
     }
-
   }
-
 
   /// Before call this method, add a event 'connect_event_bridge', to receive uri string
   ///

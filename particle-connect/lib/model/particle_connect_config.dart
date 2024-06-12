@@ -1,9 +1,9 @@
-import 'package:particle_auth/model/login_info.dart';
+import 'package:particle_base/particle_base.dart';
 
 class ParticleConnectConfig {
   LoginType loginType;
   String account;
-  String? code ="";
+  String? code = "";
   List<SupportAuthType> supportAuthTypes;
   SocialLoginPrompt? socialLoginPrompt;
   LoginPageConfig? loginPageConfig;
@@ -20,8 +20,9 @@ class ParticleConnectConfig {
   ///
   ///
   /// [socialLoginPrompt] set social login prompt, optional.
-  ParticleConnectConfig(this.loginType, this.account,  this.supportAuthTypes, this.socialLoginPrompt,
-      {this.code,this.authorization, this.loginPageConfig});
+  ParticleConnectConfig(this.loginType, this.account, this.supportAuthTypes,
+      this.socialLoginPrompt,
+      {this.code, this.authorization, this.loginPageConfig});
 
   Map<String, dynamic> toJson() => {
         'loginType': loginType.name,

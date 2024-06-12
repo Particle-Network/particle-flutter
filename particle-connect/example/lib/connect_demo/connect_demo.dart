@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:particle_auth/model/login_info.dart';
+import 'package:particle_base/particle_base.dart';
 import 'package:particle_connect/model/wallet_type.dart';
 import 'package:particle_connect_example/connect_demo/connect_logic.dart';
 import 'package:particle_connect_example/connect_demo/select_chain_page.dart';
@@ -16,15 +16,20 @@ class ConnectDemoPage extends StatefulWidget {
 }
 
 class _ConnectDemoPageState extends State<ConnectDemoPage> {
-  static const EventChannel _walletConnectEventChannel = EventChannel('connect_event_bridge');
+  static const EventChannel _walletConnectEventChannel =
+      EventChannel('connect_event_bridge');
   var walletConnectUri = "";
   TextEditingController accountCtrl = TextEditingController();
   List<LoginType> socialLoginTypes = LoginType.values.where((type) {
-    return type != LoginType.email && type != LoginType.phone && type != LoginType.jwt;
+    return type != LoginType.email &&
+        type != LoginType.phone &&
+        type != LoginType.jwt;
   }).toList();
 
   LoginType loginType = LoginType.email;
-  Map<SupportAuthType, bool> selectedAuthTypes = {for (var item in SupportAuthType.values) item: true};
+  Map<SupportAuthType, bool> selectedAuthTypes = {
+    for (var item in SupportAuthType.values) item: true
+  };
   bool selectedLoginTypesShow = false;
 
   @override
@@ -35,7 +40,6 @@ class _ConnectDemoPageState extends State<ConnectDemoPage> {
     });
 
     Provider.of<ConnectLogic>(context, listen: false).init();
-
   }
 
   void _onEvent(Object event) {
@@ -56,9 +60,9 @@ class _ConnectDemoPageState extends State<ConnectDemoPage> {
           return SingleChildScrollView(
             child: Column(
               children: <Widget>[
-
                 Padding(
-                  padding: const EdgeInsets.only(left: 8.0, top: 16.0, right: 8.0, bottom: 8.0),
+                  padding: const EdgeInsets.only(
+                      left: 8.0, top: 16.0, right: 8.0, bottom: 8.0),
                   child: SizedBox(
                     width: double.infinity,
                     height: 50,
@@ -66,7 +70,9 @@ class _ConnectDemoPageState extends State<ConnectDemoPage> {
                         onPressed: () => {
                               Navigator.push(
                                 context,
-                                MaterialPageRoute(builder: (context) => const SelectChainPage()),
+                                MaterialPageRoute(
+                                    builder: (context) =>
+                                        const SelectChainPage()),
                               )
                             },
                         child: const Text(
@@ -76,7 +82,8 @@ class _ConnectDemoPageState extends State<ConnectDemoPage> {
                   ),
                 ),
                 Padding(
-                  padding: const EdgeInsets.only(left: 8.0, top: 16.0, right: 8.0, bottom: 8.0),
+                  padding: const EdgeInsets.only(
+                      left: 8.0, top: 16.0, right: 8.0, bottom: 8.0),
                   child: SizedBox(
                     width: double.infinity,
                     height: 50,
@@ -84,7 +91,9 @@ class _ConnectDemoPageState extends State<ConnectDemoPage> {
                         onPressed: () => {
                               Navigator.push(
                                 context,
-                                MaterialPageRoute(builder: (context) => const SelectWalletPage()),
+                                MaterialPageRoute(
+                                    builder: (context) =>
+                                        const SelectWalletPage()),
                               )
                             },
                         child: const Text(
@@ -119,7 +128,9 @@ class _ConnectDemoPageState extends State<ConnectDemoPage> {
                         )),
                   ),
                 ),
-                Visibility(visible: logic.walletType == WalletType.authCore, child: connectWithParams()),
+                Visibility(
+                    visible: logic.walletType == WalletType.authCore,
+                    child: connectWithParams()),
                 Visibility(
                   visible: logic.walletType != WalletType.authCore,
                   child: Padding(
@@ -282,7 +293,6 @@ class _ConnectDemoPageState extends State<ConnectDemoPage> {
                         )),
                   ),
                 ),
-
                 Padding(
                   padding: const EdgeInsets.all(8.0),
                   child: SizedBox(
@@ -431,9 +441,14 @@ class _ConnectDemoPageState extends State<ConnectDemoPage> {
             ),
             ItemButton(
                 "Connect",
-                () => Provider.of<ConnectLogic>(context, listen: false).authCoreConnect(loginType, accountCtrl.text,
-                          selectedAuthTypes.entries.where((e) => e.value).map((e) => e.key).toList())
-                    ),
+                () => Provider.of<ConnectLogic>(context, listen: false)
+                    .authCoreConnect(
+                        loginType,
+                        accountCtrl.text,
+                        selectedAuthTypes.entries
+                            .where((e) => e.value)
+                            .map((e) => e.key)
+                            .toList())),
           ],
         ),
       ),
