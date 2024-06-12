@@ -40,7 +40,7 @@ flutter:
     plugin:
         platforms:
             android:
-                package: network.particle.aa_plugin.particle_aa
+                package: network.particle.aa_plugin
                 pluginClass: ParticleAAPlugin
             ios:
                 pluginClass: ParticleAAPlugin

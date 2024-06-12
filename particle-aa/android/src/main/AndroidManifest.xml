@@ -1,5 +1,5 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="network.particle.aa_plugin.particle_biconomy">
+    package="network.particle.aa_plugin">
 
     <application>
         <!--   Particle Network config start     -->
@@ -8,7 +8,7 @@
             android:configChanges="orientation|keyboardHidden|screenSize"
             android:exported="true"
             android:launchMode="singleTask"
-            android:theme="@style/ThemeAuthWeb">
+            android:theme="@style/PnThemeWallet.FullScreen">
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
 

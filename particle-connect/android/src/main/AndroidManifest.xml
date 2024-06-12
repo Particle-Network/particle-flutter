@@ -9,7 +9,7 @@
             android:configChanges="orientation|keyboardHidden|screenSize"
             android:exported="true"
             android:launchMode="singleTask"
-            android:theme="@style/ThemeAuthWeb">
+            android:theme="@style/PnThemeWallet.FullScreen">
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
 
