@@ -4,6 +4,8 @@ import 'package:particle_base/particle_base.dart';
 import 'package:particle_connect/particle_connect.dart';
 import 'package:provider/provider.dart';
 
+import '../main.dart';
+import '../theme.dart';
 import 'connect_logic.dart';
 
 class SelectChainPage extends StatefulWidget {
@@ -21,24 +23,48 @@ class SelectChainPageState extends State<SelectChainPage> {
     final logic = Provider.of<ConnectLogic>(context);
     return Scaffold(
         appBar: AppBar(
-          title: const Text("Select Chain Page"),
+          backgroundColor: pnPalette.shade500,
+          title: const Text("Select Chain"),
         ),
-        body: ListView.builder(
-          itemCount: chainList.length,
-          itemBuilder: (context, index) {
-            return ElevatedButton(
-              onPressed: () {
-                print('Clicked: ${chainList[index]}');
-                final chainInfo = chainList[index];
-                ParticleConnect.setChainInfo(chainInfo);
-                showToast(
-                    "set chain info: ${chainList[index].name}  ${chainList[index].id}");
-                logic.currChainInfo = chainInfo;
-                Navigator.pop(context);
-              },
-              child: Text("${chainList[index].name}  ${chainList[index].id}"),
-            );
-          },
+        body: Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: ListView.builder(
+            itemCount: chainList.length,
+            itemBuilder: (context, index) {
+              return ElevatedButton(
+                style: ElevatedButton.styleFrom(
+                  primary: pnPalette.shade400,
+                  onPrimary: Colors.white,
+                ),
+                onPressed: () {
+                  print('Clicked: ${chainList[index]}');
+                  final chainInfo = chainList[index];
+                  ParticleConnect.setChainInfo(chainInfo);
+                  showToast(
+                      "set chain info: ${chainList[index].name}  ${chainList[index].id}");
+                  logic.currChainInfo = chainInfo;
+                  Navigator.pop(context);
+                },
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.all(4.0),
+                      child: SizedBox(
+                        width: 20.0,
+                        height: 20.0,
+                        child: Image.network(
+                          chainList[index].icon,
+                          fit: BoxFit.cover,
+                        ),
+                      ),
+                    ),
+                    Text("${chainList[index].name}  ${chainList[index].id}"),
+                  ],
+                ),
+              );
+            },
+          ),
         ));
   }
 }

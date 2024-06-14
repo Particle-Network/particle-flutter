@@ -82,8 +82,6 @@ object ConnectBridge {
         ) {
             initAdapter(rpcUrl)
         }
-        val adapters = ParticleConnect.getAdapters()
-        LogUtils.d("adapters", adapters.size)
     }
 
     fun setChainInfo(chainParams: String, result: MethodChannel.Result) {

@@ -1,9 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:oktoast/oktoast.dart';
-import 'package:particle_connect_example/connect_demo/connect_demo.dart';
+import 'package:particle_connect_example/theme.dart';
 import 'package:provider/provider.dart';
 
 import 'connect_demo/connect_logic.dart';
+import 'connect_demo/connect_with_wallet.dart';
+import 'connect_demo/connected_wallet_oprate.dart';
+import 'connect_demo/select_chain_page.dart';
 
 void main() {
   runApp(const MyApp());
@@ -20,16 +23,14 @@ class MyApp extends StatelessWidget {
       textStyle: const TextStyle(fontSize: 19.0, color: Colors.white),
       backgroundColor: Colors.black,
       animationCurve: Curves.easeIn,
-      animationBuilder: const OffsetAnimationBuilder(),
+      animationBuilder: const OffsetAnimationBuilder().call,
       animationDuration: const Duration(milliseconds: 200),
       duration: const Duration(seconds: 5),
       child: ChangeNotifierProvider(
         create: (context) => ConnectLogic(),
         child: MaterialApp(
-          theme: ThemeData(
-            primarySwatch: Colors.blue,
-          ),
-          home: const MyHomePage(title: 'Particle Network Flutter Demo '),
+          theme: ThemeData(primarySwatch: pnPalette),
+          home: const MyHomePage(title: 'Particle Connect'),
         ),
       ),
     );
@@ -47,39 +48,144 @@ class MyHomePage extends StatefulWidget {
 
 class _MyHomePageState extends State<MyHomePage> {
   @override
+  void initState() {
+    super.initState();
+
+    Provider.of<ConnectLogic>(context, listen: false).init();
+    Provider.of<ConnectLogic>(context, listen: false).refreshConnectedAccounts();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text(widget.title),
-      ),
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            //add a button
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: SizedBox(
-                  width: 200,
-                  height: 50,
-                  child: ElevatedButton(
-                    onPressed: () => {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => const ConnectDemoPage(),
+        appBar: AppBar(
+          title: Consumer<ConnectLogic>(
+            builder: (context, provider, child) {
+              return Row(
+                children: [
+                  Text(widget.title),
+                  Expanded(
+                    child: GestureDetector(
+                      onTap: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(builder: (context) => const SelectChainPage()),
+                        );
+                      },
+                      child: Align(
+                        alignment: Alignment.centerRight,
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.end,
+                          children: [
+                            Padding(
+                              padding: const EdgeInsets.all(4.0),
+                              child: SizedBox(
+                                width: 20.0,
+                                height: 20.0,
+                                child: Image.network(
+                                  provider.currChainInfo.icon,
+                                  fit: BoxFit.cover,
+                                ),
+                              ),
+                            ),
+                            Text(
+                              provider.currChainInfo.fullname,
+                              textAlign: TextAlign.center,
+                              style: const TextStyle(
+                                fontSize: 14,
+                                decoration: TextDecoration.underline,
+                              ),
+                            ),
+                            const Icon(Icons.arrow_forward_ios, size: 14),
+                          ],
                         ),
-                      )
-                    },
-                    child: const Text(
-                      "Connect Demo",
-                      style: TextStyle(fontSize: 20),
+                      ),
                     ),
-                  )),
+                  ),
+                ],
+              );
+            },
+          ),
+        ),
+        body: Stack(
+          children: [
+            Consumer<ConnectLogic>(
+              builder: (context, connectLogic, child) {
+                if (connectLogic.connectedAccounts.isEmpty) {
+                  return Center(
+                    child: Text('No connected accounts found.'),
+                  );
+                }
+                return ListView.builder(
+                  itemCount: connectLogic.connectedAccounts.length,
+                  itemBuilder: (context, index) {
+                    final account = connectLogic.connectedAccounts[index];
+                    return InkWell(
+                      onTap: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => WalletOpratePage(account: account),
+                          ),
+                        );
+                      },
+                      child: Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Row(
+                          children: [
+                            Padding(
+                              padding: const EdgeInsets.all(4.0),
+                              child: SizedBox(
+                                width: 40.0,
+                                height: 40.0,
+                                child: ClipOval(
+                                  child: Image.network(
+                                    account.icons?.first ?? '',
+                                    fit: BoxFit.fill,
+                                  ),
+                                ),
+                              ),
+                            ),
+                            Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  ' ${account.name}',
+                                  style: TextStyle(fontSize: 18),
+                                ),
+                                Padding(
+                                  padding: const EdgeInsets.all(4.0),
+                                  child: Text(
+                                    '${account.publicAddress}',
+                                    style: TextStyle(fontSize: 10),
+                                  ),
+                                ), // 根据你的Account模型显示数据
+                              ],
+                              // 根据你的Account模型显示数据
+                            ),
+                          ],
+                        ),
+                      ),
+                    );
+                  },
+                );
+              },
             ),
+            Align(
+                alignment: Alignment.bottomCenter,
+                child: Image.asset('assets/images/powerby_particle_network.webp',
+                    width: 200, height: 20, fit: BoxFit.cover))
           ],
         ),
-      ),
-    );
+        floatingActionButton: FloatingActionButton.extended(
+          onPressed: () {
+            Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => const ConnectWalletPage()),
+            );
+          },
+          icon: Icon(Icons.add),
+          label: Text('Connect'),
+        ));
   }
 }

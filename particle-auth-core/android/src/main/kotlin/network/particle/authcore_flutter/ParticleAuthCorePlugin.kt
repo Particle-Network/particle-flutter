@@ -5,6 +5,9 @@ import android.app.Activity
 import android.os.Handler
 import android.os.Looper
 import com.particle.auth.AuthCore
+import com.particle.auth.data.MasterPwdServiceCallback
+import com.particle.base.data.ErrorInfo
+import network.particle.authcore_flutter.AuthCoreBridge
 
 import io.flutter.embedding.engine.plugins.FlutterPlugin
 import io.flutter.embedding.engine.plugins.activity.ActivityAware
@@ -12,6 +15,7 @@ import io.flutter.embedding.engine.plugins.activity.ActivityPluginBinding
 import io.flutter.plugin.common.MethodCall
 import io.flutter.plugin.common.MethodChannel
 import io.flutter.plugin.common.MethodChannel.MethodCallHandler
+import network.particle.base_flutter.model.FlutterCallBack
 
 
 /** ParticleAuthCorePlugin */
@@ -62,7 +66,45 @@ class ParticleAuthCorePlugin : FlutterPlugin, MethodCallHandler, ActivityAware {
                 AuthCoreBridge.switchChain(call.arguments as String, result)
             }
             "changeMasterPassword" -> {
-                AuthCoreBridge.changeMasterPassword(result)
+                if (AuthCore.hasMasterPassword()) {
+                    AuthCore.changeMasterPassword(object : MasterPwdServiceCallback {
+                        override fun failure(errMsg: ErrorInfo) {
+                            try {
+                                result.success(FlutterCallBack.failed(errMsg).toGson())
+                            } catch (_: Exception) {
+
+                            }
+                        }
+
+                        override fun success() {
+                            try {
+                                result.success(FlutterCallBack.success(true).toGson())
+
+                            } catch (_: Exception) {
+
+                            }
+                        }
+                    })
+                }else{
+                    AuthCore.setMasterPassword(object : MasterPwdServiceCallback {
+                        override fun failure(errMsg: ErrorInfo) {
+                            try {
+                                result.success(FlutterCallBack.failed(errMsg).toGson())
+                            } catch (_: Exception) {
+
+                            }
+                        }
+
+                        override fun success() {
+                            try {
+                                result.success(FlutterCallBack.success(true).toGson())
+                            } catch (_: Exception) {
+
+                            }
+
+                        }
+                    })
+                }
             }
             "hasMasterPassword" -> {
                 AuthCoreBridge.hasMasterPassword(result)

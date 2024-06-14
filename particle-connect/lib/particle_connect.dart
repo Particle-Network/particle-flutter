@@ -499,8 +499,12 @@ class ParticleConnect {
 
     if (jsonDecode(result)["status"] == true ||
         jsonDecode(result)["status"] == 1) {
-      final flag = jsonDecode(result)["data"] as bool;
-      return flag;
+      if(Platform.isAndroid){
+        return true;
+      }else{
+        final flag = jsonDecode(result)["data"] as bool;
+        return flag;
+      }
     } else {
       final error = RpcError.fromJson(jsonDecode(result)["data"]);
       return Future.error(error);

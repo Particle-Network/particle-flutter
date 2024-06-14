@@ -35,6 +35,7 @@ import network.particle.authcore_flutter.module.ConnectData
 import network.particle.base_flutter.model.TransactionParams
 import network.particle.base_flutter.model.TransactionsParams
 import network.particle.base_flutter.model.FlutterCallBack
+
 object AuthCoreBridge {
 
     private val failed = ErrorInfo("failed", 100000)
@@ -118,15 +119,46 @@ object AuthCoreBridge {
 
 
     fun changeMasterPassword(result: MethodChannel.Result) {
-        AuthCore.changeMasterPassword(object : MasterPwdServiceCallback {
-            override fun failure(errMsg: ErrorInfo) {
-                result.success(FlutterCallBack.failed(errMsg).toGson())
-            }
+        if (AuthCore.hasMasterPassword()) {
+            AuthCore.changeMasterPassword(object : MasterPwdServiceCallback {
+                override fun failure(errMsg: ErrorInfo) {
+                    try {
+                        result.success(FlutterCallBack.failed(errMsg).toGson())
+                    } catch (_: Exception) {
 
-            override fun success() {
-                result.success(FlutterCallBack.success(true).toGson())
-            }
-        })
+                    }
+                }
+
+                override fun success() {
+                    try {
+                        result.success(FlutterCallBack.success(true).toGson())
+
+                    } catch (_: Exception) {
+
+                    }
+                }
+            })
+        }else{
+            AuthCore.setMasterPassword(object : MasterPwdServiceCallback {
+                override fun failure(errMsg: ErrorInfo) {
+                    try {
+                        result.success(FlutterCallBack.failed(errMsg).toGson())
+                    } catch (_: Exception) {
+
+                    }
+                }
+
+                override fun success() {
+                    try {
+                        result.success(FlutterCallBack.success(true).toGson())
+                    } catch (_: Exception) {
+
+                    }
+
+                }
+            })
+        }
+
     }
 
 
@@ -224,7 +256,6 @@ object AuthCoreBridge {
     }
 
 
-
     //solana
 
 
@@ -303,7 +334,10 @@ object AuthCoreBridge {
     fun sendTransaction(transactionParams: String, result: MethodChannel.Result) {
         LogUtils.d("signAndSendTransaction", transactionParams)
         val transParams =
-            GsonUtils.fromJson<TransactionParams>(transactionParams, network.particle.base_flutter.model.TransactionParams::class.java)
+            GsonUtils.fromJson<TransactionParams>(
+                transactionParams,
+                network.particle.base_flutter.model.TransactionParams::class.java
+            )
         var feeMode: FeeMode = FeeModeNative()
         if (transParams.feeMode != null) {
             val option = transParams!!.feeMode!!.option
@@ -354,11 +388,13 @@ object AuthCoreBridge {
                     val feeQuote = transParams.feeMode!!.feeQuote!!
                     feeMode = FeeModeToken(feeQuote, tokenPaymasterAddress!!)
                 }
+
                 "gasless" -> {
                     val verifyingPaymasterGasless =
                         transParams.feeMode!!.wholeFeeQuote.verifyingPaymasterGasless
                     feeMode = FeeModeGasless(verifyingPaymasterGasless)
                 }
+
                 "native" -> {
                     val verifyingPaymasterNative =
                         transParams.feeMode!!.wholeFeeQuote.verifyingPaymasterNative

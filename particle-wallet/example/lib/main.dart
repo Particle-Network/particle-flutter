@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:oktoast/oktoast.dart';
 import 'package:particle_wallet_example/pages/connect_demo/connect_demo.dart';
 import 'package:particle_wallet_example/pages/wallet_demo/wallet_demo.dart';
+import 'package:particle_wallet_example/theme.dart';
 
 void main() {
   runApp(const MyApp());
@@ -22,9 +23,7 @@ class MyApp extends StatelessWidget {
       animationDuration: const Duration(milliseconds: 200),
       duration: const Duration(seconds: 5),
       child: MaterialApp(
-        theme: ThemeData(
-          primarySwatch: Colors.blue,
-        ),
+        theme: ThemeData(primarySwatch: pnPalette),
         home: const MyHomePage(title: 'Particle Network Flutter Demo '),
       ),
     );

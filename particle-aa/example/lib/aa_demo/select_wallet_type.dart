@@ -16,11 +16,8 @@ class SelectWalletPageState extends State<SelectWalletPage> {
     WalletType.rainbow,
     WalletType.bitKeep,
     WalletType.trust,
-    WalletType.evmPrivateKey,
-    WalletType.solanaPrivateKey,
     WalletType.imToken,
     WalletType.phantom,
-    WalletType.zerion
   ];
 
   @override
