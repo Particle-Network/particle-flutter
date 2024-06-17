@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:particle_aa/particle_aa.dart';
 import 'package:particle_connect/particle_connect.dart';
-import 'package:particle_auth/particle_auth.dart';
+import 'package:particle_base/particle_base.dart';
+import 'package:particle_auth_core/particle_auth_core.dart';
 
 void main() {
   runApp(const MyApp());
@@ -88,13 +89,13 @@ class _MyHomePageState extends State<MyHomePage> {
 
   void _connectParticle() async {
     try {
-      final config = ParticleConnectConfig(
-          LoginType.google, "", SupportAuthType.values, SocialLoginPrompt.select_account);
+      final config = ParticleConnectConfig(LoginType.google, "",
+          SupportAuthType.values, SocialLoginPrompt.select_account);
       final account =
-          await ParticleConnect.connect(WalletType.particle, config: config);
+          await ParticleConnect.connect(WalletType.authCore, config: config);
       this.account = account;
       print("connect particle $account");
-      final userInfo = ParticleAuth.getUserInfo();
+      final userInfo = ParticleAuthCore.getUserInfo();
       print("particle userInfo $userInfo");
     } catch (error) {
       print("connect particle $error");

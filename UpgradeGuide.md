@@ -1,5 +1,5 @@
 # Upgrade Guide
-Upgrading from version 1.14.x to version 1.15.x - this is an upgrade guide. If you were previously using particle-auth, you can upgrade to particle-auth-core. If you need to connect to other wallet services, such as Metamask, you can directly upgrade to particle-connect. Below is a comparison table of methods before and after the upgrade.
+Upgrading from version 1.4.x to version 1.5.x - this is an upgrade guide. If you were previously using particle-auth, you can upgrade to particle-auth-core. If you need to connect to other wallet services, such as Metamask, you can directly upgrade to particle-connect. Below is a comparison table of methods before and after the upgrade.
 
 ## Quick Methods Comparison
 | particle-auth          | particle-auth-core                                | particle-connect                           |
