@@ -254,31 +254,34 @@ packages:
   particle_auth_core:
     dependency: "direct main"
     description:
-      path: "../../particle-auth-core"
-      relative: true
-    source: path
-    version: "1.4.27"
+      name: particle_auth_core
+      sha256: "89784abf2107c86e57a44f61edac572aa44cdfc127983fb7120b4e9269f17770"
+      url: "https://pub.dev"
+    source: hosted
+    version: "1.5.0"
   particle_base:
     dependency: "direct main"
     description:
-      path: "../../particle-base"
-      relative: true
-    source: path
+      name: particle_base
+      sha256: c9f9164d14c9fb79279ad40ce8c80f56ca11ab476df641b5acca8cb5ebf0351d
+      url: "https://pub.dev"
+    source: hosted
     version: "1.5.0"
   particle_connect:
     dependency: "direct main"
     description:
-      path: "../../particle-connect"
-      relative: true
-    source: path
-    version: "1.4.27"
+      name: particle_connect
+      sha256: "51640334b1a9db15e75c0153ea6f8437c177345a534af77e4bcc5607d9a124fe"
+      url: "https://pub.dev"
+    source: hosted
+    version: "1.5.0"
   particle_wallet:
     dependency: "direct main"
     description:
       path: ".."
       relative: true
     source: path
-    version: "1.4.27"
+    version: "1.5.0"
   path:
     dependency: transitive
     description:

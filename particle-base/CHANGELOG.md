@@ -1,3 +1,5 @@
+## 1.5.0
+remove particle-auth, use particle-base, upgrade interface.
 ## 1.4.27
 
 ## 1.4.26
