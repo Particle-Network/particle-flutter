@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:oktoast/oktoast.dart';
 import 'package:particle_connect/particle_connect.dart';
 import 'package:provider/provider.dart';
-
 import 'connect_logic.dart';
 import 'package:particle_base/particle_base.dart';
 
@@ -86,7 +84,7 @@ class SelectWalletPageState extends State<WalletOpratePage> {
                     child: ElevatedButton(
                         onPressed: () => {logic.signAndSendTransaction(walletType, publicAddress)},
                         child: const Text(
-                          "Sign And Send  Transaction",
+                          "Sign And Send Transaction",
                           style: TextStyle(fontSize: 18),
                         )),
                   ),

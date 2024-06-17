@@ -3,8 +3,6 @@ import 'package:oktoast/oktoast.dart';
 import 'package:particle_base/particle_base.dart';
 import 'package:particle_connect/particle_connect.dart';
 import 'package:provider/provider.dart';
-
-import '../main.dart';
 import '../theme.dart';
 import 'connect_logic.dart';
 
@@ -33,8 +31,8 @@ class SelectChainPageState extends State<SelectChainPage> {
             itemBuilder: (context, index) {
               return ElevatedButton(
                 style: ElevatedButton.styleFrom(
-                  primary: pnPalette.shade400,
-                  onPrimary: Colors.white,
+                  backgroundColor: pnPalette.shade400,
+                  foregroundColor: Colors.white,
                 ),
                 onPressed: () {
                   print('Clicked: ${chainList[index]}');
@@ -43,6 +41,7 @@ class SelectChainPageState extends State<SelectChainPage> {
                   showToast(
                       "set chain info: ${chainList[index].name}  ${chainList[index].id}");
                   logic.currChainInfo = chainInfo;
+                  logic.refreshConnectedAccounts();
                   Navigator.pop(context);
                 },
                 child: Row(

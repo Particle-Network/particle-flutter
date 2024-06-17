@@ -30,7 +30,7 @@ class MyApp extends StatelessWidget {
         create: (context) => ConnectLogic(),
         child: MaterialApp(
           theme: ThemeData(primarySwatch: pnPalette),
-          home: const MyHomePage(title: 'Particle Connect'),
+          home: const MyHomePage(title: 'Particle'),
         ),
       ),
     );
@@ -112,7 +112,7 @@ class _MyHomePageState extends State<MyHomePage> {
             Consumer<ConnectLogic>(
               builder: (context, connectLogic, child) {
                 if (connectLogic.connectedAccounts.isEmpty) {
-                  return Center(
+                  return const Center(
                     child: Text('No connected accounts found.'),
                   );
                 }
@@ -140,7 +140,7 @@ class _MyHomePageState extends State<MyHomePage> {
                                 height: 40.0,
                                 child: ClipOval(
                                   child: Image.network(
-                                    account.icons?.first ?? '',
+                                    account.icons?.firstOrNull ?? '',
                                     fit: BoxFit.fill,
                                   ),
                                 ),
@@ -150,18 +150,17 @@ class _MyHomePageState extends State<MyHomePage> {
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
                                 Text(
-                                  ' ${account.name}',
-                                  style: TextStyle(fontSize: 18),
+                                  '${account.name}',
+                                  style: const TextStyle(fontSize: 18),
                                 ),
                                 Padding(
                                   padding: const EdgeInsets.all(4.0),
                                   child: Text(
-                                    '${account.publicAddress}',
-                                    style: TextStyle(fontSize: 10),
+                                    account.publicAddress,
+                                    style: const TextStyle(fontSize: 8),
                                   ),
-                                ), // 根据你的Account模型显示数据
+                                ), 
                               ],
-                              // 根据你的Account模型显示数据
                             ),
                           ],
                         ),
@@ -184,8 +183,8 @@ class _MyHomePageState extends State<MyHomePage> {
               MaterialPageRoute(builder: (context) => const ConnectWalletPage()),
             );
           },
-          icon: Icon(Icons.add),
-          label: Text('Connect'),
+          icon: const Icon(Icons.add),
+          label: const Text('Connect'),
         ));
   }
 }

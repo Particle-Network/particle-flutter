@@ -1,4 +1,3 @@
-
 import 'package:particle_base/particle_base.dart';
 import 'package:particle_auth_core_example/mock/test_account.dart';
 
@@ -63,6 +62,16 @@ class TransactionMock {
     const data = "0x";
     final transaction = await EvmService.createTransaction(
         from, data, amount, to,
+        gasFeeLevel: GasFeeLevel.high);
+
+    return transaction;
+  }
+
+  /// Mock a transaction
+  /// Send native token in our test account
+  static Future<String> mockOkxDex(String from, String data, String to) async {
+    final transaction = await EvmService.createTransaction(
+        from, data, BigInt.zero, to,
         gasFeeLevel: GasFeeLevel.high);
 
     return transaction;

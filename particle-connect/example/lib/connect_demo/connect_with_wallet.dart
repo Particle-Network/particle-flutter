@@ -19,25 +19,34 @@ class ConnectWalletPage extends StatefulWidget {
 var walletConnectUri = "";
 TextEditingController accountCtrl = TextEditingController();
 List<LoginType> socialLoginTypes = LoginType.values.where((type) {
-  return type != LoginType.email && type != LoginType.phone && type != LoginType.jwt;
+  return type != LoginType.email &&
+      type != LoginType.phone &&
+      type != LoginType.jwt;
 }).toList();
 
 LoginType loginType = LoginType.email;
-Map<SupportAuthType, bool> selectedAuthTypes = {for (var item in SupportAuthType.values) item: true};
+Map<SupportAuthType, bool> selectedAuthTypes = {
+  for (var item in SupportAuthType.values) item: true
+};
 bool selectedLoginTypesShow = false;
 
 class SelectWalletPageState extends State<ConnectWalletPage> {
-  static const EventChannel _walletConnectEventChannel = EventChannel('connect_event_bridge');
-  List<WalletType> walletList = <WalletType>[
+  static const EventChannel _walletConnectEventChannel =
+      EventChannel('connect_event_bridge');
+  List<WalletType> evmWalletList = <WalletType>[
     WalletType.authCore,
     WalletType.metaMask,
     WalletType.rainbow,
     WalletType.bitKeep,
     WalletType.trust,
     WalletType.imToken,
-    WalletType.phantom,
     WalletType.okx,
     WalletType.walletConnect
+  ];
+
+  List<WalletType> solanaWalletList = <WalletType>[
+    WalletType.authCore,
+    WalletType.phantom,
   ];
 
   @override
@@ -58,6 +67,12 @@ class SelectWalletPageState extends State<ConnectWalletPage> {
   @override
   Widget build(BuildContext context) {
     final logic = Provider.of<ConnectLogic>(context);
+    List<WalletType> walletList;
+    if (logic.currChainInfo.isEvmChain()) {
+      walletList = evmWalletList;
+    } else {
+      walletList = solanaWalletList;
+    }
     return Scaffold(
         appBar: AppBar(
           title: const Text("Connect With Wallet"),
@@ -79,15 +94,18 @@ class SelectWalletPageState extends State<ConnectWalletPage> {
                       return Column(
                         verticalDirection: VerticalDirection.down,
                         children: [
-                          Container(
+                          SizedBox(
                             width: double.infinity,
                             child: ElevatedButton(
                               onPressed: () async {
                                 print('Clicked: ${walletList[index]}');
                                 try {
-                                  final result = await ParticleConnect.connectWalletConnect();
+                                  final result = await ParticleConnect
+                                      .connectWalletConnect();
                                   logic.refreshConnectedAccounts();
-                                  Navigator.pop(context);
+                                  if (mounted) {
+                                    Navigator.pop(context);
+                                  }
                                   print("connect: $result");
                                 } catch (error) {
                                   showToast('connect: $error');
@@ -99,7 +117,8 @@ class SelectWalletPageState extends State<ConnectWalletPage> {
                           ),
                           Visibility(
                               visible: walletConnectUri.isEmpty ? false : true,
-                              child: QrImageView(data: walletConnectUri, size: 200)),
+                              child: QrImageView(
+                                  data: walletConnectUri, size: 200)),
                         ],
                       );
                     } else {
@@ -203,8 +222,13 @@ class SelectWalletPageState extends State<ConnectWalletPage> {
             ),
             ItemButton(
                 "Connect",
-                () => logic.authCoreConnect(loginType, accountCtrl.text,
-                    selectedAuthTypes.entries.where((e) => e.value).map((e) => e.key).toList())),
+                () => logic.authCoreConnect(
+                    loginType,
+                    accountCtrl.text,
+                    selectedAuthTypes.entries
+                        .where((e) => e.value)
+                        .map((e) => e.key)
+                        .toList())),
           ],
         ),
       ),
