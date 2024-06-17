@@ -5,14 +5,17 @@ Upgrading from version 1.4.x to version 1.5.x - this is an upgrade guide. If you
 | particle-auth          | particle-auth-core                                | particle-connect                           |
 | ---------------------- | ------------------------------------------------- | ------------------------------------------ |
 | init                   | init                                              | init                                       |
-| login                  | connect                                           | connect(WalleType.authCore, connectConfig)                |
+| login                  | connect                                           | connect(WalleType.authCore, connectConfig) |
 | getUserInfo            | getUserInfo                                       | getAccounts(WalleType.authCore)            |
 | logout/fastLogout      | disconnect                                        | disconnect(WalleType.authCore)             |
 | signMessage            | evm.personalSign/solana.signMessage               | signMessage(WalleType.authCore)            |
+| signMessageUnique      | evm.personalSignUnique                            | -                                          |
 | signTransaction        | solana.signTransaction                            | signTransaction(WalleType.authCore)        |
 | signAllTransactions    | solana.signAllTransactions                        | signAllTransactions(WalleType.authCore)    |
 | signTypedData          | evm.signTypedData                                 | signTypedData(WalleType.authCore)          |
+| signTypedDataUnique    | evm.signTypedDataUnique                           | -                                          |
 | signAndSendTransaction | evm.sendTransaction/solana.signAndSendTransaction | signAndSendTransaction(WalleType.authCore) |
+| batchSendTransactions  | evm.batchSendTransactions                         | batchSendTransactions(WalleType.authCore)  |
 | isLogin/isLoginAsync   | isConnected                                       | isConnected(WalleType.authCore)            |
 | hasMasterPassword      | hasMasterPassword                                 | -                                          |
 | hasPaymentPassword     | hasPaymentPassword                                | -                                          |
