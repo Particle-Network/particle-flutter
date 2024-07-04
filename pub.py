@@ -13,8 +13,8 @@ class ParticleBase:
         for line in lines:
             if line.strip().startswith('#'):
                 updated_lines.append(line)
-            elif line.strip().startswith('particle_auth:'):
-                updated_lines.append(f'  particle_auth: ^{version}\n')
+            elif line.strip().startswith('particle_base:'):
+                updated_lines.append(f'  particle_base: ^{version}\n')
             elif line.strip().startswith('particle_connect:'):
                 updated_lines.append(f'  particle_connect: ^{version}\n')
             elif line.strip().startswith('particle_auth_core:'):
@@ -74,7 +74,7 @@ class ParticleBase:
 
 class ParticleAuth(ParticleBase):
     def __init__(self, version):
-        os.chdir("particle-auth")
+        os.chdir("particle-base")
         super().__init__(version)
 
     def publish(self):
@@ -158,20 +158,21 @@ class ParticleWallet(ParticleBase):
 
 
 if __name__ == "__main__":
-    version = '1.4.27'
+    version = '1.5.2'
 
-    print("Auth Start")
+    print("Base Start")
     ParticleAuth(version).publish()
-    print("Auth Finish")
-    time.sleep(5)
-    print("Connect Start")
-    ParticleConnect(version).publish()
-    print("Connect Finish")
+    print("Base Finish")
     time.sleep(5)
     print("AuthCore Start")
     ParticleAuthCore(version).publish()
     print("AuthCore Finish")
     time.sleep(5)
+    print("Connect Start")
+    ParticleConnect(version).publish()
+    print("Connect Finish")
+    time.sleep(5)
+
     print("ParticleAA Start")
     ParticleAA(version).publish()
     print("ParticleAA Finish")

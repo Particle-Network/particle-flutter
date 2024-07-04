@@ -1,6 +1,6 @@
 name: particle_base
 description: A flutter plugin project for particle base
-version: 1.5.0
+version: 1.5.2
 homepage: https://particle.network
 
 environment:

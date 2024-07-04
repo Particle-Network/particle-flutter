@@ -6,7 +6,7 @@ import 'package:particle_auth_core/particle_auth_core.dart';
 
 class AAAuthCoreLogic {
   static String? smartAccountAddress;
-  static AccountName accountName = AccountName.BICONOMY_V1();
+  static AccountName accountName = AccountName.BICONOMY_V2();
   static void init() {
     Map<int, String> biconomyApiKeys = {
       1: "", // your ethereum mainnet key
