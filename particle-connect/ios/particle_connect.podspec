@@ -26,5 +26,4 @@ A flutter plugin project for particle connect
   s.dependency 'ConnectEVMAdapter'
   s.dependency 'ConnectPhantomAdapter'
   s.dependency 'ConnectCommon'
-  s.dependency 'ParticleAuthAdapter'
 end

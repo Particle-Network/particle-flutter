@@ -11,7 +11,7 @@ dependencies:
   flutter:
     sdk: flutter
   particle_connect: ^1.5.2
-  article_auth_core: ^1.4.27
+  particle_auth_core: ^1.5.2
   particle_base: ^1.5.2
 
 #  particle_connect:

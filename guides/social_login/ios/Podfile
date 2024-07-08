@@ -31,20 +31,24 @@ target 'Runner' do
   use_frameworks! :linkage => :static
   use_modular_headers!
   
-  pod 'ParticleNetworkBase', '1.4.0'
-    pod 'ParticleAuthService', '1.4.0'
-    pod 'ParticleWalletAPI', '1.4.0'
+    pod 'ParticleNetworkBase', '1.4.9'
+    pod 'ParticleWalletAPI', '1.4.9'
 
-    pod 'ConnectCommon', '0.2.19'
-    pod 'ConnectEVMAdapter', '0.2.19'
-    pod 'ConnectSolanaAdapter', '0.2.19'
-    pod 'ConnectWalletConnectAdapter', '0.2.19'
-    pod 'ConnectPhantomAdapter', '0.2.19'
-    pod 'ParticleConnect', '0.2.19'
-    pod 'ParticleAuthAdapter', '0.2.19'
+    pod 'ConnectCommon', '0.2.24'
+    pod 'ConnectEVMAdapter', '0.2.24'
+    pod 'ConnectSolanaAdapter', '0.2.24'
+    pod 'ConnectWalletConnectAdapter', '0.2.24'
+    pod 'ConnectPhantomAdapter', '0.2.24'
+    pod 'ParticleConnect', '0.2.24'
+
+    pod 'AuthCoreAdapter', '1.4.7'
+    pod 'ParticleAuthCore', '1.4.7'
+    pod 'ParticleMPCCore', '1.4.7'
+    pod 'Thresh', '1.4.7'
 
     pod 'SwiftyUserDefaults', :git => 'https://github.com/SunZhiC/SwiftyUserDefaults.git', :branch => 'master'
     pod 'WalletConnectSwiftV2', :git => 'https://github.com/SunZhiC/WalletConnectSwiftV2.git', :branch => 'particle'
+    pod 'SkeletonView', :git => 'https://github.com/SunZhiC/SkeletonView.git', :branch => 'main'
 
   flutter_install_all_ios_pods File.dirname(File.realpath(__FILE__))
   target 'RunnerTests' do

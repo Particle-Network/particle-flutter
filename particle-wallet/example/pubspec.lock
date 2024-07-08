@@ -252,36 +252,36 @@ packages:
     source: hosted
     version: "2.1.0"
   particle_auth_core:
-    dependency: "direct main"
+    dependency: transitive
     description:
       name: particle_auth_core
-      sha256: "89784abf2107c86e57a44f61edac572aa44cdfc127983fb7120b4e9269f17770"
+      sha256: "33825ffc9f2ff2107580019544893766e1c91b0cdcaccaa2afd03d7c45566539"
       url: "https://pub.dev"
     source: hosted
-    version: "1.5.0"
+    version: "1.5.2"
   particle_base:
-    dependency: "direct main"
+    dependency: transitive
     description:
       name: particle_base
-      sha256: c9f9164d14c9fb79279ad40ce8c80f56ca11ab476df641b5acca8cb5ebf0351d
+      sha256: "94729e0646697f1a8941dab19e79718da883dc1829edbcc0ab64e0a49f5f64b2"
       url: "https://pub.dev"
     source: hosted
-    version: "1.5.0"
+    version: "1.5.2"
   particle_connect:
-    dependency: "direct main"
+    dependency: transitive
     description:
       name: particle_connect
-      sha256: "51640334b1a9db15e75c0153ea6f8437c177345a534af77e4bcc5607d9a124fe"
+      sha256: "2b189cb21166f18d346376a4152de0394681ca88a88173b4090815ac489a7a80"
       url: "https://pub.dev"
     source: hosted
-    version: "1.5.0"
+    version: "1.5.2"
   particle_wallet:
     dependency: "direct main"
     description:
       path: ".."
       relative: true
     source: path
-    version: "1.5.0"
+    version: "1.5.2"
   path:
     dependency: transitive
     description:

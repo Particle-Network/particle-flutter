@@ -54,7 +54,7 @@ PODS:
     - Base58.swift
     - CryptoSwift (~> 1.8.1)
     - Thresh
-  - ParticleNetworkBase (1.4.6):
+  - ParticleNetworkBase (1.4.9):
     - Alamofire (~> 5.9.0)
     - Base58.swift
     - BigInt (~> 5.2.0)
@@ -102,7 +102,7 @@ DEPENDENCIES:
   - particle_base (from `.symlinks/plugins/particle_base/ios`)
   - ParticleAuthCore (= 1.4.7)
   - ParticleMPCCore (= 1.4.7)
-  - ParticleNetworkBase (= 1.4.6)
+  - ParticleNetworkBase (= 1.4.9)
   - SkeletonView (from `https://github.com/SunZhiC/SkeletonView.git`, branch `main`)
   - SwiftyUserDefaults (from `https://github.com/SunZhiC/SwiftyUserDefaults.git`, branch `master`)
   - Thresh (= 1.4.7)
@@ -175,7 +175,7 @@ SPEC CHECKSUMS:
   particle_base: a43be9e2129ecdc02740f458cfc299759ae89985
   ParticleAuthCore: 7707d89194a2d1f13d7a6d6aa532f1951457e496
   ParticleMPCCore: 9974d8b8170e2e9aebc6a15fd0256697dd011ffe
-  ParticleNetworkBase: b40363d077d8801747144e12fe9f7489a813d64b
+  ParticleNetworkBase: 5d112d15d6b0a593725e338b23fefd334de79e98
   RxAlamofire: beb75a1c452d0de225651db4903f5d29d034a620
   RxCocoa: 44a80de90e25b739b5aeaae3c8c371a32e3343cc
   RxRelay: 45eaa5db8ee4fb50e5ebd57deec0159e97fa51e6
@@ -192,6 +192,6 @@ SPEC CHECKSUMS:
   Thresh: c4a6e9f8c177d9412159442cd2940ff7ecfdf2bf
   TweetNacl: 3abf4d1d2082b0114e7a67410e300892448951e6
 
-PODFILE CHECKSUM: 802c0ab98740dbd5051bf1983f00a34f2e3d34ce
+PODFILE CHECKSUM: 111f33e4f213fc820f3b0024f705e44c144b001b
 
 COCOAPODS: 1.15.2

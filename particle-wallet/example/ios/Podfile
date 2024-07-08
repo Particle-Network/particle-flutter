@@ -37,13 +37,12 @@ target 'Runner' do
   pod 'ConnectEVMAdapter', '0.2.24'
   pod 'ConnectCommon', '0.2.24'
   pod 'ConnectPhantomAdapter', '0.2.24'
-  pod 'ParticleAuthAdapter', '0.2.24'
   
-  pod 'ParticleNetworkBase', '1.4.6'
-  pod 'ParticleWalletGUI', '1.4.6'
-  pod 'ParticleWalletAPI', '1.4.6'
-  pod 'ParticleWalletConnect', '1.4.6'
-  pod 'ParticleAA', '1.4.6'
+  pod 'ParticleNetworkBase', '1.4.9'
+  pod 'ParticleWalletGUI', '1.4.9'
+  pod 'ParticleWalletAPI', '1.4.9'
+  pod 'ParticleWalletConnect', '1.4.9'
+  pod 'ParticleAA', '1.4.9'
 
   pod 'AuthCoreAdapter', '1.4.7'
   pod 'ParticleAuthCore', '1.4.7'

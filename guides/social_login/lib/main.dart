@@ -51,6 +51,7 @@ class _MyHomePageState extends State<MyHomePage> {
         "Particle Connect Flutter Demo");
 
     ParticleConnect.init(ChainInfo.ArbitrumSepolia, dappInfo, Env.dev);
+    ParticleAuthCore.init();
   }
 
   void _connectParticle() async {
