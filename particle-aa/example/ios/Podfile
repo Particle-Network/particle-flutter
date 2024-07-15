@@ -31,21 +31,21 @@ flutter_ios_podfile_setup
 target 'Runner' do
   use_frameworks! :linkage => :static
   
-  pod "Thresh", '1.4.7'
-  pod "ParticleMPCCore", '1.4.7'
-  pod "ParticleAuthCore", '1.4.7'
-  pod "AuthCoreAdapter", '1.4.7'
+  pod "Thresh", '1.4.9'
+  pod "ParticleMPCCore", '1.4.9'
+  pod "ParticleAuthCore", '1.4.9'
+  pod "AuthCoreAdapter", '1.4.9'
 
-  pod 'ParticleNetworkBase', '1.4.6'
-  pod 'ParticleAA', '1.4.6'
+  pod 'ParticleNetworkBase', '1.4.10'
+  pod 'ParticleAA', '1.4.10'
   
-  pod 'ParticleConnect', '0.2.24'
-  pod 'ConnectWalletConnectAdapter', '0.2.24'
-  pod 'ConnectSolanaAdapter', '0.2.24'
-  pod 'ConnectEVMAdapter', '0.2.24'
-  pod 'ConnectCommon', '0.2.24'
-  pod 'ConnectPhantomAdapter', '0.2.24'
-  pod 'ParticleAuthAdapter', '0.2.24'
+  pod 'ParticleConnect', '0.2.26'
+  pod 'ConnectWalletConnectAdapter', '0.2.26'
+  pod 'ConnectSolanaAdapter', '0.2.26'
+  pod 'ConnectEVMAdapter', '0.2.26'
+  pod 'ConnectCommon', '0.2.26'
+  pod 'ConnectPhantomAdapter', '0.2.26'
+  pod 'ParticleAuthAdapter', '0.2.26'
 
   pod 'SwiftyUserDefaults', :git => 'https://github.com/SunZhiC/SwiftyUserDefaults.git', :branch => 'master'
   pod 'WalletConnectSwiftV2', :git => 'https://github.com/SunZhiC/WalletConnectSwiftV2.git', :branch => 'particle'
