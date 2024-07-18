@@ -42,7 +42,7 @@ class ConnectLogic {
   static void connect() async {
     try {
       final config = ParticleConnectConfig(
-          LoginType.email, "", SupportAuthType.values, null);
+          LoginType.email, "", SupportAuthType.values, SocialLoginPrompt.select_account);
       final account = await ParticleConnect.connect(walletType, config: config);
       ConnectLogic.account = account;
       showToast('connect: $account');
