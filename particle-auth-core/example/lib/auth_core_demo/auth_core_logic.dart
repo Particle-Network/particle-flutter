@@ -416,7 +416,7 @@ class AuthCoreLogic {
         result = await SolanaService.getTokensAndNFTs(address, true);
       } else {
         final address = await Evm.getAddress();
-        result = await EvmService.getTokensAndNFTs(address);
+        result = await EvmService.getTokensAndNFTs(address, []);
       }
 
       print("getTokensAndNfts: $result");
@@ -434,7 +434,7 @@ class AuthCoreLogic {
     }
     try {
       final address = await Evm.getAddress();
-      final result = await EvmService.getTokens(address);
+      final result = await EvmService.getTokens(address, []);
       print("getTokens: $result");
       showToast("getTokens: $result");
     } catch (error) {
@@ -450,7 +450,7 @@ class AuthCoreLogic {
     }
     try {
       final address = await Evm.getAddress();
-      final result = await EvmService.getNFTs(address);
+      final result = await EvmService.getNFTs(address, []);
       print("getNFTs: $result");
       showToast("getNFTs: $result");
     } catch (error) {

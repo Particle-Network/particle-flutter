@@ -1,6 +1,6 @@
 class SecurityAccountConfig {
-  /// if show set payment password prompt when sign in web,  default value is 1.
-  /// 0 don't show prompt when sign in web.
+  /// if show set payment password prompt when sign,  default value is 1.
+  /// 0 don't show prompt when sign.
   /// 1 show prompt when first sign only.
   /// 2 show prompt when sign every time.
   /// 3 force set payment password when sign
@@ -18,7 +18,7 @@ class SecurityAccountConfig {
   ///
   /// [promptSettingWhenSign] you can choose one of 0, 1, 2, 3.
   ///
-  /// 0 don't show prompt when sign in web.
+  /// 0 don't show prompt when sign.
   ///
   /// 1 show prompt when first sign only.
   ///
@@ -28,7 +28,7 @@ class SecurityAccountConfig {
   ///
   /// [promptMasterPasswordSettingWhenLogin] you can choose one of 0, 1, 2, 3
   ///
-  /// 0 don't show prompt when login in web.
+  /// 0 don't show prompt when login.
   ///
   /// 1 show prompt when first login only.
   ///

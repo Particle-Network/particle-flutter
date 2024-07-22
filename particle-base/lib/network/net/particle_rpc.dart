@@ -187,27 +187,27 @@ class EvmService {
   /// Get tokens and nfts
   ///
   /// [address] is user's public address
-  static Future<dynamic> getTokensAndNFTs(String address) async {
+  static Future<dynamic> getTokensAndNFTs(String address, List<String> tokenAddresses) async {
     const method = "particle_getTokensAndNFTs";
-    final params = [address];
+    final params = [address, tokenAddresses];
     return await EvmService.rpc(method, params);
   }
 
   /// Get tokens
   ///
   /// [address] is user's public address
-  static Future<dynamic> getTokens(String address) async {
+  static Future<dynamic> getTokens(String address, List<String> tokenAddresses) async {
     const method = "particle_getTokens";
-    final params = [address];
+    final params = [address, tokenAddresses];
     return await EvmService.rpc(method, params);
   }
 
   /// Get nfts
   ///
   /// [address] is user's public address
-  static Future<dynamic> getNFTs(String address) async {
+  static Future<dynamic> getNFTs(String address, List<String> tokenAddresses) async {
     const method = "particle_getNFTs";
-    final params = [address];
+    final params = [address, tokenAddresses];
     return await EvmService.rpc(method, params);
   }
 
@@ -313,7 +313,7 @@ class EvmService {
   ///
   /// [data] is contract transaction parameter
   ///
-  /// [value] is navtie amount
+  /// [value] is native amount
   ///
   /// [to] if it is a contract transaction, to is contract address, if it is a native transaciton, to is receiver address.
   ///
