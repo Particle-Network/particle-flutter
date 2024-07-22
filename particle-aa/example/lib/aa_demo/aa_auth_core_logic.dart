@@ -8,13 +8,7 @@ class AAAuthCoreLogic {
   static String? smartAccountAddress;
   static AccountName accountName = AccountName.BICONOMY_V2();
   static void init() {
-    Map<int, String> biconomyApiKeys = {
-      1: "", // your ethereum mainnet key
-      5: "", // your ethereum goerli key
-      137: "", // your polygon mainnet key
-      80001: "", // your polygon mumbai key
-    };
-    ParticleBase.init(ChainInfo.Polygon, Env.production);
+    ParticleBase.init(ChainInfo.Ethereum, Env.production);
     ParticleAuthCore.init();
 
     // Get your project id and client from dashboard, https://dashboard.particle.network
@@ -28,13 +22,12 @@ class AAAuthCoreLogic {
     }
 
     ParticleInfo.set(projectId, clientK);
-    ParticleAA.init(accountName, biconomyApiKeys);
+    ParticleAA.init(accountName);
   }
 
   static void connectGoogle() async {
     try {
-      final userInfo =
-          await ParticleAuthCore.connect(LoginType.google);
+      final userInfo = await ParticleAuthCore.connect(LoginType.google);
       print("login google: $userInfo");
       showToast("login google: $userInfo");
     } catch (error) {

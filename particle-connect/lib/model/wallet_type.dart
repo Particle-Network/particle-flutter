@@ -8,6 +8,12 @@ enum WalletType {
   walletConnect,
   phantom,
   okx,
+  zerion,
+  math,
+  zengo,
+  alpha,
+  evmPrivateKey,
+  solanaPrivateKey
 }
 
 WalletType parseWalletType(String? value) {
@@ -30,6 +36,10 @@ WalletType parseWalletType(String? value) {
       return WalletType.phantom;
     case 'okx':
       return WalletType.okx;
+    case 'evmPrivateKey':
+      return WalletType.evmPrivateKey;
+    case 'solanaPrivateKey':
+      return WalletType.solanaPrivateKey;
     default:
       throw ArgumentError('Invalid WalletType value: $value');
   }

@@ -31,14 +31,8 @@ class AAConnectLogic {
 
     ParticleConnect.init(ChainInfo.ArbitrumSepolia, dappInfo, Env.dev);
 
-    Map<int, String> biconomyApiKeys = {
-      1: "", // your ethereum mainnet key
-      5: "", // your ethereum goerli key
-      137: "", // your polygon mainnet key
-      80001: "", // your polygon mumbai key
-    };
-    ParticleBase.init(ChainInfo.Polygon, Env.production);
-    ParticleAA.init(AccountName.BICONOMY_V1(), biconomyApiKeys);
+    ParticleBase.init(ChainInfo.Ethereum, Env.production);
+    ParticleAA.init(AccountName.BICONOMY_V1());
   }
 
   static void loginMetamask() async {

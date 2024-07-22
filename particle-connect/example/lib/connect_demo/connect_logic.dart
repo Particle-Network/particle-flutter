@@ -77,6 +77,7 @@ class ConnectLogic extends ChangeNotifier {
       final config = ParticleConnectConfig(loginType, account ?? "",
           supportAuthTypes, SocialLoginPrompt.select_account,
           loginPageConfig: loginPageConfig2);
+
       final result =
           await ParticleConnect.connect(WalletType.authCore, config: config);
       refreshConnectedAccounts();

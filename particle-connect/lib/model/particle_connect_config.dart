@@ -7,7 +7,6 @@ class ParticleConnectConfig {
   List<SupportAuthType> supportAuthTypes;
   SocialLoginPrompt? socialLoginPrompt;
   LoginPageConfig? loginPageConfig;
-  LoginAuthorization? authorization;
 
   /// Particle connect config, use for connect when wallet type is particle.
   ///
@@ -22,7 +21,7 @@ class ParticleConnectConfig {
   /// [socialLoginPrompt] set social login prompt, optional.
   ParticleConnectConfig(this.loginType, this.account, this.supportAuthTypes,
       this.socialLoginPrompt,
-      {this.code, this.authorization, this.loginPageConfig});
+      {this.loginPageConfig});
 
   Map<String, dynamic> toJson() => {
         'loginType': loginType.name,
@@ -31,6 +30,5 @@ class ParticleConnectConfig {
         'supportAuthTypeValues': supportAuthTypes.map((e) => e.name).toList(),
         "loginPageConfig": loginPageConfig,
         "socialLoginPrompt": socialLoginPrompt?.name,
-        "authorization": authorization
       };
 }
