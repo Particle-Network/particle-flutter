@@ -20,6 +20,12 @@ String getCurrentTimestamp() {
 }
 
 class EvmService {
+  /// Request rpc
+  /// 
+  /// [method] rpc method
+  /// 
+  /// [params] rpc method parameters
+  /// 
   static Future<dynamic> rpc(String method, List<dynamic> params) async {
     final req = RequestBodyEntity();
     req.chainId = await ParticleBase.getChainId();
@@ -187,6 +193,8 @@ class EvmService {
   /// Get tokens and nfts
   ///
   /// [address] is user's public address
+  /// 
+  /// [tokenAddresses] the specific tokens' addresses
   static Future<dynamic> getTokensAndNFTs(String address, List<String> tokenAddresses) async {
     const method = "particle_getTokensAndNFTs";
     final params = [address, tokenAddresses];
@@ -396,6 +404,13 @@ class EvmService {
 }
 
 class SolanaService {
+
+  /// Request rpc
+  /// 
+  /// [method] rpc method
+  /// 
+  /// [params] rpc method parameters
+  /// 
   static Future<dynamic> rpc(String method, List<dynamic> params) async {
     final req = RequestBodyEntity();
     req.chainId = await ParticleBase.getChainId();
@@ -415,6 +430,8 @@ class SolanaService {
   /// Get tokens and NFTs
   ///
   /// [address] is user's solana public address
+  /// 
+  /// [parseMetadataUri] if parse the nft meta data
   static Future<dynamic> getTokensAndNFTs(
       String address, bool parseMetadataUri) async {
     const method = "enhancedGetTokensAndNFTs";

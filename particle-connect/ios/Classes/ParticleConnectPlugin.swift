@@ -9,7 +9,6 @@ import Base58_swift
 import ConnectCommon
 import Flutter
 import Foundation
-import ParticleAuthAdapter
 import ParticleConnect
 import ParticleNetworkBase
 import RxSwift
@@ -166,8 +165,9 @@ extension ParticleConnectPlugin {
         let dAppUrl = URL(string: dAppUrlString) != nil ? URL(string: dAppUrlString)! : URL(string: "https://connect.particle.network")!
         
         let dAppData = DAppMetaData(name: dAppName, icon: dAppIconUrl, url: dAppUrl, description: dappDescription, redirectUniversalLink: redirectUniversalLink)
+        var adapters: [ConnectAdapter] = []
         
-        var adapters: [ConnectAdapter] = [ParticleAuthAdapter()]
+        
 #if canImport(ConnectEVMAdapter)
         let evmRpcUrl = data["rpc_url"]["evm_url"].stringValue
         if evmRpcUrl.isEmpty {
