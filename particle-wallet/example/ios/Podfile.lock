@@ -66,16 +66,12 @@ PODS:
     - ConnectSolanaAdapter
     - ConnectWalletConnectAdapter
     - Flutter
-    - ParticleAuthAdapter
     - ParticleConnect
   - particle_wallet (0.0.1):
     - Flutter
     - ParticleWalletGUI
   - ParticleAA (1.4.10):
     - ParticleNetworkBase
-  - ParticleAuthAdapter (0.2.24):
-    - ConnectCommon
-    - ParticleAuthService
   - ParticleAuthCore (1.4.10):
     - AWSKMS (~> 2.34.2)
     - ParticleMPCCore
@@ -86,8 +82,6 @@ PODS:
     - SnapKit (~> 5.7.1)
     - SwiftMessages
     - Then
-  - ParticleAuthService (1.4.9):
-    - ParticleNetworkBase
   - ParticleConnect (0.2.26):
     - ConnectCommon
   - ParticleMPCCore (1.4.10):
@@ -247,9 +241,7 @@ SPEC REPOS:
     - libwebp
     - MJRefresh
     - ParticleAA
-    - ParticleAuthAdapter
     - ParticleAuthCore
-    - ParticleAuthService
     - ParticleConnect
     - ParticleMPCCore
     - ParticleNetworkBase
@@ -326,12 +318,10 @@ SPEC CHECKSUMS:
   MJRefresh: ff9e531227924c84ce459338414550a05d2aea78
   particle_auth_core: 08525d1c4253c4f49fbb6d1562a45d9187fa3f1b
   particle_base: a43be9e2129ecdc02740f458cfc299759ae89985
-  particle_connect: 0192191b9fcae5c955c4752920acc5f05deb762a
+  particle_connect: cdc538adcd1376911b0a4627701e35f2b76efd57
   particle_wallet: f7e7dec6e3dc03937e492dd053375e460ba02825
   ParticleAA: a2f469809ed069750e925648f9e999867e6b239d
-  ParticleAuthAdapter: 6ef287f4befb6b046bd4fb82e1b3594f9b679782
   ParticleAuthCore: 3ced5202ce50c04b1c4c9053e45bd98a35bd95ed
-  ParticleAuthService: 7f732bdfe93e74197cbd4c8f0cc03fb9f8b6cceb
   ParticleConnect: 29851f6e2c4c563c3c01f2e9683bbee9e45f8685
   ParticleMPCCore: fd4052a49db4726d7bba3b5deb71956f2279245b
   ParticleNetworkBase: 98c7ef521e6ec3db98eff9369e264d69897f265f
