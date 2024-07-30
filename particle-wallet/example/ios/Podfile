@@ -44,10 +44,10 @@ target 'Runner' do
   pod 'ParticleWalletConnect', '1.4.10'
   pod 'ParticleAA', '1.4.10'
 
-  pod 'AuthCoreAdapter', '1.4.10'
-  pod 'ParticleAuthCore', '1.4.10'
-  pod 'ParticleMPCCore', '1.4.10'
-  pod 'Thresh', '1.4.10'
+  pod 'AuthCoreAdapter', '1.4.11'
+  pod 'ParticleAuthCore', '1.4.11'
+  pod 'ParticleMPCCore', '1.4.11'
+  pod 'Thresh', '1.4.11'
   
   pod 'SwiftyUserDefaults', :git => 'https://github.com/SunZhiC/SwiftyUserDefaults.git', :branch => 'master'
   pod 'WalletConnectSwiftV2', :git => 'https://github.com/SunZhiC/WalletConnectSwiftV2.git', :branch => 'particle'
