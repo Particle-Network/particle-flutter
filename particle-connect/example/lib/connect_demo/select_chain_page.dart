@@ -4,6 +4,7 @@ import 'package:particle_base/particle_base.dart';
 import 'package:particle_connect/particle_connect.dart';
 import 'package:provider/provider.dart';
 import '../theme.dart';
+import 'package:particle_auth_core/particle_auth_core.dart';
 import 'connect_logic.dart';
 
 class SelectChainPage extends StatefulWidget {
@@ -34,12 +35,15 @@ class SelectChainPageState extends State<SelectChainPage> {
                   backgroundColor: pnPalette.shade400,
                   foregroundColor: Colors.white,
                 ),
-                onPressed: () {
+                onPressed: () async {
                   print('Clicked: ${chainList[index]}');
                   final chainInfo = chainList[index];
                   ParticleConnect.setChainInfo(chainInfo);
-                  showToast(
-                      "set chain info: ${chainList[index].name}  ${chainList[index].id}");
+                  if (await ParticleAuthCore.isConnected()) {
+                    final switchChain = await ParticleAuthCore.switchChain(chainInfo);
+                    print("switchChain:$switchChain");
+                  }
+                  showToast("set chain info: ${chainList[index].name}  ${chainList[index].id}");
                   logic.currChainInfo = chainInfo;
                   logic.refreshConnectedAccounts();
                   Navigator.pop(context);
