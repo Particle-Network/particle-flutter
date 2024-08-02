@@ -22,7 +22,7 @@ class ParticleAuthCore {
   }
 
   /// Connect
-  /// 
+  ///
   /// [loginType], for example email, google and so on.
   ///
   /// [account] when login type is email, phone, you could pass email address,
@@ -34,15 +34,15 @@ class ParticleAuthCore {
   /// [prompt] optional, social login prompt.
   ///
   /// [loginPageConfig] optional, custom login page.
+  /// 
   /// Return userinfo or error
   static Future<UserInfo> connect(LoginType loginType,
       {String? account,
       SocialLoginPrompt? prompt,
       LoginPageConfig? loginPageConfig,
       List<SupportAuthType>? supportAuthTypes}) async {
-    final convertSupportLoginTypes = supportAuthTypes
-        ?.map((e) => e.name)
-        .toList();
+    final convertSupportLoginTypes =
+        supportAuthTypes?.map((e) => e.name).toList();
     final json = jsonEncode({
       "login_type": loginType.name,
       "account": account ?? "",
@@ -71,6 +71,66 @@ class ParticleAuthCore {
     if (jsonDecode(result)["status"] == true ||
         jsonDecode(result)["status"] == 1) {
       return jsonDecode(result)["data"] as String;
+    } else {
+      final error = RpcError.fromJson(jsonDecode(result)["data"]);
+      return Future.error(error);
+    }
+  }
+
+  /// Send phone code
+  /// 
+  /// [phone] is phone number, format requires E.164, such as '+11234567890' '+442012345678' '+8613611112222'
+  /// 
+  /// If true is returned, the message is successful.
+  static Future<bool> sendPhoneCode(String phone) async {
+    final result = await _channel.invokeMethod('sendPhoneCode', phone);
+    if (jsonDecode(result)["status"] == true ||
+        jsonDecode(result)["status"] == 1) {
+      return jsonDecode(result)["data"] as bool;
+    } else {
+      final error = RpcError.fromJson(jsonDecode(result)["data"]);
+      return Future.error(error);
+    }
+  }
+
+  /// Send email code
+  /// 
+  /// [email] is email address
+  /// 
+  /// If true is returned, the message is successful
+  static Future<bool> sendEmailCode(String email) async {
+    final result = await _channel.invokeMethod('sendEmailCode', email);
+    if (jsonDecode(result)["status"] == true ||
+        jsonDecode(result)["status"] == 1) {
+      return jsonDecode(result)["data"] as bool;
+    } else {
+      final error = RpcError.fromJson(jsonDecode(result)["data"]);
+      return Future.error(error);
+    }
+  }
+
+  /// Connect with code
+  /// 
+  /// Select phone or email, 
+  /// 
+  /// [phone] is phone number, format requires E.164, such as '+11234567890' '+442012345678' '+8613611112222'
+  /// 
+  /// [email] is email address
+  /// 
+  /// [code] is verification code
+  /// 
+  /// Return userinfo or error
+  static Future<UserInfo> connectWithCode(
+      String? phone, String? email, String code) async {
+    final json = jsonEncode({
+      "phone": phone,
+      "email": email,
+      "code": code,
+    });
+    final result = await _channel.invokeMethod('connectWithCode', json);
+    if (jsonDecode(result)["status"] == true ||
+        jsonDecode(result)["status"] == 1) {
+      return UserInfo.fromJson(jsonDecode(result)["data"]);
     } else {
       final error = RpcError.fromJson(jsonDecode(result)["data"]);
       return Future.error(error);
