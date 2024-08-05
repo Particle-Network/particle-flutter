@@ -21,11 +21,11 @@ String getCurrentTimestamp() {
 
 class EvmService {
   /// Request rpc
-  /// 
+  ///
   /// [method] rpc method
-  /// 
+  ///
   /// [params] rpc method parameters
-  /// 
+  ///
   static Future<dynamic> rpc(String method, List<dynamic> params) async {
     final req = RequestBodyEntity();
     req.chainId = await ParticleBase.getChainId();
@@ -193,9 +193,10 @@ class EvmService {
   /// Get tokens and nfts
   ///
   /// [address] is user's public address
-  /// 
+  ///
   /// [tokenAddresses] the specific tokens' addresses
-  static Future<dynamic> getTokensAndNFTs(String address, List<String> tokenAddresses) async {
+  static Future<dynamic> getTokensAndNFTs(
+      String address, List<String> tokenAddresses) async {
     const method = "particle_getTokensAndNFTs";
     final params = [address, tokenAddresses];
     return await EvmService.rpc(method, params);
@@ -204,7 +205,8 @@ class EvmService {
   /// Get tokens
   ///
   /// [address] is user's public address
-  static Future<dynamic> getTokens(String address, List<String> tokenAddresses) async {
+  static Future<dynamic> getTokens(
+      String address, List<String> tokenAddresses) async {
     const method = "particle_getTokens";
     final params = [address, tokenAddresses];
     return await EvmService.rpc(method, params);
@@ -213,7 +215,8 @@ class EvmService {
   /// Get nfts
   ///
   /// [address] is user's public address
-  static Future<dynamic> getNFTs(String address, List<String> tokenAddresses) async {
+  static Future<dynamic> getNFTs(
+      String address, List<String> tokenAddresses) async {
     const method = "particle_getNFTs";
     final params = [address, tokenAddresses];
     return await EvmService.rpc(method, params);
@@ -268,6 +271,8 @@ class EvmService {
   ///
   /// [address] is public address
   ///
+  /// [value] is the value sent with this transaction.
+  ///
   /// [contractAddress] is contract address
   ///
   /// [methodName] is a contract method name, such as 'mint', 'balanceOf'
@@ -275,8 +280,15 @@ class EvmService {
   /// [parameters] is parameters required by the method
   ///
   /// [abiJsonString] is abi json string, such as "[{\"inputs\":[{\"internalType\":\"uint256\",\"name\":\"quantity\",\"type\":\"uint256\"},{\"internalType\":\"uint256\",\"name\":\"amount\",\"type\":\"uint256\"}],\"name\":\"mint\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"}]"
-  static Future<dynamic> readContract(String address, String contractAddress,
-      String methodName, List<Object> parameters, String abiJsonString) async {
+  static Future<dynamic> readContract(
+      String address,
+      BigInt value,
+      String contractAddress,
+      String methodName,
+      List<Object> parameters,
+      String abiJsonString) async {
+    final valueHex = "0x${value.toRadixString(16)}";
+
     final data = await EvmService.customMethod(
         contractAddress, methodName, parameters, abiJsonString);
 
@@ -284,7 +296,7 @@ class EvmService {
     req.chainId = await ParticleBase.getChainId();
     const method = "eth_call";
     final params = [
-      {"to": contractAddress, "data": data, "from": address},
+      {"from": address, "to": contractAddress, "data": data, "value": valueHex},
       "latest"
     ];
 
@@ -296,6 +308,8 @@ class EvmService {
   ///
   /// [address] is public address
   ///
+  /// [value] is the value sent with this transaction.
+  ///
   /// [contractAddress] is contract address
   ///
   /// [methodName] is a contract method name, such as 'mint', 'balanceOf'
@@ -305,13 +319,18 @@ class EvmService {
   /// [abiJsonString] is abi json string, such as "[{\"inputs\":[{\"internalType\":\"uint256\",\"name\":\"quantity\",\"type\":\"uint256\"},{\"internalType\":\"uint256\",\"name\":\"amount\",\"type\":\"uint256\"}],\"name\":\"mint\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"}]"
   ///
   /// [gasFeeLevel] is gas fee level, default is high.
-  static Future<String> writeContract(String address, String contractAddress,
-      String methodName, List<Object> parameters, String abiJsonString,
+  static Future<String> writeContract(
+      String address,
+      BigInt value,
+      String contractAddress,
+      String methodName,
+      List<Object> parameters,
+      String abiJsonString,
       {GasFeeLevel gasFeeLevel = GasFeeLevel.high}) async {
     final data = await EvmService.customMethod(
         contractAddress, methodName, parameters, abiJsonString);
 
-    return createTransaction(address, data, BigInt.from(0), contractAddress,
+    return createTransaction(address, data, value, contractAddress,
         gasFeeLevel: gasFeeLevel);
   }
 
@@ -321,7 +340,7 @@ class EvmService {
   ///
   /// [data] is contract transaction parameter
   ///
-  /// [value] is native amount
+  /// [value] is the value sent with this transaction.
   ///
   /// [to] if it is a contract transaction, to is contract address, if it is a native transaciton, to is receiver address.
   ///
@@ -404,13 +423,12 @@ class EvmService {
 }
 
 class SolanaService {
-
   /// Request rpc
-  /// 
+  ///
   /// [method] rpc method
-  /// 
+  ///
   /// [params] rpc method parameters
-  /// 
+  ///
   static Future<dynamic> rpc(String method, List<dynamic> params) async {
     final req = RequestBodyEntity();
     req.chainId = await ParticleBase.getChainId();
@@ -430,7 +448,7 @@ class SolanaService {
   /// Get tokens and NFTs
   ///
   /// [address] is user's solana public address
-  /// 
+  ///
   /// [parseMetadataUri] if parse the nft meta data
   static Future<dynamic> getTokensAndNFTs(
       String address, bool parseMetadataUri) async {
@@ -466,7 +484,6 @@ class SolanaService {
     final params = ["unwrap-sol", transaction];
     return await SolanaService.rpc(method, params);
   }
-
 
   /// Get token price,
   ///
