@@ -25,7 +25,7 @@ Specify all pod versions in your Podfile, get the lateset versions from iOS nati
 
 ## Getting Started 
 
-[Auth Doc](https://docs.particle.network/developers/auth-service/sdks/flutter)
+[Auth Doc](https://developers.particle.network/api-reference/auth/mobile-sdks/flutter)
 
 ### Use this package as a library
 
@@ -33,21 +33,10 @@ Depend on it
 
 Run this command:
 
-With Flutter:
-```
-flutter pub add particle_auth
-```
-This will add a line like this to your package's pubspec.yaml (and run an implicit flutter pub get):
-
-Import it
-Now in your Dart code, you can use:
-```
-import 'package:particle_auth/particle_auth.dart';
-```
 
 Import Connect and Wallet SDKs using the same method
 
-[Connect Doc](https://docs.particle.network/developers/connect-service/sdks/flutter)
+[Connect Doc](https://developers.particle.network/api-reference/connect/mobile/flutter)
 
 ```
 flutter pub add particle_connect
@@ -56,7 +45,7 @@ flutter pub add particle_connect
 import 'package:particle_connect/particle_connect.dart';
 ```
 
-[Wallet Doc](https://docs.particle.network/developers/wallet-service/sdks/flutter)
+[Wallet Doc](https://developers.particle.network/api-reference/connect/mobile/flutter)
 ```
 flutter pub add particle_wallet
 ```
@@ -64,7 +53,7 @@ flutter pub add particle_wallet
 import 'package:particle_wallet/particle_wallet.dart';
 ```
 
-[AA Doc](https://docs.particle.network/developers/account-abstraction/flutter)
+[AA Doc](https://developers.particle.network/api-reference/aa/sdks/mobile/flutter)
 ```
 flutter pub add particle_aa
 ```
@@ -72,7 +61,7 @@ flutter pub add particle_aa
 import 'package:particle_aa/particle_aa.dart';
 ```
 
-[Auth Core Doc](https://docs.particle.network/developers/auth-service/core/flutter)
+[Auth Core Doc](https://developers.particle.network/api-reference/auth/mobile-sdks/flutter)
 
 Please note that the `particle_auth_core` supports ios-arm64 (iOS devices). We currently do not support simulators. To perform testing, you will require an actual iPhone device.
 

@@ -153,7 +153,7 @@ class ConnectLogic extends ChangeNotifier {
   void signInWithEthereum(WalletType walletType, String publicAddress) async {
     try {
       const domain = "particle.network";
-      const uri = "https://docs.particle.network/";
+      const uri = "https://developers.particle.network";
       this.siwe = await ParticleConnect.signInWithEthereum(
           walletType, publicAddress, domain, uri);
       print(

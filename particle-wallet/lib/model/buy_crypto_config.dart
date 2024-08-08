@@ -24,7 +24,7 @@ import 'package:particle_wallet/particle_wallet.dart';
 /// [theme] optional, Theme, dark or light.
 ///
 /// [language] optional, Language
-/// 
+///
 /// [modalStyle] control iOS presentation style
 class BuyCryptoConfig {
   String? walletAddress;
