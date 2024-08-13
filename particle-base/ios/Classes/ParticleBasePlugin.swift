@@ -9,6 +9,7 @@ import Base58_swift
 import Flutter
 import Foundation
 import ParticleNetworkBase
+import ParticleNetworkChains
 import RxSwift
 import SwiftyJSON
 
@@ -222,6 +223,27 @@ public extension ParticleBasePlugin {
             ParticleNetwork.setFiatCoin(.inr)
         } else if json.lowercased() == "krw" {
             ParticleNetwork.setFiatCoin(.krw)
+        }
+    }
+    
+    func setThemeColor(_ json: String?) {
+        guard let json = json else {
+            return
+        }
+        if let color = UIColor(hex: json) {
+            ParticleNetwork.setThemeColor(color)
+        }
+    }
+    
+    func setCustomUIConfigJsonString(_ json: String?) {
+        guard let json = json else {
+            return
+        }
+        do {
+            try ParticleNetwork.setCustomUIConfigJsonString(json)
+        } catch {
+            print("setCustomUIConfigJsonString error \(error)")
+                  
         }
     }
 }

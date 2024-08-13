@@ -28,7 +28,6 @@ public class ParticleWalletPlugin: NSObject, FlutterPlugin {
         case navigatorNFTDetails
         case navigatorPay
         case navigatorBuyCrypto
-        case navigatorLoginList
         case navigatorSwap
         case navigatorDappBrowser
         case setShowTestNetwork
@@ -48,7 +47,6 @@ public class ParticleWalletPlugin: NSObject, FlutterPlugin {
         case setDisplayNFTContractAddresses
         case setPriorityTokenAddresses
         case setPriorityNFTContractAddresses
-        case loadCustomUIJsonString
 
         // WalletConnectV2
         case setSupportWalletConnect
@@ -91,8 +89,7 @@ public class ParticleWalletPlugin: NSObject, FlutterPlugin {
             self.navigatorPay()
         case .navigatorBuyCrypto:
             self.navigatorBuyCrypto(json as? String)
-        case .navigatorLoginList:
-            self.navigatorLoginList(result)
+
         case .navigatorSwap:
             self.navigatorSwap(json as? String)
         case .navigatorDappBrowser:
@@ -133,8 +130,6 @@ public class ParticleWalletPlugin: NSObject, FlutterPlugin {
             self.setPriorityTokenAddresses(json as? String)
         case .setPriorityNFTContractAddresses:
             self.setPriorityNFTContractAddresses(json as? String)
-        case .loadCustomUIJsonString:
-            self.loadCustomUIJsonString(json as? String)
         case .initializeWalletMetaData:
             self.initializeWalletMetaData(json as? String)
 
@@ -254,13 +249,6 @@ extension ParticleWalletPlugin {
         PNRouter.navigatorBuy(buyCryptoConfig: buyConfig, modalStyle: modalStyle)
     }
 
-    func navigatorLoginList(_ callback: @escaping ParticleCallback) {
-        subscribeAndCallback(observable: PNRouter.navigatorLoginList().map { walletType, account in
-            let loginListModel = FlutterLoginListModel(walletType: walletType.stringValue, account: account)
-            return loginListModel
-        }, callback: callback)
-    }
-
     func navigatorSwap(_ json: String?) {
         if let json = json {
             let data = JSON(parseJSON: json)
@@ -338,7 +326,7 @@ extension ParticleWalletPlugin {
         let walletTypeString = data["wallet_type"].stringValue
         let publicAddress = data["public_address"].stringValue
 
-        if let walletType = map2WalletType(from: walletTypeString) {
+        if let walletType = WalletType.from(walletTypeString) {
             let result = ParticleWalletGUI.switchWallet(walletType: walletType, publicAddress: publicAddress)
             callback(result)
         } else {
@@ -457,17 +445,6 @@ extension ParticleWalletPlugin {
         }
     }
 
-    func loadCustomUIJsonString(_ json: String?) {
-        guard let json = json else {
-            return
-        }
-        do {
-            try ParticleWalletGUI.loadCustomUIJsonString(json)
-        } catch {
-            print(error)
-        }
-    }
-
     func setSupportWalletConnect(_ enable: Bool) {
         ParticleWalletGUI.setSupportWalletConnect(enable)
     }
@@ -476,6 +453,8 @@ extension ParticleWalletPlugin {
         guard let json = json else {
             return
         }
+        
+        ParticleWalletGUI.setAdapters
 
         let data = JSON(parseJSON: json)
 

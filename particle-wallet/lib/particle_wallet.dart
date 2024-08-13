@@ -176,24 +176,6 @@ class ParticleWallet {
     _channel.invokeMethod('navigatorDappBrowser', jsonEncode({"url": url}));
   }
 
-  /// Navigator login list page.
-  ///
-  /// Return account or error.
-  static Future<Account> navigatorLoginList() async {
-    final result = await _channel.invokeMethod('navigatorLoginList');
-
-    if (jsonDecode(result)["status"] == true ||
-        jsonDecode(result)["status"] == 1) {
-      final account = Account.fromJson(jsonDecode(result)["data"]["account"]);
-      final walletType = jsonDecode(result)["data"]["walletType"] as String;
-      account.walletType = walletType;
-      return account;
-    } else {
-      final error = RpcError.fromJson(jsonDecode(result)["data"]);
-      return Future.error(error);
-    }
-  }
-
   /// Set show test network, default value is false.
   static setShowTestNetwork(bool enable) {
     _channel.invokeMethod('setShowTestNetwork', enable);

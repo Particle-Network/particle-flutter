@@ -1,6 +1,6 @@
 PODS:
   - Alamofire (5.9.1)
-  - AuthCoreAdapter (1.4.11):
+  - AuthCoreAdapter (2.0.0):
     - ConnectCommon
     - ParticleAuthCore
   - AWSCore (2.34.2)
@@ -9,13 +9,13 @@ PODS:
   - Base58.swift (1.0.2):
     - BigInt
   - BigInt (5.2.0)
-  - ConnectCommon (0.2.26):
+  - ConnectCommon (2.0.0):
     - BigInt (~> 5.2.0)
     - ParticleNetworkBase
     - RxAlamofire (~> 6.1.1)
     - secp256k1.swift (~> 0.1)
     - TweetNacl
-  - CryptoSwift (1.8.2)
+  - CryptoSwift (1.8.3)
   - Flutter (1.0.0)
   - integration_test (0.0.1):
     - Flutter
@@ -40,7 +40,8 @@ PODS:
   - particle_base (0.0.1):
     - Flutter
     - ParticleNetworkBase
-  - ParticleAuthCore (1.4.11):
+    - ParticleNetworkChains
+  - ParticleAuthCore (2.0.0):
     - AWSKMS (~> 2.34.2)
     - ParticleMPCCore
     - ParticleNetworkBase
@@ -50,20 +51,22 @@ PODS:
     - SnapKit (~> 5.7.1)
     - SwiftMessages
     - Then
-  - ParticleMPCCore (1.4.11):
+  - ParticleMPCCore (2.0.0):
     - Base58.swift
     - CryptoSwift (~> 1.8.1)
     - Thresh
-  - ParticleNetworkBase (1.4.10):
+  - ParticleNetworkBase (2.0.0):
     - Alamofire (~> 5.9.0)
     - Base58.swift
     - BigInt (~> 5.2.0)
     - CryptoSwift (~> 1.8.1)
+    - ParticleNetworkChains
     - RxAlamofire (~> 6.1.1)
     - RxCocoa (= 6.6.0)
     - RxSwift (= 6.6.0)
     - SwiftyJSON (~> 5.0.1)
     - SwiftyUserDefaults (~> 5.3.0)
+  - ParticleNetworkChains (2.0.0)
   - RxAlamofire (6.1.1):
     - RxAlamofire/Core (= 6.1.1)
   - RxAlamofire/Core (6.1.1):
@@ -75,9 +78,9 @@ PODS:
   - RxRelay (6.6.0):
     - RxSwift (= 6.6.0)
   - RxSwift (6.6.0)
-  - SDWebImage (5.19.4):
-    - SDWebImage/Core (= 5.19.4)
-  - SDWebImage/Core (5.19.4)
+  - SDWebImage (5.19.6):
+    - SDWebImage/Core (= 5.19.6)
+  - SDWebImage/Core (5.19.6)
   - SDWebImageWebPCoder (0.14.6):
     - libwebp (~> 1.0)
     - SDWebImage/Core (~> 5.17)
@@ -90,22 +93,23 @@ PODS:
   - SwiftyJSON (5.0.2)
   - SwiftyUserDefaults (5.3.0)
   - Then (3.0.0)
-  - Thresh (1.4.11)
+  - Thresh (2.0.0)
   - TweetNacl (1.0.2)
 
 DEPENDENCIES:
-  - AuthCoreAdapter (= 1.4.11)
-  - ConnectCommon (= 0.2.26)
+  - AuthCoreAdapter (= 2.0.0)
+  - ConnectCommon (= 2.0.0)
   - Flutter (from `Flutter`)
   - integration_test (from `.symlinks/plugins/integration_test/ios`)
   - particle_auth_core (from `.symlinks/plugins/particle_auth_core/ios`)
   - particle_base (from `.symlinks/plugins/particle_base/ios`)
-  - ParticleAuthCore (= 1.4.11)
-  - ParticleMPCCore (= 1.4.11)
-  - ParticleNetworkBase (= 1.4.10)
+  - ParticleAuthCore (= 2.0.0)
+  - ParticleMPCCore (= 2.0.0)
+  - ParticleNetworkBase (= 2.0.0)
+  - ParticleNetworkChains (= 2.0.0)
   - SkeletonView (from `https://github.com/SunZhiC/SkeletonView.git`, branch `main`)
   - SwiftyUserDefaults (from `https://github.com/SunZhiC/SwiftyUserDefaults.git`, branch `master`)
-  - Thresh (= 1.4.11)
+  - Thresh (= 2.0.0)
 
 SPEC REPOS:
   https://github.com/CocoaPods/Specs.git:
@@ -121,6 +125,7 @@ SPEC REPOS:
     - ParticleAuthCore
     - ParticleMPCCore
     - ParticleNetworkBase
+    - ParticleNetworkChains
     - RxAlamofire
     - RxCocoa
     - RxRelay
@@ -161,26 +166,27 @@ CHECKOUT OPTIONS:
 
 SPEC CHECKSUMS:
   Alamofire: f36a35757af4587d8e4f4bfa223ad10be2422b8c
-  AuthCoreAdapter: aa7d0173ba7f98a8a95f960903b3c5077b069248
+  AuthCoreAdapter: c235dfb6b60718830d02fd25f968251a31480412
   AWSCore: 13649d9063a6807ec37bde35c8f2da329d63d4e2
   AWSKMS: 311bb0cb71967273de5f4657875b9f2484ec13c2
   Base58.swift: e0e16655f9db843b8cd367593ed6f7d90d136b7f
   BigInt: f668a80089607f521586bbe29513d708491ef2f7
-  ConnectCommon: d9f6e33104f911e5361aa75a266df0e850a3a525
-  CryptoSwift: c63a805d8bb5e5538e88af4e44bb537776af11ea
+  ConnectCommon: ab95f35bb6a2232a973a8f6c6aae0e6178c4625a
+  CryptoSwift: 967f37cea5a3294d9cce358f78861652155be483
   Flutter: f04841e97a9d0b0a8025694d0796dd46242b2854
   integration_test: 13825b8a9334a850581300559b8839134b124670
   libwebp: 1786c9f4ff8a279e4dac1e8f385004d5fc253009
   particle_auth_core: 08525d1c4253c4f49fbb6d1562a45d9187fa3f1b
-  particle_base: a43be9e2129ecdc02740f458cfc299759ae89985
-  ParticleAuthCore: 96548b5844eadeb4d63e138c3383b8b5af396f85
-  ParticleMPCCore: 7930476dd1da4d19ece55ec5130487b2c07ea860
-  ParticleNetworkBase: 98c7ef521e6ec3db98eff9369e264d69897f265f
+  particle_base: 3f7728b23f0733ccd5acdafcf41a69af24f8ed02
+  ParticleAuthCore: 7917e9d72989e3b0194e3fafeb1506b47477134c
+  ParticleMPCCore: afc26ed337833ab2ffaa6b68a2fce08c00549e95
+  ParticleNetworkBase: 55ed95a84c1ef16e14064d9a30894232ef1201b0
+  ParticleNetworkChains: e433da789431d54304a023f362d463bd7163b5fe
   RxAlamofire: beb75a1c452d0de225651db4903f5d29d034a620
   RxCocoa: 44a80de90e25b739b5aeaae3c8c371a32e3343cc
   RxRelay: 45eaa5db8ee4fb50e5ebd57deec0159e97fa51e6
   RxSwift: a4b44f7d24599f674deebd1818eab82e58410632
-  SDWebImage: 066c47b573f408f18caa467d71deace7c0f8280d
+  SDWebImage: a79252b60f4678812d94316c91da69ec83089c9f
   SDWebImageWebPCoder: e38c0a70396191361d60c092933e22c20d5b1380
   secp256k1.swift: a7e7a214f6db6ce5db32cc6b2b45e5c4dd633634
   SkeletonView: 735bba714f75a451d998bf6f4aef5bfe9d1c803e
@@ -189,9 +195,9 @@ SPEC CHECKSUMS:
   SwiftyJSON: f5b1bf1cd8dd53cd25887ac0eabcfd92301c6a5a
   SwiftyUserDefaults: dd5dce66fb01565a82c3618b835f0546987eb683
   Then: 844265ae87834bbe1147d91d5d41a404da2ec27d
-  Thresh: 213a087253919fc037e58e3c7b68bc1f6c89d18e
+  Thresh: 3dcd6e7215f7ad369e7a48c0e7b8fe2562b1fa6a
   TweetNacl: 3abf4d1d2082b0114e7a67410e300892448951e6
 
-PODFILE CHECKSUM: 9395a5a6848b673381f70b3e66fde220f58f8710
+PODFILE CHECKSUM: 34573627ac57897b190574d3bb806414b424dad3
 
 COCOAPODS: 1.15.2

@@ -12,6 +12,7 @@ import Flutter
 import Foundation
 import ParticleAuthCore
 import ParticleNetworkBase
+import ParticleNetworkChains
 import RxSwift
 import SwiftyJSON
 
@@ -47,6 +48,9 @@ public class ParticleAuthCorePlugin: NSObject, FlutterPlugin {
         case changeMasterPassword
         case setBlindEnable
         case getBlindEnable
+        case sendPhoneCode
+        case sendEmailCode
+        case connectWithCode
     }
 
     public static func register(with registrar: FlutterPluginRegistrar) {
@@ -114,6 +118,12 @@ public class ParticleAuthCorePlugin: NSObject, FlutterPlugin {
             self.setBlindEnable(json as? Bool ?? false)
         case .getBlindEnable:
             self.getBlindEnable(result)
+        case .sendEmailCode:
+            self.sendEmailCode(json as? String, callback: result)
+        case .sendPhoneCode:
+            self.sendPhoneCode(json as? String, callback: result)
+        case .connectWithCode:
+            self.connectWithCode(json as? String, callback: result)
         }
     }
 }
@@ -236,6 +246,66 @@ public extension ParticleAuthCorePlugin {
         }
 
         subscribeAndCallback(observable: observable, callback: callback)
+    }
+
+    func sendPhoneCode(_ json: String?, callback: @escaping ParticleCallback) {
+        guard let phone = json else {
+            callback(getErrorJson("json is nil"))
+            return
+        }
+
+        let observable = Single<Bool>.fromAsync { [weak self] in
+            guard let self = self else { throw ParticleNetwork.ResponseError(code: nil, message: "self is nil") }
+            return try await self.auth.sendPhoneCode(phone: phone)
+        }
+        subscribeAndCallback(observable: observable, callback: callback)
+    }
+
+    func sendEmailCode(_ json: String?, callback: @escaping ParticleCallback) {
+        guard let email = json else {
+            callback(getErrorJson("json is nil"))
+            return
+        }
+
+        let observable = Single<Bool>.fromAsync { [weak self] in
+            guard let self = self else { throw ParticleNetwork.ResponseError(code: nil, message: "self is nil") }
+            return try await self.auth.sendEmailCode(email: email)
+        }
+        subscribeAndCallback(observable: observable, callback: callback)
+    }
+
+    func connectWithCode(_ json: String?, callback: @escaping ParticleCallback) {
+        guard let json = json else {
+            callback(getErrorJson("json is nil"))
+            return
+        }
+
+        let data = JSON(parseJSON: json)
+        let email = data["email"].stringValue
+        let phone = data["phone"].stringValue
+        let code = data["code"].stringValue
+        if !email.isEmpty {
+            let observable = Single<UserInfo>.fromAsync { [weak self] in
+                guard let self = self else { throw ParticleNetwork.ResponseError(code: nil, message: "self is nil") }
+                return try await self.auth.connect(type: LoginType.email, account: email, code: code)
+            }.map { userInfo in
+                let userInfoJsonString = userInfo.jsonStringFullSnake()
+                let newUserInfo = JSON(parseJSON: userInfoJsonString)
+                return newUserInfo
+            }
+            subscribeAndCallback(observable: observable, callback: callback)
+        } else {
+            let observable = Single<UserInfo>.fromAsync { [weak self] in
+                guard let self = self else { throw ParticleNetwork.ResponseError(code: nil, message: "self is nil") }
+                return try await self.auth.connect(type: LoginType.phone, account: phone, code: code)
+            }.map { userInfo in
+                let userInfoJsonString = userInfo.jsonStringFullSnake()
+                let newUserInfo = JSON(parseJSON: userInfoJsonString)
+                return newUserInfo
+            }
+
+            subscribeAndCallback(observable: observable, callback: callback)
+        }
     }
 
     func disconnect(_ callback: @escaping ParticleCallback) {
@@ -538,12 +608,12 @@ extension ParticleAuthCorePlugin {
             switch result {
             case .failure(let error):
                 let response = self.ResponseFromError(error)
-                let statusModel = FlutterStatusModel(status: false, data: response)
+                let statusModel = PNStatusModel(status: false, data: response)
                 let data = try! JSONEncoder().encode(statusModel)
                 guard let json = String(data: data, encoding: .utf8) else { return }
                 callback(json)
             case .success(let signedMessage):
-                let statusModel = FlutterStatusModel(status: true, data: signedMessage)
+                let statusModel = PNStatusModel(status: true, data: signedMessage)
                 let data = try! JSONEncoder().encode(statusModel)
                 guard let json = String(data: data, encoding: .utf8) else { return }
                 callback(json)
@@ -553,7 +623,7 @@ extension ParticleAuthCorePlugin {
 }
 
 extension ParticleAuthCorePlugin: MessageSigner {
-    public func signMessage(_ message: String, chainInfo: ParticleNetworkBase.ParticleNetwork.ChainInfo?) -> RxSwift.Single<String> {
+    public func signMessage(_ message: String, chainInfo: ChainInfo?) -> RxSwift.Single<String> {
         return Single<String>.fromAsync { [weak self] in
             guard let self = self else {
                 throw ParticleNetwork.ResponseError(code: nil, message: "self is nil")
@@ -581,8 +651,8 @@ extension Single {
 
 extension ParticleAuthCorePlugin {
     private func getErrorJson(_ message: String) -> String {
-        let response = FlutterResponseError(code: nil, message: message, data: nil)
-        let statusModel = FlutterStatusModel(status: false, data: response)
+        let response = PNResponseError(code: nil, message: message, data: nil)
+        let statusModel = PNStatusModel(status: false, data: response)
         let data1 = try! JSONEncoder().encode(statusModel)
         guard let json = String(data: data1, encoding: .utf8) else { return "" }
         return json

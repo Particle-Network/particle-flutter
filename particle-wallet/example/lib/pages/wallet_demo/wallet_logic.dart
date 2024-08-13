@@ -91,17 +91,6 @@ class WalletLogic {
     ParticleWallet.navigatorDappBrowser(url: url);
   }
 
-  static void navigatorLoginList() async {
-    try {
-      Account account = await ParticleWallet.navigatorLoginList();
-      print("navigatorLoginList:$account");
-      showToast("navigatorLoginList: $account");
-    } catch (error) {
-      print("navigatorLoginList:$error");
-      showToast("navigatorLoginList: $error");
-    }
-  }
-
   static void setSupportChain() {
     List<ChainInfo> chainInfos = <ChainInfo>[];
     chainInfos.add(ChainInfo.Ethereum);

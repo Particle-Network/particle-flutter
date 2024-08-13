@@ -10,7 +10,9 @@ import ConnectCommon
 import Flutter
 import Foundation
 import ParticleConnect
+import ParticleConnectKit
 import ParticleNetworkBase
+import ParticleNetworkChains
 import RxSwift
 import SwiftyJSON
 
@@ -53,7 +55,7 @@ public class ParticleConnectPlugin: NSObject, FlutterPlugin {
         case signAllTransactions
         case signAndSendTransaction
         case signTypedData
-        case login
+        case signInWithEthereum
         case verify
         case importPrivateKey
         case importMnemonic
@@ -105,8 +107,8 @@ public class ParticleConnectPlugin: NSObject, FlutterPlugin {
             self.signAndSendTransaction(json as? String, callback: result)
         case .signTypedData:
             self.signTypedData(json as? String, callback: result)
-        case .login:
-            self.login(json as? String, callback: result)
+        case .signInWithEthereum:
+            self.signInWithEthereum(json as? String, callback: result)
         case .verify:
             self.verify(json as? String, callback: result)
         case .importPrivateKey:
@@ -167,23 +169,12 @@ extension ParticleConnectPlugin {
         let dAppData = DAppMetaData(name: dAppName, icon: dAppIconUrl, url: dAppUrl, description: dappDescription, redirectUniversalLink: redirectUniversalLink)
         var adapters: [ConnectAdapter] = []
         
-        
 #if canImport(ConnectEVMAdapter)
-        let evmRpcUrl = data["rpc_url"]["evm_url"].stringValue
-        if evmRpcUrl.isEmpty {
-            adapters.append(EVMConnectAdapter())
-        } else {
-            adapters.append(EVMConnectAdapter(rpcUrl: evmRpcUrl))
-        }
+        adapters.append(EVMConnectAdapter())
 #endif
         
 #if canImport(ConnectSolanaAdapter)
-        let solanaRpcUrl = data["rpc_url"]["sol_url"].stringValue
-        if solanaRpcUrl.isEmpty {
-            adapters.append(SolanaConnectAdapter())
-        } else {
-            adapters.append(SolanaConnectAdapter(rpcUrl: solanaRpcUrl))
-        }
+        adapters.append(SolanaConnectAdapter())
 #endif
         
 #if canImport(ConnectPhantomAdapter)
@@ -194,7 +185,7 @@ extension ParticleConnectPlugin {
         adapters.append(contentsOf: [
             MetaMaskConnectAdapter(),
             RainbowConnectAdapter(),
-            BitkeepConnectAdapter(),
+            BitgetConnectAdapter(),
             ImtokenConnectAdapter(),
             TrustConnectAdapter(),
             WalletConnectAdapter(),
@@ -207,9 +198,7 @@ extension ParticleConnectPlugin {
         ])
         
 #endif
-        ParticleConnect.initialize(env: devEnv, chainInfo: chainInfo, dAppData: dAppData) {
-            adapters
-        }
+        ParticleConnect.initialize(env: devEnv, chainInfo: chainInfo, dAppData: dAppData, adapters: adapters)
         
         ParticleConnect.setWalletConnectV2ProjectId(walletConnectProjectId)
     }
@@ -236,7 +225,7 @@ extension ParticleConnectPlugin {
         }
         
         let walletTypeString = json
-        guard let walletType = map2WalletType(from: walletTypeString) else {
+        guard let walletType = WalletType.fromString( walletTypeString) else {
             print("walletType \(walletTypeString) is not existed")
             callback(getErrorJson("walletType \(walletTypeString) is not existed"))
             return
@@ -248,10 +237,27 @@ extension ParticleConnectPlugin {
         }
         
         let accounts = adapter.getAccounts()
-        let statusModel = FlutterStatusModel(status: true, data: accounts)
+        let statusModel = PNStatusModel(status: true, data: accounts)
         let data = try! JSONEncoder().encode(statusModel)
         let jsonString = String(data: data, encoding: .utf8) ?? ""
         callback(jsonString)
+    }
+    
+    func connectKit(_ json: String?, callback: @escaping ParticleCallback) {
+        guard let json = json else {
+            callback(getErrorJson("json is nil"))
+            return
+        }
+        let connectOptions: [ConnectOption] = []
+        let socialProviders: [EnableSocialProvider] = []
+        let walletProviders: [EnableWalletProvider] = []
+        let additionalLayoutOptions: AdditionalLayoutOptions = .init(isCollapseWalletList: false, isSplitEmailAndSocial: false, isSplitEmailAndPhone: false, isHideContinueButton: false)
+        let designOptions: DesignOptions = .init(icon: nil)
+        let config: ConnectKitConfig = .init(connectOptions: connectOptions, socialProviders: socialProviders, walletProviders: walletProviders, additionalLayoutOptions: additionalLayoutOptions, designOptions: designOptions)
+        
+        let observable: Single<Account> = ParticleConnectUI.connect(config: config)
+        
+        subscribeAndCallback(observable: observable, callback: callback)
     }
     
     func connect(_ json: String?, callback: @escaping ParticleCallback) {
@@ -263,7 +269,7 @@ extension ParticleConnectPlugin {
         let walletTypeString = JSON(parseJSON: json)["walletType"].stringValue
         let configJson = JSON(parseJSON: json)["particleConnectConfig"]
         
-        guard let walletType = map2WalletType(from: walletTypeString) else {
+        guard let walletType = WalletType.fromString(walletTypeString) else {
             print("walletType \(walletTypeString) is not existed")
             callback(getErrorJson("walletType \(walletTypeString) is not existed"))
             return
@@ -351,7 +357,7 @@ extension ParticleConnectPlugin {
             particleAuthCoreConfig = ParticleAuthCoreConfig(loginType: loginType, supportAuthType: supportAuthTypeArray, account: account, code: code, socialLoginPrompt: socialLoginPrompt, loginPageConfig: loginPageConfig)
         }
                 
-        var observable: Single<Account?>
+        var observable: Single<Account>
         if walletType == .authCore {
             observable = adapter.connect(particleAuthCoreConfig)
         } else {
@@ -370,7 +376,7 @@ extension ParticleConnectPlugin {
         let walletTypeString = data["wallet_type"].stringValue
         let publicAddress = data["public_address"].stringValue
         
-        guard let walletType = map2WalletType(from: walletTypeString) else {
+        guard let walletType = WalletType.fromString(walletTypeString) else {
             print("walletType \(walletTypeString) is not existed")
             callback(getErrorJson("walletType \(walletTypeString) is not existed"))
             return
@@ -394,7 +400,7 @@ extension ParticleConnectPlugin {
         let walletTypeString = data["wallet_type"].stringValue
         let publicAddress = data["public_address"].stringValue
         
-        guard let walletType = map2WalletType(from: walletTypeString) else {
+        guard let walletType = WalletType.fromString(walletTypeString) else {
             print("walletType \(walletTypeString) is not existed")
             callback(getErrorJson("walletType \(walletTypeString) is not existed"))
             return
@@ -418,7 +424,7 @@ extension ParticleConnectPlugin {
         let publicAddress = data["public_address"].stringValue
         let transaction = data["transaction"].stringValue
         
-        guard let walletType = map2WalletType(from: walletTypeString) else {
+        guard let walletType = WalletType.fromString(walletTypeString) else {
             print("walletType \(walletTypeString) is not existed")
             callback(getErrorJson("walletType \(walletTypeString) is not existed"))
             return
@@ -473,7 +479,7 @@ extension ParticleConnectPlugin {
         let walletTypeString = data["wallet_type"].stringValue
         let publicAddress = data["public_address"].stringValue
         
-        guard let walletType = map2WalletType(from: walletTypeString) else {
+        guard let walletType = WalletType.fromString(walletTypeString) else {
             print("walletType \(walletTypeString) is not existed")
             callback(getErrorJson("walletType \(walletTypeString) is not existed"))
             return
@@ -523,7 +529,7 @@ extension ParticleConnectPlugin {
         let publicAddress = data["public_address"].stringValue
         let transaction = data["transaction"].stringValue
         
-        guard let walletType = map2WalletType(from: walletTypeString) else {
+        guard let walletType = WalletType.fromString(walletTypeString) else {
             print("walletType \(walletTypeString) is not existed")
             callback(getErrorJson("walletType \(walletTypeString) is not existed"))
             return
@@ -551,7 +557,7 @@ extension ParticleConnectPlugin {
             $0.stringValue
         }
         
-        guard let walletType = map2WalletType(from: walletTypeString) else {
+        guard let walletType = WalletType.fromString(walletTypeString) else {
             print("walletType \(walletTypeString) is not existed")
             callback(getErrorJson("walletType \(walletTypeString) is not existed"))
             return
@@ -582,7 +588,7 @@ extension ParticleConnectPlugin {
             message = Base58.encode(message.data(using: .utf8)!)
         }
         
-        guard let walletType = map2WalletType(from: walletTypeString) else {
+        guard let walletType = WalletType.fromString(walletTypeString) else {
             print("walletType \(walletTypeString) is not existed ")
             callback(getErrorJson("walletType \(walletTypeString) is not existed"))
             return
@@ -609,7 +615,7 @@ extension ParticleConnectPlugin {
         let publicAddress = data["public_address"].stringValue
         let message = data["message"].stringValue
         
-        guard let walletType = map2WalletType(from: walletTypeString) else {
+        guard let walletType = WalletType.fromString(walletTypeString) else {
             print("walletType \(walletTypeString) is not existed")
             callback(getErrorJson("walletType \(walletTypeString) is not existed"))
             return
@@ -634,7 +640,7 @@ extension ParticleConnectPlugin {
         let walletTypeString = data["wallet_type"].stringValue
         let privateKey = data["private_key"].stringValue
         
-        guard let walletType = map2WalletType(from: walletTypeString) else {
+        guard let walletType = WalletType.fromString(walletTypeString) else {
             print("walletType \(walletTypeString) is not existed")
             callback(getErrorJson("walletType \(walletTypeString) is not existed"))
             return
@@ -665,7 +671,7 @@ extension ParticleConnectPlugin {
         let walletTypeString = data["wallet_type"].stringValue
         let mnemonic = data["mnemonic"].stringValue
         
-        guard let walletType = map2WalletType(from: walletTypeString) else {
+        guard let walletType = WalletType.fromString(walletTypeString) else {
             print("walletType \(walletTypeString) is not existed")
             callback(getErrorJson("walletType \(walletTypeString) is not existed"))
             return
@@ -696,7 +702,7 @@ extension ParticleConnectPlugin {
         let walletTypeString = data["wallet_type"].stringValue
         let publicAddress = data["public_address"].stringValue
         
-        guard let walletType = map2WalletType(from: walletTypeString) else {
+        guard let walletType = WalletType.fromString(walletTypeString) else {
             print("walletType \(walletTypeString) is not existed")
             callback(getErrorJson("walletType \(walletTypeString) is not existed"))
             return
@@ -709,8 +715,8 @@ extension ParticleConnectPlugin {
         
         guard walletType == WalletType.evmPrivateKey || walletType == WalletType.solanaPrivateKey else {
             print("walletType \(walletTypeString) is not support import from private key")
-            let response = FlutterResponseError(code: nil, message: "walletType \(walletTypeString) is not support import from private key", data: nil)
-            let statusModel = FlutterStatusModel(status: false, data: response)
+            let response = PNResponseError(code: nil, message: "walletType \(walletTypeString) is not support import from private key", data: nil)
+            let statusModel = PNStatusModel(status: false, data: response)
             let data = try! JSONEncoder().encode(statusModel)
             guard let json = String(data: data, encoding: .utf8) else { return }
             callback(json)
@@ -722,7 +728,7 @@ extension ParticleConnectPlugin {
         subscribeAndCallback(observable: observable, callback: callback)
     }
     
-    func login(_ json: String?, callback: @escaping ParticleCallback) {
+    func signInWithEthereum(_ json: String?, callback: @escaping ParticleCallback) {
         guard let json = json else {
             callback(getErrorJson("json is nil"))
             return
@@ -735,10 +741,10 @@ extension ParticleConnectPlugin {
         let address = publicAddress
         guard let uri = URL(string: data["uri"].stringValue) else { return }
         
-        guard let walletType = map2WalletType(from: walletTypeString) else {
+        guard let walletType = WalletType.fromString(walletTypeString) else {
             print("walletType \(walletTypeString) is not existed ")
-            let response = FlutterResponseError(code: nil, message: "walletType \(walletTypeString) is not existed", data: nil)
-            let statusModel = FlutterStatusModel(status: false, data: response)
+            let response = PNResponseError(code: nil, message: "walletType \(walletTypeString) is not existed", data: nil)
+            let statusModel = PNStatusModel(status: false, data: response)
             let data = try! JSONEncoder().encode(statusModel)
             guard let json = String(data: data, encoding: .utf8) else { return }
             callback(json)
@@ -747,8 +753,8 @@ extension ParticleConnectPlugin {
         
         guard let adapter = map2ConnectAdapter(from: walletType) else {
             print("adapter for \(walletTypeString) is not init")
-            let response = FlutterResponseError(code: nil, message: "adapter for \(walletTypeString) is not init", data: nil)
-            let statusModel = FlutterStatusModel(status: false, data: response)
+            let response = PNResponseError(code: nil, message: "adapter for \(walletTypeString) is not init", data: nil)
+            let statusModel = PNStatusModel(status: false, data: response)
             let data = try! JSONEncoder().encode(statusModel)
             guard let json = String(data: data, encoding: .utf8) else { return }
             callback(json)
@@ -756,9 +762,8 @@ extension ParticleConnectPlugin {
         }
         
         let siwe = try! SiweMessage(domain: domain, address: address, uri: uri)
-        
-        let observable = adapter.login(config: siwe, publicAddress: publicAddress).map { sourceMessage, signedMessage in
-            FlutterConnectLoginResult(message: sourceMessage, signature: signedMessage)
+        let observable = adapter.signInWithEthereum(config: siwe, publicAddress: publicAddress).map { sourceMessage, signedMessage in
+            PNConnectLoginResult(message: sourceMessage, signature: signedMessage)
         }
         subscribeAndCallback(observable: observable, callback: callback)
     }
@@ -778,10 +783,10 @@ extension ParticleConnectPlugin {
             signature = Base58.encode(Data(base64Encoded: signature)!)
         }
         
-        guard let walletType = map2WalletType(from: walletTypeString) else {
+        guard let walletType = WalletType.fromString(walletTypeString) else {
             print("walletType \(walletTypeString) is not existed ")
-            let response = FlutterResponseError(code: nil, message: "walletType \(walletTypeString) is not existed", data: nil)
-            let statusModel = FlutterStatusModel(status: false, data: response)
+            let response = PNResponseError(code: nil, message: "walletType \(walletTypeString) is not existed", data: nil)
+            let statusModel = PNStatusModel(status: false, data: response)
             let data = try! JSONEncoder().encode(statusModel)
             guard let json = String(data: data, encoding: .utf8) else { return }
             callback(json)
@@ -790,8 +795,8 @@ extension ParticleConnectPlugin {
         
         guard let adapter = map2ConnectAdapter(from: walletType) else {
             print("adapter for \(walletTypeString) is not init")
-            let response = FlutterResponseError(code: nil, message: "adapter for \(walletTypeString) is not init", data: nil)
-            let statusModel = FlutterStatusModel(status: false, data: response)
+            let response = PNResponseError(code: nil, message: "adapter for \(walletTypeString) is not init", data: nil)
+            let statusModel = PNStatusModel(status: false, data: response)
             let data = try! JSONEncoder().encode(statusModel)
             guard let json = String(data: data, encoding: .utf8) else { return }
             callback(json)
@@ -813,10 +818,10 @@ extension ParticleConnectPlugin {
         let data = JSON(parseJSON: json)
         let walletTypeString = data["wallet_type"].stringValue
 
-        guard let walletType = map2WalletType(from: walletTypeString) else {
+        guard let walletType = WalletType.fromString(walletTypeString) else {
             print("walletType \(walletTypeString) is not existed ")
-            let response = FlutterResponseError(code: nil, message: "walletType \(walletTypeString) is not existed", data: nil)
-            let statusModel = FlutterStatusModel(status: false, data: response)
+            let response = PNResponseError(code: nil, message: "walletType \(walletTypeString) is not existed", data: nil)
+            let statusModel = PNStatusModel(status: false, data: response)
             let data = try! JSONEncoder().encode(statusModel)
             guard let json = String(data: data, encoding: .utf8) else { return }
             callback(json)
@@ -825,8 +830,8 @@ extension ParticleConnectPlugin {
         
         guard let adapter = map2ConnectAdapter(from: walletType) else {
             print("adapter for \(walletTypeString) is not init")
-            let response = FlutterResponseError(code: nil, message: "adapter for \(walletTypeString) is not init", data: nil)
-            let statusModel = FlutterStatusModel(status: false, data: response)
+            let response = PNResponseError(code: nil, message: "adapter for \(walletTypeString) is not init", data: nil)
+            let statusModel = PNStatusModel(status: false, data: response)
             let data = try! JSONEncoder().encode(statusModel)
             guard let json = String(data: data, encoding: .utf8) else { return }
             callback(json)
@@ -868,7 +873,7 @@ extension ParticleConnectPlugin {
             } catch {
                 print("error \(error)")
                 let response = self.ResponseFromError(error)
-                let statusModel = FlutterStatusModel(status: false, data: response)
+                let statusModel = PNStatusModel(status: false, data: response)
                 let data = try! JSONEncoder().encode(statusModel)
                 guard let json = String(data: data, encoding: .utf8) else { return }
                 callback(json)
@@ -895,12 +900,12 @@ extension ParticleConnectPlugin {
             switch result {
             case .failure(let error):
                 let response = self.ResponseFromError(error)
-                let statusModel = FlutterStatusModel(status: false, data: response)
+                let statusModel = PNStatusModel(status: false, data: response)
                 let data = try! JSONEncoder().encode(statusModel)
                 guard let json = String(data: data, encoding: .utf8) else { return }
                 callback(json)
             case .success(let signedMessage):
-                let statusModel = FlutterStatusModel(status: true, data: signedMessage)
+                let statusModel = PNStatusModel(status: true, data: signedMessage)
                 let data = try! JSONEncoder().encode(statusModel)
                 guard let json = String(data: data, encoding: .utf8) else { return }
                 callback(json)
@@ -910,7 +915,7 @@ extension ParticleConnectPlugin {
 }
 
 extension ParticleConnectPlugin: MessageSigner {
-    public func signMessage(_ message: String, chainInfo: ParticleNetworkBase.ParticleNetwork.ChainInfo?) -> RxSwift.Single<String> {
+    public func signMessage(_ message: String, chainInfo: ChainInfo?) -> RxSwift.Single<String> {
         guard let walletType = self.latestWalletType else {
             print("walletType is nil")
             return .error(ParticleNetwork.ResponseError(code: nil, message: "walletType is nil"))
@@ -930,8 +935,8 @@ extension ParticleConnectPlugin: MessageSigner {
 
 extension ParticleConnectPlugin {
     private func getErrorJson(_ message: String) -> String {
-        let response = FlutterResponseError(code: nil, message: message, data: nil)
-        let statusModel = FlutterStatusModel(status: false, data: response)
+        let response = PNResponseError(code: nil, message: message, data: nil)
+        let statusModel = PNStatusModel(status: false, data: response)
         let data1 = try! JSONEncoder().encode(statusModel)
         guard let json = String(data: data1, encoding: .utf8) else { return "" }
         return json

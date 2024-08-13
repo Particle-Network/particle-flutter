@@ -460,7 +460,7 @@ class ParticleConnect {
   static Future<Siwe> signInWithEthereum(WalletType walletType,
       String publicAddress, String domain, String uri) async {
     final result = await _channel.invokeMethod(
-        'login',
+        'signInWithEthereum',
         jsonEncode({
           "wallet_type": walletType.name,
           "public_address": publicAddress,

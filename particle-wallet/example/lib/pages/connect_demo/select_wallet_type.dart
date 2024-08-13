@@ -16,7 +16,7 @@ class SelectWalletPageState extends State<SelectWalletPage> {
     WalletType.authCore,
     WalletType.metaMask,
     WalletType.rainbow,
-    WalletType.bitKeep,
+    WalletType.bitget,
     WalletType.trust,
     WalletType.imToken,
     WalletType.phantom,

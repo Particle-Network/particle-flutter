@@ -138,4 +138,28 @@ class ParticleBase {
   static setFiatCoin(FiatCoin fiatCoin) {
     _channel.invokeMethod("setFiatCoin", fiatCoin.name);
   }
+
+  /// Set theme color
+  ///
+  /// [hexColor] requires 6-digit hexadecimal color code, such as #FFFFFF
+  /// the defualt theme color is #A257FA
+  static setThemeColor(String hexColor) {
+    if (Platform.isIOS) {
+      _channel.invokeMethod("setThemeColor", hexColor);
+    } else {
+      // todo
+    }
+  }
+
+  /// Set customize UI config json string, only support iOS
+  /// 
+  /// [jsonString] can reference example customUIConfig.json files
+  /// 
+  /// 
+  static setCustomUIConfigJsonString(String jsonString) {
+    if (Platform.isIOS) {
+      _channel.invokeMethod("setCustomUIConfigJsonString", jsonString);
+    } else {
+    }
+  }
 }

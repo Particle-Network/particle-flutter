@@ -33,8 +33,8 @@ class AuthCoreLogic {
           account: account,
           supportAuthTypes: supportAuthTypes,
           loginPageConfig: LoginPageConfig(
-                  "https://static.particle.network/wallet-icons/Particle-iOS.png",
-               "Flutter Example",
+              "https://static.particle.network/wallet-icons/Particle-iOS.png",
+              "Flutter Example",
               "Welcome to login"));
       print("connect: $userInfo");
       showToast("connect: $userInfo");
@@ -261,8 +261,8 @@ class AuthCoreLogic {
       String methodName = "balanceOf";
       List<Object> parameters = <Object>[address];
       String abiJsonString = "";
-      final result = await EvmService.readContract(
-          address, contractAddress, methodName, parameters, abiJsonString);
+      final result = await EvmService.readContract(address, BigInt.zero,
+          contractAddress, methodName, parameters, abiJsonString);
       print("result: $result");
       showToast("result: $result");
     } catch (error) {
@@ -281,8 +281,8 @@ class AuthCoreLogic {
         "100000000"
       ];
       String abiJsonString = "";
-      final transaction = await EvmService.writeContract(
-          address, contractAddress, methodName, parameters, abiJsonString,
+      final transaction = await EvmService.writeContract(address, BigInt.zero,
+          contractAddress, methodName, parameters, abiJsonString,
           gasFeeLevel: GasFeeLevel.low);
       print("writeContract: $transaction");
       showToast("writeContract: $transaction");
@@ -299,8 +299,8 @@ class AuthCoreLogic {
       String methodName = "mint";
       List<Object> parameters = <Object>["0x3"];
       String abiJsonString = "";
-      final transaction = await EvmService.writeContract(
-          address, contractAddress, methodName, parameters, abiJsonString,
+      final transaction = await EvmService.writeContract(address, BigInt.zero,
+          contractAddress, methodName, parameters, abiJsonString,
           gasFeeLevel: GasFeeLevel.low);
       print("transaction: $transaction");
       showToast("transaction: $transaction");

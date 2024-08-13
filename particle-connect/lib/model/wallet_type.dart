@@ -4,7 +4,7 @@ enum WalletType {
   rainbow,
   trust,
   imToken,
-  bitKeep,
+  bitget,
   walletConnect,
   phantom,
   okx,
@@ -28,8 +28,8 @@ WalletType parseWalletType(String? value) {
       return WalletType.trust;
     case 'imToken':
       return WalletType.imToken;
-    case 'bitKeep':
-      return WalletType.bitKeep;
+    case 'bitget':
+      return WalletType.bitget;
     case 'walletConnect':
       return WalletType.walletConnect;
     case 'phantom':

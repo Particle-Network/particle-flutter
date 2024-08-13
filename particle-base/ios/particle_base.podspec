@@ -19,5 +19,6 @@ A flutter plugin project for particle base
 
   s.swift_version = '5.7'
   s.dependency 'ParticleNetworkBase'
+  s.dependency 'ParticleNetworkChains'
 
 end

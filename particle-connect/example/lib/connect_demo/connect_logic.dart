@@ -282,7 +282,7 @@ class ConnectLogic extends ChangeNotifier {
     print(await ParticleConnect.walletReadyState(WalletType.rainbow));
     print(await ParticleConnect.walletReadyState(WalletType.trust));
     print(await ParticleConnect.walletReadyState(WalletType.imToken));
-    print(await ParticleConnect.walletReadyState(WalletType.bitKeep));
+    print(await ParticleConnect.walletReadyState(WalletType.bitget));
   }
 
   void setChainInfo() async {

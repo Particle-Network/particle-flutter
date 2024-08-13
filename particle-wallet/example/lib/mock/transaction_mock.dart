@@ -2,7 +2,7 @@ import 'package:particle_base/particle_base.dart';
 import 'package:particle_wallet_example/mock/test_account.dart';
 
 class TransactionMock {
-    static Future<String> mockSOLTransaction(String publicAddress) async {
+  static Future<String> mockSOLTransaction(String publicAddress) async {
     final transaction = SerializeSOLTransaction();
     transaction.lamports = TestAccount.solana.amount.toInt();
     transaction.receiver = TestAccount.solana.publicAddress;
@@ -116,8 +116,8 @@ class TransactionMock {
     // such as
     // [{\"inputs\":[{\"internalType\":\"uint256\",\"name\":\"quantity\",\"type\":\"uint256\"},{\"internalType\":\"uint256\",\"name\":\"amount\",\"type\":\"uint256\"}],\"name\":\"mint\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"}]
     const abiJsonString = null;
-    final result = EvmService.writeContract(
-        publicAddress, contractAddress, methodName, params, abiJsonString,
+    final result = EvmService.writeContract(publicAddress, BigInt.zero,
+        contractAddress, methodName, params, abiJsonString,
         gasFeeLevel: GasFeeLevel.high);
 
     return result;
@@ -137,8 +137,8 @@ class TransactionMock {
     // [{\"inputs\":[{\"internalType\":\"uint256\",\"name\":\"quantity\",\"type\":\"uint256\"},{\"internalType\":\"uint256\",\"name\":\"amount\",\"type\":\"uint256\"}],\"name\":\"mint\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"}]
     const abiJsonString = null;
 
-    final result = await EvmService.readContract(
-        publicAddress, contractAddress, methodName, parameters, abiJsonString);
+    final result = await EvmService.readContract(publicAddress, BigInt.zero,
+        contractAddress, methodName, parameters, abiJsonString);
     return result;
   }
 }
