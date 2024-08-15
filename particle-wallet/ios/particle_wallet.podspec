@@ -20,4 +20,5 @@ A flutter plugin project for particle wallet
   s.swift_version = '5.7'
 
   s.dependency 'ParticleWalletGUI'
+  s.dependency 'ParticleConnect'
 end

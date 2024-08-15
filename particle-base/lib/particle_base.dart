@@ -54,7 +54,7 @@ class ParticleBase {
   /// [chainInfo] Chain info, for example EthereumChain, BscChain.
   ///
   /// [env] Development environment.
-  static Future<void> init(ChainInfo chainInfo, Env env) async {
+  static init(ChainInfo chainInfo, Env env) async {
     if (Platform.isIOS) {
       await _channel.invokeMethod(
           'initialize',
@@ -75,9 +75,8 @@ class ParticleBase {
   }
 
   /// Set chain info, update chain info to SDK.
-  /// Call this method before login.
   ///
-  /// [chainInfo] Chain info, for example EthereumChain, BscChain.
+  /// [chainInfo] Chain info, for example Ethereum, Polygon.
   static Future<bool> setChainInfo(ChainInfo chainInfo) async {
     return await _channel.invokeMethod(
         'setChainInfo',
@@ -152,14 +151,27 @@ class ParticleBase {
   }
 
   /// Set customize UI config json string, only support iOS
-  /// 
+  ///
   /// [jsonString] can reference example customUIConfig.json files
-  /// 
-  /// 
+  ///
   static setCustomUIConfigJsonString(String jsonString) {
     if (Platform.isIOS) {
       _channel.invokeMethod("setCustomUIConfigJsonString", jsonString);
+    } else {}
+  }
+
+  /// set unsupport countries list, used with phone login UI
+  ///
+  /// [isoCodeList] is ISO 3166-1 alpha-2 code list, https://en.wikipedia.org/wiki/ISO_3166-1_alpha-2
+  /// such as the US, the UK, etc.
+  static setUnsupportCountries(List<String> isoCodeList) {
+    List<String> lowerCaseIsoCodeList =
+        isoCodeList.map((code) => code.toLowerCase()).toList();
+    if (Platform.isIOS) {
+      _channel.invokeMethod(
+          "setUnsupportCountries", jsonEncode(lowerCaseIsoCodeList));
     } else {
+      // todo
     }
   }
 }

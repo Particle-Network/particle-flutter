@@ -13,9 +13,14 @@ class AccountName {
         version = '2.0.0';
 
   // ignore: non_constant_identifier_names
-  AccountName.SIMPLE()
+  AccountName.SIMPLE_V1()
       : name = 'SIMPLE',
         version = '1.0.0';
+
+  // ignore: non_constant_identifier_names
+  AccountName.SIMPLE_V2()
+      : name = 'SIMPLE',
+        version = '2.0.0';
 
   // ignore: non_constant_identifier_names
   AccountName.CYBERCONNECT()

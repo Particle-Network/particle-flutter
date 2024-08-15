@@ -7,9 +7,7 @@
 
 import ConnectCommon
 import Foundation
-import ParticleConnect
 import ParticleNetworkBase
-
 extension NSObject {
     func ResponseFromError(_ error: Error) -> PNResponseError {
         if let responseError = error as? ParticleNetwork.ResponseError {
@@ -19,14 +17,6 @@ extension NSObject {
         } else {
             return PNResponseError(code: nil, message: String(describing: error), data: nil)
         }
-    }
-
-    func map2ConnectAdapter(from walletType: WalletType) -> ConnectAdapter? {
-        let adapters = ParticleConnect.getAllAdapters().filter {
-            $0.walletType == walletType
-        }
-        let adapter = adapters.first
-        return adapter
     }
 }
 

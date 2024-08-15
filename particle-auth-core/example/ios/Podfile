@@ -31,13 +31,13 @@ target 'Runner' do
   use_frameworks! :linkage => :static
   use_modular_headers!
 
-  pod 'Thresh', '2.0.0'
-  pod 'ParticleMPCCore', '2.0.0'
-  pod 'ParticleAuthCore', '2.0.0'
-  pod 'AuthCoreAdapter', '2.0.0'
+  pod 'Thresh', '2.0.1'
+  pod 'ParticleMPCCore', '2.0.1'
+  pod 'ParticleAuthCore', '2.0.1'
+  pod 'AuthCoreAdapter', '2.0.1'
 
-  pod 'ParticleNetworkBase', '2.0.0'
-  pod 'ParticleNetworkChains', '2.0.0'
+  pod 'ParticleNetworkBase', '2.0.1'
+  pod 'ParticleNetworkChains', '2.0.1'
   pod 'ConnectCommon', '2.0.0'
 
   pod 'SwiftyUserDefaults', :git => 'https://github.com/SunZhiC/SwiftyUserDefaults.git', :branch => 'master'

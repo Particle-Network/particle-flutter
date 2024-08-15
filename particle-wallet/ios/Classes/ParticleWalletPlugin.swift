@@ -8,7 +8,9 @@
 import ConnectCommon
 import Flutter
 import Foundation
+import ParticleConnect
 import ParticleNetworkBase
+import ParticleNetworkChains
 import ParticleWalletConnect
 import ParticleWalletGUI
 import RxSwift
@@ -297,7 +299,7 @@ extension ParticleWalletPlugin {
             let chainType: ChainType = chainName == "solana" ? .solana : .evm
             return ParticleNetwork.searchChainInfo(by: chainId, chainType: chainType)
         }
-        ParticleWalletGUI.setSupportChain(chains)
+        ParticleWalletGUI.setSupportChain(Set(chains))
     }
 
     func setPayDisabled(_ disabled: Bool) {
@@ -325,8 +327,7 @@ extension ParticleWalletPlugin {
         let data = JSON(parseJSON: json)
         let walletTypeString = data["wallet_type"].stringValue
         let publicAddress = data["public_address"].stringValue
-
-        if let walletType = WalletType.from(walletTypeString) {
+        if let walletType = WalletType.fromString(walletTypeString) {
             let result = ParticleWalletGUI.switchWallet(walletType: walletType, publicAddress: publicAddress)
             callback(result)
         } else {
@@ -453,8 +454,6 @@ extension ParticleWalletPlugin {
         guard let json = json else {
             return
         }
-        
-        ParticleWalletGUI.setAdapters
 
         let data = JSON(parseJSON: json)
 
@@ -483,7 +482,6 @@ extension ParticleWalletPlugin {
         let name = data["name"].stringValue
         let icon = data["icon"].stringValue
 
-        ConnectManager.setCustomWalletName(walletType: .particle, name: .init(name: name, icon: icon))
         ConnectManager.setCustomWalletName(walletType: .authCore, name: .init(name: name, icon: icon))
     }
 
@@ -519,12 +517,12 @@ extension ParticleWalletPlugin {
             switch result {
             case .failure(let error):
                 let response = self.ResponseFromError(error)
-                let statusModel = FlutterStatusModel(status: false, data: response)
+                let statusModel = PNStatusModel(status: false, data: response)
                 let data = try! JSONEncoder().encode(statusModel)
                 guard let json = String(data: data, encoding: .utf8) else { return }
                 callback(json)
             case .success(let signedMessage):
-                let statusModel = FlutterStatusModel(status: true, data: signedMessage)
+                let statusModel = PNStatusModel(status: true, data: signedMessage)
                 let data = try! JSONEncoder().encode(statusModel)
                 guard let json = String(data: data, encoding: .utf8) else { return }
                 callback(json)
@@ -535,8 +533,8 @@ extension ParticleWalletPlugin {
 
 extension ParticleWalletPlugin {
     private func getErrorJson(_ message: String) -> String {
-        let response = FlutterResponseError(code: nil, message: message, data: nil)
-        let statusModel = FlutterStatusModel(status: false, data: response)
+        let response = PNResponseError(code: nil, message: message, data: nil)
+        let statusModel = PNStatusModel(status: false, data: response)
         let data1 = try! JSONEncoder().encode(statusModel)
         guard let json = String(data: data1, encoding: .utf8) else { return "" }
         return json
