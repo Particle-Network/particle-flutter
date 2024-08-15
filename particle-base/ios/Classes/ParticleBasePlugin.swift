@@ -68,13 +68,16 @@ public class ParticleBasePlugin: NSObject, FlutterPlugin {
         case .initialize:
             ShareBase.initialize(json as! String)
         case .setChainInfo:
-            ShareBase.setChainInfo(json as! String, callback: result)
+            let value = ShareBase.setChainInfo(json as! String)
+            result(value)
         case .getChainInfo:
-            ShareBase.getChainInfo(result)
+            let value = ShareBase.getChainInfo()
+            result(value)
         case .setLanguage:
             ShareBase.setLanguage(json as! String)
         case .getLanguage:
-            ShareBase.getLanguage(result)
+            let value = ShareBase.getLanguage()
+            result(value)
         case .setAppearance:
             ShareBase.setAppearance(json as! String)
         case .setFiatCoin:

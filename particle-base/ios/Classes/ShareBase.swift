@@ -10,38 +10,6 @@ import ParticleNetworkBase
 import ParticleNetworkChains
 import SwiftyJSON
 
-extension Dictionary {
-    /// - Parameter prettify: set true to prettify string (default is false).
-    /// - Returns: optional JSON String (if applicable).
-    func jsonString(prettify: Bool = false) -> String? {
-        guard JSONSerialization.isValidJSONObject(self) else { return nil }
-        let options = (prettify == true) ? JSONSerialization.WritingOptions.prettyPrinted : JSONSerialization.WritingOptions()
-        guard let jsonData = try? JSONSerialization.data(withJSONObject: self, options: options) else { return nil }
-        return String(data: jsonData, encoding: .utf8)
-    }
-}
-
-extension NSObject {
-    func ResponseFromError(_ error: Error) -> PNResponseError {
-        if let responseError = error as? ParticleNetwork.ResponseError {
-            return PNResponseError(code: responseError.code, message: responseError.message ?? "", data: responseError.data)
-        } else {
-            return PNResponseError(code: nil, message: String(describing: error), data: nil)
-        }
-    }
-}
-
-struct PNResponseError: Codable {
-    let code: Int?
-    let message: String?
-    let data: String?
-}
-
-struct PNStatusModel<T: Codable>: Codable {
-    let status: Bool
-    let data: T
-}
-
 typealias ShareCallback = (Any) -> Void
 
 enum ShareBase {
@@ -69,7 +37,7 @@ enum ShareBase {
         ParticleNetwork.initialize(config: config)
     }
 
-    static func setChainInfo(_ json: String, callback: @escaping ShareCallback) {
+    static func setChainInfo(_ json: String) -> Bool {
         let data = JSON(parseJSON: json)
 
         let chainId = data["chain_id"].intValue
@@ -77,11 +45,10 @@ enum ShareBase {
         let chainType: ChainType = chainName == "solana" ? .solana : .evm
 
         guard let chainInfo = ParticleNetwork.searchChainInfo(by: chainId, chainType: chainType) else {
-            callback(false)
-            return
+            return false
         }
         ParticleNetwork.setChainInfo(chainInfo)
-        callback(true)
+        return true
     }
 
     static func setAppearance(_ json: String) {
@@ -163,36 +130,39 @@ enum ShareBase {
     }
 
     static func setLanguage(_ json: String) {
-        let lanaguage = json.lowercased()
+        let language = json.lowercased()
         /*
          en,
-         zh_hans,
-         zh_hant,
+         zh_hans, zh_cn
+         zh_hant, zh_tw
          ja,
          ko
          */
-        if lanaguage == "en" {
+
+        switch language {
+        case "en":
             ParticleNetwork.setLanguage(.en)
-        } else if lanaguage == "zh_hans" {
-            ParticleNetwork.setLanguage(.zh_Hans)
-        } else if lanaguage == "zh_hant" {
-            ParticleNetwork.setLanguage(.zh_Hant)
-        } else if lanaguage == "ja" {
+        case "ja":
             ParticleNetwork.setLanguage(.ja)
-        } else if lanaguage == "ko" {
+        case "ko":
             ParticleNetwork.setLanguage(.ko)
+        case "zh_hans", "zh_cn":
+            ParticleNetwork.setLanguage(.zh_Hans)
+        case "zh_hant", "zh_tw":
+            ParticleNetwork.setLanguage(.zh_Hant)
+        default:
+            break
         }
     }
 
-    static func getChainInfo(_ callback: ShareCallback) {
+    static func getChainInfo() -> String {
         let chainInfo = ParticleNetwork.getChainInfo()
 
         let jsonString = ["chain_name": chainInfo.name, "chain_id": chainInfo.chainId].jsonString() ?? ""
-
-        callback(jsonString)
+        return jsonString
     }
 
-    static func getLanguage(_ callback: @escaping ShareCallback) {
+    static func getLanguage() -> String {
         var language = ""
 
         switch ParticleNetwork.getLanguage() {
@@ -210,8 +180,7 @@ enum ShareBase {
             language = "en"
         }
 
-        callback(language)
+        return language
     }
 }
-
 
