@@ -71,7 +71,7 @@ class SecurityAccount {
 
   @override
   String toString() {
-    return 'SecurityAccount(email: $email, phone: $phone, hasSetPaymentPassword: $hasSetPaymentPassword, hasSetMasterPassword: $hasSetMasterPassword, paymentPasswordUpdatedAt: $paymentPasswordUpdatedAt, ';
+    return 'SecurityAccount(email: $email, phone: $phone, hasSetPaymentPassword: $hasSetPaymentPassword, hasSetMasterPassword: $hasSetMasterPassword, paymentPasswordUpdatedAt: $paymentPasswordUpdatedAt';
   }
 }
 
