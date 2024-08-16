@@ -129,7 +129,7 @@ class ShareBase {
     }
 
     func setLanguage(_ json: String) {
-        let language = json.lowercased()
+        let languageString = json.lowercased()
         /*
          en,
          zh_hans, zh_cn
@@ -138,19 +138,24 @@ class ShareBase {
          ko
          */
 
-        switch language {
+        var language: Language?
+        switch languageString {
         case "en":
-            ParticleNetwork.setLanguage(.en)
+            language = .en
         case "ja":
-            ParticleNetwork.setLanguage(.ja)
+            language = .ja
         case "ko":
-            ParticleNetwork.setLanguage(.ko)
+            language = .ko
         case "zh_hans", "zh_cn":
-            ParticleNetwork.setLanguage(.zh_Hans)
+            language = .zh_Hans
         case "zh_hant", "zh_tw":
-            ParticleNetwork.setLanguage(.zh_Hant)
+            language = .zh_Hant
         default:
-            break
+            language = nil
+        }
+
+        if language != nil {
+            ParticleNetwork.setLanguage(language!)
         }
     }
 

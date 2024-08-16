@@ -83,8 +83,8 @@ class ConnectLogic {
 
   static void signInWithEthereum() async {
     try {
-      const domain = "login.xyz";
-      const uri = "https://login.xyz/demo#login";
+      const domain = "particle.network";
+      const uri = "https://demo.particle.network";
       ConnectLogic.siwe = await ParticleConnect.signInWithEthereum(
           walletType, getPublicAddress(), domain, uri);
       print(

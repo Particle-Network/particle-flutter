@@ -5,22 +5,10 @@
 //  Created by link on 2022/10/8.
 //
 
-import ConnectCommon
 import Flutter
-import Foundation
-import ParticleConnect
 import ParticleNetworkBase
-import ParticleNetworkChains
-import ParticleWalletConnect
-import ParticleWalletGUI
-import RxSwift
-import SwiftyJSON
-
-public typealias ParticleCallback = FlutterResult
 
 public class ParticleWalletPlugin: NSObject, FlutterPlugin {
-    let bag = DisposeBag()
-
     public enum Method: String {
         case navigatorWallet
         case navigatorTokenReceive
@@ -28,7 +16,6 @@ public class ParticleWalletPlugin: NSObject, FlutterPlugin {
         case navigatorTokenTransactionRecords
         case navigatorNFTSend
         case navigatorNFTDetails
-        case navigatorPay
         case navigatorBuyCrypto
         case navigatorSwap
         case navigatorDappBrowser
@@ -39,6 +26,8 @@ public class ParticleWalletPlugin: NSObject, FlutterPlugin {
         case getPayDisabled
         case setSwapDisabled
         case getSwapDisabled
+        case setBridgeDisabled
+        case getBridgeDisabled
         case switchWallet
         case setSupportDappBrowser
         case setShowLanguageSetting
@@ -49,13 +38,47 @@ public class ParticleWalletPlugin: NSObject, FlutterPlugin {
         case setDisplayNFTContractAddresses
         case setPriorityTokenAddresses
         case setPriorityNFTContractAddresses
-
-        // WalletConnectV2
         case setSupportWalletConnect
         case initializeWalletMetaData
-
         case setCustomWalletName
         case setCustomLocalizable
+
+        var containsParameter: Bool {
+            switch self {
+            case .navigatorWallet,
+                 .navigatorTokenReceive,
+                 .navigatorTokenSend,
+                 .navigatorTokenTransactionRecords,
+                 .navigatorNFTSend,
+                 .navigatorNFTDetails,
+                 .navigatorBuyCrypto,
+                 .navigatorSwap,
+                 .navigatorDappBrowser,
+                 .setShowTestNetwork,
+                 .setShowManageWallet,
+                 .setSupportChain,
+                 .setPayDisabled,
+                 .setSwapDisabled,
+                 .setBridgeDisabled,
+                 .switchWallet,
+                 .setSupportDappBrowser,
+                 .setShowLanguageSetting,
+                 .setShowAppearanceSetting,
+                 .setShowSmartAccountSetting,
+                 .setSupportAddToken,
+                 .setDisplayTokenAddresses,
+                 .setDisplayNFTContractAddresses,
+                 .setPriorityTokenAddresses,
+                 .setPriorityNFTContractAddresses,
+                 .setSupportWalletConnect,
+                 .initializeWalletMetaData,
+                 .setCustomWalletName,
+                 .setCustomLocalizable:
+                return true
+            case .getPayDisabled, .getSwapDisabled, .getBridgeDisabled:
+                return false
+            }
+        }
     }
 
     public static func register(with registrar: FlutterPluginRegistrar) {
@@ -74,462 +97,89 @@ public class ParticleWalletPlugin: NSObject, FlutterPlugin {
 
         let json = call.arguments
 
+        if method.containsParameter, (json as? String?) == nil, (json as? Bool) == nil, (json as? Int) == nil {
+            let response = ParticleNetwork.ResponseError(code: nil, message: "parameters is required")
+            let statusModel = PNStatusModel(status: false, data: response)
+            let data = try! JSONEncoder().encode(statusModel)
+            guard let json = String(data: data, encoding: .utf8) else { return }
+            result(json)
+        }
+
         switch method {
         case .navigatorWallet:
-            self.navigatorWallet((json as? Int) ?? 0)
+            ShareWallet.shared.navigatorWallet(json as! Int)
         case .navigatorTokenReceive:
-            self.navigatorTokenReceive(json as? String)
+            ShareWallet.shared.navigatorTokenReceive(json as! String)
         case .navigatorTokenSend:
-            self.navigatorTokenSend(json as? String)
+            ShareWallet.shared.navigatorTokenSend(json as! String)
         case .navigatorTokenTransactionRecords:
-            self.navigatorTokenTransactionRecords(json as? String)
+            ShareWallet.shared.navigatorTokenTransactionRecords(json as! String)
         case .navigatorNFTSend:
-            self.navigatorNFTSend(json as? String)
+            ShareWallet.shared.navigatorNFTSend(json as! String)
         case .navigatorNFTDetails:
-            self.navigatorNFTDetails(json as? String)
-        case .navigatorPay:
-            self.navigatorPay()
+            ShareWallet.shared.navigatorNFTDetails(json as! String)
         case .navigatorBuyCrypto:
-            self.navigatorBuyCrypto(json as? String)
+            ShareWallet.shared.navigatorBuyCrypto(json as! String)
 
         case .navigatorSwap:
-            self.navigatorSwap(json as? String)
+            ShareWallet.shared.navigatorSwap(json as! String)
         case .navigatorDappBrowser:
-            self.navigatorDappBrowser(json as? String)
+            ShareWallet.shared.navigatorDappBrowser(json as! String)
         case .setShowTestNetwork:
-            self.setShowTestNetwork((json as? Bool) ?? false)
+            ShareWallet.shared.setShowTestNetwork(json as! Bool)
         case .setShowSmartAccountSetting:
-            self.setShowSmartAccountSetting((json as? Bool) ?? false)
+            ShareWallet.shared.setShowSmartAccountSetting(json as! Bool)
         case .setShowManageWallet:
-            self.setShowManageWallet((json as? Bool) ?? true)
+            ShareWallet.shared.setShowManageWallet(json as! Bool)
         case .setSupportChain:
-            self.setSupportChain(json as? String)
+            ShareWallet.shared.setSupportChain(json as! String)
         case .setPayDisabled:
-            self.setPayDisabled((json as? Bool) ?? true)
+            ShareWallet.shared.setPayDisabled(json as! Bool)
         case .getPayDisabled:
-            self.getPayDisabled(flutterResult: result)
+            let value = ShareWallet.shared.getPayDisabled()
+            result(value)
         case .setSwapDisabled:
-            self.setSwapDisabled((json as? Bool) ?? true)
+            ShareWallet.shared.setSwapDisabled(json as! Bool)
         case .getSwapDisabled:
-            self.getSwapDisabled(flutterResult: result)
+            let value = ShareWallet.shared.getSwapDisabled()
+            result(value)
+        case .setBridgeDisabled:
+            ShareWallet.shared.setBridgeDisabled(json as! Bool)
+        case .getBridgeDisabled:
+            let value = ShareWallet.shared.getBridgeDisabled()
+            result(value)
         case .switchWallet:
-            self.switchWallet(json as? String, callback: result)
+            let value = ShareWallet.shared.switchWallet(json as! String)
+            result(value)
         case .setSupportWalletConnect:
-            self.setSupportWalletConnect((json as? Bool) ?? true)
+            ShareWallet.shared.setSupportWalletConnect(json as! Bool)
         case .setSupportDappBrowser:
-            self.setSupportDappBrowser((json as? Bool) ?? true)
+            ShareWallet.shared.setSupportDappBrowser(json as! Bool)
         case .setShowLanguageSetting:
-            self.setShowLanguageSetting((json as? Bool) ?? true)
+            ShareWallet.shared.setShowLanguageSetting(json as! Bool)
         case .setShowAppearanceSetting:
-            self.setShowAppearanceSetting((json as? Bool) ?? true)
+            ShareWallet.shared.setShowAppearanceSetting(json as! Bool)
         case .setSupportAddToken:
-            self.setSupportAddToken((json as? Bool) ?? true)
+            ShareWallet.shared.setSupportAddToken(json as! Bool)
         case .setDisplayTokenAddresses:
-            self.setDisplayTokenAddresses(json as? String)
+            ShareWallet.shared.setDisplayTokenAddresses(json as! String)
         case .setDisplayNFTContractAddresses:
-            self.setDisplayNFTContractAddresses(json as? String)
+            ShareWallet.shared.setDisplayNFTContractAddresses(json as! String)
         case .setPriorityTokenAddresses:
-            self.setPriorityTokenAddresses(json as? String)
+            ShareWallet.shared.setPriorityTokenAddresses(json as! String)
         case .setPriorityNFTContractAddresses:
-            self.setPriorityNFTContractAddresses(json as? String)
+            ShareWallet.shared.setPriorityNFTContractAddresses(json as! String)
         case .initializeWalletMetaData:
-            self.initializeWalletMetaData(json as? String)
-
+            ShareWallet.shared.initializeWalletMetaData(json as! String)
         case .setCustomWalletName:
-            self.setCustomWalletName(json as? String)
+            ShareWallet.shared.setCustomWalletName(json as! String)
         case .setCustomLocalizable:
-            self.setCustomLocalizable(json as? String)
+            ShareWallet.shared.setCustomLocalizable(json as! String)
         }
     }
 }
 
 // MARK: -  Methods
-
-extension ParticleWalletPlugin {
-    func navigatorWallet(_ display: Int) {
-        if display != 0 {
-            PNRouter.navigatorWallet(display: .nft)
-        } else {
-            PNRouter.navigatorWallet(display: .token)
-        }
-    }
-
-    func navigatorTokenReceive(_ json: String?) {
-        PNRouter.navigatorTokenReceive(tokenReceiveConfig: TokenReceiveConfig(tokenAddress: json))
-    }
-
-    func navigatorTokenSend(_ json: String?) {
-        if let json = json {
-            let data = JSON(parseJSON: json)
-            let tokenAddress = data["token_address"].string
-            let toAddress = data["to_address"].string
-            let amount = data["amount"].string
-            let config = TokenSendConfig(tokenAddress: tokenAddress, toAddress: toAddress, amountString: amount)
-
-            PNRouter.navigatorTokenSend(tokenSendConfig: config)
-        } else {
-            PNRouter.navigatorTokenSend()
-        }
-    }
-
-    func navigatorTokenTransactionRecords(_ json: String?) {
-        if let json = json {
-            let config = TokenTransactionRecordsConfig(tokenAddress: json)
-            PNRouter.navigatorTokenTransactionRecords(tokenTransactionRecordsConfig: config)
-        } else {
-            PNRouter.navigatorTokenTransactionRecords()
-        }
-    }
-
-    func navigatorNFTSend(_ json: String?) {
-        guard let json = json else { return }
-
-        let data = JSON(parseJSON: json)
-        let address = data["mint"].stringValue
-        let tokenId = data["token_id"].stringValue
-        let toAddress = data["receiver_address"].string
-        let amount = data["amount"].int
-        let config = NFTSendConfig(address: address, toAddress: toAddress, tokenId: tokenId, amount: BInt(amount ?? 1))
-        PNRouter.navigatorNFTSend(nftSendConfig: config)
-    }
-
-    func navigatorNFTDetails(_ json: String?) {
-        guard let json = json else { return }
-
-        let data = JSON(parseJSON: json)
-        let address = data["mint"].stringValue
-        let tokenId = data["token_id"].stringValue
-        let config = NFTDetailsConfig(address: address, tokenId: tokenId)
-        PNRouter.navigatorNFTDetails(nftDetailsConfig: config)
-    }
-
-    func navigatorPay() {
-        PNRouter.navigatorBuy()
-    }
-
-    func navigatorBuyCrypto(_ json: String?) {
-        guard let json = json else { return }
-        let data = JSON(parseJSON: json)
-        let walletAddress = data["wallet_address"].string
-        let chainId = data["chain_info"]["chain_id"].intValue
-        let chainName = data["chain_info"]["chain_name"].stringValue.lowercased()
-        let chainType: ChainType = chainName == "solana" ? .solana : .evm
-
-        let chainInfo = ParticleNetwork.searchChainInfo(by: chainId, chainType: chainType) ?? ParticleNetwork.getChainInfo()
-
-        let fiatCoin = data["fiat_coin"].string
-        let fiatAmt = data["fiat_amt"].int
-        let cryptoCoin = data["crypto_coin"].string
-        let fixCryptoCoin = data["fix_crypto_coin"].boolValue
-        let fixFiatAmt = data["fix_fiat_amt"].boolValue
-        let fixFiatCoin = data["fix_fiat_coin"].boolValue
-        let theme = data["theme"].stringValue.lowercased()
-        let language = self.getLanguage(from: data["language"].stringValue.lowercased())
-
-        var buyConfig = BuyCryptoConfig()
-        buyConfig.network = chainInfo
-        buyConfig.walletAddress = walletAddress
-        buyConfig.cryptoCoin = cryptoCoin ?? chainInfo.nativeToken.symbol
-        buyConfig.fiatAmt = fiatAmt
-        if fiatCoin != nil {
-            buyConfig.fiatCoin = fiatCoin!
-        }
-        buyConfig.fixCryptoCoin = fixCryptoCoin
-        buyConfig.fixFiatCoin = fixFiatCoin
-        buyConfig.fixFiatAmt = fixFiatAmt
-        buyConfig.theme = theme
-        buyConfig.language = language?.webString ?? Language.en.webString
-
-        let modalStyleString = data["modal_style"].stringValue.lowercased()
-        var modalStyle: ParticleGUIModalStyle
-        if modalStyleString == "fullscreen" {
-            modalStyle = .fullScreen
-        } else {
-            modalStyle = .pageSheet
-        }
-
-        PNRouter.navigatorBuy(buyCryptoConfig: buyConfig, modalStyle: modalStyle)
-    }
-
-    func navigatorSwap(_ json: String?) {
-        if let json = json {
-            let data = JSON(parseJSON: json)
-            let fromTokenAddress = data["from_token_address"].string
-            let toTokenAddress = data["to_token_address"].string
-            let amount = data["amount"].string
-            let config = SwapConfig(fromTokenAddress: fromTokenAddress, toTokenAddress: toTokenAddress, fromTokenAmountString: amount)
-
-            PNRouter.navigatorSwap(swapConfig: config)
-        } else {
-            PNRouter.navigatorSwap()
-        }
-    }
-
-    func navigatorDappBrowser(_ json: String?) {
-        if let json = json {
-            let data = JSON(parseJSON: json)
-            let urlStr = data["url"].stringValue
-            if let url = URL(string: urlStr) {
-                PNRouter.navigatorDappBrowser(url: url)
-            } else {
-                PNRouter.navigatorDappBrowser(url: nil)
-            }
-        } else {
-            PNRouter.navigatorDappBrowser(url: nil)
-        }
-    }
-
-    func setShowTestNetwork(_ isShow: Bool) {
-        ParticleWalletGUI.setShowTestNetwork(isShow)
-    }
-
-    func setShowSmartAccountSetting(_ isShow: Bool) {
-        ParticleWalletGUI.setShowSmartAccountSetting(isShow)
-    }
-
-    func setShowManageWallet(_ isShow: Bool) {
-        ParticleWalletGUI.setShowManageWallet(isShow)
-    }
-
-    func setSupportChain(_ json: String?) {
-        guard let json = json else { return }
-        let chains = JSON(parseJSON: json).arrayValue.compactMap {
-            let chainId = $0["chain_id"].intValue
-            let chainName = $0["chain_name"].stringValue.lowercased()
-            let chainType: ChainType = chainName == "solana" ? .solana : .evm
-            return ParticleNetwork.searchChainInfo(by: chainId, chainType: chainType)
-        }
-        ParticleWalletGUI.setSupportChain(Set(chains))
-    }
-
-    func setPayDisabled(_ disabled: Bool) {
-        ParticleWalletGUI.setPayDisabled(disabled)
-    }
-
-    func getPayDisabled(flutterResult: @escaping FlutterResult) {
-        flutterResult(ParticleWalletGUI.getPayDisabled())
-    }
-
-    func setSwapDisabled(_ disabled: Bool) {
-        ParticleWalletGUI.setSwapDisabled(disabled)
-    }
-
-    func getSwapDisabled(flutterResult: @escaping FlutterResult) {
-        flutterResult(ParticleWalletGUI.getSwapDisabled())
-    }
-
-    func switchWallet(_ json: String?, callback: @escaping ParticleCallback) {
-        guard let json = json else {
-            callback(getErrorJson("json is nil"))
-            return
-        }
-
-        let data = JSON(parseJSON: json)
-        let walletTypeString = data["wallet_type"].stringValue
-        let publicAddress = data["public_address"].stringValue
-        if let walletType = WalletType.fromString(walletTypeString) {
-            let result = ParticleWalletGUI.switchWallet(walletType: walletType, publicAddress: publicAddress)
-            callback(result)
-        } else {
-            print("walletType \(walletTypeString) is not existed")
-            callback(false)
-        }
-    }
-
-    private func getLanguage(from json: String) -> Language? {
-        /*
-         en,
-         zh_hans,
-         zh_hant,
-         ja,
-         ko
-         */
-        var language: Language?
-        if json.lowercased() == "en" {
-            language = .en
-        } else if json.lowercased() == "zh_hans" {
-            language = .zh_Hans
-        } else if json.lowercased() == "zh_hant" {
-            language = .zh_Hant
-        } else if json.lowercased() == "ja" {
-            language = .ja
-        } else if json.lowercased() == "ko" {
-            language = .ko
-        }
-        return language
-    }
-
-    func setSupportDappBrowser(_ enable: Bool) {
-        ParticleWalletGUI.setSupportDappBrowser(enable)
-    }
-
-    func setShowLanguageSetting(_ isShow: Bool) {
-        ParticleWalletGUI.setShowLanguageSetting(isShow)
-    }
-
-    func setShowAppearanceSetting(_ isShow: Bool) {
-        ParticleWalletGUI.setShowAppearanceSetting(isShow)
-    }
-
-    func setSupportAddToken(_ isShow: Bool) {
-        ParticleWalletGUI.setSupportAddToken(isShow)
-    }
-
-    func setDisplayTokenAddresses(_ json: String?) {
-        guard let json = json else {
-            return
-        }
-        let data = JSON(parseJSON: json)
-        let tokenAddresses = data.arrayValue.map {
-            $0.stringValue
-        }
-        ParticleWalletGUI.setDisplayTokenAddresses(tokenAddresses)
-    }
-
-    func setDisplayNFTContractAddresses(_ json: String?) {
-        guard let json = json else {
-            return
-        }
-        let data = JSON(parseJSON: json)
-        let nftContractAddresses = data.arrayValue.map {
-            $0.stringValue
-        }
-        ParticleWalletGUI.setDisplayNFTContractAddresses(nftContractAddresses)
-    }
-
-    func setPriorityTokenAddresses(_ json: String?) {
-        guard let json = json else {
-            return
-        }
-        let data = JSON(parseJSON: json)
-        let tokenAddresses = data.arrayValue.map {
-            $0.stringValue
-        }
-        ParticleWalletGUI.setPriorityTokenAddresses(tokenAddresses)
-    }
-
-    func setPriorityNFTContractAddresses(_ json: String?) {
-        guard let json = json else {
-            return
-        }
-        let data = JSON(parseJSON: json)
-        let nftContractAddresses = data.arrayValue.map {
-            $0.stringValue
-        }
-        ParticleWalletGUI.setPriorityNFTContractAddresses(nftContractAddresses)
-    }
-
-    func setFiatCoin(_ json: String?) {
-        guard let json = json else {
-            return
-        }
-        /*
-             USD,
-             CNY,
-             JPY,
-             HKD,
-             INR,
-             KRW,
-         */
-        if json.lowercased() == "usd" {
-            ParticleNetwork.setFiatCoin(.usd)
-        } else if json.lowercased() == "cny" {
-            ParticleNetwork.setFiatCoin(.cny)
-        } else if json.lowercased() == "jpy" {
-            ParticleNetwork.setFiatCoin(.jpy)
-        } else if json.lowercased() == "hkd" {
-            ParticleNetwork.setFiatCoin(.hkd)
-        } else if json.lowercased() == "inr" {
-            ParticleNetwork.setFiatCoin(.inr)
-        } else if json.lowercased() == "krw" {
-            ParticleNetwork.setFiatCoin(.krw)
-        }
-    }
-
-    func setSupportWalletConnect(_ enable: Bool) {
-        ParticleWalletGUI.setSupportWalletConnect(enable)
-    }
-
-    func initializeWalletMetaData(_ json: String?) {
-        guard let json = json else {
-            return
-        }
-
-        let data = JSON(parseJSON: json)
-
-        let walletName = data["name"].stringValue
-        let walletIconString = data["icon"].stringValue
-        let walletUrlString = data["url"].stringValue
-        let walletDescription = data["description"].stringValue
-
-        let walletConnectV2ProjectId = data["walletConnectProjectId"].stringValue
-
-        let walletIconUrl = URL(string: walletIconString) != nil ? URL(string: walletIconString)! : URL(string: "https://connect.particle.network/icons/512.png")!
-
-        let walletUrl = URL(string: walletUrlString) != nil ? URL(string: walletUrlString)! : URL(string: "https://connect.particle.network")!
-
-        ParticleWalletConnect.initialize(.init(name: walletName, icon: walletIconUrl, url: walletUrl, description: walletDescription, redirectUniversalLink: nil))
-        ParticleWalletConnect.setWalletConnectV2ProjectId(walletConnectV2ProjectId)
-    }
-
-    func setCustomWalletName(_ json: String?) {
-        guard let json = json else {
-            return
-        }
-
-        let data = JSON(parseJSON: json)
-
-        let name = data["name"].stringValue
-        let icon = data["icon"].stringValue
-
-        ConnectManager.setCustomWalletName(walletType: .authCore, name: .init(name: name, icon: icon))
-    }
-
-    func setCustomLocalizable(_ json: String?) {
-        guard let json = json else {
-            return
-        }
-
-        let data = JSON(parseJSON: json).dictionaryValue
-
-        var localizables: [Language: [String: String]] = [:]
-
-        for (key, value) in data {
-            let language = self.getLanguage(from: key.lowercased())
-            if language == nil {
-                continue
-            }
-
-            let itemLocalizables = value.dictionaryValue.mapValues { json in
-                json.stringValue
-            }
-            localizables[language!] = itemLocalizables
-        }
-
-        ParticleWalletGUI.setCustomLocalizable(localizables)
-    }
-}
-
-extension ParticleWalletPlugin {
-    private func subscribeAndCallback<T: Codable>(observable: Single<T>, callback: @escaping ParticleCallback) {
-        observable.subscribe { [weak self] result in
-            guard let self = self else { return }
-            switch result {
-            case .failure(let error):
-                let response = self.ResponseFromError(error)
-                let statusModel = PNStatusModel(status: false, data: response)
-                let data = try! JSONEncoder().encode(statusModel)
-                guard let json = String(data: data, encoding: .utf8) else { return }
-                callback(json)
-            case .success(let signedMessage):
-                let statusModel = PNStatusModel(status: true, data: signedMessage)
-                let data = try! JSONEncoder().encode(statusModel)
-                guard let json = String(data: data, encoding: .utf8) else { return }
-                callback(json)
-            }
-        }.disposed(by: self.bag)
-    }
-}
 
 extension ParticleWalletPlugin {
     private func getErrorJson(_ message: String) -> String {

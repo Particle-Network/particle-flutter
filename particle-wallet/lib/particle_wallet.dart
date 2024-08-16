@@ -66,9 +66,9 @@ class ParticleWallet {
   ///
   /// [toAddress] is the receiver address, default value is empty string.
   ///
-  /// [amount] is token amoun you want to send, default value is 0.
+  /// [amount] is token amount you want to send, such as "1", "100", "10000", default value is null
   static navigatorTokenSend(
-      {String tokenAddress = "", String toAddress = "", int amount = 0}) {
+      {String? tokenAddress, String? toAddress, String? amount}) {
     _channel.invokeMethod(
         'navigatorTokenSend',
         jsonEncode({
@@ -125,6 +125,16 @@ class ParticleWallet {
   /// Get pay feature state.
   static Future<bool> getPayDisabled() async {
     return await _channel.invokeMethod('getPayDisabled');
+  }
+
+    /// Disable bridge feature in SDK, pbridgeay feature in SDK is enable by default.
+  static setBridgeDisabled(bool disable) {
+    _channel.invokeMethod('setBridgeDisabled', disable);
+  }
+
+  /// Get bridge feature state.
+  static Future<bool> getBridgeDisabled() async {
+    return await _channel.invokeMethod('getBridgeDisabled');
   }
 
   /// Disable swap feature in SDK, swap feature in SDK is enable by default.
@@ -226,7 +236,7 @@ class ParticleWallet {
         jsonEncode({
           "wallet_type": walletType.name,
           "public_address": publicAddress,
-          "wallet_name": pnWalletName??"",
+          "wallet_name": pnWalletName ?? "",
         }));
   }
 

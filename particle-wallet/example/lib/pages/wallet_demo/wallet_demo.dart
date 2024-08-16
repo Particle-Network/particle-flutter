@@ -155,7 +155,7 @@ class _WalletDemoPageState extends State<WalletDemoPage> {
                 width: double.infinity,
                 height: 50,
                 child: ElevatedButton(
-                    onPressed: () => {WalletLogic.setSwapDisabled()},
+                    onPressed: () => {WalletLogic.setSwapDisabled(context)},
                     child: const Text(
                       "Set Swap Disabled",
                       style: TextStyle(fontSize: 18),
@@ -168,7 +168,7 @@ class _WalletDemoPageState extends State<WalletDemoPage> {
                 width: double.infinity,
                 height: 50,
                 child: ElevatedButton(
-                    onPressed: () => {WalletLogic.setPayDisabled()},
+                    onPressed: () => {WalletLogic.setPayDisabled(context)},
                     child: const Text(
                       "Set Pay Disabled",
                       style: TextStyle(fontSize: 18),
@@ -233,7 +233,7 @@ class _WalletDemoPageState extends State<WalletDemoPage> {
                 width: double.infinity,
                 height: 50,
                 child: ElevatedButton(
-                    onPressed: () => {WalletLogic.setShowTestNetwork()},
+                    onPressed: () => {WalletLogic.setShowTestNetwork(context)},
                     child: const Text(
                       "Set Show Test Network",
                       style: TextStyle(fontSize: 18),
@@ -246,7 +246,7 @@ class _WalletDemoPageState extends State<WalletDemoPage> {
                 width: double.infinity,
                 height: 50,
                 child: ElevatedButton(
-                    onPressed: () => {WalletLogic.setShowSmartAccountSetting()},
+                    onPressed: () => {WalletLogic.setShowSmartAccountSetting(context)},
                     child: const Text(
                       "Set Show Smart Account Setting",
                       style: TextStyle(fontSize: 18),
@@ -259,7 +259,7 @@ class _WalletDemoPageState extends State<WalletDemoPage> {
                 width: double.infinity,
                 height: 50,
                 child: ElevatedButton(
-                    onPressed: () => {WalletLogic.setShowManageWallet()},
+                    onPressed: () => {WalletLogic.setShowManageWallet(context)},
                     child: const Text(
                       "Set Show Manage Wallet",
                       style: TextStyle(fontSize: 18),
@@ -272,7 +272,7 @@ class _WalletDemoPageState extends State<WalletDemoPage> {
                 width: double.infinity,
                 height: 50,
                 child: ElevatedButton(
-                    onPressed: () => {WalletLogic.setShowLanguageSetting()},
+                    onPressed: () => {WalletLogic.setShowLanguageSetting(context)},
                     child: const Text(
                       "Set show language setting",
                       style: TextStyle(fontSize: 18),
@@ -285,7 +285,7 @@ class _WalletDemoPageState extends State<WalletDemoPage> {
                 width: double.infinity,
                 height: 50,
                 child: ElevatedButton(
-                    onPressed: () => {WalletLogic.setShowAppearanceSetting()},
+                    onPressed: () => {WalletLogic.setShowAppearanceSetting(context)},
                     child: const Text(
                       "Set Show Appearance Setting",
                       style: TextStyle(fontSize: 18),
@@ -298,7 +298,7 @@ class _WalletDemoPageState extends State<WalletDemoPage> {
                 width: double.infinity,
                 height: 50,
                 child: ElevatedButton(
-                    onPressed: () => {WalletLogic.setSupportAddToken()},
+                    onPressed: () => {WalletLogic.setSupportAddToken(context)},
                     child: const Text(
                       "Set support add token",
                       style: TextStyle(fontSize: 18),
