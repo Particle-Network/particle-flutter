@@ -27,7 +27,8 @@ class AAAuthCoreLogic {
 
   static void connectGoogle() async {
     try {
-      final userInfo = await ParticleAuthCore.connect(LoginType.google);
+      final userInfo = await ParticleAuthCore.connect(LoginType.google,
+          prompt: SocialLoginPrompt.select_account);
       print("login google: $userInfo");
       showToast("login google: $userInfo");
     } catch (error) {
@@ -99,8 +100,8 @@ class AAAuthCoreLogic {
           await TransactionMock.mockEvmSendNative(smartAccountAddress!);
       print("transaction: $transaction");
       List<String> transactions = <String>[transaction];
-      var result =
-          await ParticleAA.rpcGetFeeQuotes(smartAccountAddress!, transactions);
+      final eoaAddress = await Evm.getAddress();
+      var result = await ParticleAA.rpcGetFeeQuotes(eoaAddress, transactions);
       print("rpcGetFeeQuotes: $result");
       showToast("rpcGetFeeQuotes: $result");
     } catch (error) {

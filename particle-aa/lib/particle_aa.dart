@@ -13,19 +13,11 @@ class ParticleAA {
   /// Init particle-aa SDK
   ///
   /// [accountName] AA biconomy dapp keys
-  /// 
-  /// [biconomyApiKeys] Optional, if you'd like to use Particle Paymaster, don't need to set it. if you'd like to use biconomy paymaster, should set it's api key, key is chain id number, value is your biconomy api key string.
-  static init(AccountName accountName,
-      {Map<int, String>? biconomyApiKeys}) {
-    // Convert integer keys to strings
-    var stringKeyMap =
-        biconomyApiKeys?.map((key, value) => MapEntry(key.toString(), value));
-
+  static init(AccountName accountName) {
     if (Platform.isIOS) {
       _channel.invokeMethod(
           'initialize',
           jsonEncode({
-            "biconomy_app_keys": stringKeyMap,
             "name": accountName.name,
             "version": accountName.version,
           }));
@@ -33,7 +25,6 @@ class ParticleAA {
       _channel.invokeMethod(
           'init',
           jsonEncode({
-            "biconomy_app_keys": stringKeyMap,
             "name": accountName.name,
             "version": accountName.version,
           }));

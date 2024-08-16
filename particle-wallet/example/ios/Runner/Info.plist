@@ -56,12 +56,14 @@
 	<array>
 		<string>_dartVmService._tcp</string>
 	</array>
-	<key>NSCameraUsageDescription</key>
-	<string>We use the camera to scan barcodes</string>
+    <key>NSPhotoLibraryUsageDescription</key>
+    <string>We need access in order to open photos of barcodes</string>
+    <key>NSCameraUsageDescription</key>
+    <string>We use the camera to scan barcodes</string>
+    <key>NSFaceIDUsageDescription</key>
+    <string>We use Face ID for secure access to the app.</string>
 	<key>NSLocalNetworkUsageDescription</key>
 	<string>Allow Flutter tools on your computer to connect and debug your application</string>
-	<key>NSPhotoLibraryUsageDescription</key>
-	<string>We need access in order to open photos of barcodes</string>
 	<key>UIApplicationSupportsIndirectInputEvents</key>
 	<true/>
 	<key>UILaunchStoryboardName</key>
