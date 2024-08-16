@@ -64,6 +64,9 @@ class ParticleBasePlugin : FlutterPlugin, MethodCallHandler, ActivityAware {
             "setFiatCoin" -> {
                 BaseBridge.setFiatCoin(call.arguments as String)
             }
+            "setUnsupportCountries" -> {
+                BaseBridge.setUnsupportCountries(call.arguments as String)
+            }
 
       
             else -> result.notImplemented()

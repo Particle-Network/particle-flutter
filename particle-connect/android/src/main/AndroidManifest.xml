@@ -1,5 +1,4 @@
-<manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="network.particle.connect_plugin.particle_connect">
+<manifest xmlns:android="http://schemas.android.com/apk/res/android">
 
     <application>
 

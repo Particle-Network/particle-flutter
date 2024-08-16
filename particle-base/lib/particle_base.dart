@@ -146,7 +146,7 @@ class ParticleBase {
     if (Platform.isIOS) {
       _channel.invokeMethod("setThemeColor", hexColor);
     } else {
-      // todo
+      // not supported
     }
   }
 

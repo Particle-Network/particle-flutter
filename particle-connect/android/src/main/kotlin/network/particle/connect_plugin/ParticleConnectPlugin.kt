@@ -65,6 +65,11 @@ class ParticleConnectPlugin : FlutterPlugin, MethodCallHandler, ActivityAware, E
                 ConnectBridge.connectWalletConnect(result, events)
             }
 
+
+            "connectWithConnectKitConfig" -> {
+                ConnectBridge.connectWithConnectKitConfig(call.arguments as String, result, events)
+            }
+
             "qrCodeUri" -> {
                 ConnectBridge.qrCodeUri(result)
             }
@@ -117,7 +122,7 @@ class ParticleConnectPlugin : FlutterPlugin, MethodCallHandler, ActivityAware, E
                 ConnectBridge.exportPrivateKey(call.arguments as String, result)
             }
 
-            "login" -> {
+            "signInWithEthereum" -> {
                 ConnectBridge.login(call.arguments as String, result)
             }
 

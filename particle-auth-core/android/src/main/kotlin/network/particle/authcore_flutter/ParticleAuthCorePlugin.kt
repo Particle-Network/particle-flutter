@@ -161,6 +161,16 @@ class ParticleAuthCorePlugin : FlutterPlugin, MethodCallHandler, ActivityAware {
             "getBlindEnable" -> {
                 AuthCoreBridge.getBlindEnable(result)
             }
+
+            "sendEmailCode"->{
+                AuthCoreBridge.sendEmailCode(call.arguments as String, result)
+            }
+            "sendPhoneCode"->{
+                AuthCoreBridge.sendPhoneCode(call.arguments as String, result)
+            }
+            "connectWithCode"->{
+                AuthCoreBridge.connectWithCode(call.arguments as String, result)
+            }
             else -> result.notImplemented()
         }
     }

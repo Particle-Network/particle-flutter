@@ -1,14 +1,14 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    package="network.particle.connect_plugin.example">
+    xmlns:tools="http://schemas.android.com/tools">
    <application
         android:label="particle_connect_example"
        android:supportsRtl="true"
        android:fullBackupContent="@xml/pn_backup_rules"
-       tools:replace="android:fullBackupContent"
+       tools:replace="android:fullBackupContent,android:label"
        android:usesCleartextTraffic="true"
         android:icon="@mipmap/ic_launcher">
         <activity
+
             android:name="network.particle.connect_plugin.example.MainActivity"
             android:exported="true"
             android:launchMode="singleTop"

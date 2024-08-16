@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 import 'package:particle_base/particle_base.dart';
 import 'package:particle_auth_core_example/auth_core_demo/auth_core_logic.dart';
@@ -14,19 +13,24 @@ class AuthDemoPage extends StatefulWidget {
 }
 
 class AuthDemoPageState extends State<AuthDemoPage> {
+  final TextEditingController _controllerPhoneEmail = TextEditingController(text: "");
+  final TextEditingController _controllerCode = TextEditingController(text: "");
+
   TextEditingController accountCtrl = TextEditingController();
   List<LoginType> socialLoginTypes = LoginType.values.where((type) {
-    return type != LoginType.email &&
-        type != LoginType.phone &&
-        type != LoginType.jwt;
+    return type != LoginType.email && type != LoginType.phone && type != LoginType.jwt;
   }).toList();
 
   LoginType loginType = LoginType.email;
-  Map<SupportAuthType, bool> selectedAuthTypes = {
-    for (var item in SupportAuthType.values) item: true
-  };
+  Map<SupportAuthType, bool> selectedAuthTypes = {for (var item in SupportAuthType.values) item: true};
   bool selectedLoginTypesShow = false;
   bool blindEnable = false;
+
+  @override
+  void initState() {
+    super.initState();
+    AuthCoreLogic.init(Env.dev);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -37,68 +41,47 @@ class AuthDemoPageState extends State<AuthDemoPage> {
       body: SingleChildScrollView(
         child: Column(
           children: <Widget>[
-            ItemButton("Init", () => AuthCoreLogic.init(Env.dev)),
             ItemButton(
                 "SelectChain",
                 () => Navigator.push(
                       context,
-                      MaterialPageRoute(
-                          builder: (context) => const SelectChainPage()),
+                      MaterialPageRoute(builder: (context) => const SelectChainPage()),
                     )),
-            ItemButton(
-                "Connect With JWT", () => AuthCoreLogic.connectWithJWT()),
+            ItemButton("Connect With JWT", () => AuthCoreLogic.connectWithJWT()),
             connectWithParams(),
+            connectWithPhoneEmailCustomUI(),
             ItemButton("Get user info", () => AuthCoreLogic.getUserInfo()),
             ItemButton("Disconnect", () => AuthCoreLogic.disconnect()),
             ItemButton("IsConnected", () => AuthCoreLogic.isConnected()),
             ItemButton("Switch chain", () => AuthCoreLogic.swicthChain()),
             ItemButton("Evm get address", () => AuthCoreLogic.evmGetAddress()),
             blindStatus(),
-            ItemButton(
-                "Evm personal sign", () => AuthCoreLogic.evmPersonalSign()),
-            ItemButton("Evm personal sign unique",
-                () => AuthCoreLogic.evmPersonalSignUnique()),
-            ItemButton(
-                "Evm sign typed data", () => AuthCoreLogic.evmSignTypedData()),
-            ItemButton("Evm sign typed data unique",
-                () => AuthCoreLogic.evmSignTypedDataUnique()),
-            ItemButton("Evm send transaction",
-                () => AuthCoreLogic.evmSendTransaction()),
-            ItemButton(
-                "Solana get address", () => AuthCoreLogic.solanaGetAddress()),
-            ItemButton(
-                "Solana sign message", () => AuthCoreLogic.solanaSignMessage()),
-            ItemButton("Solana sign transation",
-                () => AuthCoreLogic.solanaSignTransaction()),
-            ItemButton("Solana sign all transactions",
-                () => AuthCoreLogic.solanaSignAllTransactions()),
-            ItemButton("Solana sign and send transaction",
-                () => AuthCoreLogic.solanaSignAndSendTransaction()),
-            ItemButton("Open account and security",
-                () => AuthCoreLogic.openAccountAndSecurity()),
-            ItemButton("Change master password",
-                () => AuthCoreLogic.changeMasterPassword()),
+            ItemButton("Evm personal sign", () => AuthCoreLogic.evmPersonalSign()),
+            ItemButton("Evm personal sign unique", () => AuthCoreLogic.evmPersonalSignUnique()),
+            ItemButton("Evm sign typed data", () => AuthCoreLogic.evmSignTypedData()),
+            ItemButton("Evm sign typed data unique", () => AuthCoreLogic.evmSignTypedDataUnique()),
+            ItemButton("Evm send transaction", () => AuthCoreLogic.evmSendTransaction()),
+            ItemButton("Solana get address", () => AuthCoreLogic.solanaGetAddress()),
+            ItemButton("Solana sign message", () => AuthCoreLogic.solanaSignMessage()),
+            ItemButton("Solana sign transation", () => AuthCoreLogic.solanaSignTransaction()),
+            ItemButton("Solana sign all transactions", () => AuthCoreLogic.solanaSignAllTransactions()),
+            ItemButton("Solana sign and send transaction", () => AuthCoreLogic.solanaSignAndSendTransaction()),
+            ItemButton("Open account and security", () => AuthCoreLogic.openAccountAndSecurity()),
+            ItemButton("Change master password", () => AuthCoreLogic.changeMasterPassword()),
             ItemButton("Read contract", () => AuthCoreLogic.readContract()),
             ItemButton("Write contract", () => AuthCoreLogic.writeContract()),
-            ItemButton("Write contract then send",
-                () => AuthCoreLogic.writeContractThenSendTransaction()),
+            ItemButton("Write contract then send", () => AuthCoreLogic.writeContractThenSendTransaction()),
             ItemButton("Send evm native", () => AuthCoreLogic.sendEvmNative()),
             ItemButton("Send evm token", () => AuthCoreLogic.sendEvmToken()),
             ItemButton("Send evm nft 721", () => AuthCoreLogic.sendEvmNFT721()),
-            ItemButton(
-                "Send evm nft 1155", () => AuthCoreLogic.sendEvmNFT1155()),
-            ItemButton(
-                "Has master password", () => AuthCoreLogic.hasMasterPassword()),
-            ItemButton("Has payment password",
-                () => AuthCoreLogic.hasPaymentPassword()),
-            ItemButton(
-                "getTokensAndNFTs", () => AuthCoreLogic.getTokensAndNFTs()),
+            ItemButton("Send evm nft 1155", () => AuthCoreLogic.sendEvmNFT1155()),
+            ItemButton("Has master password", () => AuthCoreLogic.hasMasterPassword()),
+            ItemButton("Has payment password", () => AuthCoreLogic.hasPaymentPassword()),
+            ItemButton("getTokensAndNFTs", () => AuthCoreLogic.getTokensAndNFTs()),
             ItemButton("getTokens", () => AuthCoreLogic.getTokens()),
             ItemButton("getNFTs", () => AuthCoreLogic.getNFTs()),
-            ItemButton("getTransactionsByAddress",
-                () => AuthCoreLogic.getTransactionsByAddress()),
-            ItemButton("getTokenByTokenAddresses",
-                () => AuthCoreLogic.getTokenByTokenAddresses()),
+            ItemButton("getTransactionsByAddress", () => AuthCoreLogic.getTransactionsByAddress()),
+            ItemButton("getTokenByTokenAddresses", () => AuthCoreLogic.getTokenByTokenAddresses()),
             ItemButton("getPrice", () => AuthCoreLogic.getPrice()),
           ],
         ),
@@ -194,13 +177,48 @@ class AuthDemoPageState extends State<AuthDemoPage> {
             ),
             ItemButton(
                 "Connect",
-                () => AuthCoreLogic.connect(
-                    loginType,
-                    accountCtrl.text,
-                    selectedAuthTypes.entries
-                        .where((e) => e.value)
-                        .map((e) => e.key)
-                        .toList())),
+                () => AuthCoreLogic.connect(loginType, accountCtrl.text,
+                    selectedAuthTypes.entries.where((e) => e.value).map((e) => e.key).toList())),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Card connectWithPhoneEmailCustomUI() {
+    return Card(
+      elevation: 5,
+      child: Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: Column(
+          children: [
+            const Text(
+              "Connect with Phone or Email CustomUI",
+              style: TextStyle(fontSize: 18),
+            ),
+            TextField(
+              controller: _controllerPhoneEmail,
+              decoration: const InputDecoration(
+                labelText: 'Email/Phone',
+                hintText: 'Email/Phone',
+                border: UnderlineInputBorder(),
+              ),
+            ),
+            ItemButton(
+                "Send Code",
+                () => AuthCoreLogic.sendCode(_controllerPhoneEmail.text),
+            ),
+            TextField(
+              controller: _controllerCode,
+              decoration: const InputDecoration(
+                labelText: 'Code',
+                hintText: 'Code',
+                border: UnderlineInputBorder(),
+              ),
+            ),
+            ItemButton(
+                "Connect With Code",
+                    () => AuthCoreLogic.connectWithCode(_controllerPhoneEmail.text, _controllerCode.text)),
           ],
         ),
       ),
@@ -237,6 +255,7 @@ class AuthDemoPageState extends State<AuthDemoPage> {
 class ItemButton extends StatelessWidget {
   final String text;
   final VoidCallback onPressed;
+
   const ItemButton(this.text, this.onPressed, {super.key});
 
   @override

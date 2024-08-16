@@ -1,3 +1,5 @@
+import 'dart:io';
+
 class Account {
   String publicAddress;
   String? name;
@@ -13,8 +15,12 @@ class Account {
 
   factory Account.fromJson(Map<String, dynamic> json) {
     String walletType = "";
-    if (json.containsKey("walletType") && json['walletType'] != null) {
-      walletType = (json['walletType'] as Map<String, dynamic>).keys.first;
+    if(Platform.isIOS){
+      if (json.containsKey("walletType") && json['walletType'] != null) {
+        walletType = (json['walletType'] as Map<String, dynamic>).keys.first;
+      }
+    }else{
+      walletType = json['walletType'] ?? "";
     }
     return Account(
       json['publicAddress'],

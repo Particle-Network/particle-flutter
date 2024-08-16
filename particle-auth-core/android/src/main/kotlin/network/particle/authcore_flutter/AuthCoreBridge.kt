@@ -1,6 +1,7 @@
 package network.particle.authcore_flutter;
 
 import android.app.Activity
+import android.provider.ContactsContract.CommonDataKinds.Phone
 import com.blankj.utilcode.util.GsonUtils
 import com.blankj.utilcode.util.LogUtils
 import com.google.gson.reflect.TypeToken
@@ -8,6 +9,7 @@ import com.particle.auth.AuthCore
 import com.particle.auth.data.AuthCoreServiceCallback
 import com.particle.auth.data.AuthCoreSignCallback
 import com.particle.auth.data.MasterPwdServiceCallback
+import com.particle.auth.data.req.LoginReq
 import com.particle.base.ParticleNetwork
 import com.particle.base.data.ErrorInfo
 import com.particle.base.data.SignAllOutput
@@ -18,8 +20,10 @@ import com.particle.base.iaa.FeeModeGasless
 import com.particle.base.iaa.FeeModeNative
 import com.particle.base.iaa.FeeModeToken
 import com.particle.base.iaa.MessageSigner
+import com.particle.base.model.CodeReq
 import com.particle.base.model.LoginPageConfig
 import com.particle.base.model.LoginType
+import com.particle.base.model.Result1Callback
 import com.particle.base.model.ResultCallback
 import com.particle.base.model.SupportLoginType
 import com.particle.base.model.UserInfo
@@ -138,7 +142,7 @@ object AuthCoreBridge {
                     }
                 }
             })
-        }else{
+        } else {
             AuthCore.setMasterPassword(object : MasterPwdServiceCallback {
                 override fun failure(errMsg: ErrorInfo) {
                     try {
@@ -329,6 +333,47 @@ object AuthCoreBridge {
 
     fun getBlindEnable(result: MethodChannel.Result) {
         result.success(AuthCore.getBlindEnable())
+    }
+
+    fun sendPhoneCode(phone: String, result: MethodChannel.Result) {
+        AuthCore.sendCode(CodeReq(phone=phone),object :Result1Callback{
+            override fun failure(error: ErrorInfo) {
+                result.success(FlutterCallBack.failed(error).toGson())
+            }
+
+            override fun success() {
+                result.success(FlutterCallBack.success(true).toGson())
+            }
+        })
+    }
+
+    fun sendEmailCode(email: String, result: MethodChannel.Result) {
+        AuthCore.sendCode(CodeReq(email=email),object :Result1Callback{
+            override fun failure(error: ErrorInfo) {
+                result.success(FlutterCallBack.failed(error).toGson())
+            }
+
+            override fun success() {
+                result.success(FlutterCallBack.success(true).toGson())
+            }
+        })
+    }
+
+    fun connectWithCode(phoneCodeJson: String, result: MethodChannel.Result) {
+        val req = GsonUtils.fromJson<LoginReq>(phoneCodeJson,LoginReq::class.java)
+        AuthCore.connect(req, connectCallback = object :AuthCoreServiceCallback<UserInfo>{
+            override fun failure(errMsg: ErrorInfo) {
+                result.success(FlutterCallBack.failed(errMsg).toGson())
+            }
+
+            override fun success(output: UserInfo) {
+                try {
+                    result.success(FlutterCallBack.success(output).toGson())
+                } catch (_: Exception) {
+
+                }
+            }
+        })
     }
 
     fun sendTransaction(transactionParams: String, result: MethodChannel.Result) {

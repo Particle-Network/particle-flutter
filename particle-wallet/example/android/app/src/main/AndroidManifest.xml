@@ -1,13 +1,13 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    package="network.particle.wallet_plugin.example">
+>
 
     <application
         android:name="${applicationName}"
         android:fullBackupContent="@xml/pn_backup_rules"
         android:icon="@mipmap/ic_launcher"
         android:label="particle_wallet_example"
-        tools:replace="android:fullBackupContent">
+        tools:replace="android:fullBackupContent,android:label">
         <activity
             android:name="network.particle.wallet_plugin.example.MainActivity"
             android:configChanges="orientation|keyboardHidden|keyboard|screenSize|smallestScreenSize|locale|layoutDirection|fontScale|screenLayout|density|uiMode"

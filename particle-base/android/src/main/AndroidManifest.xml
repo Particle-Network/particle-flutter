@@ -1,8 +1,6 @@
-<manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="network.particle.auth_plugin.particle_base">
+<manifest xmlns:android="http://schemas.android.com/apk/res/android">
 
     <application>
-
 
         <meta-data
             android:name="particle.network.project_id"
