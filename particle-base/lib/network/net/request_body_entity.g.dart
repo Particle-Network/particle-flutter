@@ -8,7 +8,7 @@ part of 'request_body_entity.dart';
 
 RequestBodyEntity _$RequestBodyEntityFromJson(Map<String, dynamic> json) =>
     RequestBodyEntity()
-      ..chainId = json['chainId'] as int?
+      ..chainId = (json['chainId'] as num?)?.toInt()
       ..jsonrpc = json['jsonrpc'] as String?
       ..id = json['id'] as String?
       ..method = json['method'] as String?

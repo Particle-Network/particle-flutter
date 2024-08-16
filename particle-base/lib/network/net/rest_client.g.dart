@@ -22,7 +22,7 @@ class _SolanaRpcApi implements SolanaRpcApi {
 
   @override
   Future<String> rpc(RequestBodyEntity requestBody) async {
-    const _extra = <String, dynamic>{};
+    final _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{};
     final _headers = <String, dynamic>{};
     final _data = <String, dynamic>{};
@@ -94,7 +94,7 @@ class _EvmRpcApi implements EvmRpcApi {
 
   @override
   Future<String> rpc(RequestBodyEntity requestBody) async {
-    const _extra = <String, dynamic>{};
+    final _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{};
     final _headers = <String, dynamic>{};
     final _data = <String, dynamic>{};

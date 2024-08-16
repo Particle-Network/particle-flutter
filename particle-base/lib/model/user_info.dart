@@ -155,6 +155,7 @@ class UserInfo {
   @JsonKey(name: "security_account")
   final SecurityAccount? securityAccount;
   final String? signature;
+  final String? message;
 
   UserInfo({
     required this.uuid,
@@ -188,6 +189,7 @@ class UserInfo {
     this.jwtId,
     this.securityAccount,
     this.signature,
+    this.message,
   });
 
   factory UserInfo.fromJson(Map<String, dynamic> json) =>
@@ -197,6 +199,6 @@ class UserInfo {
 
   @override
   String toString() {
-    return 'UserInfo(uuid: $uuid, token: $token, wallets: $wallets, name: $name, avatar: $avatar, phone: $phone, email: $email, facebookId: $facebookId, facebookEmail: $facebookEmail, googleId: $googleId, googleEmail: $googleEmail, appleId: $appleId, appleEmail: $appleEmail, discordId: $discordId, discordEmail: $discordEmail, githubId: $githubId, githubEmail: $githubEmail, linkedinId: $linkedinId, linkedinEmail: $linkedinEmail, microsoftId: $microsoftId, microsoftEmail: $microsoftEmail, twitchId: $twitchId, twitchEmail: $twitchEmail, twitterId: $twitterId, twitterEmail: $twitterEmail, created_at: $createdAt, updated_at: $updatedAt, thirdparty_userInfo: $thirdpartyUserInfo, jwtId: $jwtId, security_account: $securityAccount, signature: $signature)';
+    return 'UserInfo(uuid: $uuid, token: $token, wallets: $wallets, name: $name, avatar: $avatar, phone: $phone, email: $email, facebookId: $facebookId, facebookEmail: $facebookEmail, googleId: $googleId, googleEmail: $googleEmail, appleId: $appleId, appleEmail: $appleEmail, discordId: $discordId, discordEmail: $discordEmail, githubId: $githubId, githubEmail: $githubEmail, linkedinId: $linkedinId, linkedinEmail: $linkedinEmail, microsoftId: $microsoftId, microsoftEmail: $microsoftEmail, twitchId: $twitchId, twitchEmail: $twitchEmail, twitterId: $twitterId, twitterEmail: $twitterEmail, created_at: $createdAt, updated_at: $updatedAt, thirdparty_userInfo: $thirdpartyUserInfo, jwtId: $jwtId, security_account: $securityAccount, signature: $signature, message: $message)';
   }
 }

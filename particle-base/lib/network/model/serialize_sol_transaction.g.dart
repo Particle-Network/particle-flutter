@@ -11,7 +11,7 @@ SerializeSOLTransaction _$SerializeSOLTransactionFromJson(
     SerializeSOLTransaction()
       ..sender = json['sender'] as String
       ..receiver = json['receiver'] as String
-      ..lamports = json['lamports'] as int;
+      ..lamports = (json['lamports'] as num).toInt();
 
 Map<String, dynamic> _$SerializeSOLTransactionToJson(
         SerializeSOLTransaction instance) =>

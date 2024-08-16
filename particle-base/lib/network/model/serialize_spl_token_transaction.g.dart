@@ -12,7 +12,7 @@ SerializeSplTokenTransaction _$SerializeSplTokenTransactionFromJson(
       ..sender = json['sender'] as String
       ..receiver = json['receiver'] as String
       ..mint = json['mint'] as String
-      ..amount = json['amount'] as int;
+      ..amount = (json['amount'] as num).toInt();
 
 Map<String, dynamic> _$SerializeSplTokenTransactionToJson(
         SerializeSplTokenTransaction instance) =>

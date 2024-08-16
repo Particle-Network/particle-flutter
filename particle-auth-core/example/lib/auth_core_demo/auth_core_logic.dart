@@ -32,6 +32,7 @@ class AuthCoreLogic {
       final userInfo = await ParticleAuthCore.connect(loginType,
           account: account,
           supportAuthTypes: supportAuthTypes,
+          prompt: SocialLoginPrompt.select_account,
           loginPageConfig: LoginPageConfig(
               "https://static.particle.network/wallet-icons/Particle-iOS.png",
               "Flutter Example",

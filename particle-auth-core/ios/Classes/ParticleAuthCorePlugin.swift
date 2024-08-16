@@ -80,7 +80,7 @@ public class ParticleAuthCorePlugin: NSObject, FlutterPlugin {
 
         let json = call.arguments
 
-        if method.containsParameter, (json as! String?) == nil {
+        if method.containsParameter, (json as? String?) == nil, (json as? Bool) == nil {
             let response = ParticleNetwork.ResponseError(code: nil, message: "parameters is required")
             let statusModel = PNStatusModel(status: false, data: response)
             let data = try! JSONEncoder().encode(statusModel)
@@ -126,7 +126,7 @@ public class ParticleAuthCorePlugin: NSObject, FlutterPlugin {
             let value = ShareAuthCore.shared.evmGetAddress()
             result(value)
         case .getUserInfo:
-            let value = ShareAuthCore.shared.getUserInfo
+            let value = ShareAuthCore.shared.getUserInfo()
             result(value)
         case .openAccountAndSecurity:
             ShareAuthCore.shared.openAccountAndSecurity(result)
@@ -137,7 +137,7 @@ public class ParticleAuthCorePlugin: NSObject, FlutterPlugin {
         case .changeMasterPassword:
             ShareAuthCore.shared.changeMasterPassword(result)
         case .setBlindEnable:
-            ShareAuthCore.shared.setBlindEnable(json as? Bool ?? false)
+            ShareAuthCore.shared.setBlindEnable(json as! Bool)
         case .getBlindEnable:
             let value = ShareAuthCore.shared.getBlindEnable()
             result(value)

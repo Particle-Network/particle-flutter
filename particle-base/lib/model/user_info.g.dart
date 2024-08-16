@@ -108,6 +108,7 @@ UserInfo _$UserInfoFromJson(Map<String, dynamic> json) => UserInfo(
           : SecurityAccount.fromJson(
               json['security_account'] as Map<String, dynamic>),
       signature: json['signature'] as String?,
+      message: json['message'] as String?,
     );
 
 Map<String, dynamic> _$UserInfoToJson(UserInfo instance) => <String, dynamic>{
@@ -142,4 +143,5 @@ Map<String, dynamic> _$UserInfoToJson(UserInfo instance) => <String, dynamic>{
       'jwt_id': instance.jwtId,
       'security_account': instance.securityAccount,
       'signature': instance.signature,
+      'message': instance.message,
     };
