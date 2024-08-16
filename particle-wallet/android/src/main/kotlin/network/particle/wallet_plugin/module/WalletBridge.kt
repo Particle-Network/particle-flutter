@@ -129,7 +129,7 @@ object WalletBridge {
             val jsonObject = JSONObject(json);
             val tokenAddress = jsonObject.getString("token_address");
             val toAddress = jsonObject.getString("to_address");
-            val amount = jsonObject.getLong("amount");
+            val amount = jsonObject.getString("amount").toLong()
             val params = WalletSendParams(
                 tokenAddress, toAddress, BigInteger.valueOf(amount)
             );
@@ -323,6 +323,15 @@ object WalletBridge {
 
     fun getEnableSwap(result: MethodChannel.Result) {
         result.success(!ParticleWallet.getSwapDisabled())
+    }
+
+    fun getBridgeDisabled(result: MethodChannel.Result){
+        result.success(ParticleWallet.getBridgeDisabled())
+    }
+
+    fun setBridgeDisabled(disable: Boolean) {
+        LogUtils.d("setBridgeDisabled", disable.toString());
+        ParticleWallet.setBridgeDisabled(disable)
     }
 
     fun getPayDisabled(result: MethodChannel.Result) {

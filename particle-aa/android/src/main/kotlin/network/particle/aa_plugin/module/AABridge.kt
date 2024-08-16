@@ -4,6 +4,7 @@ import androidx.annotation.Keep
 import com.blankj.utilcode.util.GsonUtils
 import com.blankj.utilcode.util.LogUtils
 import com.particle.base.ParticleNetwork
+import com.particle.base.data.ErrorInfo
 import com.particle.base.isSupportedERC4337
 import com.particle.erc4337.ParticleNetworkAA.initAAMode
 
@@ -32,7 +33,7 @@ object AABridge {
     fun init(activity: Activity, initParams: String?) {
         LogUtils.d("init", initParams)
         val initData = GsonUtils.fromJson(initParams, BiconomyInitData::class.java)
-        ParticleNetwork.initAAMode(initData.dAppKeys)
+        ParticleNetwork.initAAMode()
         val providerName = initData.name
         val providerVersion = initData.version
         LogUtils.d("providerName", providerName)
@@ -71,7 +72,7 @@ object AABridge {
                 val isDeploy = ParticleNetwork.getAAService().isDeploy(eoaAddress)
                 result.success(FlutterCallBack.success(isDeploy).toGson())
             } catch (e: Exception) {
-                result.success(FlutterCallBack.failed(e.message ?: "failed").toGson())
+                result.success(FlutterCallBack.failed(ErrorInfo("not deployed",ErrorInfo.UNKNOWN_ERROR)).toGson())
             }
         }
     }

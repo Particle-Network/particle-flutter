@@ -1,5 +1,5 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="network.particle.aa_plugin">
+   >
 
     <application>
         <!--   Particle Network config start     -->
