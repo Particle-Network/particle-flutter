@@ -176,15 +176,43 @@ class _MyHomePageState extends State<MyHomePage> {
                     width: 200, height: 20, fit: BoxFit.cover))
           ],
         ),
-        floatingActionButton: FloatingActionButton.extended(
-          onPressed: () {
-            Navigator.push(
-              context,
-              MaterialPageRoute(builder: (context) => const ConnectWalletPage()),
-            );
-          },
-          icon: const Icon(Icons.add),
-          label: const Text('Connect'),
+        floatingActionButton: SizedBox(
+          height: 150,
+          child: Column(
+
+            children: [
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: SizedBox(
+                  width: 150,
+                  child: FloatingActionButton.extended(
+
+                    onPressed: () {
+                      Provider.of<ConnectLogic>(context, listen: false).connectWithConnectKit();
+                    },
+                    icon: const Icon(Icons.add),
+                    label: const Text('ConnectKit'),
+                  ),
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: SizedBox(
+                  width: 150,
+                  child: FloatingActionButton.extended(
+                    onPressed: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (context) => const ConnectWalletPage()),
+                      );
+                    },
+                    icon: const Icon(Icons.add),
+                    label: const Text('Connect'),
+                  ),
+                ),
+              ),
+            ],
+          ),
         ));
   }
 }

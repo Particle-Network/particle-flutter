@@ -6,6 +6,7 @@ import android.util.Log
 import com.blankj.utilcode.util.GsonUtils
 import com.blankj.utilcode.util.LogUtils
 import com.google.gson.Gson
+import com.google.gson.reflect.TypeToken
 
 import com.particle.base.CurrencyEnum
 import com.particle.base.Env
@@ -14,6 +15,7 @@ import com.particle.base.LanguageEnum
 import com.particle.base.ParticleNetwork
 import com.particle.base.ParticleNetwork.setFiatCoin
 import com.particle.base.ThemeEnum
+import com.particle.base.data.CountryInfo
 
 import com.particle.base.model.SecurityAccountConfig
 import com.particle.base.utils.ChainUtils
@@ -121,6 +123,12 @@ object BaseBridge {
         LogUtils.d("setFiatCoin", fiatCoin)
         ParticleNetwork.setFiatCoin(CurrencyEnum.valueOf(fiatCoin.uppercase()))
     }
-
-
+    fun setUnsupportCountries(countriesJson: String) {
+        LogUtils.d("countriesJson", countriesJson)
+        val listType = object : TypeToken<List<String>>() {}.type
+        val list: List<String> = GsonUtils.fromJson<List<String>?>(countriesJson, listType).map { it.lowercase() }
+        ParticleNetwork.setCountryFilter { countryInfo ->
+            countryInfo.code !in list
+        }
+    }
 }

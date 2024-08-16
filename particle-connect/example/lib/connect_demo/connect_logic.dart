@@ -1,7 +1,10 @@
+import 'dart:convert';
+
 import 'package:flutter/cupertino.dart';
 import 'package:oktoast/oktoast.dart';
 import 'package:particle_base/particle_base.dart';
 import 'package:particle_auth_core/particle_auth_core.dart';
+import 'package:particle_connect/model/connect_kit_config.dart';
 import 'package:particle_connect/particle_connect.dart';
 import 'package:particle_connect_example/mock/transaction_mock.dart';
 
@@ -89,7 +92,52 @@ class ConnectLogic extends ChangeNotifier {
       print("connect: $error");
     }
   }
+  void connectWithConnectKit() async{
+    final config = ConnectKitConfig(
+      logo: "",//base64 or https
+      connectOptions: [
+        ConnectOption.EMAIL,
+        ConnectOption.PHONE,
+        ConnectOption.SOCIAL,
+        ConnectOption.WALLET,
+      ],//Changing the order can affect the interface
+      socialProviders: [
+        EnableSocialProvider.GOOGLE,
+        EnableSocialProvider.APPLE,
+        EnableSocialProvider.DISCORD,
+        EnableSocialProvider.TWITTER,
+        EnableSocialProvider.FACEBOOK,
+        EnableSocialProvider.GITHUB,
+        EnableSocialProvider.MICROSOFT,
+        EnableSocialProvider.TWITCH,
+        EnableSocialProvider.LINKEDIN,
+      ],//Changing the order can affect the interface
+      walletProviders: [
+        EnableWalletProvider(EnableWallet.MetaMask, label:  EnableWalletLabel.RECOMMENDED),
+        EnableWalletProvider(EnableWallet.OKX),
+        EnableWalletProvider(EnableWallet.Trust),
+        EnableWalletProvider(EnableWallet.Bitget),
+        EnableWalletProvider(EnableWallet.WalletConnect),
+      ],//Changing the order can affect the interface
+      additionalLayoutOptions: AdditionalLayoutOptions(
+        isCollapseWalletList: false,
+        isSplitEmailAndSocial: false,
+        isSplitEmailAndPhone: false,
+        isHideContinueButton: false,
+      ),
+    );
 
+    try {
+      final result = await  ParticleConnect.connectWithConnectKitConfig(config);
+      showToast('connect: $result');
+      print("connect: $result");
+      refreshConnectedAccounts();
+      closeConnectWithWalletPage = true;
+    } catch (error) {
+      showToast('connect: $error');
+      print("connect: $error");
+    }
+  }
   void connect(WalletType walletType) async {
     try {
       final result = await ParticleConnect.connect(walletType);

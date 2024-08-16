@@ -4,6 +4,7 @@ import 'dart:io' show Platform;
 import 'package:flutter/services.dart';
 import 'package:particle_base/particle_base.dart';
 import 'package:particle_connect/model/account.dart';
+import 'package:particle_connect/model/connect_kit_config.dart';
 import 'package:particle_connect/model/dapp_meta_data.dart';
 import 'package:particle_connect/model/particle_connect_config.dart';
 import 'package:particle_connect/model/rpc_url_config.dart';
@@ -90,6 +91,20 @@ class ParticleConnect {
       } else {
         account.walletType = walletType.name;
       }
+      return account;
+    } else {
+      final error = RpcError.fromJson(jsonDecode(result)["data"]);
+      return Future.error(error);
+    }
+  }
+  static Future<Account> connectWithConnectKitConfig(ConnectKitConfig config) async{
+    final jsonStr = jsonEncode(config.toJson());
+    final result = await _channel.invokeMethod(
+        'connectWithConnectKitConfig',jsonStr);
+    print("connectWithConnectKitConfig:"+result);
+    if (jsonDecode(result)["status"] == true ||
+        jsonDecode(result)["status"] == 1) {
+      final account = Account.fromJson(jsonDecode(result)["data"]);
       return account;
     } else {
       final error = RpcError.fromJson(jsonDecode(result)["data"]);

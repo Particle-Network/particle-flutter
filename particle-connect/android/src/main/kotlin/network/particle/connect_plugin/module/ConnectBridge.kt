@@ -38,6 +38,8 @@ import com.particle.base.utils.PnModuleUtils
 import com.particle.connect.ParticleConnect
 import com.particle.connect.ParticleConnect.setChain
 import com.particle.connect.model.AdapterAccount
+import com.particle.connectkit.ConnectKitConfig
+import com.particle.connectkit.ParticleConnectKit
 import com.phantom.adapter.PhantomConnectAdapter
 import com.solana.adapter.SolanaConnectAdapter
 import com.wallet.connect.adapter.*
@@ -49,6 +51,7 @@ import kotlinx.coroutines.launch
 import network.particle.connect_plugin.model.InitData
 import network.particle.connect_plugin.model.RpcUrl
 import network.particle.chains.ChainInfo
+import network.particle.connect_plugin.model.AccountNew
 import network.particle.connect_plugin.model.ChainData
 import network.particle.connect_plugin.model.ConnectData
 import network.particle.connect_plugin.model.ConnectSignData
@@ -224,6 +227,48 @@ object ConnectBridge {
         if (connectAdapter is WalletConnectAdapter) {
             events?.success((connectAdapter as WalletConnectAdapter).qrCodeUri())
         }
+    }
+
+    fun connectWithConnectKitConfig(
+        connectJson: String, result: MethodChannel.Result, events: EventChannel.EventSink?
+    ) {
+        LogUtils.d("connectWithConnectKitConfig", connectJson)
+        val connectKitConfig: ConnectKitConfig = GsonUtils.fromJson(
+            connectJson, ConnectKitConfig::class.java
+        )
+        LogUtils.d("connectKitConfig", connectKitConfig)
+        ParticleConnectKit.connect(connectKitConfig, object : ConnectKitCallback {
+            override fun onConnected(walletName: String, account: Account) {
+                LogUtils.d("onConnected", account.toString())
+                try {
+                    result.success(
+                        FlutterCallBack.success(
+                            AccountNew(
+                                account.publicAddress,
+                                walletName
+                            )
+                        ).toGson()
+                    )
+                } catch (_: Exception) {
+
+                }
+            }
+
+            override fun onError(error: ConnectError) {
+                try {
+                    result.success(
+                        FlutterCallBack.failed(
+                            FlutterErrorMessage.parseConnectError(
+                                error
+                            )
+                        ).toGson()
+                    )
+                } catch (_: Exception) {
+
+                }
+            }
+
+        })
     }
 
     fun connectWalletConnect(result: MethodChannel.Result, events: EventChannel.EventSink?) {
@@ -746,7 +791,7 @@ object ConnectBridge {
             RainbowConnectAdapter(),
             TrustConnectAdapter(),
             ImTokenConnectAdapter(),
-            BitKeepConnectAdapter(),
+            BitGetConnectAdapter(),
             OKXConnectAdapter(),
             WalletConnectAdapter(),
             PhantomConnectAdapter(),

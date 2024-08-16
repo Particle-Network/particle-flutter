@@ -109,6 +109,7 @@ class ParticleAuthCore {
     }
   }
 
+
   /// Connect with code
   /// 
   /// Select phone or email, 
@@ -120,8 +121,8 @@ class ParticleAuthCore {
   /// [code] is verification code
   /// 
   /// Return userinfo or error
-  static Future<UserInfo> connectWithCode(
-      String? phone, String? email, String code) async {
+  static Future<UserInfo> connectWithCode({
+      String? phone, String? email, required String code}) async {
     final json = jsonEncode({
       "phone": phone,
       "email": email,

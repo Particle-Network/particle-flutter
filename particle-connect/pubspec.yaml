@@ -17,12 +17,15 @@ dependencies:
    path: ../particle-base/
   particle_auth_core:
    path: ../particle-auth-core/
+  json_annotation: ^4.8.0
+
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
   flutter_lints: ^3.0.1
-
+  build_runner: ^2.3.3
+  json_serializable: ^6.6.0
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
 
