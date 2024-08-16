@@ -12,8 +12,10 @@ import SwiftyJSON
 
 typealias ShareCallback = (Any) -> Void
 
-enum ShareBase {
-    static func initialize(_ json: String) {
+class ShareBase {
+    static let shared: ShareBase = .init()
+
+    func initialize(_ json: String) {
         let data = JSON(parseJSON: json)
 
         let chainId = data["chain_id"].intValue
@@ -37,7 +39,7 @@ enum ShareBase {
         ParticleNetwork.initialize(config: config)
     }
 
-    static func setChainInfo(_ json: String) -> Bool {
+    func setChainInfo(_ json: String) -> Bool {
         let data = JSON(parseJSON: json)
 
         let chainId = data["chain_id"].intValue
@@ -51,7 +53,7 @@ enum ShareBase {
         return true
     }
 
-    static func setAppearance(_ json: String) {
+    func setAppearance(_ json: String) {
         let appearance = json.lowercased()
         /**
          SYSTEM,
@@ -67,7 +69,7 @@ enum ShareBase {
         }
     }
 
-    static func setSecurityAccountConfig(_ json: String) {
+    func setSecurityAccountConfig(_ json: String) {
         let data = JSON(parseJSON: json)
         let promptSettingWhenSign = data["prompt_setting_when_sign"].intValue
         let promptMasterPasswordSettingWhenLogin = data["prompt_master_password_setting_when_login"].intValue
@@ -75,7 +77,7 @@ enum ShareBase {
         ParticleNetwork.setSecurityAccountConfig(config: .init(promptSettingWhenSign: promptSettingWhenSign, promptMasterPasswordSettingWhenLogin: promptMasterPasswordSettingWhenLogin))
     }
 
-    static func setFiatCoin(_ json: String) {
+    func setFiatCoin(_ json: String) {
         /*
              USD,
              CNY,
@@ -99,13 +101,13 @@ enum ShareBase {
         }
     }
 
-    static func setThemeColor(_ json: String) {
+    func setThemeColor(_ json: String) {
         if let color = UIColor(hex: json) {
             ParticleNetwork.setThemeColor(color)
         }
     }
 
-    static func setCustomUIConfigJsonString(_ json: String) {
+    func setCustomUIConfigJsonString(_ json: String) {
         do {
             try ParticleNetwork.setCustomUIConfigJsonString(json)
         } catch {
@@ -113,10 +115,7 @@ enum ShareBase {
         }
     }
 
-    func setUnsupportCountries(_ json: String?) {
-        guard let json = json else {
-            return
-        }
+    func setUnsupportCountries(_ json: String) {
         let countries = JSON(parseJSON: json).arrayValue.map {
             $0.stringValue.lowercased()
         }
@@ -129,7 +128,7 @@ enum ShareBase {
         }
     }
 
-    static func setLanguage(_ json: String) {
+    func setLanguage(_ json: String) {
         let language = json.lowercased()
         /*
          en,
@@ -155,14 +154,14 @@ enum ShareBase {
         }
     }
 
-    static func getChainInfo() -> String {
+    func getChainInfo() -> String {
         let chainInfo = ParticleNetwork.getChainInfo()
 
         let jsonString = ["chain_name": chainInfo.name, "chain_id": chainInfo.chainId].jsonString() ?? ""
         return jsonString
     }
 
-    static func getLanguage() -> String {
+    func getLanguage() -> String {
         var language = ""
 
         switch ParticleNetwork.getLanguage() {
@@ -183,4 +182,3 @@ enum ShareBase {
         return language
     }
 }
-

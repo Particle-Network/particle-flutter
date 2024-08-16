@@ -59,4 +59,14 @@ class BaseLogic {
   static void setFiatCoin() {
     ParticleBase.setFiatCoin(FiatCoin.KRW);
   }
+
+  static void setUnsupportCountries() {
+    List<String> isoCodeList = ['US', 'CA', 'GB'];
+    ParticleBase.setUnsupportCountries(isoCodeList);
+  }
+
+  static void setThemeColor() {
+    const hexColor = "#003468";
+    ParticleBase.setThemeColor(hexColor);
+  }
 }

@@ -25,6 +25,8 @@ class BaseDemoPageState extends State<BaseDemoPage> {
         () => BaseLogic.setSecurityAccountConfig()),
     MethodItem("Set fiat coin", () => BaseLogic.setFiatCoin()),
     MethodItem("Set appearance", () => BaseLogic.setAppearance()),
+    MethodItem("Set unsupport countries", () => BaseLogic.setUnsupportCountries()),
+    MethodItem("Set theme color", () => BaseLogic.setThemeColor()),
   ];
 
   @override

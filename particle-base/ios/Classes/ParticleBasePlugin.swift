@@ -13,8 +13,6 @@ import ParticleNetworkChains
 import RxSwift
 import SwiftyJSON
 
-public typealias ParticleCallback = FlutterResult
-
 public class ParticleBasePlugin: NSObject, FlutterPlugin {
     let bag = DisposeBag()
     
@@ -29,10 +27,11 @@ public class ParticleBasePlugin: NSObject, FlutterPlugin {
         case setFiatCoin
         case setCustomUIConfigJsonString
         case setThemeColor
+        case setUnsupportCountries
         
         var containsParameter: Bool {
             switch self {
-            case .initialize, .setChainInfo, .setSecurityAccountConfig, .setLanguage, .setAppearance, .setFiatCoin, .setCustomUIConfigJsonString, .setThemeColor:
+            case .initialize, .setChainInfo, .setSecurityAccountConfig, .setLanguage, .setAppearance, .setFiatCoin, .setCustomUIConfigJsonString, .setThemeColor, .setUnsupportCountries:
                 return true
             
             case .getChainInfo, .getLanguage:
@@ -57,7 +56,7 @@ public class ParticleBasePlugin: NSObject, FlutterPlugin {
         
         let json = call.arguments
         if method.containsParameter, (json as? String?) == nil {
-            let response = ParticleNetwork.ResponseError(code: nil, message: "no parameters")
+            let response = ParticleNetwork.ResponseError(code: nil, message: "parameters is required")
             let statusModel = PNStatusModel(status: false, data: response)
             let data = try! JSONEncoder().encode(statusModel)
             guard let json = String(data: data, encoding: .utf8) else { return }
@@ -66,28 +65,30 @@ public class ParticleBasePlugin: NSObject, FlutterPlugin {
         
         switch method {
         case .initialize:
-            ShareBase.initialize(json as! String)
+            ShareBase.shared.initialize(json as! String)
         case .setChainInfo:
-            let value = ShareBase.setChainInfo(json as! String)
+            let value = ShareBase.shared.setChainInfo(json as! String)
             result(value)
         case .getChainInfo:
-            let value = ShareBase.getChainInfo()
+            let value = ShareBase.shared.getChainInfo()
             result(value)
         case .setLanguage:
-            ShareBase.setLanguage(json as! String)
+            ShareBase.shared.setLanguage(json as! String)
         case .getLanguage:
-            let value = ShareBase.getLanguage()
+            let value = ShareBase.shared.getLanguage()
             result(value)
         case .setAppearance:
-            ShareBase.setAppearance(json as! String)
+            ShareBase.shared.setAppearance(json as! String)
         case .setFiatCoin:
-            ShareBase.setFiatCoin(json as! String)
+            ShareBase.shared.setFiatCoin(json as! String)
         case .setSecurityAccountConfig:
-            ShareBase.setSecurityAccountConfig(json as! String)
+            ShareBase.shared.setSecurityAccountConfig(json as! String)
         case .setCustomUIConfigJsonString:
-            ShareBase.setCustomUIConfigJsonString(json as! String)
+            ShareBase.shared.setCustomUIConfigJsonString(json as! String)
         case .setThemeColor:
-            ShareBase.setThemeColor(json as! String)
+            ShareBase.shared.setThemeColor(json as! String)
+        case .setUnsupportCountries:
+            ShareBase.shared.setUnsupportCountries(json as! String)
         }
     }
 }
