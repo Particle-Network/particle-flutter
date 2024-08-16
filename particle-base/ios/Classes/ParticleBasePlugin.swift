@@ -55,7 +55,7 @@ public class ParticleBasePlugin: NSObject, FlutterPlugin {
         }
         
         let json = call.arguments
-        if method.containsParameter, (json as? String?) == nil {
+        if method.containsParameter, (json as? String?) == nil, (json as? Bool) == nil {
             let response = ParticleNetwork.ResponseError(code: nil, message: "parameters is required")
             let statusModel = PNStatusModel(status: false, data: response)
             let data = try! JSONEncoder().encode(statusModel)

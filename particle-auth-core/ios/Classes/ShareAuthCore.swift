@@ -69,11 +69,12 @@ class ShareAuthCore {
         }
 
         let loginType = LoginType(rawValue: type) ?? .email
-        var supportAuthTypeArray: [SupportAuthType] = []
 
         let array = supportAuthType.map {
             $0.stringValue.lowercased()
         }
+
+        var supportAuthTypeArray: [SupportAuthType] = []
 
         array.forEach {
             if $0 == "email" {
@@ -107,7 +108,7 @@ class ShareAuthCore {
         }
 
         let config = data["login_page_config"] != JSON.null ? data["login_page_config"] : data["loginPageConfig"]
-        
+
         var loginPageConfig: LoginPageConfig?
         if config != JSON.null {
             let projectName = config["projectName"].stringValue

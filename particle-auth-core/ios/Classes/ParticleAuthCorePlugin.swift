@@ -155,8 +155,8 @@ extension ParticleAuthCorePlugin {
     private func getErrorJson(_ message: String) -> String {
         let response = PNResponseError(code: nil, message: message, data: nil)
         let statusModel = PNStatusModel(status: false, data: response)
-        let data1 = try! JSONEncoder().encode(statusModel)
-        guard let json = String(data: data1, encoding: .utf8) else { return "" }
+        let data = try! JSONEncoder().encode(statusModel)
+        guard let json = String(data: data, encoding: .utf8) else { return "" }
         return json
     }
 }

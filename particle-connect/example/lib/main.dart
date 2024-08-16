@@ -52,7 +52,8 @@ class _MyHomePageState extends State<MyHomePage> {
     super.initState();
 
     Provider.of<ConnectLogic>(context, listen: false).init();
-    Provider.of<ConnectLogic>(context, listen: false).refreshConnectedAccounts();
+    Provider.of<ConnectLogic>(context, listen: false)
+        .refreshConnectedAccounts();
   }
 
   @override
@@ -69,7 +70,8 @@ class _MyHomePageState extends State<MyHomePage> {
                       onTap: () {
                         Navigator.push(
                           context,
-                          MaterialPageRoute(builder: (context) => const SelectChainPage()),
+                          MaterialPageRoute(
+                              builder: (context) => const SelectChainPage()),
                         );
                       },
                       child: Align(
@@ -125,7 +127,8 @@ class _MyHomePageState extends State<MyHomePage> {
                         Navigator.push(
                           context,
                           MaterialPageRoute(
-                            builder: (context) => WalletOpratePage(account: account),
+                            builder: (context) =>
+                                WalletOpratePage(account: account),
                           ),
                         );
                       },
@@ -139,10 +142,13 @@ class _MyHomePageState extends State<MyHomePage> {
                                 width: 40.0,
                                 height: 40.0,
                                 child: ClipOval(
-                                  child: Image.network(
-                                    account.icons?.firstOrNull ?? '',
-                                    fit: BoxFit.fill,
-                                  ),
+                                  child: account.icons != null &&
+                                          account.icons!.isNotEmpty
+                                      ? Image.network(
+                                          account.icons!.firstOrNull ?? '',
+                                          fit: BoxFit.fill,
+                                        )
+                                      : const SizedBox.shrink(),
                                 ),
                               ),
                             ),
@@ -159,7 +165,7 @@ class _MyHomePageState extends State<MyHomePage> {
                                     account.publicAddress,
                                     style: const TextStyle(fontSize: 8),
                                   ),
-                                ), 
+                                ),
                               ],
                             ),
                           ],
@@ -172,23 +178,26 @@ class _MyHomePageState extends State<MyHomePage> {
             ),
             Align(
                 alignment: Alignment.bottomCenter,
-                child: Image.asset('assets/images/powerby_particle_network.webp',
-                    width: 200, height: 20, fit: BoxFit.cover))
+                child: Image.asset(
+                    'assets/images/powerby_particle_network.webp',
+                    width: 200,
+                    height: 20,
+                    fit: BoxFit.cover))
           ],
         ),
         floatingActionButton: SizedBox(
           height: 150,
           child: Column(
-
             children: [
               Padding(
                 padding: const EdgeInsets.all(8.0),
                 child: SizedBox(
                   width: 150,
                   child: FloatingActionButton.extended(
-
+                    heroTag: "connectWithConnectKit",
                     onPressed: () {
-                      Provider.of<ConnectLogic>(context, listen: false).connectWithConnectKit();
+                      Provider.of<ConnectLogic>(context, listen: false)
+                          .connectWithConnectKit();
                     },
                     icon: const Icon(Icons.add),
                     label: const Text('ConnectKit'),
@@ -200,10 +209,12 @@ class _MyHomePageState extends State<MyHomePage> {
                 child: SizedBox(
                   width: 150,
                   child: FloatingActionButton.extended(
+                    heroTag: "connectWalletPage",
                     onPressed: () {
                       Navigator.push(
                         context,
-                        MaterialPageRoute(builder: (context) => const ConnectWalletPage()),
+                        MaterialPageRoute(
+                            builder: (context) => const ConnectWalletPage()),
                       );
                     },
                     icon: const Icon(Icons.add),

@@ -7,6 +7,7 @@
 
 import ConnectCommon
 import Foundation
+import ParticleConnect
 import ParticleNetworkBase
 
 extension Dictionary {

@@ -97,6 +97,10 @@ class ParticleConnect {
       return Future.error(error);
     }
   }
+
+  /// Connect through a UI page
+  /// 
+  /// [config] is 
   static Future<Account> connectWithConnectKitConfig(ConnectKitConfig config) async{
     final jsonStr = jsonEncode(config.toJson());
     final result = await _channel.invokeMethod(
@@ -528,7 +532,7 @@ class ParticleConnect {
 
   /// get walletReadyState
   /// Pass [walletType] to decide a wallet.
-  /// android supported wallet:MetaMask,Rainbow,Trust,ImToken,BitKeep,MathWallet,TokenPocket,Zerion,Coin98,Bitpie,ZenGo,Alpha,TTWallet
+  /// android supported wallet:MetaMask,Rainbow,Trust,ImToken,Bitget,MathWallet,TokenPocket,Zerion,Bitpie,ZenGo,Alpha
   static Future<WalletReadyState> walletReadyState(
       WalletType walletType) async {
     String readyState = await _channel.invokeMethod(

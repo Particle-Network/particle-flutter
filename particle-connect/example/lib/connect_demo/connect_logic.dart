@@ -103,25 +103,25 @@ class ConnectLogic extends ChangeNotifier {
       ],//Changing the order can affect the interface
       socialProviders: [
         EnableSocialProvider.GOOGLE,
+        EnableSocialProvider.TWITCH,
         EnableSocialProvider.APPLE,
         EnableSocialProvider.DISCORD,
         EnableSocialProvider.TWITTER,
         EnableSocialProvider.FACEBOOK,
         EnableSocialProvider.GITHUB,
         EnableSocialProvider.MICROSOFT,
-        EnableSocialProvider.TWITCH,
         EnableSocialProvider.LINKEDIN,
       ],//Changing the order can affect the interface
       walletProviders: [
         EnableWalletProvider(EnableWallet.MetaMask, label:  EnableWalletLabel.RECOMMENDED),
         EnableWalletProvider(EnableWallet.OKX),
-        EnableWalletProvider(EnableWallet.Trust),
+        EnableWalletProvider(EnableWallet.Trust, label:  EnableWalletLabel.POPULAR),
         EnableWalletProvider(EnableWallet.Bitget),
         EnableWalletProvider(EnableWallet.WalletConnect),
       ],//Changing the order can affect the interface
       additionalLayoutOptions: AdditionalLayoutOptions(
         isCollapseWalletList: false,
-        isSplitEmailAndSocial: false,
+        isSplitEmailAndSocial: true,
         isSplitEmailAndPhone: false,
         isHideContinueButton: false,
       ),
