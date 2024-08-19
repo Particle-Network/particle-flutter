@@ -62,7 +62,18 @@ class WalletLogic {
     bool value = option.toLowerCase() == 'true';
     ParticleWallet.setPayDisabled(value);
   }
+  static void setBridgeDisabled(BuildContext context) async {
+    const options = ["true", "false"];
 
+    String option =
+        await showModal(context, "setBridgeDisabled", options);
+    bool value = option.toLowerCase() == 'true';
+    ParticleWallet.setBridgeDisabled(value);
+  }
+  static void getBridgeDisabled() async {
+    bool disabled = await ParticleWallet.getBridgeDisabled();
+    showToast("bridge is disabled:$disabled");
+  }
   static void getPayDisabled() async {
     bool disabled = await ParticleWallet.getPayDisabled();
     showToast("pay is disabled:$disabled");
@@ -79,19 +90,6 @@ class WalletLogic {
   static void getSwapDisabled() async {
     bool disabled = await ParticleWallet.getSwapDisabled();
     showToast("swap is disabled:$disabled");
-  }
-
-  static void setBridgeDisabled(BuildContext context) async {
-    const options = ["true", "false"];
-
-    String option = await showModal(context, "setBridgeDisabled", options);
-    bool value = option.toLowerCase() == 'true';
-    ParticleWallet.setSwapDisabled(value);
-  }
-
-  static void getBridgeDisabled() async {
-    bool disabled = await ParticleWallet.getBridgeDisabled();
-    showToast("bridge is disabled:$disabled");
   }
 
   static void navigatorBuyCrypto() {
