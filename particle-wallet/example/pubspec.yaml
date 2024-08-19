@@ -33,6 +33,9 @@ dependencies:
   # auto_route: ^7.8.1
   oktoast: ^3.3.2+1
 
+  particle_base: ^2.0.1
+  particle_auth_core: ^2.0.1
+  particle_connect: ^2.0.1
 #  particle_base:
 #    path: ../../particle-base/
 #  particle_connect:
