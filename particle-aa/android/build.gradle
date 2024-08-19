@@ -54,7 +54,7 @@ android {
 
 dependencies {
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
-    def sdkVersion = "2.0.9"
+    def sdkVersion = "2.0.10"
     implementation("network.particle:aa-service:$sdkVersion")
     implementation("com.github.xxhong:CollectsPkg:2.1.0")
     implementation("commons-codec:commons-codec:1.15")

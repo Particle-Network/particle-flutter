@@ -316,13 +316,13 @@ object WalletBridge {
         }
     }
 
-    fun enableSwap(enable: Boolean) {
+    fun setSwapDisabled(enable: Boolean) {
         LogUtils.d("enableSwap", enable.toString());
-        ParticleWallet.setSwapDisabled(!enable)
+        ParticleWallet.setSwapDisabled(enable)
     }
 
-    fun getEnableSwap(result: MethodChannel.Result) {
-        result.success(!ParticleWallet.getSwapDisabled())
+    fun getSwapDisabled(result: MethodChannel.Result) {
+        result.success(ParticleWallet.getSwapDisabled())
     }
 
     fun getBridgeDisabled(result: MethodChannel.Result){

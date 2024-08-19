@@ -86,17 +86,18 @@ class ParticleWalletPlugin : FlutterPlugin, MethodCallHandler, ActivityAware {
             "getPayDisabled" -> {
                 WalletBridge.getEnablePay(result);
             }
-            "enableSwap" -> {
-                WalletBridge.enableSwap(call.arguments as Boolean)
-            }
-            "getEnableSwap" -> {
-                WalletBridge.getEnableSwap(result)
-            }
+
             "getBridgeDisabled"->{
                 WalletBridge.getBridgeDisabled(result)
             }
             "setBridgeDisabled"->{
                 WalletBridge.setBridgeDisabled(call.arguments as Boolean)
+            }
+            "setSwapDisabled"->{
+                WalletBridge.setSwapDisabled(call.arguments as Boolean)
+            }
+            "getSwapDisabled"->{
+                WalletBridge.getSwapDisabled(result)
             }
             "setWallet" -> {
                 WalletBridge.setWallet(call.arguments as String)
