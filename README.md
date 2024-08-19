@@ -2,15 +2,15 @@
 
 ![](https://img.shields.io/pub/v/particle_base?color=blue&style=round) 
 
+
+
 ## Upgrade Guide
 If you are using 1.4.x, please review this [Upgrade Guide](https://github.com/Particle-Network/particle-flutter/blob/master/UpgradeGuide.md) from 1.4.x to 1.5.x 
 
 ### Note For iOS
 Please note that the SDK `particle_auth_core` only supports ios-arm64 (iOS devices), does not support simulators, to perform testing, you will require an actual iPhone device.
 
-Particle Auth is a simple self-custodial auth infra for Web3 apps and wallets.
-
-Particle Auth Core combine MPC signature capability and Wallet through Auth Core. In this way, you can control almost all the UI/UX. To simplify this, we also provide out-of-box UI/UX for Custom Auth signing.
+Particle Auth Core is a simple self-custodial auth infra for Web3 apps and wallets.
 
 Particle Connect is the best way to onboard any user for your dApp.
 
