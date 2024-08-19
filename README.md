@@ -3,7 +3,7 @@
 ![](https://img.shields.io/pub/v/particle_base?color=blue&style=round) 
 
 <img width="420" src="/images/connectkit-mobile.svg"></img>
-◊
+
 ## Upgrade Guide
 If you are using 1.4.x, please review this [Upgrade Guide](https://github.com/Particle-Network/particle-flutter/blob/master/UpgradeGuide.md) from 1.4.x to 1.5.x 
 
