@@ -94,13 +94,13 @@ class ConnectLogic extends ChangeNotifier {
   }
   void connectWithConnectKit() async{
     final config = ConnectKitConfig(
-      logo: "",//base64 or https
+      logo: "",// base64 string or url
       connectOptions: [
         ConnectOption.EMAIL,
         ConnectOption.PHONE,
         ConnectOption.SOCIAL,
         ConnectOption.WALLET,
-      ],//Changing the order can affect the interface
+      ],// Changing the order can affect the interface
       socialProviders: [
         EnableSocialProvider.GOOGLE,
         EnableSocialProvider.TWITCH,
@@ -111,7 +111,7 @@ class ConnectLogic extends ChangeNotifier {
         EnableSocialProvider.GITHUB,
         EnableSocialProvider.MICROSOFT,
         EnableSocialProvider.LINKEDIN,
-      ],//Changing the order can affect the interface
+      ],// Changing the order can affect the interface
       walletProviders: [
         EnableWalletProvider(EnableWallet.MetaMask, label:  EnableWalletLabel.RECOMMENDED),
         EnableWalletProvider(EnableWallet.OKX),
@@ -128,9 +128,9 @@ class ConnectLogic extends ChangeNotifier {
     );
 
     try {
-      final result = await  ParticleConnect.connectWithConnectKitConfig(config);
-      showToast('connect: $result');
-      print("connect: $result");
+      final account = await  ParticleConnect.connectWithConnectKitConfig(config);
+      showToast('connect: $account');
+      print("connect: $account");
       refreshConnectedAccounts();
       closeConnectWithWalletPage = true;
     } catch (error) {

@@ -4,10 +4,19 @@ part 'connect_kit_config.g.dart';
 
 @JsonSerializable()
 class ConnectKitConfig {
+  /// Connect options, support `EMAIL`, `PHONE`, `SOCIAL` and `WALLET`, the sort order is used for connect kit login UI. 
   final List<ConnectOption> connectOptions;
+
+  /// Layout options.
   final AdditionalLayoutOptions additionalLayoutOptions;
+
+  /// Social providers, support `GOOGLE`, `APPLE` and other social options, the sort order is used for connect kit login UI.
   final List<EnableSocialProvider>? socialProviders;
+
+  /// Wallet providers, support `metamask`, `trust` and other wallet options, the sort order is used for connect kit login UI.
   final List<EnableWalletProvider>? walletProviders;
+
+  /// Project icon, supports base64 string and url.
   final String? logo;
 
   ConnectKitConfig({

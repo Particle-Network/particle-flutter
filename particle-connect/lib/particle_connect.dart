@@ -98,9 +98,9 @@ class ParticleConnect {
     }
   }
 
-  /// Connect through a UI page
+  /// connectWithConnectKitConfig is one click login function, which can present a customizable login UI
   /// 
-  /// [config] is 
+  /// [config] can be derived from [ConnectKitConfig]
   static Future<Account> connectWithConnectKitConfig(ConnectKitConfig config) async{
     final jsonStr = jsonEncode(config.toJson());
     final result = await _channel.invokeMethod(
