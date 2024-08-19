@@ -181,6 +181,31 @@ class _WalletDemoPageState extends State<WalletDemoPage> {
                 width: double.infinity,
                 height: 50,
                 child: ElevatedButton(
+                    onPressed: () => {WalletLogic.setBridgeDisabled(context)},
+                    child: const Text(
+                      "Set Bridge Disabled",
+                      style: TextStyle(fontSize: 18),
+                    )),
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: SizedBox(
+                width: double.infinity,
+                height: 50,
+                child: ElevatedButton(
+                    onPressed: () => {WalletLogic.getBridgeDisabled()},
+                    child: const Text(
+                      "Get Disable Bridge",
+                      style: TextStyle(fontSize: 18),
+                    )),
+              ),
+            ),      Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: SizedBox(
+                width: double.infinity,
+                height: 50,
+                child: ElevatedButton(
                     onPressed: () => {WalletLogic.getSwapDisabled()},
                     child: const Text(
                       "Get Disable Swap",
