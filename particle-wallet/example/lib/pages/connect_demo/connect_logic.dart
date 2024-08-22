@@ -28,7 +28,6 @@ class ConnectLogic {
     ParticleInfo.set(projectId, clientK);
 
     final dappInfo = DappMetaData(
-        "75ac08814504606fc06126541ace9df6",
         "Particle Connect",
         "https://connect.particle.network/icons/512.png",
         "https://connect.particle.network",

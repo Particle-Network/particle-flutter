@@ -1,6 +1,6 @@
 name: particle_auth_core
 description: A flutter plugin project for particle auth core
-version: 2.0.3
+version: 2.0.4
 homepage: https://particle.network
 
 environment:
@@ -11,7 +11,7 @@ dependencies:
   flutter:
     sdk: flutter
   plugin_platform_interface: ^2.1.6
-  particle_base: ^2.0.3
+  particle_base: ^2.0.4
   # particle_base: ^2.0.0
   #  path: ../particle-base/
 

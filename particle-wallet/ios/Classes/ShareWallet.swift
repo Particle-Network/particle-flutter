@@ -168,7 +168,7 @@ class ShareWallet {
     func getSwapDisabled() -> Bool {
         return ParticleWalletGUI.getSwapDisabled()
     }
-    
+
     func setBridgeDisabled(_ disabled: Bool) {
         ParticleWalletGUI.setBridgeDisabled(disabled)
     }
@@ -279,14 +279,11 @@ class ShareWallet {
         let walletUrlString = data["url"].stringValue
         let walletDescription = data["description"].stringValue
 
-        let walletConnectV2ProjectId = data["walletConnectProjectId"].stringValue
-
         let walletIconUrl = URL(string: walletIconString) != nil ? URL(string: walletIconString)! : URL(string: "https://connect.particle.network/icons/512.png")!
 
         let walletUrl = URL(string: walletUrlString) != nil ? URL(string: walletUrlString)! : URL(string: "https://connect.particle.network")!
 
         ParticleWalletConnect.initialize(.init(name: walletName, icon: walletIconUrl, url: walletUrl, description: walletDescription, redirectUniversalLink: nil))
-        ParticleWalletConnect.setWalletConnectV2ProjectId(walletConnectV2ProjectId)
         ParticleWalletGUI.setAdapters(ParticleConnect.getAllAdapters())
     }
 
@@ -317,6 +314,11 @@ class ShareWallet {
         }
 
         ParticleWalletGUI.setCustomLocalizable(localizables)
+    }
+
+    func setWalletConnectProjectId(_ json: String) {
+        let walletConnectProjectId = json
+        ParticleWalletConnect.setWalletConnectV2ProjectId(walletConnectProjectId)
     }
 }
 

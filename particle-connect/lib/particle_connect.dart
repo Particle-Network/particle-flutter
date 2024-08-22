@@ -99,13 +99,14 @@ class ParticleConnect {
   }
 
   /// connectWithConnectKitConfig is one click login function, which can present a customizable login UI
-  /// 
+  ///
   /// [config] can be derived from [ConnectKitConfig]
-  static Future<Account> connectWithConnectKitConfig(ConnectKitConfig config) async{
+  static Future<Account> connectWithConnectKitConfig(
+      ConnectKitConfig config) async {
     final jsonStr = jsonEncode(config.toJson());
-    final result = await _channel.invokeMethod(
-        'connectWithConnectKitConfig',jsonStr);
-    print("connectWithConnectKitConfig:"+result);
+    final result =
+        await _channel.invokeMethod('connectWithConnectKitConfig', jsonStr);
+    print("connectWithConnectKitConfig:" + result);
     if (jsonDecode(result)["status"] == true ||
         jsonDecode(result)["status"] == 1) {
       final account = Account.fromJson(jsonDecode(result)["data"]);
@@ -518,9 +519,9 @@ class ParticleConnect {
 
     if (jsonDecode(result)["status"] == true ||
         jsonDecode(result)["status"] == 1) {
-      if(Platform.isAndroid){
+      if (Platform.isAndroid) {
         return true;
-      }else{
+      } else {
         final flag = jsonDecode(result)["data"] as bool;
         return flag;
       }
@@ -538,5 +539,11 @@ class ParticleConnect {
     String readyState = await _channel.invokeMethod(
         'walletReadyState', jsonEncode({"wallet_type": walletType.name}));
     return WalletReadyState.values.byName(readyState);
+  }
+
+  ///set WalletConnect Project ID
+  /// call before ParticleConnect.init()
+  static setWalletConnectProjectId(String walletConnectProjectId) {
+    _channel.invokeMethod('setWalletConnectProjectId', walletConnectProjectId);
   }
 }

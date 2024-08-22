@@ -42,6 +42,7 @@ public class ParticleWalletPlugin: NSObject, FlutterPlugin {
         case initializeWalletMetaData
         case setCustomWalletName
         case setCustomLocalizable
+        case setWalletConnectProjectId
 
         var containsParameter: Bool {
             switch self {
@@ -73,7 +74,8 @@ public class ParticleWalletPlugin: NSObject, FlutterPlugin {
                  .setSupportWalletConnect,
                  .initializeWalletMetaData,
                  .setCustomWalletName,
-                 .setCustomLocalizable:
+                 .setCustomLocalizable,
+                 .setWalletConnectProjectId:
                 return true
             case .getPayDisabled, .getSwapDisabled, .getBridgeDisabled:
                 return false
@@ -175,6 +177,8 @@ public class ParticleWalletPlugin: NSObject, FlutterPlugin {
             ShareWallet.shared.setCustomWalletName(json as! String)
         case .setCustomLocalizable:
             ShareWallet.shared.setCustomLocalizable(json as! String)
+        case .setWalletConnectProjectId:
+            ShareWallet.shared.setWalletConnectProjectId(json as! String)
         }
     }
 }

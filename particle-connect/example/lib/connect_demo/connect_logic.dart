@@ -41,9 +41,7 @@ class ConnectLogic extends ChangeNotifier {
         "ctWeIc2UBA6sYTKJknT9cu9LBikF00fbk1vmQjsV"; //ctWeIc2UBA6sYTKJknT9cu9LBikF00fbk1vmQjsV
     ParticleInfo.set(projectId, clientK);
 
-    ///get walletConnectProjectId from https://cloud.walletconnect.com/
     final dappInfo = DappMetaData(
-        "75ac08814504606fc06126541ace9df6",
         "Particle Connect",
         "https://connect.particle.network/icons/512.png",
         "https://connect.particle.network",
@@ -92,15 +90,17 @@ class ConnectLogic extends ChangeNotifier {
       print("connect: $error");
     }
   }
-  void connectWithConnectKit() async{
+
+  void connectWithConnectKit() async {
     final config = ConnectKitConfig(
-      logo: "",// base64 string or url
+      logo: "",
+      //base64 or https
       connectOptions: [
         ConnectOption.EMAIL,
         ConnectOption.PHONE,
         ConnectOption.SOCIAL,
         ConnectOption.WALLET,
-      ],// Changing the order can affect the interface
+      ], // Changing the order can affect the interface
       socialProviders: [
         EnableSocialProvider.GOOGLE,
         EnableSocialProvider.TWITCH,
@@ -111,14 +111,18 @@ class ConnectLogic extends ChangeNotifier {
         EnableSocialProvider.GITHUB,
         EnableSocialProvider.MICROSOFT,
         EnableSocialProvider.LINKEDIN,
-      ],// Changing the order can affect the interface
+      ], // Changing the order can affect the interface
+      //Changing the order can affect the interface
       walletProviders: [
-        EnableWalletProvider(EnableWallet.MetaMask, label:  EnableWalletLabel.RECOMMENDED),
+        EnableWalletProvider(EnableWallet.MetaMask,
+            label: EnableWalletLabel.RECOMMENDED),
         EnableWalletProvider(EnableWallet.OKX),
-        EnableWalletProvider(EnableWallet.Trust, label:  EnableWalletLabel.POPULAR),
+        EnableWalletProvider(EnableWallet.Trust,
+            label: EnableWalletLabel.POPULAR),
         EnableWalletProvider(EnableWallet.Bitget),
         EnableWalletProvider(EnableWallet.WalletConnect),
-      ],//Changing the order can affect the interface
+      ],
+      //Changing the order can affect the interface
       additionalLayoutOptions: AdditionalLayoutOptions(
         isCollapseWalletList: false,
         isSplitEmailAndSocial: true,
@@ -128,9 +132,9 @@ class ConnectLogic extends ChangeNotifier {
     );
 
     try {
-      final account = await  ParticleConnect.connectWithConnectKitConfig(config);
-      showToast('connect: $account');
-      print("connect: $account");
+      final result = await ParticleConnect.connectWithConnectKitConfig(config);
+      showToast('connect: $result');
+      print("connect: $result");
       refreshConnectedAccounts();
       closeConnectWithWalletPage = true;
     } catch (error) {
@@ -138,6 +142,7 @@ class ConnectLogic extends ChangeNotifier {
       print("connect: $error");
     }
   }
+
   void connect(WalletType walletType) async {
     try {
       final result = await ParticleConnect.connect(walletType);

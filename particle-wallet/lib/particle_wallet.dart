@@ -127,7 +127,7 @@ class ParticleWallet {
     return await _channel.invokeMethod('getPayDisabled');
   }
 
-    /// Disable bridge feature in SDK, pbridgeay feature in SDK is enable by default.
+  /// Disable bridge feature in SDK, pbridgeay feature in SDK is enable by default.
   static setBridgeDisabled(bool disable) {
     _channel.invokeMethod('setBridgeDisabled', disable);
   }
@@ -323,6 +323,15 @@ class ParticleWallet {
         localizables.map((key, value) => MapEntry(key.name, value));
     if (Platform.isIOS) {
       _channel.invokeListMethod("setCustomLocalizable", jsonEncode(converted));
+    }
+  }
+
+  /// Replace the default walletconnect project id
+  static setWalletConnectProjectId(String walletConnectProjectId) {
+    if (Platform.isIOS) {
+      _channel.invokeListMethod("setWalletConnectProjectId", walletConnectProjectId);
+    } else {
+      ParticleConnect.setWalletConnectProjectId(walletConnectProjectId);
     }
   }
 }
