@@ -32,6 +32,7 @@ public class ParticleConnectPlugin: NSObject, FlutterPlugin {
         case connectWalletConnect
         case batchSendTransactions
         case setWalletConnectV2SupportChainInfos
+        case setWalletConnectProjectId
         
         var containsParameter: Bool {
             switch self {
@@ -53,7 +54,8 @@ public class ParticleConnectPlugin: NSObject, FlutterPlugin {
                  .exportPrivateKey,
                  .walletReadyState,
                  .batchSendTransactions,
-                 .setWalletConnectV2SupportChainInfos:
+                 .setWalletConnectV2SupportChainInfos,
+                 .setWalletConnectProjectId:
                 return true
             case .connectWalletConnect:
                 return false
@@ -100,7 +102,8 @@ public class ParticleConnectPlugin: NSObject, FlutterPlugin {
         case .disconnect:
             ShareConnect.shared.disconnect(json as! String, callback: result)
         case .isConnected:
-            ShareConnect.shared.isConnected(json as! String, callback: result)
+            let value = ShareConnect.shared.isConnected(json as! String)
+            result(value)
         case .signMessage:
             ShareConnect.shared.signMessage(json as! String, callback: result)
         case .signTransaction:
@@ -122,7 +125,8 @@ public class ParticleConnectPlugin: NSObject, FlutterPlugin {
         case .exportPrivateKey:
             ShareConnect.shared.exportPrivateKey(json as! String, callback: result)
         case .walletReadyState:
-            ShareConnect.shared.walletReadyState(json as! String, callback: result)
+            let value = ShareConnect.shared.walletReadyState(json as! String)
+            result(value)
         case .connectWalletConnect:
             ShareConnect.shared.connectWalletConnect(callback: result) { [weak self] uri in
                 self?.eventSink?(uri)
@@ -131,6 +135,8 @@ public class ParticleConnectPlugin: NSObject, FlutterPlugin {
             ShareConnect.shared.batchSendTransactions(json as! String, callback: result)
         case .setWalletConnectV2SupportChainInfos:
             ShareConnect.shared.setWalletConnectV2SupportChainInfos(json as! String)
+        case .setWalletConnectProjectId:
+            ShareConnect.shared.setWalletConnectProjectId(json as! String)
         case .connectWithConnectKitConfig:
             ShareConnect.shared.connectWithConnectKitConfig(json as! String, callback: result)
         }

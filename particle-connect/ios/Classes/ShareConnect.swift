@@ -55,7 +55,6 @@ class ShareConnect {
         let dAppUrlString = data["metadata"]["url"].stringValue
         let dappDescription = data["metadata"]["description"].stringValue
         let redirectUniversalLink = data["metadata"]["redirect"].string
-        let walletConnectProjectId = data["metadata"]["walletConnectProjectId"].stringValue
         
         let dAppIconUrl = URL(string: dAppIconString) != nil ? URL(string: dAppIconString)! : URL(string: "https://connect.particle.network/icons/512.png")!
         
@@ -83,8 +82,6 @@ class ShareConnect {
         ]
         
         ParticleConnect.initialize(env: devEnv, chainInfo: chainInfo, dAppData: dAppData, adapters: adapters)
-        
-        ParticleConnect.setWalletConnectV2ProjectId(walletConnectProjectId)
     }
 
     func setWalletConnectV2SupportChainInfos(_ json: String) {
@@ -96,6 +93,11 @@ class ShareConnect {
         }
         
         ParticleConnect.setWalletConnectV2SupportChainInfos(chainInfos)
+    }
+    
+    func setWalletConnectProjectId(_ json: String) {
+        let walletConnectProjectId = json
+        ParticleConnect.setWalletConnectV2ProjectId(walletConnectProjectId)
     }
     
     func getAccounts(_ json: String) -> String {
@@ -275,22 +277,20 @@ class ShareConnect {
         subscribeAndCallback(observable: adapter.disconnect(publicAddress: publicAddress), callback: callback)
     }
     
-    func isConnected(_ json: String, callback: ShareCallback) {
+    func isConnected(_ json: String) -> Bool {
         let data = JSON(parseJSON: json)
         let walletTypeString = data["wallet_type"].stringValue
         let publicAddress = data["public_address"].stringValue
         
         guard let walletType = WalletType.fromString(walletTypeString) else {
             print("walletType \(walletTypeString) is not existed")
-            callback(getErrorJson("walletType \(walletTypeString) is not existed"))
-            return
+            return false
         }
         guard let adapter = map2ConnectAdapter(from: walletType) else {
             print("adapter for \(walletTypeString) is not init")
-            callback(getErrorJson("adapter for \(walletTypeString) is not init"))
-            return
+            return false
         }
-        callback(adapter.isConnected(publicAddress: publicAddress))
+        return adapter.isConnected(publicAddress: publicAddress)
     }
     
     func signAndSendTransaction(_ json: String, callback: @escaping ShareCallback) {
@@ -613,19 +613,18 @@ class ShareConnect {
         subscribeAndCallback(observable: observable, callback: callback)
     }
     
-    func walletReadyState(_ json: String, callback: @escaping ShareCallback) {
+    func walletReadyState(_ json: String) -> String {
         let data = JSON(parseJSON: json)
         let walletTypeString = data["wallet_type"].stringValue
 
         guard let walletType = WalletType.fromString(walletTypeString) else {
             print("walletType \(walletTypeString) is not existed")
-            callback(getErrorJson("walletType \(walletTypeString) is not existed"))
-            return
+            return "unsupported"
         }
+        
         guard let adapter = map2ConnectAdapter(from: walletType) else {
             print("adapter for \(walletTypeString) is not init")
-            callback(getErrorJson("adapter for \(walletTypeString) is not init"))
-            return
+            return "unsupported"
         }
         
         var str: String
@@ -644,7 +643,7 @@ class ShareConnect {
             str = "undetectable"
         }
         
-        callback(str)
+        return str
     }
     
     func connectWalletConnect(callback: @escaping ShareCallback, eventCallback: @escaping ShareCallback) {
