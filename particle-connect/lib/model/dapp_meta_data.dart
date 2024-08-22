@@ -1,6 +1,5 @@
 class DappMetaData {
   ///  get from https://cloud.walletconnect.com/
-  String walletConnectProjectId;
   String name;
   String icon;
   String url;
@@ -8,11 +7,11 @@ class DappMetaData {
   String? redirect;
   String? verifyUrl;
 
-  DappMetaData(this.walletConnectProjectId, this.name, this.icon, this.url, this.description,
+  DappMetaData(this.name, this.icon, this.url, this.description,
       {this.redirect, this.verifyUrl});
 
   DappMetaData.fromJson(Map<String, dynamic> json)
-      : walletConnectProjectId = json['walletConnectProjectId'],
+      :
         name = json['name'],
         icon = json['icon'],
         url = json['url'],
@@ -25,7 +24,6 @@ class DappMetaData {
         'icon': icon,
         'url': url,
         'description': description,
-        "walletConnectProjectId": walletConnectProjectId,
         "redirect": redirect,
         "verifyUrl": verifyUrl,
       };

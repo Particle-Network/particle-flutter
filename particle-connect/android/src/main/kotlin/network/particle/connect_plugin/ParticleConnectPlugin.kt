@@ -14,7 +14,8 @@ import io.flutter.plugin.common.MethodChannel.MethodCallHandler
 import network.particle.connect_plugin.module.ConnectBridge
 
 /** ParticleConnectPlugin */
-class ParticleConnectPlugin : FlutterPlugin, MethodCallHandler, ActivityAware, EventChannel.StreamHandler {
+class ParticleConnectPlugin : FlutterPlugin, MethodCallHandler, ActivityAware,
+    EventChannel.StreamHandler {
     private var activity: Activity? = null
     private var channel: MethodChannel? = null
     private var eventChannel: EventChannel? = null
@@ -51,6 +52,10 @@ class ParticleConnectPlugin : FlutterPlugin, MethodCallHandler, ActivityAware, E
 
             "setChainInfo" -> {
                 ConnectBridge.setChainInfo(call.arguments as String, result)
+            }
+
+            "setWalletConnectProjectId" -> {
+                ConnectBridge.setWalletConnectProjectId(call.arguments as String)
             }
 
             "getChainInfo" -> {

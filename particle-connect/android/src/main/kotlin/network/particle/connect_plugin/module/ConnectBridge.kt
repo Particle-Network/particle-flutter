@@ -101,6 +101,10 @@ object ConnectBridge {
         }
     }
 
+    fun setWalletConnectProjectId(walletConnectProjectId: String) {
+        ParticleNetwork.setWalletConnectProjectId(walletConnectProjectId)
+    }
+
     var connectAdapter: IConnectAdapter? = null
     fun qrCodeUri(result: MethodChannel.Result) {
         var url: String? = null

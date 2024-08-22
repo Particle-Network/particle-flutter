@@ -36,8 +36,7 @@ class ParticleConnect {
   /// [env] Development environment.
   ///
   /// [RpcUrlConfig] set custom solana and evm rpc url, default is null.
-  static init(ChainInfo chainInfo, DappMetaData dappMetaData, Env env,
-      {RpcUrlConfig? rpcUrlConfig}) {
+  static init(ChainInfo chainInfo, DappMetaData dappMetaData, Env env, {RpcUrlConfig? rpcUrlConfig}) {
     String methodName;
     if (Platform.isIOS) {
       methodName = 'initialize';
@@ -65,8 +64,7 @@ class ParticleConnect {
         "chain_id": chainInfo.id,
       });
     }
-    _channel.invokeMethod(
-        'setWalletConnectV2SupportChainInfos', jsonEncode(allInfos));
+    _channel.invokeMethod('setWalletConnectV2SupportChainInfos', jsonEncode(allInfos));
   }
 
   /// Connect a wallet.
@@ -76,16 +74,14 @@ class ParticleConnect {
   /// you can pass a config.
   ///
   /// Result account or error.
-  static Future<Account> connect(WalletType walletType,
-      {ParticleConnectConfig? config}) async {
+  static Future<Account> connect(WalletType walletType, {ParticleConnectConfig? config}) async {
     final result = await _channel.invokeMethod(
         'connect',
         jsonEncode({
           "walletType": walletType.name,
           "particleConnectConfig": config,
         }));
-    if (jsonDecode(result)["status"] == true ||
-        jsonDecode(result)["status"] == 1) {
+    if (jsonDecode(result)["status"] == true || jsonDecode(result)["status"] == 1) {
       final account = Account.fromJson(jsonDecode(result)["data"]);
       if (Platform.isIOS) {
       } else {
@@ -99,15 +95,13 @@ class ParticleConnect {
   }
 
   /// Connect through a UI page
-  /// 
-  /// [config] is 
-  static Future<Account> connectWithConnectKitConfig(ConnectKitConfig config) async{
+  ///
+  /// [config] is
+  static Future<Account> connectWithConnectKitConfig(ConnectKitConfig config) async {
     final jsonStr = jsonEncode(config.toJson());
-    final result = await _channel.invokeMethod(
-        'connectWithConnectKitConfig',jsonStr);
-    print("connectWithConnectKitConfig:"+result);
-    if (jsonDecode(result)["status"] == true ||
-        jsonDecode(result)["status"] == 1) {
+    final result = await _channel.invokeMethod('connectWithConnectKitConfig', jsonStr);
+    print("connectWithConnectKitConfig:" + result);
+    if (jsonDecode(result)["status"] == true || jsonDecode(result)["status"] == 1) {
       final account = Account.fromJson(jsonDecode(result)["data"]);
       return account;
     } else {
@@ -138,8 +132,7 @@ class ParticleConnect {
   /// Result account or error.
   static Future<Account> connectWalletConnect() async {
     final result = await _channel.invokeMethod('connectWalletConnect');
-    if (jsonDecode(result)["status"] == true ||
-        jsonDecode(result)["status"] == 1) {
+    if (jsonDecode(result)["status"] == true || jsonDecode(result)["status"] == 1) {
       final account = Account.fromJson(jsonDecode(result)["data"]);
       if (Platform.isIOS) {
       } else {
@@ -159,16 +152,14 @@ class ParticleConnect {
   /// [publicAddress] is which public address you want to disconnect.
   ///
   /// Result success or error.
-  static Future<String> disconnect(
-      WalletType walletType, String publicAddress) async {
+  static Future<String> disconnect(WalletType walletType, String publicAddress) async {
     final result = await _channel.invokeMethod(
         'disconnect',
         jsonEncode({
           "wallet_type": walletType.name,
           "public_address": publicAddress,
         }));
-    if (jsonDecode(result)["status"] == true ||
-        jsonDecode(result)["status"] == 1) {
+    if (jsonDecode(result)["status"] == true || jsonDecode(result)["status"] == 1) {
       return jsonDecode(result)["data"];
     } else {
       final error = RpcError.fromJson(jsonDecode(result)["data"]);
@@ -181,8 +172,7 @@ class ParticleConnect {
   /// [walletType] is which wallet you want to check.
   ///
   /// [publicAddress] is which public address you want to check.
-  static Future<bool> isConnected(
-      WalletType walletType, String publicAddress) async {
+  static Future<bool> isConnected(WalletType walletType, String publicAddress) async {
     final result = await _channel.invokeMethod(
         'isConnected',
         jsonEncode({
@@ -201,8 +191,7 @@ class ParticleConnect {
   /// Result accounts or error.
   static Future<List<Account>> getAccounts(WalletType walletType) async {
     final result = await _channel.invokeMethod('getAccounts', walletType.name);
-    if (jsonDecode(result)["status"] == true ||
-        jsonDecode(result)["status"] == 1) {
+    if (jsonDecode(result)["status"] == true || jsonDecode(result)["status"] == 1) {
       List<Account> accounts = jsonDecode(result)["data"].map<Account>((x) {
         var account = Account.fromJson(x);
         account.walletType = walletType.name;
@@ -223,8 +212,7 @@ class ParticleConnect {
   /// [message] message you want to sign, evm chain requires a hexadecimal string, solana chain requires a human readable message.
   ///
   /// Return signature or error.
-  static Future<String> signMessage(
-      WalletType walletType, String publicAddress, String message) async {
+  static Future<String> signMessage(WalletType walletType, String publicAddress, String message) async {
     final result = await _channel.invokeMethod(
         'signMessage',
         jsonEncode({
@@ -233,8 +221,7 @@ class ParticleConnect {
           "message": message,
         }));
 
-    if (jsonDecode(result)["status"] == true ||
-        jsonDecode(result)["status"] == 1) {
+    if (jsonDecode(result)["status"] == true || jsonDecode(result)["status"] == 1) {
       final signature = jsonDecode(result)["data"] as String;
       return signature;
     } else {
@@ -249,8 +236,7 @@ class ParticleConnect {
   /// [transaction].
   ///
   /// Result signature or error.
-  static Future<String> signTransaction(
-      WalletType walletType, String publicAddress, String transaction) async {
+  static Future<String> signTransaction(WalletType walletType, String publicAddress, String transaction) async {
     final result = await _channel.invokeMethod(
         'signTransaction',
         jsonEncode({
@@ -259,8 +245,7 @@ class ParticleConnect {
           "transaction": transaction,
         }));
 
-    if (jsonDecode(result)["status"] == true ||
-        jsonDecode(result)["status"] == 1) {
+    if (jsonDecode(result)["status"] == true || jsonDecode(result)["status"] == 1) {
       final signature = jsonDecode(result)["data"] as String;
       return signature;
     } else {
@@ -275,8 +260,8 @@ class ParticleConnect {
   /// [transactions].
   ///
   /// Result signatures or error.
-  static Future<String> signAllTransactions(WalletType walletType,
-      String publicAddress, List<String> transactions) async {
+  static Future<String> signAllTransactions(
+      WalletType walletType, String publicAddress, List<String> transactions) async {
     final result = await _channel.invokeMethod(
         'signAllTransactions',
         jsonEncode({
@@ -285,8 +270,7 @@ class ParticleConnect {
           "transactions": transactions,
         }));
 
-    if (jsonDecode(result)["status"] == true ||
-        jsonDecode(result)["status"] == 1) {
+    if (jsonDecode(result)["status"] == true || jsonDecode(result)["status"] == 1) {
       final signature = jsonDecode(result)["data"] as String;
       return signature;
     } else {
@@ -303,8 +287,7 @@ class ParticleConnect {
   /// [feeMode] is optional, works with aa service.
   ///
   /// Result signature or error.
-  static Future<String> signAndSendTransaction(
-      WalletType walletType, String publicAddress, String transaction,
+  static Future<String> signAndSendTransaction(WalletType walletType, String publicAddress, String transaction,
       {AAFeeMode? feeMode}) async {
     final result = await _channel.invokeMethod(
         'signAndSendTransaction',
@@ -315,8 +298,7 @@ class ParticleConnect {
           "fee_mode": feeMode,
         }));
 
-    if (jsonDecode(result)["status"] == true ||
-        jsonDecode(result)["status"] == 1) {
+    if (jsonDecode(result)["status"] == true || jsonDecode(result)["status"] == 1) {
       final signature = jsonDecode(result)["data"] as String;
       return signature;
     } else {
@@ -334,8 +316,7 @@ class ParticleConnect {
   /// [feeMode] is optional, works with aa service.
   ///
   /// Result signature or error.
-  static Future<String> batchSendTransactions(
-      WalletType walletType, String publicAddress, List<String> transactions,
+  static Future<String> batchSendTransactions(WalletType walletType, String publicAddress, List<String> transactions,
       {AAFeeMode? feeMode}) async {
     final json = jsonEncode({
       "wallet_type": walletType.name,
@@ -345,8 +326,7 @@ class ParticleConnect {
     });
     final result = await _channel.invokeMethod('batchSendTransactions', json);
 
-    if (jsonDecode(result)["status"] == true ||
-        jsonDecode(result)["status"] == 1) {
+    if (jsonDecode(result)["status"] == true || jsonDecode(result)["status"] == 1) {
       final signature = jsonDecode(result)["data"] as String;
       return signature;
     } else {
@@ -363,8 +343,7 @@ class ParticleConnect {
   /// [typedData] only support v4, requires hexadecimal string.
   ///
   /// Result signatrue or error.
-  static Future<String> signTypedData(
-      WalletType walletType, String publicAddress, String typedData) async {
+  static Future<String> signTypedData(WalletType walletType, String publicAddress, String typedData) async {
     final result = await _channel.invokeMethod(
         'signTypedData',
         jsonEncode({
@@ -373,8 +352,7 @@ class ParticleConnect {
           "message": typedData,
         }));
 
-    if (jsonDecode(result)["status"] == true ||
-        jsonDecode(result)["status"] == 1) {
+    if (jsonDecode(result)["status"] == true || jsonDecode(result)["status"] == 1) {
       final signature = jsonDecode(result)["data"] as String;
       return signature;
     } else {
@@ -390,8 +368,7 @@ class ParticleConnect {
   /// [privateKey] is the private key.
   ///
   /// Result account or error.
-  static Future<Account> importPrivateKey(
-      WalletType walletType, String privateKey) async {
+  static Future<Account> importPrivateKey(WalletType walletType, String privateKey) async {
     final result = await _channel.invokeMethod(
         'importPrivateKey',
         jsonEncode({
@@ -399,8 +376,7 @@ class ParticleConnect {
           "private_key": privateKey,
         }));
 
-    if (jsonDecode(result)["status"] == true ||
-        jsonDecode(result)["status"] == 1) {
+    if (jsonDecode(result)["status"] == true || jsonDecode(result)["status"] == 1) {
       final account = Account.fromJson(jsonDecode(result)["data"]);
       if (Platform.isIOS) {
       } else {
@@ -420,16 +396,14 @@ class ParticleConnect {
   /// [mnemonic] is mnemonic, for example "apple banana pear ...", 12 24 or 48 words.
   ///
   /// Result account or error.
-  static Future<Account> importMnemonic(
-      WalletType walletType, String mnemonic) async {
+  static Future<Account> importMnemonic(WalletType walletType, String mnemonic) async {
     final result = await _channel.invokeMethod(
         'importMnemonic',
         jsonEncode({
           "wallet_type": walletType.name,
           "mnemonic": mnemonic,
         }));
-    if (jsonDecode(result)["status"] == true ||
-        jsonDecode(result)["status"] == 1) {
+    if (jsonDecode(result)["status"] == true || jsonDecode(result)["status"] == 1) {
       final account = Account.fromJson(jsonDecode(result)["data"]);
       if (Platform.isIOS) {
       } else {
@@ -449,16 +423,14 @@ class ParticleConnect {
   /// [publicAddress] is public address.
   ///
   /// Result private key or error.
-  static Future<String> exportPrivateKey(
-      WalletType walletType, String publicAddress) async {
+  static Future<String> exportPrivateKey(WalletType walletType, String publicAddress) async {
     final result = await _channel.invokeMethod(
         'exportPrivateKey',
         jsonEncode({
           "wallet_type": walletType.name,
           "public_address": publicAddress,
         }));
-    if (jsonDecode(result)["status"] == true ||
-        jsonDecode(result)["status"] == 1) {
+    if (jsonDecode(result)["status"] == true || jsonDecode(result)["status"] == 1) {
       final privateKey = jsonDecode(result)["data"] as String;
       return privateKey;
     } else {
@@ -476,8 +448,7 @@ class ParticleConnect {
   /// [uri] for example "https://particle.network/demo#login"
   ///
   /// Result source message and signature or error.
-  static Future<Siwe> signInWithEthereum(WalletType walletType,
-      String publicAddress, String domain, String uri) async {
+  static Future<Siwe> signInWithEthereum(WalletType walletType, String publicAddress, String domain, String uri) async {
     final result = await _channel.invokeMethod(
         'signInWithEthereum',
         jsonEncode({
@@ -487,8 +458,7 @@ class ParticleConnect {
           "uri": uri,
         }));
 
-    if (jsonDecode(result)["status"] == true ||
-        jsonDecode(result)["status"] == 1) {
+    if (jsonDecode(result)["status"] == true || jsonDecode(result)["status"] == 1) {
       final signature = jsonDecode(result)["data"]["signature"] as String;
       final message = jsonDecode(result)["data"]["message"] as String;
       return Siwe(message, signature);
@@ -505,8 +475,7 @@ class ParticleConnect {
   /// [message] is source message, comes from login.
   ///
   /// [signature] is signature, comes from login.
-  static Future<bool> verify(WalletType walletType, String publicAddress,
-      String message, String signature) async {
+  static Future<bool> verify(WalletType walletType, String publicAddress, String message, String signature) async {
     final result = await _channel.invokeMethod(
         'verify',
         jsonEncode({
@@ -516,11 +485,10 @@ class ParticleConnect {
           "signature": signature,
         }));
 
-    if (jsonDecode(result)["status"] == true ||
-        jsonDecode(result)["status"] == 1) {
-      if(Platform.isAndroid){
+    if (jsonDecode(result)["status"] == true || jsonDecode(result)["status"] == 1) {
+      if (Platform.isAndroid) {
         return true;
-      }else{
+      } else {
         final flag = jsonDecode(result)["data"] as bool;
         return flag;
       }
@@ -533,10 +501,13 @@ class ParticleConnect {
   /// get walletReadyState
   /// Pass [walletType] to decide a wallet.
   /// android supported wallet:MetaMask,Rainbow,Trust,ImToken,Bitget,MathWallet,TokenPocket,Zerion,Bitpie,ZenGo,Alpha
-  static Future<WalletReadyState> walletReadyState(
-      WalletType walletType) async {
-    String readyState = await _channel.invokeMethod(
-        'walletReadyState', jsonEncode({"wallet_type": walletType.name}));
+  static Future<WalletReadyState> walletReadyState(WalletType walletType) async {
+    String readyState = await _channel.invokeMethod('walletReadyState', jsonEncode({"wallet_type": walletType.name}));
     return WalletReadyState.values.byName(readyState);
+  }
+  ///set WalletConnect Project ID
+  /// call before ParticleConnect.init()
+  static setWalletConnectProjectId(String walletConnectProjectId) {
+    _channel.invokeMethod('setWalletConnectProjectId', walletConnectProjectId);
   }
 }
