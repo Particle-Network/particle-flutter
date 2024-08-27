@@ -1,6 +1,6 @@
 # Uncomment this line to define a global platform for your project
 platform :ios, '14.0'
-
+source 'https://github.com/CocoaPods/Specs.git'
 # CocoaPods analytics sends network stats synchronously affecting flutter build latency.
 ENV['COCOAPODS_DISABLE_STATS'] = 'true'
 
@@ -31,20 +31,21 @@ target 'Runner' do
   use_frameworks! :linkage => :static
   use_modular_headers!
   
-    pod 'ParticleNetworkBase', '1.4.10'
-    pod 'ParticleWalletAPI', '1.4.10'
+    pod 'ParticleNetworkBase', '2.0.2'
+    pod 'ParticleNetworkChains', '2.0.2'
+    pod 'ParticleWalletAPI', '2.0.2'
 
-    pod 'ConnectCommon', '0.2.26'
-    pod 'ConnectEVMAdapter', '0.2.26'
-    pod 'ConnectSolanaAdapter', '0.2.26'
-    pod 'ConnectWalletConnectAdapter', '0.2.26'
-    pod 'ConnectPhantomAdapter', '0.2.26'
-    pod 'ParticleConnect', '0.2.26'
+    pod 'ConnectCommon', '2.0.2'
+    pod 'ConnectEVMAdapter', '2.0.2'
+    pod 'ConnectSolanaAdapter', '2.0.2'
+    pod 'ConnectWalletConnectAdapter', '2.0.2'
+    pod 'ConnectPhantomAdapter', '2.0.2'
+    pod 'ParticleConnect', '2.0.2'
 
-    pod 'AuthCoreAdapter', '1.4.9'
-    pod 'ParticleAuthCore', '1.4.9'
-    pod 'ParticleMPCCore', '1.4.9'
-    pod 'Thresh', '1.4.9'
+    pod 'AuthCoreAdapter', '2.0.2'
+    pod 'ParticleAuthCore', '2.0.2'
+    pod 'ParticleMPCCore', '2.0.2'
+    pod 'Thresh', '2.0.2'
 
     pod 'SwiftyUserDefaults', :git => 'https://github.com/SunZhiC/SwiftyUserDefaults.git', :branch => 'master'
     pod 'WalletConnectSwiftV2', :git => 'https://github.com/SunZhiC/WalletConnectSwiftV2.git', :branch => 'particle'
