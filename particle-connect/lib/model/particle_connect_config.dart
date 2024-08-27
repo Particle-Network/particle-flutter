@@ -2,7 +2,7 @@ import 'package:particle_base/particle_base.dart';
 
 class ParticleConnectConfig {
   LoginType loginType;
-  String account;
+  String? account = "";
   String? code = "";
   List<SupportAuthType> supportAuthTypes;
   SocialLoginPrompt? socialLoginPrompt;

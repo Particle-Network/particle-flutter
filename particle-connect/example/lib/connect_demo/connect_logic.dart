@@ -75,8 +75,8 @@ class ConnectLogic extends ChangeNotifier {
       final loginPageConfig2 =
           LoginPageConfig(base64Img, "Flutter Example", "Welcome to login");
 
-      final config = ParticleConnectConfig(loginType, account ?? "",
-          supportAuthTypes, SocialLoginPrompt.select_account,
+      final config = ParticleConnectConfig(loginType, account, supportAuthTypes,
+          SocialLoginPrompt.select_account,
           loginPageConfig: loginPageConfig2);
 
       final result =
