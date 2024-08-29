@@ -169,20 +169,22 @@ class ShareConnect {
         
         var particleAuthCoreConfig: ParticleAuthCoreConfig?
         
-        var loginType: LoginType
-        var supportAuthTypeArray: [SupportAuthType] = []
-        var account: String?
-        var code: String?
-        var socialLoginPrompt: SocialLoginPrompt?
-                
+        print(configJson)
         if configJson != JSON.null {
+            var supportAuthTypeArray: [SupportAuthType] = []
+            var account: String?
+            var code: String?
+            var socialLoginPrompt: SocialLoginPrompt?
+            
             let data = configJson
-            loginType = LoginType(rawValue: data["loginType"].stringValue.lowercased()) ?? .email
-                        
-            let array = data["supportAuthTypeValues"].arrayValue.map {
+            
+            let type = ((data["login_type"].string ?? data["loginType"].string) ?? "").lowercased()
+            let loginType = LoginType(rawValue: type) ?? .email
+            
+            let array = ((data["support_auth_type_values"].array ?? data["supportAuthTypeValues"].array) ?? data["supportAuthType"].array ?? []).map {
                 $0.stringValue.lowercased()
             }
-            
+
             array.forEach { if $0 == "email" {
                 supportAuthTypeArray.append(.email)
             } else if $0 == "phone" {
@@ -218,8 +220,9 @@ class ShareConnect {
             if code != nil, code!.isEmpty {
                 code = nil
             }
-                        
-            let socialLoginPromptString = data["socialLoginPrompt"].stringValue.lowercased()
+           
+            let socialLoginPromptString = (data["social_login_prompt"].string ?? data["socialLoginPrompt"].string ?? "").lowercased()
+            
             if socialLoginPromptString == "none" {
                 socialLoginPrompt = SocialLoginPrompt.none
             } else if socialLoginPromptString == "consent" {
