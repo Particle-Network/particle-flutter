@@ -27,6 +27,8 @@ class ConnectLogic extends ChangeNotifier {
   set currChainInfo(ChainInfo newValue) {
     if (_currChainInfo != newValue) {
       _currChainInfo = newValue;
+      List<ChainInfo> chainInfos = <ChainInfo>[currChainInfo];
+      ParticleConnect.setWalletConnectV2SupportChainInfos(chainInfos);
       notifyListeners();
     }
   }
