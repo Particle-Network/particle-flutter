@@ -248,8 +248,6 @@ class AuthCoreLogic {
   }
 
   static void evmSendTransaction() async {
-    final address = await Evm.getAddress();
-
     try {
       final evmAddress = await Evm.getAddress();
       const receiverAddress = "0x0000000000000000000000000000000000000000";
@@ -261,8 +259,8 @@ class AuthCoreLogic {
 
       // final transaction = await TransactionMock.mockEvmSendNative(address);
       String txHash = await Evm.sendTransaction(transaction);
-      debugPrint("evm sendTransaction: $signature");
-      showToast("evm sendTransaction: $signature");
+      debugPrint("evm sendTransaction: $txHash");
+      showToast("evm sendTransaction: $txHash");
     } catch (error) {
       debugPrint("evm sendTransaction: $error");
       showToast("evm sendTransaction: $error");

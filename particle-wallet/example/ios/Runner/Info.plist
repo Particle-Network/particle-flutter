@@ -49,6 +49,7 @@
 		<string>1inch</string>
 		<string>awallet</string>
 		<string>okex</string>
+		<string>bnc</string>
 	</array>
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
