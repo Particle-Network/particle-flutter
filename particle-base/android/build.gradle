@@ -49,9 +49,10 @@ android {
 }
 
 dependencies {
-    def sdkVersion = "2.1.0"
+    def sdkVersion = "2.1.5"
     implementation("network.particle:base-service:$sdkVersion")
     implementation("com.github.xxhong:CollectsPkg:2.1.0")
     implementation("commons-codec:commons-codec:1.15")
     implementation("com.google.code.gson:gson:2.10.1")
+    implementation("com.blankj:utilcodex:1.31.0")
 }

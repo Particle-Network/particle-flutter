@@ -258,9 +258,9 @@ class AuthCoreLogic {
           evmAddress, data, value, receiverAddress);
 
       // final transaction = await TransactionMock.mockEvmSendNative(address);
-      String txHash = await Evm.sendTransaction(transaction);
-      debugPrint("evm sendTransaction: $txHash");
-      showToast("evm sendTransaction: $txHash");
+      String signature = await Evm.sendTransaction(transaction);
+      debugPrint("evm sendTransaction: $signature");
+      showToast("evm sendTransaction: $signature");
     } catch (error) {
       debugPrint("evm sendTransaction: $error");
       showToast("evm sendTransaction: $error");
