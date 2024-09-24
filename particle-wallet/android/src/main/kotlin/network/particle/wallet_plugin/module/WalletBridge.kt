@@ -9,6 +9,8 @@ import com.blankj.utilcode.util.LogUtils
 import com.connect.common.IConnectAdapter
 import com.connect.common.IParticleConnectAdapter
 import com.google.gson.reflect.TypeToken
+import com.particle.api.infrastructure.db.DBMananger
+import com.particle.api.infrastructure.db.PNDatabase
 import com.particle.api.infrastructure.db.table.WalletInfo
 import com.particle.api.service.DBService
 import com.particle.base.ParticleNetwork
@@ -28,6 +30,8 @@ import com.particle.gui.ui.token_detail.TokenTransactionRecordsParams
 import com.particle.gui.utils.WalletUtils
 import com.particle.network.ParticleNetworkAuth.getAddress
 import io.flutter.plugin.common.MethodChannel
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import network.particle.connect_plugin.utils.BridgeScope
 import network.particle.chains.ChainInfo
@@ -41,8 +45,18 @@ object WalletBridge {
     var isUIInit = false
 
     //init
-    fun init(activity: Activity?) {
+    fun init(activity: Activity?,result: MethodChannel.Result) {
         isUIInit = try {
+//
+//            LogUtils.d("init db DatabaseName: ${PNDatabase.DATABASE_NAME} DatabaseVersion: ${PNDatabase.DATABASE_VERSION}")
+//            CoroutineScope(Dispatchers.IO).launch {
+//
+//                DBService.walletInfoDao.getAllWallets()
+//                PrefUtils.init(activity!!, "particle")
+//                ParticleWallet.init(activity!!, null)
+//            }.invokeOnCompletion {
+//
+//            }
             PrefUtils.init(activity!!, "particle")
             ParticleWallet.init(activity!!, null)
             true

@@ -39,7 +39,7 @@ class ParticleWalletPlugin : FlutterPlugin, MethodCallHandler, ActivityAware {
         LogUtils.d("xxhong", call)
         when (call.method) {
             "init" -> {
-                WalletBridge.init(activity!!)
+                WalletBridge.init(activity!!,result)
             }
             "navigatorWallet" -> {
                 WalletBridge.navigatorWallet(call.arguments as Int)

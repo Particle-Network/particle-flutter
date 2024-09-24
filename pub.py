@@ -158,25 +158,25 @@ class ParticleWallet(ParticleBase):
 
 
 if __name__ == "__main__":
-    version = '2.1.3'
+    version = '2.1.10'
+    sleep_time = 20
+    # print("Base Start")
+    # ParticleAuth(version).publish()
+    # print("Base Finish")
+    # time.sleep(sleep_time)
+    # print("AuthCore Start")
+    # ParticleAuthCore(version).publish()
+    # print("AuthCore Finish")
+    # time.sleep(sleep_time)
+    # print("Connect Start")
+    # ParticleConnect(version).publish()
+    # print("Connect Finish")
+    # time.sleep(sleep_time)
 
-    print("Base Start")
-    ParticleAuth(version).publish()
-    print("Base Finish")
-    time.sleep(5)
-    print("AuthCore Start")
-    ParticleAuthCore(version).publish()
-    print("AuthCore Finish")
-    time.sleep(5)
-    print("Connect Start")
-    ParticleConnect(version).publish()
-    print("Connect Finish")
-    time.sleep(5)
-
-    print("ParticleAA Start")
-    ParticleAA(version).publish()
-    print("ParticleAA Finish")
-    time.sleep(5)
+    # print("ParticleAA Start")
+    # ParticleAA(version).publish()
+    # print("ParticleAA Finish")
+    # time.sleep(sleep_time)
     print("ParticleWallet Start")
     ParticleWallet(version).publish()
     print("ParticleWallet Finish")
