@@ -158,8 +158,8 @@ class ParticleWallet(ParticleBase):
 
 
 if __name__ == "__main__":
-    version = '2.1.20'
-    sleep_time = 30
+    version = '2.1.22'
+    sleep_time = 60
     print("Base Start")
     ParticleAuth(version).publish()
     print("Base Finish")

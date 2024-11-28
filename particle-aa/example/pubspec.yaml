@@ -27,9 +27,9 @@ dependencies:
     # the parent directory to use the current plugin's version.
     path: ../
 
-  particle_connect: ^2.1.20
-  particle_base: ^2.1.20
-  particle_auth_core: ^2.1.20
+  particle_connect: ^2.1.22
+  particle_base: ^2.1.22
+  particle_auth_core: ^2.1.22
   # particle_auth_core: ^2.0.0
   #  path: ../../particle-auth-core/
   # particle_connect: ^2.0.0

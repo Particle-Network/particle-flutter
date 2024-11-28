@@ -543,8 +543,9 @@ object ConnectBridge {
             )
             return
         }
-        val typedData = MessageProcess.start(signData.message)
-        connectAdapter.signTypedData(signData.publicAddress, typedData, object : SignCallback {
+        val typedData = MessageProcess.processTypedData(signData.message)
+        val escapedJson = typedData.replace("\"", "\\\"")
+        connectAdapter.signTypedData(signData.publicAddress, escapedJson, object : SignCallback {
             override fun onError(error: ConnectError) {
                 LogUtils.d("onError", error.toString())
                 result.success(
