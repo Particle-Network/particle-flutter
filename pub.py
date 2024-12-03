@@ -1,14 +1,13 @@
 import os
+import requests
 import subprocess
 import time
 
 class ParticleBase:
     def update_pubspec_dependency(self, version):
-        # Read the original pubspec.yaml file content
         with open('pubspec.yaml', 'r') as file:
             lines = file.readlines()
 
-        # Find the particle_auth dependency and update the version number
         updated_lines = []
         for line in lines:
             if line.strip().startswith('#'):
@@ -22,7 +21,6 @@ class ParticleBase:
             else:
                 updated_lines.append(line)
 
-        # Write the updated content back to the file
         with open('pubspec.yaml', 'w') as file:
             file.writelines(updated_lines)
 
@@ -35,7 +33,6 @@ class ParticleBase:
         with open(self.pubspec_path, 'r') as file:
             lines = file.readlines()
 
-        # Modify the third line
         lines[2] = f'version: {self.version}\n'
 
         with open(self.pubspec_path, 'w') as file:
@@ -45,9 +42,7 @@ class ParticleBase:
         with open(self.changelog_path, 'r') as file:
             lines = file.readlines()
 
-        # Check if the first line contains the new version number
         if f'## {self.version}\n' not in lines:
-            # Add new version information to the first line
             lines.insert(0, f'## {self.version}\n\n')
 
             with open(self.changelog_path, 'w') as file:
@@ -80,11 +75,6 @@ class ParticleAuth(ParticleBase):
     def publish(self):
         self.prepare()
         self.flutter_publish()
-        self.close()
-
-    def publish_dry_run(self):
-        self.prepare()
-        self.flutter_publish_dry_run()
         self.close()
 
 
@@ -134,7 +124,6 @@ class ParticleAA(ParticleBase):
     def publish(self):
         self.prepare()
         self.self_prepare()
-
         self.flutter_get()
         self.flutter_publish()
         self.close()
@@ -151,32 +140,68 @@ class ParticleWallet(ParticleBase):
     def publish(self):
         self.prepare()
         self.self_prepare()
-
         self.flutter_get()
         self.flutter_publish()
         self.close()
 
 
+def is_package_published(package_name, version):
+    """
+    Check if a package version is published on pub.dev.
+    """
+    try:
+        url = f"https://pub.dev/api/packages/{package_name}"
+        response = requests.get(url)
+        response.raise_for_status()
+
+        package_data = response.json()
+        latest = package_data.get('latest', {})
+        latest_version = latest.get('version')
+        print('latest_version:',latest_version)
+        if latest_version == version:
+            print(f"✅ {package_name} version {version} is published!")
+            return True
+        else:
+            print(f"❌ {package_name} version {version} is not published yet.")
+            return False
+    except requests.RequestException as e:
+        print(f"Error checking package publication: {e}")
+        return False
+
+
+def wait_until_published(package_name, version):
+    """
+    Wait until the package version is published.
+    """
+    while not is_package_published(package_name, version):
+        print(f"Waiting for {package_name} version {version} to be published...")
+        time.sleep(10)  # Wait 10 seconds before checking again
+
+
 if __name__ == "__main__":
-    version = '2.1.22'
-    sleep_time = 60
+    version = '2.1.23'
+
     print("Base Start")
     ParticleAuth(version).publish()
+    wait_until_published("particle_base", version)
     print("Base Finish")
-    time.sleep(sleep_time)
+
     print("AuthCore Start")
     ParticleAuthCore(version).publish()
+    wait_until_published("particle_auth_core", version)
     print("AuthCore Finish")
-    time.sleep(sleep_time)
+
     print("Connect Start")
     ParticleConnect(version).publish()
+    wait_until_published("particle_connect", version)
     print("Connect Finish")
-    time.sleep(sleep_time)
 
     print("ParticleAA Start")
     ParticleAA(version).publish()
+    wait_until_published("particle_aa", version)
     print("ParticleAA Finish")
-    time.sleep(sleep_time)
+
     print("ParticleWallet Start")
     ParticleWallet(version).publish()
+    wait_until_published("particle_wallet", version)
     print("ParticleWallet Finish")
