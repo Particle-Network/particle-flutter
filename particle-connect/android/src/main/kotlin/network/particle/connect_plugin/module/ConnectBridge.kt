@@ -15,6 +15,7 @@ import com.connect.common.model.*
 import com.connect.common.utils.AppUtils
 import com.evm.adapter.EVMConnectAdapter
 import com.google.gson.reflect.TypeToken
+import com.particle.auth.AuthCore
 import com.particle.base.Env
 import com.particle.base.ParticleNetwork
 import com.particle.base.data.ErrorInfo
@@ -543,8 +544,15 @@ object ConnectBridge {
             )
             return
         }
-        val typedData = MessageProcess.processTypedData(signData.message)
-        val escapedJson = typedData.replace("\"", "\\\"")
+
+        val escapedJson =if(connectAdapter is AuthCoreAdapter){
+            val typedData = MessageProcess.start(signData.message)
+            typedData
+        }else{
+            val typedData = MessageProcess.processTypedData(signData.message)
+            typedData.replace("\"", "\\\"")
+        }
+
         connectAdapter.signTypedData(signData.publicAddress, escapedJson, object : SignCallback {
             override fun onError(error: ConnectError) {
                 LogUtils.d("onError", error.toString())
