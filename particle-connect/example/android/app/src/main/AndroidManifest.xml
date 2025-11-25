@@ -6,6 +6,7 @@
        android:fullBackupContent="@xml/pn_backup_rules"
        tools:replace="android:fullBackupContent,android:label"
        android:usesCleartextTraffic="true"
+       android:enableOnBackInvokedCallback="true"
         android:icon="@mipmap/ic_launcher">
         <activity
 

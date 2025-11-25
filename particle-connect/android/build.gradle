@@ -2,7 +2,7 @@ group 'network.particle.connect_plugin.particle_connect'
 version '1.0-SNAPSHOT'
 
 buildscript {
-    ext.kotlin_version = '1.9.10'
+    ext.kotlin_version = '2.2.0'
     repositories {
         google()
         mavenCentral()
@@ -51,7 +51,7 @@ android {
 dependencies {
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
 
-    def sdkVersion = "2.1.21"
+    def sdkVersion = "2.7.1"
     api("network.particle:base-service:$sdkVersion")
     api("network.particle:auth-service:$sdkVersion")
 

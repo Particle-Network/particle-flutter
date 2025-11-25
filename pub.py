@@ -179,7 +179,7 @@ def wait_until_published(package_name, version):
 
 
 if __name__ == "__main__":
-    version = '2.1.23'
+    version = '2.2.1'
 
     print("Base Start")
     ParticleAuth(version).publish()

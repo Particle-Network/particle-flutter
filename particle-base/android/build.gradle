@@ -2,7 +2,7 @@ group 'network.particle.auth_plugin.particle_base'
 version '1.0-SNAPSHOT'
 
 buildscript {
-    ext.kotlin_version = '1.9.10'
+    ext.kotlin_version = '2.2.0'
     repositories {
         google()
         mavenCentral()
@@ -49,7 +49,7 @@ android {
 }
 
 dependencies {
-    def sdkVersion = "2.1.21"
+    def sdkVersion = "2.7.1"
     implementation("network.particle:base-service:$sdkVersion")
     implementation("com.github.xxhong:CollectsPkg:2.1.0")
     implementation("commons-codec:commons-codec:1.15")
