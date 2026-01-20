@@ -24,5 +24,5 @@ Upgrading from version 1.4.x to version 1.5.x - this is an upgrade guide. If you
 | setChainInfoAsync      | switchChain                                       | -                                          |
 
 ## More details
-With partice-connect, WalletType.authCore, after connect successfully, you will get an account, that contains publicAddress, if you need more data, such as userInfo, you can retrieve it by calling `particleAuthCore.getUserInfo`, and we can't provide userInfo for other walletTypes.
+With particle-connect and WalletType.authCore, after a successful connection, you will get an account that contains a publicAddress. If you need more data, such as userInfo, you can retrieve it by calling particleAuthCore.getUserInfo. Note that userInfo is not available for other walletTypes.
 

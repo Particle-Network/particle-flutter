@@ -16,7 +16,7 @@ Particle Connect is the best way to onboard any user for your dApp.
 
 Particle Wallet is not an independent wallet—it is a wallet infrastructure plugged into apps or wallets.
 
-Particle AA support Account Abstraction
+Particle AA supports Account Abstraction
 
 ## iOS Cocoapods requires
 
@@ -74,7 +74,7 @@ import 'package:particle_auth_core/particle_auth_core.dart';
 
 ### Structure Transaction
 In particle-auth/example/lib/mock/transaction_mock.dart, We provide several examples that show how to structure transactions,
-how to read contract and write contract.
+how to read contracts and write contracts.
 
 
 
